@@ -7,6 +7,9 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
+#        - PhpBrowser:
+#            url: https://cz.ogame.gameforge.com
+        - WebDriver:
+            url: https://cz.ogame.gameforge.com
+            browser: firefox
         - \Helper\Acceptance

@@ -21,6 +21,9 @@ session:
 
 services:
 	router: App\RouterFactory::createRouter
+	- App\Model\GalaxyBrowser
+	- App\Model\SignManager(user: %user%, password: %password%)
+	codeception: App\Model\AcceptanceTester
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

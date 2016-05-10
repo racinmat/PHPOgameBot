@@ -1,7 +1,9 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__.'/../vendor/codeception/codeception/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/codeception/codeception/autoload.php';
+require_once __DIR__ . '/../tests/_support/_generated/AcceptanceTesterActions.php';
+require_once __DIR__ . '/../tests/_support/AcceptanceTester.php';
 
 $configurator = new Nette\Configurator;
 
@@ -20,44 +22,6 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 $container = $configurator->createContainer();
 
 //codeception test actor initializer
-
-$options = [
-	'config' => NULL,
-	'report' => false,
-	'html' => 'report.html',
-	'xml' => 'report.xml',
-	'tap' => 'report.tap.log',
-	'json' => 'report.json',
-	'colors' => false,
-	'no-colors' => false,
-	'silent' => false,
-	'steps' => false,
-	'debug' => false,
-	'coverage' => 'coverage.serialized',
-	'coverage-html' => 'coverage',
-	'coverage-xml' => 'coverage.xml',
-	'coverage-text' => 'coverage.txt',
-	'no-exit' => true,
-	'group' => [],
-	'skip' => [],
-	'skip-group' => [],
-	'env' => [],
-	'fail-fast' => false,
-	'no-rebuild' => false,
-	'help' => false,
-	'quiet' => false,
-	'verbose' => false,
-	'version' => false,
-	'ansi' => false,
-	'no-ansi' => false,
-	'no-interaction' => false,
-];
-$config = \Codeception\Configuration::config($options['config']);
-
-if (!$options['colors']) {
-	$options['colors'] = $config['settings']['colors'];
-}
-
 $userOptions = [
 	'xml' => false,
 	'html' => false,
@@ -70,16 +34,16 @@ $userOptions = [
 	'interactive' => true,
 	'filter' => NULL,
 ];
-
 $suite = 'acceptance';
 $test = 'basicTestCept';
-
 $codecept = new \Codeception\Codecept($userOptions);
 
 try {
 	$codecept->run($suite, $test);
 } catch(\ActorException $e) {
-	echo get_class($e->actor);
+	$actor = $e->actor;
+	$container->removeService();
+	$container->addService('codeception', $actor);
 }
 
 //end of codeception test actor initializer
