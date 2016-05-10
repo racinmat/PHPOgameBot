@@ -42,8 +42,9 @@ try {
 	$codecept->run($suite, $test);
 } catch(\ActorException $e) {
 	$actor = $e->actor;
-	$container->removeService();
-	$container->addService('codeception', $actor);
+	/** @var \App\Model\AcceptanceTesterFactory $factory */
+	$factory = $container->getByType(\App\Model\AcceptanceTesterFactory::class);
+	$factory->setAcceptanceTester($actor);
 }
 
 //end of codeception test actor initializer

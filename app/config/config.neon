@@ -23,7 +23,11 @@ services:
 	router: App\RouterFactory::createRouter
 	- App\Model\GalaxyBrowser
 	- App\Model\SignManager(user: %user%, password: %password%)
-	codeception: App\Model\AcceptanceTester
+	- App\Model\AcceptanceTesterFactory
+#	codeception:
+#		class: \AcceptanceTester
+#		factory: App\Model\AcceptanceTesterFactory
+	codeception: @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

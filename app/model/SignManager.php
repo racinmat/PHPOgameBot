@@ -31,5 +31,6 @@ class SignManager extends Nette\Object
 		$I->selectOption('#serverLogin', 's124-cz.ogame.gameforge.com');
 		$I->fillField('#usernameLogin', $this->user);
 		$I->fillField('#passwordLogin', $this->password);
+		$I->click('#loginSubmit');
 	}
 }
