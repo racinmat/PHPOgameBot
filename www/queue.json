@@ -4,5 +4,11 @@
         "data": {
             "building": "metal mine"
         }
+    },
+    {
+        "action": "upgrade",
+        "data": {
+            "building": "crystal mine"
+        }
     }
 ]

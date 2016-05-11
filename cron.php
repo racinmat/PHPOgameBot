@@ -11,8 +11,8 @@ while (true) {
 	$datetime = new DateTime($string);
 	$difference = abs($datetime->getTimestamp() - (new DateTime("2016-05-11 21:06:10"))->getTimestamp());    //in seconds
 	if ($difference < $interval) {
-		shell_exec('php www/index.php bot:queue');
 		file_put_contents('www/cron.txt', '');
+		shell_exec('php www/index.php bot:queue');
 	}
 	sleep($interval);
 }
