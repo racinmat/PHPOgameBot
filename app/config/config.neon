@@ -25,6 +25,8 @@ services:
 	- App\Model\SignManager(user: %user%, password: %password%)
 	- App\Model\AcceptanceTesterFactory
 	- App\Model\BuildingsManager
+	- App\Model\PageObject\Menu
+	- App\Model\QueueConsumer
 #	codeception:
 #		class: \AcceptanceTester
 #		factory: App\Model\AcceptanceTesterFactory

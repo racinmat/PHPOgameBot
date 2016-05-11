@@ -2,8 +2,9 @@
 
 namespace App\Model;
  
+use App\Enum\Building;
 use Nette;
- 
+
 class BuildingsManager extends Nette\Object
 {
 
@@ -15,35 +16,12 @@ class BuildingsManager extends Nette\Object
 		$this->I = $I;
 	}
 
-	public function buildMetalMine()
+	public function build(Building $building)
 	{
 		$I = $this->I;
-		$I->click('#menuTable > li:nth-child(2) > a');
-		$I->click('.supply1 > div:nth-child(1) > a:nth-child(1)');
-//		$I->click('.build-it > span:nth-child(1)');
+		$I->click($building->getMenuLocation());
+		$I->click($building->getSelector());
+		$I->click($building->getBuildButtonSelector());
 	}
 
-	public function buildCrystalMine()
-	{
-		$I = $this->I;
-		$I->click('#menuTable > li:nth-child(2) > a');
-		$I->click('.supply2 > div:nth-child(1) > a:nth-child(1)');
-		$I->click('.build-it > span:nth-child(1)');
-	}
-
-	public function buildDeuteriumMine()
-	{
-		$I = $this->I;
-		$I->click('#menuTable > li:nth-child(2) > a');
-		$I->click('.supply3 > div:nth-child(1) > a:nth-child(1)');
-//		$I->click('.build-it > span:nth-child(1)');
-	}
-
-	public function buildSolarPowerPlant()
-	{
-		$I = $this->I;
-		$I->click('#menuTable > li:nth-child(2) > a');
-		$I->click('.supply4 > div:nth-child(1) > a:nth-child(1)');
-//		$I->click('.build-it > span:nth-child(1)');
-	}
 }
