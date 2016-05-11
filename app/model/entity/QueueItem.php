@@ -4,11 +4,12 @@ namespace App\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
+use Nette\Object;
 
 /**
  * @ORM\Entity
  */
-class QueueItem
+class QueueItem extends Object
 {
 
 	const

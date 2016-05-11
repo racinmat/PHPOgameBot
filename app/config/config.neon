@@ -3,7 +3,7 @@
 # https://nette.org/security-warning
 #
 parameters:
-
+	acceleration: 1
 
 php:
 	date.timezone: Europe/Prague
@@ -27,9 +27,8 @@ services:
 	- App\Model\BuildingsManager
 	- App\Model\PageObject\Menu
 	- App\Model\QueueConsumer
-#	codeception:
-#		class: \AcceptanceTester
-#		factory: App\Model\AcceptanceTesterFactory
+	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
+	- App\Model\PlanetManager
 	codeception: @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 
 extensions:
@@ -42,3 +41,7 @@ console:
 	commands:
 		- App\Commands\SearchInactivePlanetsCommand
 		- App\Commands\ProcessQueueCommand
+
+doctrine:
+    types:
+        carbondatetime:         App\Model\Mapping\CarbonDateTimeType

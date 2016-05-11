@@ -39,6 +39,7 @@
 		"tracy/tracy": "~2.3.0",
 		"kdyby/doctrine": "@dev",
         "kdyby/events": "@dev",
-		"codeception/codeception": "@dev"
+		"codeception/codeception": "@dev",
+		"nesbot/carbon": "^1.21"
 	}
 }

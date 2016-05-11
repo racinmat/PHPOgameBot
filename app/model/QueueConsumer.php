@@ -20,11 +20,15 @@ class QueueConsumer extends Nette\Object
 	/** @var BuildingsManager */
 	private $buildingsManager;
 
-	public function __construct(EntityManager $entityManager, BuildingsManager $buildingsManager)
+	/** @var PlanetManager */
+	private $planetManager;
+
+	public function __construct(EntityManager $entityManager, BuildingsManager $buildingsManager, PlanetManager $planetManager)
 	{
 		$this->entityManager = $entityManager;
 		$this->queueRepository = $entityManager->getRepository(QueueItem::class);
 		$this->buildingsManager = $buildingsManager;
+		$this->planetManager = $planetManager;
 	}
 
 	public function processQueue()
@@ -43,6 +47,11 @@ class QueueConsumer extends Nette\Object
 			}
 		}
 		$this->entityManager->flush();
+		if (!$success) {
+			//calculate when will be possible to build next building
+			$this->planetManager->refreshResourceData();
+			$planet = $this->planetManager->getMyHomePlanet();
+		}
 	}
 
 	/**
