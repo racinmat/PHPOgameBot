@@ -24,6 +24,7 @@ services:
 	- App\Model\GalaxyBrowser
 	- App\Model\SignManager(user: %user%, password: %password%)
 	- App\Model\AcceptanceTesterFactory
+	- App\Model\BuildingsManager
 #	codeception:
 #		class: \AcceptanceTester
 #		factory: App\Model\AcceptanceTesterFactory

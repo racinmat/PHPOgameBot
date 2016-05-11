@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 use App\Fixtures\RootFixture;
+use App\Model\BuildingsManager;
 use App\Model\SignManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
@@ -21,14 +22,18 @@ class SearchInactivePlanetsCommand extends Command {
 	/** @var SignManager */
 	private $signManager;
 
+	/** @var BuildingsManager */
+	private $buildingsManager;
+
 	/**
 	 * SearchInactivePlanetsCommand constructor.
 	 * @param SignManager $signManager
 	 */
-	public function __construct(SignManager $signManager)
+	public function __construct(SignManager $signManager, BuildingsManager $buildingsManager)
 	{
 		parent::__construct();
 		$this->signManager = $signManager;
+		$this->buildingsManager = $buildingsManager;
 	}
 
 	protected function configure()
@@ -40,6 +45,7 @@ class SearchInactivePlanetsCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$this->signManager->signIn();
+		$this->buildingsManager->buildMetalMine();
 		$output->writeln('Hello world');
 		return 0; // zero return code means everything is ok
 	}
