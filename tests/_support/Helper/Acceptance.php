@@ -12,7 +12,7 @@ class Acceptance extends \Codeception\Module
 	public function seeElementExists($selector, $attributes = [])
 	{
 		/** @var WebDriver $webDriver */
-		$webDriver =  $this->getModule('WebDriver')->webDriver;
+		$webDriver =  $this->getModule('WebDriver');
 		$els = $webDriver->matchVisible($selector);
 		$els = $webDriver->filterByAttributes($els, $attributes);
 		return count($els) > 0;

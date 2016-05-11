@@ -31,12 +31,12 @@ class Building extends Enum
 	public function getSelector()
 	{
 		switch ($this->getValue()) {
-			case static::METAL_MINE: return '.supply1 > div:nth-child(1)';
-			case static::CRYSTAL_MINE: return '.supply2 > div:nth-child(1)';
-			case static::DEUTERIUM_MINE: return '.supply3 > div:nth-child(1)';
-			case static::SOLAR_POWER_PLANT: return '.supply4 > div:nth-child(1)';
-			case static::ROBOT_FACTORY: return '.station14 > div:nth-child(1)';
-			case static::HANGAR: return '.station21 > div:nth-child(1)';
+			case static::METAL_MINE: return '.supply1 > div:nth-child(1) > a.detail_button';
+			case static::CRYSTAL_MINE: return '.supply2 > div:nth-child(1) > a.detail_button';
+			case static::DEUTERIUM_MINE: return '.supply3 > div:nth-child(1) > a.detail_button';
+			case static::SOLAR_POWER_PLANT: return '.supply4 > div:nth-child(1) > a.detail_button';
+			case static::ROBOT_FACTORY: return '.station14 > div:nth-child(1) > a.detail_button';
+			case static::HANGAR: return '.station21 > div:nth-child(1) > a.detail_button';
 		}
 	}
 

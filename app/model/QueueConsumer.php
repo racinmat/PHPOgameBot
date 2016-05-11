@@ -31,20 +31,31 @@ class QueueConsumer extends Nette\Object
 	{
 		/** @var QueueItem[] $queue */
 		$queue = $this->queueRepository->findAll();
+		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		foreach ($queue as $item) {
+			if (!$success) {
+				break;
+			}
 			switch ($item->getAction()) {
-				case QueueItem::ACTION_BUILD: $this->build($item); break;
+				case QueueItem::ACTION_BUILD:
+					$success = $this->build($item);
+					break;
 			}
 		}
+		$this->entityManager->flush();
 	}
 
-	private function build(QueueItem $item)
+	/**
+	 * @param QueueItem $item
+	 * @return bool returns true if building is built successfully
+	 */
+	private function build(QueueItem $item) : bool
 	{
 		$building = Building::_($item->getData());
-		if ($this->buildingsManager->isEnoughResources($building)) {
-			$this->buildingsManager->build($building);
+		$success = $this->buildingsManager->build($building);
+		if ($success) {
 			$this->entityManager->remove($item);
 		}
-		$this->entityManager->flush();
+		return $success;
 	}
 }
