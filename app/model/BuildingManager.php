@@ -3,9 +3,13 @@
 namespace App\Model;
  
 use App\Enum\Building;
-use Nette;
+use App\Model\Entity\Planet;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Nette\Object;
+use Nette\Utils\Strings;
 
-class BuildingManager extends Nette\Object
+class BuildingManager extends Object
 {
 
 	/** @var \AcceptanceTester */
@@ -33,7 +37,7 @@ class BuildingManager extends Nette\Object
 		//možná refreshnout všechna data hned po zalogování
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		if (!$this->resourcesCalculator->isEnoughResourcesForBuilding($planet, $building)) {
+		if (!$this->canBuild($planet, $building)) {
 			return false;
 		}
 		$this->openBuildingMenu($building);
@@ -51,4 +55,36 @@ class BuildingManager extends Nette\Object
 		$I->wait(1);
 	}
 
+	private function canBuild(Planet $planet, Building $building) : bool 
+	{
+		return $this->resourcesCalculator->isEnoughResourcesForBuilding($planet, $building) && ! $this->currentlyUpgradingBuilding();
+	}
+
+	private function currentlyUpgradingBuilding() : bool
+	{
+		return ! $this->I->seeExists('Nestaví se žádné budovy.', 'table.construction.active');
+	}
+
+	public function getTimeToUpgradeAvailable(Planet $planet, Building $building) : Carbon
+	{
+		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, $building);
+		$datetime2 = $this->getTimeToFinishUpgrade();
+		return $datetime1->max($datetime2);
+	}
+
+	private function getTimeToFinishUpgrade() : Carbon
+	{
+		$I = $this->I;
+		if ($I->seeElementExists('table.construction.active #Countdown')) {
+			$interval = $I->grabTextFrom('table.construction.active #Countdown');
+			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
+		}
+		return Carbon::now();
+	}
+
+	private function parseOgameTimeInterval(string $interval) : CarbonInterval
+	{
+		$params = Strings::match($interval, '~((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');//todo: dodat hodiny až zjistím formát
+		return new CarbonInterval(0, 0, 0, 0, 0, $params['minutes'], $params['seconds']);
+	}
 }

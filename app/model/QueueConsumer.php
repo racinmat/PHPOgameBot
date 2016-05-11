@@ -80,7 +80,7 @@ class QueueConsumer extends Object
 			switch ($lastItem->getAction()) {
 				case ICommand::ACTION_UPGRADE:
 					/** @var UpgradeBuildingCommand $lastItem */
-					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, $lastItem->getBuilding());
+					$datetime = $this->buildingsManager->getTimeToUpgradeAvailable($planet, $lastItem->getBuilding());
 					break;
 				case ICommand::ACTION_BUILD_DEFENSE:
 					/** @var BuildDefenseCommand $lastItem */
