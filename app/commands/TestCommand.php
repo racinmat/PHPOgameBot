@@ -1,39 +1,44 @@
 <?php
 
 namespace App\Commands;
+use App\Enum\Building;
 use App\Fixtures\RootFixture;
 use App\Model\BuildingsManager;
+use App\Model\PlanetManager;
+use App\Model\ResourcesCalculator;
 use App\Model\SignManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class SearchInactivePlanetsCommand
+ * Class TestCommand
  * @package App\Commands
  * @author: Matěj Račinský 
  */
-class SearchInactivePlanetsCommand extends Command {
+class TestCommand extends Command {
 
 	/** @var SignManager */
 	private $signManager;
 
-	/** @var BuildingsManager */
-	private $buildingsManager;
+	/** @var PlanetManager */
+	private $planetManager;
+
+	/** @var ResourcesCalculator */
+	private $resourcesCalculator;
 
 	/**
-	 * SearchInactivePlanetsCommand constructor.
+	 * TestCommand constructor.
 	 * @param SignManager $signManager
+	 * @param PlanetManager $planetManager
+	 * @param ResourcesCalculator $resourcesCalculator
 	 */
-	public function __construct(SignManager $signManager, BuildingsManager $buildingsManager)
+	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator)
 	{
 		parent::__construct();
 		$this->signManager = $signManager;
-		$this->buildingsManager = $buildingsManager;
+		$this->planetManager = $planetManager;
+		$this->resourcesCalculator = $resourcesCalculator;
 	}
 
 	protected function configure()
@@ -45,7 +50,9 @@ class SearchInactivePlanetsCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$this->signManager->signIn();
-		$this->buildingsManager->buildMetalMine();
+		$this->planetManager->refreshResourceData();
+		$planet = $this->planetManager->getMyHomePlanet();
+		$this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, Building::_(Building::SOLAR_POWER_PLANT), 8);
 		$output->writeln('Hello world');
 		return 0; // zero return code means everything is ok
 	}

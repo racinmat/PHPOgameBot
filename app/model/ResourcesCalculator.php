@@ -22,12 +22,12 @@ class ResourcesCalculator extends Nette\Object
 	/**
 	 * @param Planet $planet
 	 * @param Building $building
-	 * @param int $level
+	 * @param int $currentLevel
 	 * @return Carbon
 	 */
-	public function getTimeToEnoughResourcesForBuilding(Planet $planet, Building $building, int $level)
+	public function getTimeToEnoughResourcesForBuilding(Planet $planet, Building $building, int $currentLevel)
 	{
-		return $this->getTimeToResources($planet, $building->getPriceToNextLevel($level));
+		return $this->getTimeToResources($planet, $building->getPriceToNextLevel($currentLevel));
 	}
 
 	/**
@@ -54,6 +54,9 @@ class ResourcesCalculator extends Nette\Object
 		$crystalHours = $crystalDiff / $this->getCrystalProductionPerHour($planet->getCrystalMineLevel());
 		$deuteriumHours = $deuteriumDiff / $this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
 
+		echo "metal per hour: " . $this->getMetalProductionPerHour($planet->getMetalMineLevel()). PHP_EOL;
+		echo "crystal per hour: " . $this->getCrystalProductionPerHour($planet->getCrystalMineLevel()) . PHP_EOL;
+		echo "deuterium per hour: " . $this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature()) . PHP_EOL;
 		$maxTime = max($metalHours, $crystalHours, $deuteriumHours);
 		if ($maxTime <= 0) {
 			return Carbon::now();

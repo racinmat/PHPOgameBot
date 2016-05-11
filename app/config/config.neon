@@ -29,7 +29,8 @@ services:
 	- App\Model\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\PlanetManager
-	codeception: @App\Model\AcceptanceTesterFactory::getAcceptanceTester
+	- App\Model\CronManager
+	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
@@ -39,7 +40,7 @@ extensions:
 
 console:
 	commands:
-		- App\Commands\SearchInactivePlanetsCommand
+		- App\Commands\TestCommand
 		- App\Commands\ProcessQueueCommand
 
 doctrine:

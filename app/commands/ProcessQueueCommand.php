@@ -27,7 +27,7 @@ class ProcessQueueCommand extends Command {
 	private $queueConsumer;
 
 	/**
-	 * SearchInactivePlanetsCommand constructor.
+	 * TestCommand constructor.
 	 * @param SignManager $signManager
 	 * @param QueueConsumer $queueConsumer
 	 */

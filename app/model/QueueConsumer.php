@@ -23,12 +23,16 @@ class QueueConsumer extends Nette\Object
 	/** @var PlanetManager */
 	private $planetManager;
 
-	public function __construct(EntityManager $entityManager, BuildingsManager $buildingsManager, PlanetManager $planetManager)
+	/** @var ResourcesCalculator */
+	private $resourcesCalculator;
+
+	public function __construct(EntityManager $entityManager, BuildingsManager $buildingsManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator)
 	{
 		$this->entityManager = $entityManager;
 		$this->queueRepository = $entityManager->getRepository(QueueItem::class);
 		$this->buildingsManager = $buildingsManager;
 		$this->planetManager = $planetManager;
+		$this->resourcesCalculator = $resourcesCalculator;
 	}
 
 	public function processQueue()
@@ -48,9 +52,7 @@ class QueueConsumer extends Nette\Object
 		}
 		$this->entityManager->flush();
 		if (!$success) {
-			//calculate when will be possible to build next building
-			$this->planetManager->refreshResourceData();
-			$planet = $this->planetManager->getMyHomePlanet();
+			//calculate when will be possible to build next building and set the cron time
 		}
 	}
 
