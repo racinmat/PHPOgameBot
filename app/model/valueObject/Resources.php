@@ -53,9 +53,23 @@ class Resources extends Nette\Object
 		return $this->deuterium;
 	}
 
-	public function multiply(float $number)
+	public function add(Resources $resources) : Resources
+	{
+		return new Resources($this->metal + $resources->getMetal(), $this->crystal + $resources->getCrystal(), $this->deuterium + $resources->getDeuterium());
+	}
+
+	public function subtract(Resources $resources) : Resources
+	{
+		return new Resources($this->metal - $resources->getMetal(), $this->crystal - $resources->getCrystal(), $this->deuterium - $resources->getDeuterium());
+	} 
+	
+	public function multiplyScalar(float $number) : Resources
 	{
 		return new Resources($this->metal * $number, $this->crystal * $number, $this->deuterium * $number);
 	}
-	
+
+	public function divide(Resources $resources) : Resources
+	{
+		return new Resources(round($this->metal / $resources->getMetal()), round($this->crystal / $resources->getCrystal()), round($this->deuterium / $resources->getDeuterium()));
+	}
 }

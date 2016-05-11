@@ -3,7 +3,7 @@
 # https://nette.org/security-warning
 #
 parameters:
-	acceleration: 1
+	acceleration: 3
 
 php:
 	date.timezone: Europe/Prague

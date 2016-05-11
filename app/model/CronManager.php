@@ -15,9 +15,10 @@ class CronManager extends Nette\Object
 
 	public function setNextStart(Carbon $datetime)
 	{
-		$input = "schtasks /change /tn OgameBot /st {$datetime->format('hh:mm')}";
+		$input = "schtasks /change /tn OgameBot /st {$datetime->format('H:i')}";
 		$output = shell_exec($input);
 		echo $input . PHP_EOL;
 		echo $output . PHP_EOL;
 	}
+	
 }

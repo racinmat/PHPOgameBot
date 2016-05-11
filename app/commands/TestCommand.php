@@ -4,6 +4,7 @@ namespace App\Commands;
 use App\Enum\Building;
 use App\Fixtures\RootFixture;
 use App\Model\BuildingsManager;
+use App\Model\CronManager;
 use App\Model\PlanetManager;
 use App\Model\ResourcesCalculator;
 use App\Model\SignManager;
@@ -27,32 +28,37 @@ class TestCommand extends Command {
 	/** @var ResourcesCalculator */
 	private $resourcesCalculator;
 
+	/** @var CronManager */
+	private $cronManager;
+	
 	/**
 	 * TestCommand constructor.
 	 * @param SignManager $signManager
 	 * @param PlanetManager $planetManager
 	 * @param ResourcesCalculator $resourcesCalculator
 	 */
-	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator)
+	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager)
 	{
 		parent::__construct();
 		$this->signManager = $signManager;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
+		$this->cronManager = $cronManager;
 	}
 
 	protected function configure()
 	{
-		$this->setName('bot:search-inactive')
-			->setDescription('Searches for inactive planets and adds them to database.');
+		$this->setName('bot:test')
+			->setDescription('It does stuff.');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$this->signManager->signIn();
-		$this->planetManager->refreshResourceData();
+//		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		$this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, Building::_(Building::SOLAR_POWER_PLANT), 8);
+		$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, Building::_(Building::SOLAR_POWER_PLANT), 8);
+		$this->cronManager->setNextStart($datetime);
 		$output->writeln('Hello world');
 		return 0; // zero return code means everything is ok
 	}

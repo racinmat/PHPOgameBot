@@ -6,9 +6,10 @@ use App\Model\Entity\Planet;
 use Carbon\Carbon;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
-use Nette;
- 
-class PlanetManager extends Nette\Object
+use Nette\Object;
+use Nette\Utils\Strings;
+
+class PlanetManager extends Object
 {
 
 	/** @var EntityManager */
@@ -42,6 +43,10 @@ class PlanetManager extends Nette\Object
 		$metal = $I->grabTextFrom('#resources_metal');
 		$crystal = $I->grabTextFrom('#resources_crystal');
 		$deuterium = $I->grabTextFrom('#resources_deuterium');
+
+		$metal = Strings::replace($metal, '~\.~');
+		$crystal = Strings::replace($crystal, '~\.~');
+		$deuterium = Strings::replace($deuterium, '~\.~');
 
 		$planet = $this->getMyHomePlanet();
 		//v budoucnu předělat na nastavení jedním DTO, které bude mít suroviny a čas

@@ -32,65 +32,54 @@ class ResourcesCalculator extends Nette\Object
 
 	/**
 	 * @param Planet $planet
-	 * @param Resources $resources
+	 * @param Resources $expected
 	 * @return Carbon
 	 */
-	public function getTimeToResources(Planet $planet, Resources $resources)
+	public function getTimeToResources(Planet $planet, Resources $expected)
 	{
-		$metalExpected = $resources->getMetal();
-		$crystalExpected = $resources->getCrystal();
-		$deuteriumExpected = $resources->getDeuterium();
-
-		$metal = $planet->getMetal();
-		$crystal = $planet->getCrystal();
-		$deuterium = $planet->getDeuterium();
+		$resources = $planet->getResources();
 		$time = $planet->getLastVisited();
 
-		$metalDiff = $metalExpected - $metal;
-		$crystalDiff = $crystalExpected - $crystal;
-		$deuteriumDiff = $deuteriumExpected - $deuterium;
+		$difference = $expected->subtract($resources);
 
-		$metalHours = $metalDiff / $this->getMetalProductionPerHour($planet->getMetalMineLevel());
-		$crystalHours = $crystalDiff / $this->getCrystalProductionPerHour($planet->getCrystalMineLevel());
-		$deuteriumHours = $deuteriumDiff / $this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
+		$productionPerHour = $this->getProductionPerHour($planet->getMetalMineLevel(), $planet->getCrystalMineLevel(), $planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
 
-		echo "metal per hour: " . $this->getMetalProductionPerHour($planet->getMetalMineLevel()). PHP_EOL;
-		echo "crystal per hour: " . $this->getCrystalProductionPerHour($planet->getCrystalMineLevel()) . PHP_EOL;
-		echo "deuterium per hour: " . $this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature()) . PHP_EOL;
-		$maxTime = max($metalHours, $crystalHours, $deuteriumHours);
-		if ($maxTime <= 0) {
+		$hoursToProduce = $difference->divide($productionPerHour);
+		$metalHours = $difference->getMetal() / $productionPerHour->getMetal();
+		$crystalHours = $difference->getCrystal() / $productionPerHour->getCrystal();
+		$deuteriumHours = $difference->getDeuterium() / $productionPerHour->getDeuterium();
+
+		$maxHours = max($metalHours, $crystalHours, $deuteriumHours);
+		if ($maxHours <= 0) {
 			return Carbon::now();
 		}
 
-		$minutes = ($maxTime - (int) $maxTime) * 60;
-		return $time->addHours($maxTime)->addMinutes($minutes);
+		$minutes = ($maxHours - (int) $maxHours) * 60;
+		return $time->addHours((int) $maxHours)->addMinutes((int) $minutes);
 	}
 
-	/**
-	 * @param int $mineLevel
-	 * @return int
-	 */
-	private function getMetalProductionPerHour(int $mineLevel)
+	private function getMetalProductionPerHour(int $mineLevel) : int
 	{
-		return $this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel);
+		return $this->acceleration * 30 + round($this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel));
 	}
 
-	/**
-	 * @param int $mineLevel
-	 * @return int
-	 */
-	private function getCrystalProductionPerHour(int $mineLevel)
+	private function getCrystalProductionPerHour(int $mineLevel) : int
 	{
-		return $this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel);
+		return $this->acceleration * 15 + round($this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel));
 	}
 
-	/**
-	 * @param int $mineLevel
-	 * @param int $averageTemperature
-	 * @return int
-	 */
-	private function getDeuteriumProductionPerHour(int $mineLevel, int $averageTemperature)
+	private function getDeuteriumProductionPerHour(int $mineLevel, int $averageTemperature) : int
 	{
-		return (int) 10 * $mineLevel * pow(1.1, $mineLevel) * (1.36 - 0.004 * $averageTemperature);
+		return round($this->acceleration * 10 * $mineLevel * pow(1.1, $mineLevel) * (1.36 - 0.004 * $averageTemperature));
 	}
+
+	private function getProductionPerHour(int $metalMineLevel, int $crystalMineLevel, int $deuteriumMineLevel, $averageTemperature) : Resources
+	{
+		return new Resources(
+			$this->getMetalProductionPerHour($metalMineLevel),
+			$this->getCrystalProductionPerHour($crystalMineLevel),
+			$this->getDeuteriumProductionPerHour($deuteriumMineLevel, $averageTemperature)
+		);
+	}
+
 }

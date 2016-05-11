@@ -78,7 +78,7 @@ class Building extends Enum
 
 	public function getPriceToNextLevel($currentLevel) : Resources
 	{
-		return $this->getBasePrice()->multiply(pow($this->getNextLevelPriceConstant(), $currentLevel));
+		return $this->getBasePrice()->multiplyScalar(pow($this->getNextLevelPriceConstant(), $currentLevel));
 	}
 
 	public function getBasePrice() : Resources

@@ -2,6 +2,7 @@
  
 namespace App\Model\Entity;
 
+use App\Model\ValueObject\Resources;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
@@ -306,5 +307,10 @@ class Planet extends Object
 	public function getAverageTemperature()
 	{
 		return ($this->minimalTemperature + $this->maximalTemperature) / 2;
+	}
+
+	public function getResources()
+	{
+		return new Resources($this->metal, $this->crystal, $this->deuterium);
 	}
 }
