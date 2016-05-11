@@ -28,11 +28,13 @@ services:
 	- App\Model\SignManager(user: %user%, password: %password%)
 	- App\Model\BuildingManager
 	- App\Model\PageObject\Menu
-	- App\Model\QueueConsumer(queueFile: %queueFile%)
+	- App\Model\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\PlanetManager
 	- App\Model\CronManager(%cronFile%)
 	- App\Model\DefenseManager
+	- App\Model\QueueProducer
+	- App\Model\QueueRepository(queueFile: %queueFile%)
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

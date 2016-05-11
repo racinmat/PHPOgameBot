@@ -34,12 +34,12 @@ class QueueConsumer extends Object
 	/** @var DefenseManager */
 	private $defenseManager;
 
-	/** @var string */
-	private $queueFile;
+	/** @var QueueRepository */
+	private $queueRepository;
 
-	public function __construct(string $queueFile, BuildingManager $buildingsManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, DefenseManager $defenseManager)
+	public function __construct(QueueRepository $queueRepository, BuildingManager $buildingsManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, DefenseManager $defenseManager)
 	{
-		$this->queueFile = $queueFile;
+		$this->queueRepository = $queueRepository;
 		$this->buildingsManager = $buildingsManager;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
@@ -49,8 +49,7 @@ class QueueConsumer extends Object
 
 	public function processQueue()
 	{
-		/** @var ICommand[] $queue */
-		$queue = $this->loadQueue();
+		$queue = $this->queueRepository->loadQueue();
 		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		$lastItem = null;
 		foreach ($queue as $key => $command) {
@@ -72,7 +71,7 @@ class QueueConsumer extends Object
 				break;
 			}
 		}
-		$this->saveQueue($queue);
+		$this->queueRepository->saveQueue($queue);
 		if (!$success) {
 			/** @var Carbon $datetime */
 			$datetime = Carbon::now();
@@ -110,46 +109,4 @@ class QueueConsumer extends Object
 		return $this->defenseManager->build($command->getDefense(), $command->getAmount());
 	}
 
-	/**
-	 * @return ICommand[]
-	 * @throws \Nette\Utils\JsonException
-	 */
-	private function loadQueue() : array
-	{
-		$queueText = file_get_contents($this->queueFile);
-		$queueCollection = new ArrayCollection(Json::decode($queueText));
-		return $queueCollection->map($this->arrayToCommandCallback());
-	}
-
-	private function arrayToCommand(array $data) : ICommand
-	{
-		foreach ($this->getCommandList() as $commandClass) {
-			if ($commandClass::getAction() === $data['action']) {
-				return $commandClass::fromArray($data);
-			}
-		}
-	}
-
-	private function arrayToCommandCallback()
-	{
-		return function (array $data) {
-			return $this->arrayToCommand($data);
-		};
-	}
-
-	private function getCommandList() : array
-	{
-		return [
-			BuildDefenseCommand::class,
-			UpgradeBuildingCommand::class
-		];
-	}
-
-	private function saveQueue(array $queue)
-	{
-		$queueCollection = new ArrayCollection($queue);
-		$arrays = $queueCollection->map(Functions::toArray());
-		$text = Json::encode($arrays);
-		file_put_contents($this->queueFile, $text);
-	}
 }

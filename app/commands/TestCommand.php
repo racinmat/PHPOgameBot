@@ -4,8 +4,10 @@ namespace App\Commands;
 use App\Enum\Building;
 use App\Fixtures\RootFixture;
 use App\Model\BuildingManager;
+use App\Model\Command\UpgradeBuildingCommand;
 use App\Model\CronManager;
 use App\Model\PlanetManager;
+use App\Model\QueueProducer;
 use App\Model\ResourcesCalculator;
 use App\Model\SignManager;
 use Symfony\Component\Console\Command\Command;
@@ -30,20 +32,18 @@ class TestCommand extends Command {
 
 	/** @var CronManager */
 	private $cronManager;
-	
-	/**
-	 * TestCommand constructor.
-	 * @param SignManager $signManager
-	 * @param PlanetManager $planetManager
-	 * @param ResourcesCalculator $resourcesCalculator
-	 */
-	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager)
+
+	/** @var QueueProducer */
+	private $queueProducer;
+
+	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, QueueProducer $queueProducer)
 	{
 		parent::__construct();
 		$this->signManager = $signManager;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->cronManager = $cronManager;
+		$this->queueProducer = $queueProducer;
 	}
 
 	protected function configure()
@@ -54,12 +54,8 @@ class TestCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$this->signManager->signIn();
-//		$this->planetManager->refreshResourceData();
-		$planet = $this->planetManager->getMyHomePlanet();
-		$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, Building::_(Building::SOLAR_POWER_PLANT), 8);
-		$this->cronManager->setNextStart($datetime);
-		$output->writeln('Hello world');
+		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
+		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::METAL_MINE)));
 		return 0; // zero return code means everything is ok
 	}
 

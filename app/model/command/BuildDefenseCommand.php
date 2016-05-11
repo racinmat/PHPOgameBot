@@ -15,10 +15,10 @@ class BuildDefenseCommand extends Nette\Object implements ICommand
 	/** @var int */
 	private $amount;
 
-	protected function __construct(array $data)
+	public function __construct(Defense $defense, $amount)
 	{
-		$this->defense = Defense::_($data['defense']);
-		$this->amount = $data['amount'];
+		$this->defense = $defense;
+		$this->amount = $amount;
 	}
 
 	public static function getAction() : string
@@ -38,7 +38,7 @@ class BuildDefenseCommand extends Nette\Object implements ICommand
 
 	public static function fromArray(array $data) : UpgradeBuildingCommand
 	{
-		return new BuildDefenseCommand($data['data']);
+		return new BuildDefenseCommand(Defense::_($data['defense']), $data['amount']);
 	}
 
 	public function toArray() : array

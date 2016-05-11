@@ -11,9 +11,9 @@ class UpgradeBuildingCommand extends Nette\Object implements ICommand
 	/** @var Building */
 	private $building;
 
-	protected function __construct(array $data)
+	public function __construct(Building $building)
 	{
-		$this->building = Building::_($data['building']);
+		$this->building = $building;
 	}
 
 	public static function getAction() : string
@@ -28,7 +28,7 @@ class UpgradeBuildingCommand extends Nette\Object implements ICommand
 
 	public static function fromArray(array $data) : UpgradeBuildingCommand
 	{
-		return new UpgradeBuildingCommand($data);
+		return new UpgradeBuildingCommand(Building::_($data['building']));
 	}
 
 	public function toArray() : array
