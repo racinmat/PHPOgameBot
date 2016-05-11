@@ -2,6 +2,7 @@
  
 namespace App\Model\Entity;
 
+use App\Enum\Building;
 use App\Model\ValueObject\Resources;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -62,13 +63,19 @@ class Planet extends Object
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
-	private $robotFactoryLevel;
+	private $roboticFactoryLevel;
 
 	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
-	private $hangarLevel;
+	private $shipyardLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var int
+	 */
+	private $fusionReactorLevel;
 
 	/**
 	 * @ORM\Column(type="boolean")
@@ -192,33 +199,33 @@ class Planet extends Object
 	/**
 	 * @return int
 	 */
-	public function getRobotFactoryLevel()
+	public function getRoboticFactoryLevel()
 	{
-		return $this->robotFactoryLevel;
+		return $this->roboticFactoryLevel;
 	}
 
 	/**
-	 * @param int $robotFactoryLevel
+	 * @param int $roboticFactoryLevel
 	 */
-	public function setRobotFactoryLevel($robotFactoryLevel)
+	public function setRoboticFactoryLevel($roboticFactoryLevel)
 	{
-		$this->robotFactoryLevel = $robotFactoryLevel;
+		$this->roboticFactoryLevel = $roboticFactoryLevel;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getHangarLevel()
+	public function getShipyardLevel()
 	{
-		return $this->hangarLevel;
+		return $this->shipyardLevel;
 	}
 
 	/**
-	 * @param int $hangarLevel
+	 * @param int $shipyardLevel
 	 */
-	public function setHangarLevel($hangarLevel)
+	public function setShipyardLevel($shipyardLevel)
 	{
-		$this->hangarLevel = $hangarLevel;
+		$this->shipyardLevel = $shipyardLevel;
 	}
 
 	/**
@@ -309,8 +316,30 @@ class Planet extends Object
 		return ($this->minimalTemperature + $this->maximalTemperature) / 2;
 	}
 
-	public function getResources()
+	public function getResources() : Resources
 	{
 		return new Resources($this->metal, $this->crystal, $this->deuterium);
 	}
+
+	public function getCurrentLevel(Building $building) : int
+	{
+		return $building->getCurrentLevel($this);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFusionReactorLevel()
+	{
+		return $this->fusionReactorLevel;
+	}
+
+	/**
+	 * @param int $fusionReactorLevel
+	 */
+	public function setFusionReactorLevel($fusionReactorLevel)
+	{
+		$this->fusionReactorLevel = $fusionReactorLevel;
+	}
+	
 }

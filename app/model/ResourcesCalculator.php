@@ -3,8 +3,10 @@
 namespace App\Model;
  
 use App\Enum\Building;
+use App\Enum\Defense;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
+use App\Utils\Functions;
 use Carbon\Carbon;
 use Nette;
  
@@ -19,35 +21,46 @@ class ResourcesCalculator extends Nette\Object
 		$this->acceleration = $acceleration;
 	}
 
-	/**
-	 * @param Planet $planet
-	 * @param Building $building
-	 * @param int $currentLevel
-	 * @return Carbon
-	 */
-	public function getTimeToEnoughResourcesForBuilding(Planet $planet, Building $building, int $currentLevel)
+	public function isEnoughResourcesForBuilding(Planet $planet, Building $building)
 	{
-		return $this->getTimeToResources($planet, $building->getPriceToNextLevel($currentLevel));
+		$currentLevel = $building->getCurrentLevel($planet);
+		$missing = $this->getMissingResources($planet, $building->getPriceToNextLevel($currentLevel));
+		return $missing->forAll(Functions::isZero());
 	}
 
-	/**
-	 * @param Planet $planet
-	 * @param Resources $expected
-	 * @return Carbon
-	 */
-	public function getTimeToResources(Planet $planet, Resources $expected)
+	public function isEnoughResourcesForDefense(Planet $planet, Defense $defense, int $amount)
 	{
-		$resources = $planet->getResources();
-		$time = $planet->getLastVisited();
+		$missing = $this->getMissingResources($planet, $defense->getPrice()->multiplyScalar($amount));
+		return $missing->forAll(Functions::isZero());
+	}
 
-		$difference = $expected->subtract($resources);
+	public function getTimeToEnoughResourcesForBuilding(Planet $planet, Building $building) : Carbon
+	{
+		$currentLevel = $building->getCurrentLevel($planet);
+		$missingResources = $this->getMissingResources($planet, $building->getPriceToNextLevel($currentLevel));
+		return $this->getTimeToResources($planet, $missingResources);
+	}
+
+	public function getTimeToEnoughResourcesFoDefense(Planet $planet, Defense $defense, int $amount) : Carbon
+	{
+		$missingResources = $this->getMissingResources($planet, $defense->getPrice()->multiplyScalar($amount));
+		return $this->getTimeToResources($planet, $missingResources);
+	}
+
+	private function getMissingResources(Planet $planet, Resources $expected) : Resources
+	{
+		return $expected->subtract($planet->getResources());
+	}
+
+	private function getTimeToResources(Planet $planet, Resources $missing) : Carbon
+	{
+		$time = $planet->getLastVisited();
 
 		$productionPerHour = $this->getProductionPerHour($planet->getMetalMineLevel(), $planet->getCrystalMineLevel(), $planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
 
-		$hoursToProduce = $difference->divide($productionPerHour);
-		$metalHours = $difference->getMetal() / $productionPerHour->getMetal();
-		$crystalHours = $difference->getCrystal() / $productionPerHour->getCrystal();
-		$deuteriumHours = $difference->getDeuterium() / $productionPerHour->getDeuterium();
+		$metalHours = $missing->getMetal() / $productionPerHour->getMetal();
+		$crystalHours = $missing->getCrystal() / $productionPerHour->getCrystal();
+		$deuteriumHours = $missing->getDeuterium() / $productionPerHour->getDeuterium();
 
 		$maxHours = max($metalHours, $crystalHours, $deuteriumHours);
 		if ($maxHours <= 0) {

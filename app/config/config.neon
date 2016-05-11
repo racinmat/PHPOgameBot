@@ -26,12 +26,13 @@ services:
 	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 	- App\Model\GalaxyBrowser
 	- App\Model\SignManager(user: %user%, password: %password%)
-	- App\Model\BuildingsManager
+	- App\Model\BuildingManager
 	- App\Model\PageObject\Menu
 	- App\Model\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\PlanetManager
 	- App\Model\CronManager(%cronFile%)
+	- App\Model\DefenseManager
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

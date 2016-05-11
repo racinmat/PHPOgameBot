@@ -7,12 +7,13 @@
  */
 
 namespace App\Enum;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 
 /**
- * Class MenuItem
+ * Class Building
  * @package App\Enum
- * @method static _(string $value) @return MenuItem
+ * @method static _(string $value) @return Building
  */
 class Building extends Enum
 {
@@ -27,19 +28,21 @@ class Building extends Enum
 		FUSION_REACTOR = 'fusion reactor'
 	;
 
-	/**
-	 * @return string
-	 */
-	public function getSelector()
+	public function getSelector() : string 
+	{
+		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
+	}
+
+	private function getClassSelector() : string 
 	{
 		switch ($this->getValue()) {
-			case static::METAL_MINE: return '.supply1 > div:nth-child(1) > a.detail_button';
-			case static::CRYSTAL_MINE: return '.supply2 > div:nth-child(1) > a.detail_button';
-			case static::DEUTERIUM_MINE: return '.supply3 > div:nth-child(1) > a.detail_button';
-			case static::SOLAR_POWER_PLANT: return '.supply4 > div:nth-child(1) > a.detail_button';
-			case static::ROBOTIC_FACTORY: return '.station14 > div:nth-child(1) > a.detail_button';
-			case static::SHIPYARD: return '.station21 > div:nth-child(1) > a.detail_button';
-			case static::FUSION_REACTOR: return '.supply12 > div:nth-child(1) > a.detail_button';
+			case static::METAL_MINE: return '.supply1';
+			case static::CRYSTAL_MINE: return '.supply2';
+			case static::DEUTERIUM_MINE: return '.supply3';
+			case static::SOLAR_POWER_PLANT: return '.supply4';
+			case static::ROBOTIC_FACTORY: return '.station14';
+			case static::SHIPYARD: return '.station21';
+			case static::FUSION_REACTOR: return '.supply12';
 		}
 	}
 
@@ -59,9 +62,9 @@ class Building extends Enum
 		}
 	}
 
-	public function getBuildButtonSelector()
+	public function getUpgradeButtonSelector()
 	{
-		return '.build-it > span:nth-child(1)';
+		return '.upgrade-it > span:nth-child(1)';
 	}
 
 	public function getNextLevelPriceConstant()
@@ -101,4 +104,24 @@ class Building extends Enum
 		}
 	}
 
+	public function getCurrentLevel(Planet $planet) : int 
+	{
+		switch ($this->getValue()) {
+			case static::METAL_MINE:
+				return $planet->getMetalMineLevel();
+			case static::CRYSTAL_MINE:
+				return $planet->getCrystalMineLevel();
+			case static::DEUTERIUM_MINE:
+				return $planet->getDeuteriumMineLevel();
+			case static::SOLAR_POWER_PLANT:
+				return $planet->getSolarPowerPlantLevel();
+			case static::ROBOTIC_FACTORY:
+				return $planet->getRoboticFactoryLevel();
+			case static::SHIPYARD:
+				return $planet->getShipyardLevel();
+			case static::FUSION_REACTOR:
+				return $planet->getFusionReactorLevel();
+		}
+	}
+	
 }

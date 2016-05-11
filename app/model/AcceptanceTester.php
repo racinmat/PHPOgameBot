@@ -3,7 +3,7 @@
 namespace App\Model;
 
 /**
- * Only as mock during container build. It does nothing.
+ * Only as mock during container upgrade. It does nothing.
  */
 class AcceptanceTester extends \AcceptanceTester
 {

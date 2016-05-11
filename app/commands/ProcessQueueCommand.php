@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 use App\Fixtures\RootFixture;
-use App\Model\BuildingsManager;
+use App\Model\BuildingManager;
 use App\Model\QueueConsumer;
 use App\Model\SignManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;

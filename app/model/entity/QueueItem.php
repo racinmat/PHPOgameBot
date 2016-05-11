@@ -13,6 +13,7 @@ class QueueItem extends Object
 {
 
 	const
+		ACTION_UPGRADE = 'upgrade',
 		ACTION_BUILD = 'build'
 	;
 

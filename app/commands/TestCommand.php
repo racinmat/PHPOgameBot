@@ -3,7 +3,7 @@
 namespace App\Commands;
 use App\Enum\Building;
 use App\Fixtures\RootFixture;
-use App\Model\BuildingsManager;
+use App\Model\BuildingManager;
 use App\Model\CronManager;
 use App\Model\PlanetManager;
 use App\Model\ResourcesCalculator;
