@@ -38,8 +38,13 @@ class QueueConsumer extends Nette\Object
 		}
 	}
 
-	public function build(QueueItem $item)
+	private function build(QueueItem $item)
 	{
-		$this->buildingsManager->build(Building::_($item->getData()));
+		$building = Building::_($item->getData());
+		if ($this->buildingsManager->isEnoughResources($building)) {
+			$this->buildingsManager->build($building);
+			$this->entityManager->remove($item);
+		}
+		$this->entityManager->flush();
 	}
 }

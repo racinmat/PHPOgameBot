@@ -41,3 +41,4 @@ extensions:
 console:
 	commands:
 		- App\Commands\SearchInactivePlanetsCommand
+		- App\Commands\ProcessQueueCommand
