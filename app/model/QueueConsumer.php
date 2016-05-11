@@ -55,11 +55,10 @@ class QueueConsumer extends Object
 					$success = $this->build($command);
 					break;
 			}
-			if ($success) {
-				unset($queue['key']);
-			}
 			$lastItem = $command;
-			if (!$success) {
+			if ($success) {
+				unset($queue[$key]);
+			} else {
 				break;
 			}
 		}

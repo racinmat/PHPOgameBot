@@ -57,7 +57,7 @@ class QueueRepository extends Object
 
 	public function saveQueue(array $queue)
 	{
-		$array = (new ArrayCollection($queue))->map(Functions::toArray())->toArray();
+		$array = (new ArrayCollection($queue))->map(Functions::toArray())->getValues();
 		file_put_contents($this->queueFile, Json::encode($array, Json::PRETTY));
 	}
 

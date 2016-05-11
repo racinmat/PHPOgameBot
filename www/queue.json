@@ -1,14 +1,8 @@
-[
-    {
+{
+    "1": {
         "action": "upgrade",
         "data": {
-            "building": "metal mine"
-        }
-    },
-    {
-        "action": "upgrade",
-        "data": {
-            "building": "crystal mine"
+            "building": "solar power plant"
         }
     }
-]
+}
