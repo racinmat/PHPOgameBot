@@ -48,6 +48,7 @@ class BuildingManager extends Nette\Object
 		$I = $this->I;
 		$I->click($building->getMenuLocation()->getSelector());
 		$I->click($building->getSelector());
+		$I->wait(1);
 	}
 
 }

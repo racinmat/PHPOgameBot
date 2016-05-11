@@ -64,7 +64,7 @@ class Building extends Enum
 
 	public function getUpgradeButtonSelector() : string
 	{
-		return '.upgrade-it > span:nth-child(1)';
+		return '.build-it > span:nth-child(1)';
 	}
 
 	public function getNextLevelPriceConstant() : float
