@@ -8,17 +8,16 @@ use Nette;
 class CronManager extends Nette\Object
 {
 
-	public function __construct()
+	private $file;
+
+	public function __construct(string $file)
 	{
-	
+		$this->file = $file;
 	}
 
 	public function setNextStart(Carbon $datetime)
 	{
-		$input = "schtasks /change /tn OgameBot /st {$datetime->format('H:i')}";
-		$output = shell_exec($input);
-		echo $input . PHP_EOL;
-		echo $output . PHP_EOL;
+		file_put_contents($this->file, $datetime->__toString());
 	}
 	
 }

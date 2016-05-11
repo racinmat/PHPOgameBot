@@ -4,6 +4,7 @@
 #
 parameters:
 	acceleration: 3
+	cronFile: %wwwDir%/cron.txt
 
 php:
 	date.timezone: Europe/Prague
@@ -21,16 +22,16 @@ session:
 
 services:
 	router: App\RouterFactory::createRouter
+	- App\Model\AcceptanceTesterFactory
+	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 	- App\Model\GalaxyBrowser
 	- App\Model\SignManager(user: %user%, password: %password%)
-	- App\Model\AcceptanceTesterFactory
 	- App\Model\BuildingsManager
 	- App\Model\PageObject\Menu
 	- App\Model\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\PlanetManager
-	- App\Model\CronManager
-	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
+	- App\Model\CronManager(%cronFile%)
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
