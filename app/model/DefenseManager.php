@@ -41,21 +41,24 @@ class DefenseManager extends Nette\Object
 		//možná refreshnout všechna data hned po zalogování
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		if (!$this->resourcesCalculator->isEnoughResourcesForBuilding($planet, $building, $building->getCurrentLevel($planet))) {
+		if (!$this->resourcesCalculator->isEnoughResourcesForDefense($planet, $defense, $amount)) {
 			return false;
 		}
-		$this->openBuildingMenu($building);
+		$this->openDefenseMenu($defense);
 		$I = $this->I;
-		$I->click($building->getUpgradeButtonSelector());
+		$I->fillField('#number', $amount);
+		$I->wait(1);
+		$I->click($defense->getBuildButtonSelector());
 		$I->wait(1);
 		return true;
 	}
 
-	private function openBuildingMenu(Building $building)
+	private function openDefenseMenu(Defense $defense)
 	{
 		$I = $this->I;
-		$I->click($building->getMenuLocation()->getSelector());
-		$I->click($building->getSelector());
+		$I->click($defense->getMenuLocation()->getSelector());
+		$I->click($defense->getSelector());
+		$I->wait(1);
 	}
 	
 }

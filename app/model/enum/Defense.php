@@ -54,14 +54,14 @@ class Defense extends Enum
 	/**
 	 * @return MenuItem
 	 */
-	public function getMenuLocation()
+	public function getMenuLocation() : MenuItem
 	{
-		MenuItem::_(MenuItem::DEFENSE);
+		return MenuItem::_(MenuItem::DEFENSE);
 	}
 
-	public function getBuildButtonSelector()
+	public function getBuildButtonSelector() : string
 	{
-		return '.upgrade-it > span:nth-child(1)';
+		return '.build-it > span:nth-child(1)';
 	}
 
 	public function getPrice() : Resources

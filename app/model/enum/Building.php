@@ -49,7 +49,7 @@ class Building extends Enum
 	/**
 	 * @return MenuItem
 	 */
-	public function getMenuLocation()
+	public function getMenuLocation() : MenuItem
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return MenuItem::_(MenuItem::RESOURCES);
@@ -62,12 +62,12 @@ class Building extends Enum
 		}
 	}
 
-	public function getUpgradeButtonSelector()
+	public function getUpgradeButtonSelector() : string
 	{
 		return '.upgrade-it > span:nth-child(1)';
 	}
 
-	public function getNextLevelPriceConstant()
+	public function getNextLevelPriceConstant() : float
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return 1.5;
