@@ -5,7 +5,7 @@
 parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
-
+	queueFile: %wwwDir%/queue.json
 php:
 	date.timezone: Europe/Prague
 
@@ -28,7 +28,7 @@ services:
 	- App\Model\SignManager(user: %user%, password: %password%)
 	- App\Model\BuildingManager
 	- App\Model\PageObject\Menu
-	- App\Model\QueueConsumer
+	- App\Model\QueueConsumer(queueFile: %queueFile%)
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\PlanetManager
 	- App\Model\CronManager(%cronFile%)

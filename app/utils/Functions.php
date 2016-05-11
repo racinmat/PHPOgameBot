@@ -2,6 +2,8 @@
 
 namespace App\Utils;
 
+use app\model\command\ArraySerializable;
+use App\Model\Command\ICommand;
 use Nette\Object;
 
 class Functions extends Object
@@ -21,4 +23,10 @@ class Functions extends Object
 		};
 	}
 
+	public static function toArray()
+	{
+		return function (ArraySerializable $data) {
+			return $data->toArray();
+		};
+	}
 }

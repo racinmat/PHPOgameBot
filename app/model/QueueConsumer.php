@@ -4,8 +4,13 @@ namespace App\Model;
  
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Model\Command\BuildDefenseCommand;
+use App\Model\Command\ICommand;
+use App\Model\Command\UpgradeBuildingCommand;
 use App\Model\Entity\QueueItem;
+use App\Utils\Functions;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
@@ -13,12 +18,6 @@ use Nette\Utils\Json;
 
 class QueueConsumer extends Object
 {
-
-	/** @var EntityManager */
-	private $entityManager;
-
-	/** @var EntityRepository */
-	private $queueRepository;
 
 	/** @var BuildingManager */
 	private $buildingsManager;
@@ -35,10 +34,12 @@ class QueueConsumer extends Object
 	/** @var DefenseManager */
 	private $defenseManager;
 
-	public function __construct(EntityManager $entityManager, BuildingManager $buildingsManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, DefenseManager $defenseManager)
+	/** @var string */
+	private $queueFile;
+
+	public function __construct(string $queueFile, BuildingManager $buildingsManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, DefenseManager $defenseManager)
 	{
-		$this->entityManager = $entityManager;
-		$this->queueRepository = $entityManager->getRepository(QueueItem::class);
+		$this->queueFile = $queueFile;
 		$this->buildingsManager = $buildingsManager;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
@@ -48,41 +49,43 @@ class QueueConsumer extends Object
 
 	public function processQueue()
 	{
-		/** @var QueueItem[] $queue */
-		$queue = $this->queueRepository->findAll();
+		/** @var ICommand[] $queue */
+		$queue = $this->loadQueue();
 		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		$lastItem = null;
-		foreach ($queue as $item) {
-			switch ($item->getAction()) {
-				case QueueItem::ACTION_UPGRADE:
-					$success = $this->upgrade($item);
+		foreach ($queue as $key => $command) {
+			switch ($command->getAction()) {
+				case ICommand::ACTION_UPGRADE:
+					/** @var UpgradeBuildingCommand $command */
+					$success = $this->upgrade($command);
 					break;
-				case QueueItem::ACTION_BUILD:
-					$success = $this->build($item);
+				case ICommand::ACTION_BUILD_DEFENSE:
+					/** @var BuildDefenseCommand $command */
+					$success = $this->build($command);
 					break;
 			}
 			if ($success) {
-				$this->entityManager->remove($item);
+				unset($queue['key']);
 			}
-			$lastItem = $item;
+			$lastItem = $command;
 			if (!$success) {
 				break;
 			}
 		}
-		$this->entityManager->flush();
+		$this->saveQueue($queue);
 		if (!$success) {
+			/** @var Carbon $datetime */
 			$datetime = Carbon::now();
 			$this->planetManager->refreshResourceData();
 			$planet = $this->planetManager->getMyHomePlanet();
 			switch ($lastItem->getAction()) {
-				case QueueItem::ACTION_UPGRADE:
-					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, Building::_($lastItem->getData()));
+				case ICommand::ACTION_UPGRADE:
+					/** @var UpgradeBuildingCommand $lastItem */
+					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesForBuilding($planet, $lastItem->getBuilding());
 					break;
-				case QueueItem::ACTION_BUILD:
-					$data = Json::decode($lastItem->getData(), true);
-					$amount = $data['amount'];
-					$type = Defense::_($data['type']);
-					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesFoDefense($planet, $type, $amount);
+				case ICommand::ACTION_BUILD_DEFENSE:
+					/** @var BuildDefenseCommand $lastItem */
+					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesFoDefense($planet, $lastItem->getDefense(), $lastItem->getAmount());
 					break;
 			}
 			$this->cronManager->setNextStart($datetime);
@@ -90,22 +93,63 @@ class QueueConsumer extends Object
 	}
 
 	/**
-	 * @param QueueItem $item
+	 * @param UpgradeBuildingCommand $command
 	 * @return bool returns true if building is built successfully
 	 */
-	private function upgrade(QueueItem $item) : bool
+	private function upgrade(UpgradeBuildingCommand $command) : bool
 	{
-		$building = Building::_($item->getData());
-		return $this->buildingsManager->upgrade($building);
+		return $this->buildingsManager->upgrade($command->getBuilding());
 	}
 
-	private function build(QueueItem $item)
+	/**
+	 * @param BuildDefenseCommand $command
+	 * @return bool returns true if building is built successfully
+	 */
+	private function build(BuildDefenseCommand $command)
 	{
-		//možná přehodit frontu do elasticsearche nebo jiného nestrukturovaného úložiště, abych měl různé druhy úkolů
-		$data = Json::decode($item->getData(), true);
-		$amount = $data['amount'];
-		$defense = Defense::_($data['type']);
-		return $this->defenseManager->build($defense, $amount);
+		return $this->defenseManager->build($command->getDefense(), $command->getAmount());
 	}
 
+	/**
+	 * @return ICommand[]
+	 * @throws \Nette\Utils\JsonException
+	 */
+	private function loadQueue() : array
+	{
+		$queueText = file_get_contents($this->queueFile);
+		$queueCollection = new ArrayCollection(Json::decode($queueText));
+		return $queueCollection->map($this->arrayToCommandCallback());
+	}
+
+	private function arrayToCommand(array $data) : ICommand
+	{
+		foreach ($this->getCommandList() as $commandClass) {
+			if ($commandClass::getAction() === $data['action']) {
+				return $commandClass::fromArray($data);
+			}
+		}
+	}
+
+	private function arrayToCommandCallback()
+	{
+		return function (array $data) {
+			return $this->arrayToCommand($data);
+		};
+	}
+
+	private function getCommandList() : array
+	{
+		return [
+			BuildDefenseCommand::class,
+			UpgradeBuildingCommand::class
+		];
+	}
+
+	private function saveQueue(array $queue)
+	{
+		$queueCollection = new ArrayCollection($queue);
+		$arrays = $queueCollection->map(Functions::toArray());
+		$text = Json::encode($arrays);
+		file_put_contents($this->queueFile, $text);
+	}
 }
