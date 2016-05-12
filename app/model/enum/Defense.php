@@ -90,4 +90,13 @@ class Defense extends Buildable
 		}
 	}
 
+	public function getFreeToEnhanceText() : string
+	{
+		return 'Žádné lodě/obrany se nyní nestaví.';
+	}
+
+	public function getEnhanceStatusSelector() : string
+	{
+		return '#overviewBottom > div:nth-child(3) table.construction.active';
+	}
 }

@@ -3,6 +3,7 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\Building;
+use App\Enum\Upgradable;
 use Nette;
  
 class UpgradeBuildingCommand extends Nette\Object implements IUpgradeCommand
@@ -18,10 +19,10 @@ class UpgradeBuildingCommand extends Nette\Object implements IUpgradeCommand
 
 	public static function getAction() : string
 	{
-		return static::ACTION_UPGRADE;
+		return static::ACTION_UPGRADE_BUILDING;
 	}
 
-	public function getBuilding() : Building
+	public function getUpgradable() : Upgradable
 	{
 		return $this->building;
 	}

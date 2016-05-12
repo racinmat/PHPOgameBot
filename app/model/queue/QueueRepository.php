@@ -3,8 +3,10 @@
 namespace App\Model\Queue;
  
 use App\Model\Queue\Command\BuildDefenseCommand;
+use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
+use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;
@@ -50,8 +52,10 @@ class QueueRepository extends Object
 	private function getCommandList() : array
 	{
 		return [
+			UpgradeBuildingCommand::class,
+			UpgradeResearchCommand::class,
 			BuildDefenseCommand::class,
-			UpgradeBuildingCommand::class
+			BuildShipsCommand::class
 		];
 	}
 

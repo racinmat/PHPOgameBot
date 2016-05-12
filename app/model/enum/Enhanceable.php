@@ -7,7 +7,6 @@
  */
 
 namespace App\Enum;
-use App\Model\ValueObject\Resources;
 
 /**
  * Class Enhanceable

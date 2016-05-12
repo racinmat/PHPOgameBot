@@ -5,6 +5,7 @@ namespace App\Model\Game;
 use App\Enum\Buildable;
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Enum\MenuItem;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
@@ -31,16 +32,16 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 	}
-	
+
 	/**
-	 * @param Buildable $buildable
-	 * @param int $amount
+	 * @param IBuildCommand $command
 	 * @return bool returns true when building was built, otherwise returns false
 	 */
-	public function build(Buildable $buildable, int $amount) : bool
+	public function build(IBuildCommand $command) : bool
 	{
+		$buildable = $command->getBuildable();
+		$amount = $command->getAmount();
 		//možná refreshnout všechna data hned po zalogování
-		//todo: dodělat kontrolu, že se nestaví nějaké lodě/obrana
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
 		if (!$this->resourcesCalculator->isEnoughResourcesForBuild($planet, $buildable, $amount)) {
@@ -71,11 +72,21 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var IBuildCommand $command */
-		$this->build($command->getBuildable(), $command->getAmount());
+		$this->build($command->getBuildable());
 	}
 	
 	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon
 	{
-		// TODO: Implement getTimeToProcessingAvailable() method.
+		/** @var IBuildCommand $command */
+		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
+		$datetime2 = $this->planetManager->getTimeToFinish($command->getBuildable());
+		return $datetime1->max($datetime2);
 	}
+
+	public function isProcessingAvailable(Planet $planet, IBuildCommand $command) : bool
+	{
+		/** @var IBuildCommand $command */
+		return $this->resourcesCalculator->isEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount()) && ! $this->planetManager->currentlyProcessing($command->getBuildable());
+	}
+
 }

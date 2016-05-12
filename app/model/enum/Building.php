@@ -137,6 +137,6 @@ class Building extends Upgradable
 
 	public function getEnhanceStatusSelector() : string
 	{
-		return 'table.construction.active';
+		return '#overviewBottom > div:nth-child(1) table.construction.active';
 	}
 }

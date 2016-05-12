@@ -43,9 +43,9 @@ class ResourcesCalculator extends Nette\Object
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 
-	public function getTimeToEnoughResourcesFoDefense(Planet $planet, Defense $defense, int $amount) : Carbon
+	public function getTimeToEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount) : Carbon
 	{
-		$missingResources = $this->getMissingResources($planet, $defense->getPrice()->multiplyScalar($amount));
+		$missingResources = $this->getMissingResources($planet, $buildable->getPrice()->multiplyScalar($amount));
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 

@@ -6,6 +6,8 @@ use App\Enum\Building;
 use App\Enum\MenuItem;
 use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
+use App\Model\Queue\Command\ICommand;
+use App\Model\Queue\Command\IUpgradeCommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
 use Carbon\Carbon;
@@ -33,15 +35,16 @@ class UpgradeManager extends Object implements ICommandProcessor
 	}
 
 	/**
-	 * @param Upgradable $upgradable
+	 * @param IUpgradeCommand $command
 	 * @return bool returns true when building was built, otherwise returns false
 	 */
-	public function upgrade(Upgradable $upgradable) : bool
+	public function upgrade(IUpgradeCommand $command) : bool
 	{
+		$upgradable = $command->getUpgradable();
 		//možná refreshnout všechna data hned po zalogování. Refreshovat vše včetně levelů budov, výzkumů apod.
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		if (!$this->canBuild($planet, $upgradable)) {
+		if (!$this->isProcessingAvailable($planet, $command)) {
 			return false;
 		}
 		$this->openMenu($upgradable);
@@ -59,39 +62,28 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$I->wait(1);
 	}
 
-	protected function canBuild(Planet $planet, Upgradable $upgradable) : bool
+	public function canProcessCommand(ICommand $command) : bool
 	{
-		return $this->resourcesCalculator->isEnoughResourcesForUpgrade($planet, $upgradable) && ! $this->currentlyUpgrading($upgradable);
+		return $command instanceof IUpgradeCommand;
 	}
 
-	public function getTimeToUpgradeAvailable(Planet $planet, Upgradable $upgradable) : Carbon
+	public function processCommand(ICommand $command) : bool
 	{
-		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForUpgrade($planet, $upgradable);
-		$datetime2 = $this->getTimeToFinishUpgrade($upgradable);
+		/** @var IUpgradeCommand $command */
+		$this->upgrade($command->getUpgradable());
+	}
+
+	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon
+	{
+		/** @var IUpgradeCommand $command */
+		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForUpgrade($planet, $command->getUpgradable());
+		$datetime2 = $this->planetManager->getTimeToFinish($command->getUpgradable());
 		return $datetime1->max($datetime2);
 	}
 
-	protected function parseOgameTimeInterval(string $interval) : CarbonInterval
+	public function isProcessingAvailable(Planet $planet, IUpgradeCommand $command) : bool
 	{
-		$params = Strings::match($interval, '~((?<weeks>\d{1,2})t)? ?((?<days>\d{1,2})d)? ?((?<hours>\d{1,2})hod)? ?((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');
-		return new CarbonInterval(0, 0, $params['weeks'], $params['days'], $params['hours'], $params['minutes'], $params['seconds']);
-	}
-
-	protected function currentlyUpgrading(Upgradable $upgradable) : bool
-	{
-		return ! $this->I->seeExists($upgradable->getFreeToEnhanceText(), $upgradable->getEnhanceStatusSelector());
-	}
-
-	protected function getTimeToFinishUpgrade(Upgradable $upgradable) : Carbon
-	{
-		$I = $this->I;
-		$I->click(MenuItem::_(MenuItem::OVERVIEW));
-		$I->wait(1);
-		if ($I->seeElementExists("{$upgradable->getEnhanceStatusSelector()} #Countdown")) {
-			$interval = $I->grabTextFrom("{$upgradable->getEnhanceStatusSelector()} #Countdown");
-			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
-		}
-		return Carbon::now();
+		return $this->resourcesCalculator->isEnoughResourcesForUpgrade($planet, $command->getUpgradable()) && ! $this->planetManager->currentlyProcessing($command->getUpgradable());
 	}
 
 }

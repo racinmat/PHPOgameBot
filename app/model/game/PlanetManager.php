@@ -2,8 +2,11 @@
 
 namespace App\Model\Game;
  
+use App\Enum\Enhanceable;
+use App\Enum\MenuItem;
 use App\Model\Entity\Planet;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
@@ -56,4 +59,28 @@ class PlanetManager extends Object
 		$planet->setLastVisited(Carbon::now());
 		$this->entityManager->flush($planet);
 	}
+
+	protected function parseOgameTimeInterval(string $interval) : CarbonInterval
+	{
+		$params = Strings::match($interval, '~((?<weeks>\d{1,2})t)? ?((?<days>\d{1,2})d)? ?((?<hours>\d{1,2})hod)? ?((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');
+		return new CarbonInterval(0, 0, $params['weeks'], $params['days'], $params['hours'], $params['minutes'], $params['seconds']);
+	}
+
+	public function getTimeToFinish(Enhanceable $enhanceable) : Carbon
+	{
+		$I = $this->I;
+		$I->click(MenuItem::_(MenuItem::OVERVIEW));
+		$I->wait(1);
+		if ($I->seeElementExists("{$enhanceable->getEnhanceStatusSelector()} #Countdown")) {
+			$interval = $I->grabTextFrom("{$enhanceable->getEnhanceStatusSelector()} #Countdown");
+			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
+		}
+		return Carbon::now();
+	}
+
+	public function currentlyProcessing(Enhanceable $enhanceable) : bool
+	{
+		return ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
+	}
+
 }

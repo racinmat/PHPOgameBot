@@ -7,7 +7,8 @@ interface ICommand extends ArraySerializable
 {
 
 	const
-		ACTION_UPGRADE = 'upgrade',
+		ACTION_UPGRADE_BUILDING = 'upgrade building',
+		ACTION_UPGRADE_RESEARCH = 'upgrade research',
 		ACTION_BUILD_DEFENSE = 'build defense',
 		ACTION_BUILD_SHIPS = 'build ships'
 	;
