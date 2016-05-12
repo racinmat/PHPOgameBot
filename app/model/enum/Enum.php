@@ -125,9 +125,13 @@ abstract class Enum extends Object {
 	/**
 	 * @return string[]
 	 */
-	public static function getEnumValues()
+	public static function getEnumValues() : array 
 	{
 		return static::getConstants();
 	}
 
+	public static function getSelectBoxValues() : array
+	{
+		return array_combine(static::getEnumValues(), static::getEnumValues());
+	}
 }

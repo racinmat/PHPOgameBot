@@ -49,7 +49,10 @@ class QueueRepository extends Object
 		};
 	}
 
-	private function getCommandList() : array
+	/**
+	 * @return string[]
+	 */
+	public function getCommandList() : array
 	{
 		return [
 			UpgradeBuildingCommand::class,

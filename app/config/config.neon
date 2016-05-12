@@ -6,6 +6,7 @@ parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
 	queueFile: %wwwDir%/queue.json
+
 php:
 	date.timezone: Europe/Prague
 
@@ -26,15 +27,17 @@ services:
 	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
 	- App\Model\Game\GalaxyBrowser
 	- App\Model\Game\SignManager(user: %user%, password: %password%)
-	- App\Model\Game\BuildingManager
+	- App\Model\Game\UpgradeManager
+	- App\Model\Game\BuildManager
 	- App\Model\PageObject\Menu
 	- App\Model\Queue\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\Game\PlanetManager
 	- App\Model\CronManager(%cronFile%)
-	- App\Model\Game\BuildingManager
 	- App\Model\Queue\QueueProducer
 	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
+	- App\Forms\FormFactory
+	- App\Forms\AddCommandFormFactory
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
