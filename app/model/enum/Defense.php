@@ -35,7 +35,7 @@ class Defense extends Buildable
 		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
 	}
 
-	private function getClassSelector() : string
+	protected function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::ROCKET_LAUNCHER: return '.defense401';

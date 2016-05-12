@@ -7,6 +7,7 @@
  */
 
 namespace App\Enum;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 
 /**
@@ -16,6 +17,14 @@ use App\Model\ValueObject\Resources;
 abstract class Upgradable extends Enhanceable
 {
 
-	abstract public function getPriceToNextLevel($currentLevel) : Resources;
-	
+	public function getPriceToNextLevel($currentLevel) : Resources
+	{
+		return $this->getBasePrice()->multiplyScalar(pow($this->getNextLevelPriceConstant(), $currentLevel));
+	}
+
+	abstract protected function getBasePrice() : Resources;
+
+	abstract protected function getNextLevelPriceConstant() : float;
+
+	abstract public function getCurrentLevel(Planet $planet) : int;
 }

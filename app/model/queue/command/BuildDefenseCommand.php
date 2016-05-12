@@ -2,6 +2,7 @@
 
 namespace App\Model\Queue\Command;
  
+use App\Enum\Buildable;
 use App\Enum\Building;
 use App\Enum\Defense;
 use Nette;
@@ -26,7 +27,7 @@ class BuildDefenseCommand extends Nette\Object implements IBuildCommand
 		return static::ACTION_BUILD_DEFENSE;
 	}
 
-	public function getDefense() : Building
+	public function getBuildable() : Buildable
 	{
 		return $this->defense;
 	}

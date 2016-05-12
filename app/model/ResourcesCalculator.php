@@ -2,8 +2,10 @@
 
 namespace App\Model;
  
+use App\Enum\Buildable;
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 use App\Utils\Functions;
@@ -21,23 +23,23 @@ class ResourcesCalculator extends Nette\Object
 		$this->acceleration = $acceleration;
 	}
 
-	public function isEnoughResourcesForBuilding(Planet $planet, Building $building)
+	public function isEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable)
 	{
-		$currentLevel = $building->getCurrentLevel($planet);
-		$missing = $this->getMissingResources($planet, $building->getPriceToNextLevel($currentLevel));
+		$currentLevel = $upgradable->getCurrentLevel($planet);
+		$missing = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
 		return $missing->forAll(Functions::isZero());
 	}
 
-	public function isEnoughResourcesForDefense(Planet $planet, Defense $defense, int $amount)
+	public function isEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount)
 	{
-		$missing = $this->getMissingResources($planet, $defense->getPrice()->multiplyScalar($amount));
+		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyScalar($amount));
 		return $missing->forAll(Functions::isZero());
 	}
 
-	public function getTimeToEnoughResourcesForBuilding(Planet $planet, Building $building) : Carbon
+	public function getTimeToEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : Carbon
 	{
-		$currentLevel = $building->getCurrentLevel($planet);
-		$missingResources = $this->getMissingResources($planet, $building->getPriceToNextLevel($currentLevel));
+		$currentLevel = $upgradable->getCurrentLevel($planet);
+		$missingResources = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 

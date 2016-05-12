@@ -32,7 +32,7 @@ services:
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\Game\PlanetManager
 	- App\Model\CronManager(%cronFile%)
-	- App\Model\Game\DefenseManager
+	- App\Model\Game\BuildingManager
 	- App\Model\Queue\QueueProducer
 	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
 

@@ -21,13 +21,17 @@ abstract class Enhanceable extends Enum
 		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
 	}
 
-	abstract protected function getClassSelector() : string;
-
-	abstract public function getMenuLocation() : MenuItem;
-
 	public function getBuildButtonSelector() : string
 	{
 		return '.build-it > span:nth-child(1)';
 	}
+
+	abstract protected function getClassSelector() : string;
+
+	abstract public function getMenuLocation() : MenuItem;
+
+	abstract public function getFreeToEnhanceText() : string;
+
+	abstract public function getFreeToEnhanceSelector() : string;
 
 }

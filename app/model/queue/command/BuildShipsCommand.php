@@ -2,6 +2,7 @@
 
 namespace App\Model\Queue\Command;
  
+use App\Enum\Buildable;
 use App\Enum\Building;
 use App\Enum\Defense;
 use App\Enum\Ships;
@@ -27,7 +28,7 @@ class BuildShipsCommand extends Nette\Object implements IBuildCommand
 		return static::ACTION_BUILD_SHIPS;
 	}
 
-	public function getShips() : Ships
+	public function getBuildable() : Buildable
 	{
 		return $this->ships;
 	}
@@ -39,7 +40,7 @@ class BuildShipsCommand extends Nette\Object implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildShipsCommand
 	{
-		return new BuildShipsCommand(Ships::_($data['defense']), $data['amount']);
+		return new BuildShipsCommand(Ships::_($data['ships']), $data['amount']);
 	}
 
 	public function toArray() : array

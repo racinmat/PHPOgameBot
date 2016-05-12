@@ -34,29 +34,23 @@ class Ships extends Buildable
 		COLONY_SHIP = 'colony ship'
 	;
 
-	public function getSelector() : string
+	protected function getClassSelector() : string
 	{
-		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
-	}
-
-	private function getClassSelector() : string
-	{
-		//todo: upravit
 		switch ($this->getValue()) {
-			case static::SMALL_CARGO_SHIP: return '.defense401';
-			case static::LARGE_CARGO_SHIP: return '.defense402';
-			case static::LIGHT_FIGHTER: return '.defense403';
-			case static::HEAVY_FIGHTER: return '.defense404';
-			case static::CRUISER: return '.defense405';
-			case static::BATTLESHIP: return '.defense406';
-			case static::BATTLECRUISER: return '.defense407';
-			case static::DESTROYER: return '.defense408';
-			case static::DEATHSTAR: return '.defense502';
-			case static::BOMBER: return '.defense503';
-			case static::RECYCLER: return '.defense503';
-			case static::ESPIONAGE_PROBE: return '.defense503';
-			case static::SOLAR_SATELLITE: return '.defense503';
-			case static::COLONY_SHIP: return '.defense503';
+			case static::SMALL_CARGO_SHIP: return '.civil202';
+			case static::LARGE_CARGO_SHIP: return '.civil203';
+			case static::LIGHT_FIGHTER: return '.military204';
+			case static::HEAVY_FIGHTER: return '.military205';
+			case static::CRUISER: return '.military206';
+			case static::BATTLESHIP: return '.military207';
+			case static::BATTLECRUISER: return '.military215';
+			case static::DESTROYER: return '.military213';
+			case static::DEATHSTAR: return '.military214';
+			case static::BOMBER: return '.military211';
+			case static::RECYCLER: return '.civil209';
+			case static::ESPIONAGE_PROBE: return '.civil210';
+			case static::SOLAR_SATELLITE: return '.civil212';
+			case static::COLONY_SHIP: return '.civil208';
 		}
 	}
 
@@ -66,11 +60,6 @@ class Ships extends Buildable
 	public function getMenuLocation() : MenuItem
 	{
 		return MenuItem::_(MenuItem::FLEET);
-	}
-
-	public function getBuildButtonSelector() : string
-	{
-		return '.build-it > span:nth-child(1)';
 	}
 
 	public function getPrice() : Resources

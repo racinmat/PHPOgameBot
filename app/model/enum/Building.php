@@ -66,7 +66,7 @@ class Building extends Upgradable
 		}
 	}
 
-	public function getNextLevelPriceConstant() : float
+	protected function getNextLevelPriceConstant() : float
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return 1.5;
@@ -78,12 +78,7 @@ class Building extends Upgradable
 		}
 	}
 
-	public function getPriceToNextLevel($currentLevel) : Resources
-	{
-		return $this->getBasePrice()->multiplyScalar(pow($this->getNextLevelPriceConstant(), $currentLevel));
-	}
-
-	public function getBasePrice() : Resources
+	protected function getBasePrice() : Resources
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE:
@@ -134,5 +129,14 @@ class Building extends Upgradable
 				return $planet->getDeuteriumTankLevel();
 		}
 	}
-	
+
+	public function getFreeToEnhanceText() : string
+	{
+		return 'Nestaví se žádné budovy.';
+	}
+
+	public function getFreeToEnhanceSelector() : string
+	{
+		return 'table.construction.active';
+	}
 }
