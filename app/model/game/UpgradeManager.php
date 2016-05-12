@@ -79,7 +79,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 
 	protected function currentlyUpgrading(Upgradable $upgradable) : bool
 	{
-		return ! $this->I->seeExists($upgradable->getFreeToEnhanceText(), $upgradable->getFreeToEnhanceSelector());
+		return ! $this->I->seeExists($upgradable->getFreeToEnhanceText(), $upgradable->getEnhanceStatusSelector());
 	}
 
 	protected function getTimeToFinishUpgrade(Upgradable $upgradable) : Carbon
@@ -87,8 +87,8 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$I = $this->I;
 		$I->click(MenuItem::_(MenuItem::OVERVIEW));
 		$I->wait(1);
-		if ($I->seeElementExists("{$upgradable->getFreeToEnhanceSelector()} #Countdown")) {
-			$interval = $I->grabTextFrom("{$upgradable->getFreeToEnhanceSelector()} #Countdown");
+		if ($I->seeElementExists("{$upgradable->getEnhanceStatusSelector()} #Countdown")) {
+			$interval = $I->grabTextFrom("{$upgradable->getEnhanceStatusSelector()} #Countdown");
 			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
 		}
 		return Carbon::now();

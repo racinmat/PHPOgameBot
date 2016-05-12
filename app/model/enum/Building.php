@@ -135,7 +135,7 @@ class Building extends Upgradable
 		return 'Nestaví se žádné budovy.';
 	}
 
-	public function getFreeToEnhanceSelector() : string
+	public function getEnhanceStatusSelector() : string
 	{
 		return 'table.construction.active';
 	}

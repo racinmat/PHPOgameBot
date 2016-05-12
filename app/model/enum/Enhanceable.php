@@ -32,6 +32,6 @@ abstract class Enhanceable extends Enum
 
 	abstract public function getFreeToEnhanceText() : string;
 
-	abstract public function getFreeToEnhanceSelector() : string;
+	abstract public function getEnhanceStatusSelector() : string;
 
 }
