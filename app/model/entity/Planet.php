@@ -138,6 +138,102 @@ class Planet extends Object
 	private $deuteriumTankLevel;
 
 	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+	 */
+	private $espionageTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $computerTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $weaponTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $shieldingTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $armourTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $energyTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $hyperspaceTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $combustionDriveLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $impulseDriveLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $hyperspaceDriveLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $laserTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $ionTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $plasmaTechnologyLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $intergalacticResearchNetworkLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $astrophysicsLevel;
+
+	/**
+	 * @ORMColumn(type="integer")
+	 * @var integer
+ 	 */
+	private $gravitonTechnologyLevel;
+
+	/**
 	 * Planet constructor.
 	 * @param string $name
 	 * @param Coordinates $coordinates
@@ -406,6 +502,262 @@ class Planet extends Object
 	public function setDeuteriumTankLevel($deuteriumTankLevel)
 	{
 		$this->deuteriumTankLevel = $deuteriumTankLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getEspionageTechnologyLevel()
+	{
+		return $this->espionageTechnologyLevel;
+	}
+
+	/**
+	 * @param int $espionageTechnologyLevel
+	 */
+	public function setEspionageTechnologyLevel($espionageTechnologyLevel)
+	{
+		$this->espionageTechnologyLevel = $espionageTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getComputerTechnologyLevel()
+	{
+		return $this->computerTechnologyLevel;
+	}
+
+	/**
+	 * @param int $computerTechnologyLevel
+	 */
+	public function setComputerTechnologyLevel($computerTechnologyLevel)
+	{
+		$this->computerTechnologyLevel = $computerTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getWeaponTechnologyLevel()
+	{
+		return $this->weaponTechnologyLevel;
+	}
+
+	/**
+	 * @param int $weaponTechnologyLevel
+	 */
+	public function setWeaponTechnologyLevel($weaponTechnologyLevel)
+	{
+		$this->weaponTechnologyLevel = $weaponTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getShieldingTechnologyLevel()
+	{
+		return $this->shieldingTechnologyLevel;
+	}
+
+	/**
+	 * @param int $shieldingTechnologyLevel
+	 */
+	public function setShieldingTechnologyLevel($shieldingTechnologyLevel)
+	{
+		$this->shieldingTechnologyLevel = $shieldingTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getArmourTechnologyLevel()
+	{
+		return $this->armourTechnologyLevel;
+	}
+
+	/**
+	 * @param int $armourTechnologyLevel
+	 */
+	public function setArmourTechnologyLevel($armourTechnologyLevel)
+	{
+		$this->armourTechnologyLevel = $armourTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getEnergyTechnologyLevel()
+	{
+		return $this->energyTechnologyLevel;
+	}
+
+	/**
+	 * @param int $energyTechnologyLevel
+	 */
+	public function setEnergyTechnologyLevel($energyTechnologyLevel)
+	{
+		$this->energyTechnologyLevel = $energyTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHyperspaceTechnologyLevel()
+	{
+		return $this->hyperspaceTechnologyLevel;
+	}
+
+	/**
+	 * @param int $hyperspaceTechnologyLevel
+	 */
+	public function setHyperspaceTechnologyLevel($hyperspaceTechnologyLevel)
+	{
+		$this->hyperspaceTechnologyLevel = $hyperspaceTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCombustionDriveLevel()
+	{
+		return $this->combustionDriveLevel;
+	}
+
+	/**
+	 * @param int $combustionDriveLevel
+	 */
+	public function setCombustionDriveLevel($combustionDriveLevel)
+	{
+		$this->combustionDriveLevel = $combustionDriveLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getImpulseDriveLevel()
+	{
+		return $this->impulseDriveLevel;
+	}
+
+	/**
+	 * @param int $impulseDriveLevel
+	 */
+	public function setImpulseDriveLevel($impulseDriveLevel)
+	{
+		$this->impulseDriveLevel = $impulseDriveLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHyperspaceDriveLevel()
+	{
+		return $this->hyperspaceDriveLevel;
+	}
+
+	/**
+	 * @param int $hyperspaceDriveLevel
+	 */
+	public function setHyperspaceDriveLevel($hyperspaceDriveLevel)
+	{
+		$this->hyperspaceDriveLevel = $hyperspaceDriveLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLaserTechnologyLevel()
+	{
+		return $this->laserTechnologyLevel;
+	}
+
+	/**
+	 * @param int $laserTechnologyLevel
+	 */
+	public function setLaserTechnologyLevel($laserTechnologyLevel)
+	{
+		$this->laserTechnologyLevel = $laserTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIonTechnologyLevel()
+	{
+		return $this->ionTechnologyLevel;
+	}
+
+	/**
+	 * @param int $ionTechnologyLevel
+	 */
+	public function setIonTechnologyLevel($ionTechnologyLevel)
+	{
+		$this->ionTechnologyLevel = $ionTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlasmaTechnologyLevel()
+	{
+		return $this->plasmaTechnologyLevel;
+	}
+
+	/**
+	 * @param int $plasmaTechnologyLevel
+	 */
+	public function setPlasmaTechnologyLevel($plasmaTechnologyLevel)
+	{
+		$this->plasmaTechnologyLevel = $plasmaTechnologyLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIntergalacticResearchNetworkLevel()
+	{
+		return $this->intergalacticResearchNetworkLevel;
+	}
+
+	/**
+	 * @param int $intergalacticResearchNetworkLevel
+	 */
+	public function setIntergalacticResearchNetworkLevel($intergalacticResearchNetworkLevel)
+	{
+		$this->intergalacticResearchNetworkLevel = $intergalacticResearchNetworkLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAstrophysicsLevel()
+	{
+		return $this->astrophysicsLevel;
+	}
+
+	/**
+	 * @param int $astrophysicsLevel
+	 */
+	public function setAstrophysicsLevel($astrophysicsLevel)
+	{
+		$this->astrophysicsLevel = $astrophysicsLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGravitonTechnologyLevel()
+	{
+		return $this->gravitonTechnologyLevel;
+	}
+
+	/**
+	 * @param int $gravitonTechnologyLevel
+	 */
+	public function setGravitonTechnologyLevel($gravitonTechnologyLevel)
+	{
+		$this->gravitonTechnologyLevel = $gravitonTechnologyLevel;
 	}
 	
 }

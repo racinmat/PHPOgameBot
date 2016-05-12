@@ -72,7 +72,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var IBuildCommand $command */
-		$this->build($command->getBuildable());
+		$this->build($command);
 	}
 	
 	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon

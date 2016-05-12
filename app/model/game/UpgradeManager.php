@@ -70,7 +70,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var IUpgradeCommand $command */
-		$this->upgrade($command->getUpgradable());
+		$this->upgrade($command);
 	}
 
 	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon

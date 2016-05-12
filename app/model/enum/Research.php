@@ -116,26 +116,38 @@ class Research extends Upgradable
 	public function getCurrentLevel(Planet $planet) : int 
 	{
 		switch ($this->getValue()) {
-			case static::METAL_MINE:
-				return $planet->getMetalMineLevel();
-			case static::CRYSTAL_MINE:
-				return $planet->getCrystalMineLevel();
-			case static::DEUTERIUM_MINE:
-				return $planet->getDeuteriumMineLevel();
-			case static::SOLAR_POWER_PLANT:
-				return $planet->getSolarPowerPlantLevel();
-			case static::ROBOTIC_FACTORY:
-				return $planet->getRoboticFactoryLevel();
-			case static::SHIPYARD:
-				return $planet->getShipyardLevel();
-			case static::FUSION_REACTOR:
-				return $planet->getFusionReactorLevel();
-			case static::METAL_STORAGE:
-				return $planet->getMetalStorageLevel();
-			case static::CRYSTAL_STORAGE:
-				return $planet->getCrystalStorageLevel();
-			case static::DEUTERIUM_TANK:
-				return $planet->getDeuteriumTankLevel();
+			case static::ESPIONAGE_TECHNOLOGY:
+				return $planet->getEspionageTechnologyLevel();
+			case static::COMPUTER_TECHNOLOGY:
+				return $planet->getComputerTechnologyLevel();
+			case static::WEAPON_TECHNOLOGY:
+				return $planet->getWeaponTechnologyLevel();
+			case static::SHIELDING_TECHNOLOGY:
+				return $planet->getShieldingTechnologyLevel();
+			case static::ARMOUR_TECHNOLOGY:
+				return $planet->getArmourTechnologyLevel();
+			case static::ENERGY_TECHNOLOGY:
+				return $planet->getEnergyTechnologyLevel();
+			case static::HYPERSPACE_TECHNOLOGY:
+				return $planet->getHyperspaceTechnologyLevel();
+			case static::COMBUSTION_DRIVE:
+				return $planet->getCombustionDriveLevel();
+			case static::IMPULSE_DRIVE:
+				return $planet->getImpulseDriveLevel();
+			case static::HYPERSPACE_DRIVE:
+				return $planet->getHyperspaceDriveLevel();
+			case static::LASER_TECHNOLOGY:
+				return $planet->getLaserTechnologyLevel();
+			case static::ION_TECHNOLOGY:
+				return $planet->getIonTechnologyLevel();
+			case static::PLASMA_TECHNOLOGY:
+				return $planet->getPlasmaTechnologyLevel();
+			case static::INTERGALACTIC_RESEARCH_NETWORK:
+				return $planet->getIntergalacticResearchNetworkLevel();
+			case static::ASTROPHYSICS:
+				return $planet->getAstrophysicsLevel();
+			case static::GRAVITON_TECHNOLOGY:
+				return $planet->getGravitonTechnologyLevel();
 		}
 	}
 
