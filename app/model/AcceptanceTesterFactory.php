@@ -12,7 +12,7 @@ class AcceptanceTesterFactory extends Nette\Object
 
 	public function __construct()
 	{
-		$this->acceptanceTester = new AcceptanceTester();
+		$this->acceptanceTester = null;
 	}
 
 	/**
@@ -20,15 +20,40 @@ class AcceptanceTesterFactory extends Nette\Object
 	 */
 	public function getAcceptanceTester()
 	{
+		if (!$this->initialized()) {
+			$this->initialize();
+		}
 		return $this->acceptanceTester;
 	}
 
-	/**
-	 * @param \AcceptanceTester $acceptanceTester
-	 */
-	public function setAcceptanceTester(\AcceptanceTester $acceptanceTester)
+	private function initialized()
 	{
-		$this->acceptanceTester = $acceptanceTester;
+		return $this->acceptanceTester != null;
 	}
-	
+
+	private function initialize()
+	{
+		$userOptions = [
+			'xml' => false,
+			'html' => false,
+			'json' => false,
+			'tap' => false,
+			'coverage' => false,
+			'coverage-xml' => false,
+			'coverage-html' => false,
+			'verbosity' => 0,
+			'interactive' => true,
+			'filter' => NULL,
+		];
+		$suite = 'acceptance';
+		$test = 'basicTestCept';
+		$codecept = new \Codeception\Codecept($userOptions);
+
+		try {
+			$codecept->run($suite, $test);
+		} catch(\ActorException $e) {
+			$actor = $e->actor;
+			$this->acceptanceTester = $actor;
+		}
+	}
 }

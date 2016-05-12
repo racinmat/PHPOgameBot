@@ -10,6 +10,7 @@ use App\Model\PlanetManager;
 use App\Model\QueueProducer;
 use App\Model\ResourcesCalculator;
 use App\Model\SignManager;
+use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,29 +22,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TestCommand extends Command {
 
-	/** @var SignManager */
-	private $signManager;
+	/** @var Container */
+	private $container;
 
-	/** @var PlanetManager */
-	private $planetManager;
-
-	/** @var ResourcesCalculator */
-	private $resourcesCalculator;
-
-	/** @var CronManager */
-	private $cronManager;
-
-	/** @var QueueProducer */
-	private $queueProducer;
-
-	public function __construct(SignManager $signManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, QueueProducer $queueProducer)
+	public function __construct(Container $container)
 	{
 		parent::__construct();
-		$this->signManager = $signManager;
-		$this->planetManager = $planetManager;
-		$this->resourcesCalculator = $resourcesCalculator;
-		$this->cronManager = $cronManager;
-		$this->queueProducer = $queueProducer;
+		$this->container = $container;
 	}
 
 	protected function configure()
@@ -54,8 +39,10 @@ class TestCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
-		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::METAL_MINE)));
+		$signManager = $this->container->getByType(SignManager::class);
+		$signManager->signIn();
+//		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
+//		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::METAL_MINE)));
 		return 0; // zero return code means everything is ok
 	}
 

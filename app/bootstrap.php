@@ -21,33 +21,5 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 $container = $configurator->createContainer();
 
-//codeception test actor initializer
-$userOptions = [
-	'xml' => false,
-	'html' => false,
-	'json' => false,
-	'tap' => false,
-	'coverage' => false,
-	'coverage-xml' => false,
-	'coverage-html' => false,
-	'verbosity' => 0,
-	'interactive' => true,
-	'filter' => NULL,
-];
-$suite = 'acceptance';
-$test = 'basicTestCept';
-$codecept = new \Codeception\Codecept($userOptions);
-
-try {
-	$codecept->run($suite, $test);
-} catch(\ActorException $e) {
-	$actor = $e->actor;
-	/** @var \App\Model\AcceptanceTesterFactory $factory */
-	$factory = $container->getByType(\App\Model\AcceptanceTesterFactory::class);
-	$factory->setAcceptanceTester($actor);
-}
-
-//end of codeception test actor initializer
-
 return $container;
 

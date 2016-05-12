@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Commands;
+
 use App\Fixtures\RootFixture;
 use App\Model\BuildingManager;
 use App\Model\QueueConsumer;
@@ -9,6 +10,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,22 +22,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ProcessQueueCommand extends Command {
 
-	/** @var SignManager */
-	private $signManager;
+	/** @var Container */
+	private $container;
 
-	/** @var QueueConsumer */
-	private $queueConsumer;
-
-	/**
-	 * TestCommand constructor.
-	 * @param SignManager $signManager
-	 * @param QueueConsumer $queueConsumer
-	 */
-	public function __construct(SignManager $signManager, QueueConsumer $queueConsumer)
+	public function __construct(Container $container)
 	{
 		parent::__construct();
-		$this->signManager = $signManager;
-		$this->queueConsumer = $queueConsumer;
+		$this->container = $container;
 	}
 
 	protected function configure()
@@ -46,9 +39,11 @@ class ProcessQueueCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$this->signManager->signIn();
-		$this->queueConsumer->processQueue();
-		$this->signManager->signOut();
+		$signManager = $this->container->getByType(SignManager::class);
+		$queueConsumer = $this->container->getByType(QueueConsumer::class);
+		$signManager->signIn();
+		$queueConsumer->processQueue();
+		$signManager->signOut();
 		$output->writeln('Queue processed');
 		return 0; // zero return code means everything is ok
 	}
