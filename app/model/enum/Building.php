@@ -25,7 +25,10 @@ class Building extends Enum
 		SOLAR_POWER_PLANT = 'solar power plant',
 		ROBOTIC_FACTORY = 'robotic factory',
 		SHIPYARD = 'shipyard',
-		FUSION_REACTOR = 'fusion reactor'
+		FUSION_REACTOR = 'fusion reactor',
+		METAL_STORAGE = 'metal storage',
+		CRYSTAL_STORAGE = 'crystal storage',
+		DEUTERIUM_TANK = 'deuterium tank'
 	;
 
 	public function getSelector() : string 
@@ -43,6 +46,9 @@ class Building extends Enum
 			case static::ROBOTIC_FACTORY: return '.station14';
 			case static::SHIPYARD: return '.station21';
 			case static::FUSION_REACTOR: return '.supply12';
+			case static::METAL_STORAGE: return '.supply22';
+			case static::CRYSTAL_STORAGE: return '.supply23';
+			case static::DEUTERIUM_TANK: return '.supply24';
 		}
 	}
 
@@ -59,6 +65,9 @@ class Building extends Enum
 			case static::ROBOTIC_FACTORY: return MenuItem::_(MenuItem::STATION);
 			case static::SHIPYARD: return MenuItem::_(MenuItem::STATION);
 			case static::FUSION_REACTOR: return MenuItem::_(MenuItem::RESOURCES);
+			case static::METAL_STORAGE: return MenuItem::_(MenuItem::RESOURCES);
+			case static::CRYSTAL_STORAGE: return MenuItem::_(MenuItem::RESOURCES);
+			case static::DEUTERIUM_TANK: return MenuItem::_(MenuItem::RESOURCES);
 		}
 	}
 
@@ -101,6 +110,12 @@ class Building extends Enum
 				return new Resources(200, 400, 200);
 			case static::FUSION_REACTOR:
 				return new Resources(900, 360, 180);
+			case static::METAL_STORAGE:
+				return new Resources(1000, 0, 0);
+			case static::CRYSTAL_STORAGE:
+				return new Resources(1000, 500, 0);
+			case static::DEUTERIUM_TANK:
+				return new Resources(1000, 1000, 0);
 		}
 	}
 
@@ -121,6 +136,12 @@ class Building extends Enum
 				return $planet->getShipyardLevel();
 			case static::FUSION_REACTOR:
 				return $planet->getFusionReactorLevel();
+			case static::METAL_STORAGE:
+				return $planet->getMetalStorageLevel();
+			case static::CRYSTAL_STORAGE:
+				return $planet->getCrystalStorageLevel();
+			case static::DEUTERIUM_TANK:
+				return $planet->getDeuteriumTankLevel();
 		}
 	}
 	

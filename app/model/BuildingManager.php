@@ -3,6 +3,7 @@
 namespace App\Model;
  
 use App\Enum\Building;
+use App\Enum\MenuItem;
 use App\Model\Entity\Planet;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -75,6 +76,8 @@ class BuildingManager extends Object
 	private function getTimeToFinishUpgrade() : Carbon
 	{
 		$I = $this->I;
+		$I->click(MenuItem::_(MenuItem::OVERVIEW));
+		$I->wait(1);
 		if ($I->seeElementExists('table.construction.active #Countdown')) {
 			$interval = $I->grabTextFrom('table.construction.active #Countdown');
 			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
@@ -84,7 +87,7 @@ class BuildingManager extends Object
 
 	private function parseOgameTimeInterval(string $interval) : CarbonInterval
 	{
-		$params = Strings::match($interval, '~((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');//todo: dodat hodiny až zjistím formát
-		return new CarbonInterval(0, 0, 0, 0, 0, $params['minutes'], $params['seconds']);
+		$params = Strings::match($interval, '~((?<weeks>\d{1,2})t)? ?((?<days>\d{1,2})d)? ?((?<hours>\d{1,2})hod)? ?((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');
+		return new CarbonInterval(0, 0, $params['weeks'], $params['days'], $params['hours'], $params['minutes'], $params['seconds']);
 	}
 }

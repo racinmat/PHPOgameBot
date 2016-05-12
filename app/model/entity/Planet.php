@@ -120,6 +120,24 @@ class Planet extends Object
 	private $maximalTemperature;
 
 	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $metalStorageLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $crystalStorageLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $deuteriumTankLevel;
+
+	/**
 	 * Planet constructor.
 	 * @param string $name
 	 * @param Coordinates $coordinates
@@ -340,6 +358,54 @@ class Planet extends Object
 	public function setFusionReactorLevel($fusionReactorLevel)
 	{
 		$this->fusionReactorLevel = $fusionReactorLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMetalStorageLevel()
+	{
+		return $this->metalStorageLevel;
+	}
+
+	/**
+	 * @param int $metalStorageLevel
+	 */
+	public function setMetalStorageLevel($metalStorageLevel)
+	{
+		$this->metalStorageLevel = $metalStorageLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCrystalStorageLevel()
+	{
+		return $this->crystalStorageLevel;
+	}
+
+	/**
+	 * @param int $crystalStorageLevel
+	 */
+	public function setCrystalStorageLevel($crystalStorageLevel)
+	{
+		$this->crystalStorageLevel = $crystalStorageLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDeuteriumTankLevel()
+	{
+		return $this->deuteriumTankLevel;
+	}
+
+	/**
+	 * @param int $deuteriumTankLevel
+	 */
+	public function setDeuteriumTankLevel($deuteriumTankLevel)
+	{
+		$this->deuteriumTankLevel = $deuteriumTankLevel;
 	}
 	
 }

@@ -48,6 +48,7 @@ class ProcessQueueCommand extends Command {
 	{
 		$this->signManager->signIn();
 		$this->queueConsumer->processQueue();
+		$this->signManager->signOut();
 		$output->writeln('Queue processed');
 		return 0; // zero return code means everything is ok
 	}

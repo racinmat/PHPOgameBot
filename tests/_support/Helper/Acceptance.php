@@ -5,6 +5,7 @@ namespace Helper;
 // all public methods declared in helper class will be available in $I
 
 use Codeception\Module\WebDriver;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
 
 class Acceptance extends \Codeception\Module
 {
@@ -48,4 +49,12 @@ class Acceptance extends \Codeception\Module
 
 	}
 
+	public function closeBrowser()
+	{
+		/** @var WebDriver $webDriverModule */
+		$webDriverModule =  $this->getModule('WebDriver');
+		/** @var RemoteWebDriver $webDriver */
+		$webDriver = $webDriverModule->webDriver;
+		$webDriver->close();
+	}
 }

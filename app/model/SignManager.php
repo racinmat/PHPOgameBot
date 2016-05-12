@@ -33,4 +33,11 @@ class SignManager extends Nette\Object
 		$I->fillField('#passwordLogin', $this->password);
 		$I->click('#loginSubmit');
 	}
+
+	public function signOut()
+	{
+		$I = $this->I;
+		$I->click('Odhlásit se');
+		$I->closeBrowser();
+	}
 }
