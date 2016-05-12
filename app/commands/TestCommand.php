@@ -1,15 +1,8 @@
 <?php
 
 namespace App\Commands;
-use App\Enum\Building;
-use App\Fixtures\RootFixture;
-use App\Model\BuildingManager;
-use App\Model\Command\UpgradeBuildingCommand;
-use App\Model\CronManager;
-use App\Model\PlanetManager;
-use App\Model\QueueProducer;
-use App\Model\ResourcesCalculator;
-use App\Model\SignManager;
+
+use App\Model\Game\SignManager;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

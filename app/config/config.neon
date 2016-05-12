@@ -24,17 +24,17 @@ services:
 	router: App\RouterFactory::createRouter
 	- App\Model\AcceptanceTesterFactory
 	- @App\Model\AcceptanceTesterFactory::getAcceptanceTester
-	- App\Model\GalaxyBrowser
-	- App\Model\SignManager(user: %user%, password: %password%)
-	- App\Model\BuildingManager
+	- App\Model\Game\GalaxyBrowser
+	- App\Model\Game\SignManager(user: %user%, password: %password%)
+	- App\Model\Game\BuildingManager
 	- App\Model\PageObject\Menu
-	- App\Model\QueueConsumer
+	- App\Model\Queue\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
-	- App\Model\PlanetManager
+	- App\Model\Game\PlanetManager
 	- App\Model\CronManager(%cronFile%)
-	- App\Model\DefenseManager
-	- App\Model\QueueProducer
-	- App\Model\QueueRepository(queueFile: %queueFile%)
+	- App\Model\Game\DefenseManager
+	- App\Model\Queue\QueueProducer
+	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

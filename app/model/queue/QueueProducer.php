@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Queue;
  
 use App\Enum\Building;
 use App\Enum\Defense;

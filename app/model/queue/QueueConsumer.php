@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Queue;
  
-use App\Model\Command\BuildDefenseCommand;
-use App\Model\Command\ICommand;
-use App\Model\Command\UpgradeBuildingCommand;
+use App\Model\CronManager;
+use App\Model\Queue\Command\BuildDefenseCommand;
+use App\Model\Queue\Command\ICommand;
+use App\Model\Queue\Command\UpgradeBuildingCommand;
+use App\Model\Game\BuildingManager;
+use App\Model\Game\DefenseManager;
+use App\Model\Game\PlanetManager;
+use App\Model\ResourcesCalculator;
 use Carbon\Carbon;
 use Nette\Object;
 

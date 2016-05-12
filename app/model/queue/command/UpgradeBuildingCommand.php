@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Command;
+namespace App\Model\Queue\Command;
  
 use App\Enum\Building;
 use Nette;

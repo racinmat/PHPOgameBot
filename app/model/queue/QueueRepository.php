@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Queue;
  
-use App\Model\Command\BuildDefenseCommand;
-use App\Model\Command\ICommand;
-use App\Model\Command\UpgradeBuildingCommand;
+use App\Model\Queue\Command\BuildDefenseCommand;
+use App\Model\Queue\Command\ICommand;
+use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;

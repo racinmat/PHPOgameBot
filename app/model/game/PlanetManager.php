@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Game;
  
 use App\Model\Entity\Planet;
 use Carbon\Carbon;

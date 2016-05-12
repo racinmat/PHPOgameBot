@@ -6,7 +6,7 @@
  * Time: 23:12
  */
 
-namespace App\Model\Command;
+namespace App\Model\Queue\Command;
 
 
 interface ArraySerializable

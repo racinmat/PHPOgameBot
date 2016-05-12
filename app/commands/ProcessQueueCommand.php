@@ -2,14 +2,8 @@
 
 namespace App\Commands;
 
-use App\Fixtures\RootFixture;
-use App\Model\BuildingManager;
+use App\Model\Game\SignManager;
 use App\Model\QueueConsumer;
-use App\Model\SignManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
