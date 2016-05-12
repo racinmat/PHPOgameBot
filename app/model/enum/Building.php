@@ -15,7 +15,7 @@ use App\Model\ValueObject\Resources;
  * @package App\Enum
  * @method static _(string $value) @return Building
  */
-class Building extends Enum
+class Building extends Upgradable
 {
 
 	const
@@ -31,12 +31,7 @@ class Building extends Enum
 		DEUTERIUM_TANK = 'deuterium tank'
 	;
 
-	public function getSelector() : string 
-	{
-		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
-	}
-
-	private function getClassSelector() : string 
+	protected function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return '.supply1';
@@ -69,11 +64,6 @@ class Building extends Enum
 			case static::CRYSTAL_STORAGE: return MenuItem::_(MenuItem::RESOURCES);
 			case static::DEUTERIUM_TANK: return MenuItem::_(MenuItem::RESOURCES);
 		}
-	}
-
-	public function getUpgradeButtonSelector() : string
-	{
-		return '.build-it > span:nth-child(1)';
 	}
 
 	public function getNextLevelPriceConstant() : float

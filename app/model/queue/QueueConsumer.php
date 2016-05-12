@@ -4,7 +4,10 @@ namespace App\Model\Queue;
  
 use App\Model\CronManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
+use App\Model\Queue\Command\BuildShipsCommand;
+use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
+use App\Model\Queue\Command\IUpgradeCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Game\BuildingManager;
 use App\Model\Game\DefenseManager;
@@ -59,6 +62,10 @@ class QueueConsumer extends Object
 					/** @var BuildDefenseCommand $command */
 					$success = $this->build($command);
 					break;
+				case ICommand::ACTION_BUILD_SHIPS:
+					/** @var BuildShipsCommand $command */
+					$success = $this->build($command);
+					break;
 			}
 			$lastItem = $command;
 			if ($success) {
@@ -82,25 +89,29 @@ class QueueConsumer extends Object
 					/** @var BuildDefenseCommand $lastItem */
 					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesFoDefense($planet, $lastItem->getDefense(), $lastItem->getAmount());
 					break;
+				case ICommand::ACTION_BUILD_SHIPS:
+					/** @var BuildShipsCommand $lastItem */
+					$datetime = $this->resourcesCalculator->getTimeToEnoughResourcesFoDefense($planet, $lastItem->getDefense(), $lastItem->getAmount());
+					break;
 			}
 			$this->cronManager->setNextStart($datetime);
 		}
 	}
 
 	/**
-	 * @param UpgradeBuildingCommand $command
+	 * @param IUpgradeCommand $command
 	 * @return bool returns true if building is built successfully
 	 */
-	private function upgrade(UpgradeBuildingCommand $command) : bool
+	private function upgrade(IUpgradeCommand $command) : bool
 	{
 		return $this->buildingsManager->upgrade($command->getBuilding());
 	}
 
 	/**
-	 * @param BuildDefenseCommand $command
+	 * @param IBuildCommand $command
 	 * @return bool returns true if building is built successfully
 	 */
-	private function build(BuildDefenseCommand $command)
+	private function build(IBuildCommand $command)
 	{
 		return $this->defenseManager->build($command->getDefense(), $command->getAmount());
 	}

@@ -4,7 +4,9 @@ namespace App\Model\Game;
  
 use App\Enum\Building;
 use App\Enum\MenuItem;
+use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
+use App\Model\ResourcesCalculator;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Nette\Object;
@@ -30,29 +32,29 @@ class BuildingManager extends Object
 	}
 
 	/**
-	 * @param Building $building
+	 * @param Upgradable $upgradable
 	 * @return bool returns true when building was built, otherwise returns false
 	 */
-	public function upgrade(Building $building) : bool
+	public function upgrade(Upgradable $upgradable) : bool
 	{
 		//možná refreshnout všechna data hned po zalogování
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		if (!$this->canBuild($planet, $building)) {
+		if (!$this->canBuild($planet, $upgradable)) {
 			return false;
 		}
-		$this->openBuildingMenu($building);
+		$this->openMenu($upgradable);
 		$I = $this->I;
-		$I->click($building->getUpgradeButtonSelector());
+		$I->click($upgradable->getBuildButtonSelector());
 		$I->wait(1);
 		return true;
 	}
 
-	private function openBuildingMenu(Building $building)
+	private function openMenu(Upgradable $upgradable)
 	{
 		$I = $this->I;
-		$I->click($building->getMenuLocation()->getSelector());
-		$I->click($building->getSelector());
+		$I->click($upgradable->getMenuLocation()->getSelector());
+		$I->click($upgradable->getSelector());
 		$I->wait(1);
 	}
 

@@ -5,7 +5,7 @@ namespace App\Model\Queue\Command;
 use App\Enum\Building;
 use Nette;
  
-class UpgradeBuildingCommand extends Nette\Object implements ICommand
+class UpgradeBuildingCommand extends Nette\Object implements IUpgradeCommand
 {
 
 	/** @var Building */

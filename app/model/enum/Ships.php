@@ -12,9 +12,9 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Defense
  * @package App\Enum
- * @method static _(string $value) @return Defense
+ * @method static _(string $value) @return Ships
  */
-class Fleet extends Enum
+class Ships extends Buildable
 {
 
 	const

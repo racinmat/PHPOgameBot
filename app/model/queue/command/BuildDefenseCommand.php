@@ -6,7 +6,7 @@ use App\Enum\Building;
 use App\Enum\Defense;
 use Nette;
  
-class BuildDefenseCommand extends Nette\Object implements ICommand
+class BuildDefenseCommand extends Nette\Object implements IBuildCommand
 {
 
 	/** @var Defense */
@@ -36,7 +36,7 @@ class BuildDefenseCommand extends Nette\Object implements ICommand
 		return $this->amount;
 	}
 
-	public static function fromArray(array $data) : UpgradeBuildingCommand
+	public static function fromArray(array $data) : BuildDefenseCommand
 	{
 		return new BuildDefenseCommand(Defense::_($data['defense']), $data['amount']);
 	}

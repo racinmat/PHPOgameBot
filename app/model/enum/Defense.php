@@ -14,7 +14,7 @@ use App\Model\ValueObject\Resources;
  * @package App\Enum
  * @method static _(string $value) @return Defense
  */
-class Defense extends Enum
+class Defense extends Buildable
 {
 
 	const

@@ -4,10 +4,11 @@ namespace App\Model\Game;
  
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Enum\Ships;
 use App\Model\ResourcesCalculator;
 use Nette;
 
-class DefenseManager extends Nette\Object
+class ShipsManager extends Nette\Object
 {
 
 	/** @var \AcceptanceTester */
@@ -33,23 +34,23 @@ class DefenseManager extends Nette\Object
 	}
 	
 	/**
-	 * @param Defense $defense
+	 * @param Ships $ships
 	 * @param int $amount
 	 * @return bool returns true when building was built, otherwise returns false
 	 */
-	public function build(Defense $defense, int $amount) : bool
+	public function build(Ships $ships, int $amount) : bool
 	{
 		//možná refreshnout všechna data hned po zalogování
 		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
-		if (!$this->resourcesCalculator->isEnoughResourcesForDefense($planet, $defense, $amount)) {
+		if (!$this->resourcesCalculator->isEnoughResourcesForDefense($planet, $ships, $amount)) {
 			return false;
 		}
-		$this->openDefenseMenu($defense);
+		$this->openDefenseMenu($ships);
 		$I = $this->I;
 		$I->fillField('#number', $amount);
 		$I->wait(1);
-		$I->click($defense->getBuildButtonSelector());
+		$I->click($ships->getBuildButtonSelector());
 		$I->wait(1);
 		return true;
 	}
