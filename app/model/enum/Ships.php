@@ -59,7 +59,7 @@ class Ships extends Buildable
 	 */
 	public function getMenuLocation() : MenuItem
 	{
-		return MenuItem::_(MenuItem::FLEET);
+		return MenuItem::_(MenuItem::SHIPYARD);
 	}
 
 	public function getPrice() : Resources
