@@ -2,13 +2,19 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine"
+            "building": "solar power plant"
         }
     },
     {
-        "action": "upgrade research",
+        "action": "upgrade building",
         "data": {
-            "research": "impulse drive"
+            "building": "crystal mine"
+        }
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine"
         }
     }
 ]

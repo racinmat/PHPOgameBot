@@ -39,6 +39,7 @@ services:
 	- App\Forms\FormFactory
 	- App\Model\Game\Menu
 	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
+	- {implement: App\Components\IDisplayCommandFactory}
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

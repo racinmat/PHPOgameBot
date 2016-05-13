@@ -134,4 +134,10 @@ abstract class Enum extends Object {
 	{
 		return array_combine(static::getEnumValues(), static::getEnumValues());
 	}
+
+	public function __toString() : string
+	{
+		return $this->getValue();
+	}
+	
 }

@@ -4,10 +4,10 @@
 	</div>
 	<div class="row">
 		Queue:
-		<ul>
+		<ol>
 			<li n:foreach="$queue as $command">
-				{$command}
+				{control displayCommand, $command}
 			</li>
-		</ul>
+		</ol>
 	</div>
 {/block}

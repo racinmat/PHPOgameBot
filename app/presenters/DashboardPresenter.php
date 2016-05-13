@@ -2,10 +2,12 @@
 
 namespace App\Presenters;
 
+use App\Components\IDisplayCommandFactory;
 use App\Utils\Functions;
 use Carbon\Carbon;
 use Nette;
 use App\Model;
+use Tracy\Debugger;
 
 
 class DashboardPresenter extends BasePresenter
@@ -20,6 +22,12 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public $queueRepository;
 
+	/**
+	 * @var IDisplayCommandFactory
+	 * @inject
+	 */
+	public $displayCommandFactory;
+	
 	public function renderDefault()
 	{
 		$nextRunTime = Carbon::instance(new \DateTime(file_get_contents($this->cronFile)));
@@ -41,6 +49,11 @@ class DashboardPresenter extends BasePresenter
 	public function setQueueFile($queueFile)
 	{
 		$this->queueFile = $queueFile;
+	}
+
+	public function createComponentDisplayCommand()
+	{
+		return $this->displayCommandFactory->create();
 	}
 
 }
