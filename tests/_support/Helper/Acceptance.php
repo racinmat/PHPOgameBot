@@ -57,4 +57,13 @@ class Acceptance extends \Codeception\Module
 		$webDriver = $webDriverModule->webDriver;
 		$webDriver->close();
 	}
+
+	public function logFailedAction(string $logDirectory, string $filename)
+	{
+		/** @var WebDriver $webDriverModule */
+		$webDriverModule =  $this->getModule('WebDriver');
+		$webDriverModule->_saveScreenshot("$logDirectory/$filename.png");
+		$webDriverModule->_savePageSource("$logDirectory/$filename.html");
+
+	}
 }

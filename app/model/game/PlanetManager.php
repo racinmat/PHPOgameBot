@@ -26,11 +26,15 @@ class PlanetManager extends Object
 	/** @var \AcceptanceTester */
 	private $I;
 
-	public function __construct(EntityManager $entityManager, \AcceptanceTester $acceptanceTester)
+	/** @var Menu */
+	private $menu;
+
+	public function __construct(EntityManager $entityManager, \AcceptanceTester $acceptanceTester, Menu $menu)
 	{
 		$this->entityManager = $entityManager;
 		$this->planetRepository = $entityManager->getRepository(Planet::class);
 		$this->I = $acceptanceTester;
+		$this->menu = $menu;
 	}
 
 	/**
@@ -67,7 +71,7 @@ class PlanetManager extends Object
 
 		//buildings level
 		foreach (Building::getEnums() as $building) {
-			$I->click($building->getMenuLocation()->getSelector());
+			$this->menu->toToPage($building->getMenuLocation());
 			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
 			usleep(random_int(500000, 1000000));
 			$building->setCurrentLevel($planet, $level);
@@ -75,7 +79,7 @@ class PlanetManager extends Object
 
 		//research level
 		foreach (Research::getEnums() as $research) {
-			$I->click($research->getMenuLocation()->getSelector());
+			$this->menu->toToPage($research->getMenuLocation());
 			$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
 			usleep(random_int(500000, 1000000));
 			$research->setCurrentLevel($planet, $level);

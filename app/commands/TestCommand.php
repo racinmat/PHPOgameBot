@@ -13,15 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package App\Commands
  * @author: Matěj Račinský 
  */
-class TestCommand extends Command {
-
-	/** @var Container */
-	private $container;
+class TestCommand extends CodeceptionUsingCommand {
 
 	public function __construct(Container $container)
 	{
-		parent::__construct();
-		$this->container = $container;
+		parent::__construct($container);
 	}
 
 	protected function configure()
@@ -30,7 +26,7 @@ class TestCommand extends Command {
 			->setDescription('It does stuff.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function executeDelegated(InputInterface $input, OutputInterface $output)
 	{
 		$signManager = $this->container->getByType(SignManager::class);
 		$signManager->signIn();

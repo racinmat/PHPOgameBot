@@ -26,11 +26,15 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	/** @var ResourcesCalculator */
 	protected $resourcesCalculator;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator)
+	/** @var Menu */
+	protected $menu;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
+		$this->menu = $menu;
 	}
 
 	/**
@@ -58,7 +62,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	protected function openMenu(Buildable $buildable)
 	{
 		$I = $this->I;
-		$I->click($buildable->getMenuLocation()->getSelector());
+		$this->menu->toToPage($buildable->getMenuLocation());
 		$I->click($buildable->getSelector());
 		$I->wait(1);
 	}

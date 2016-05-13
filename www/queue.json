@@ -2,6 +2,12 @@
     {
         "action": "upgrade building",
         "data": {
+            "building": "metal mine"
+        }
+    },
+    {
+        "action": "upgrade building",
+        "data": {
             "building": "crystal mine"
         }
     }

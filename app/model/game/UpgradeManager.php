@@ -27,11 +27,15 @@ class UpgradeManager extends Object implements ICommandProcessor
 	/** @var PlanetManager */
 	protected $planetManager;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator)
+	/** @var Menu */
+	protected $menu;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
+		$this->menu = $menu;
 	}
 
 	/**
@@ -56,7 +60,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 	protected function openMenu(Upgradable $upgradable)
 	{
 		$I = $this->I;
-		$I->click($upgradable->getMenuLocation()->getSelector());
+		$this->menu->toToPage($upgradable->getMenuLocation());
 		$I->click($upgradable->getSelector());
 		$I->wait(1);
 	}

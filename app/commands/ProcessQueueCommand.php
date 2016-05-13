@@ -14,15 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package App\Commands
  * @author: Matěj Račinský 
  */
-class ProcessQueueCommand extends Command {
-
-	/** @var Container */
-	private $container;
+class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 	public function __construct(Container $container)
 	{
-		parent::__construct();
-		$this->container = $container;
+		parent::__construct($container);
 	}
 
 	protected function configure()
@@ -31,7 +27,7 @@ class ProcessQueueCommand extends Command {
 			->setDescription('Processes queue.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function executeDelegated(InputInterface $input, OutputInterface $output)
 	{
 		$signManager = $this->container->getByType(SignManager::class);
 		$queueConsumer = $this->container->getByType(QueueConsumer::class);

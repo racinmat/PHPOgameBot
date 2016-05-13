@@ -42,5 +42,19 @@ class MenuItem extends Enum
 			case static::GALAXY: return '#menuTable > li:nth-child(9) > a > span';
 		}
 	}
+
+	public function getUrlIdentifier()
+	{
+		switch ($this->getValue()) {
+			case static::OVERVIEW: return 'page=overview';
+			case static::RESOURCES: return 'page=resources';
+			case static::STATION: return 'page=station';
+			case static::RESEARCH: return 'page=research';
+			case static::SHIPYARD: return 'page=shipyard';
+			case static::DEFENSE: return 'page=defense';
+			case static::FLEET: return 'page=fleet1';
+			case static::GALAXY: return 'page=galaxy';
+		}
+	}
 	
 }
