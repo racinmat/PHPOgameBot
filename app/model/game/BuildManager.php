@@ -62,7 +62,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	protected function openMenu(Buildable $buildable)
 	{
 		$I = $this->I;
-		$this->menu->toToPage($buildable->getMenuLocation());
+		$this->menu->goToPage($buildable->getMenuLocation());
 		$I->click($buildable->getSelector());
 		$I->wait(1);
 	}

@@ -17,7 +17,7 @@ class Menu extends Nette\Object
 		$this->I = $I;
 	}
 
-	public function toToPage(MenuItem $menuItem)
+	public function goToPage(MenuItem $menuItem)
 	{
 		$I = $this->I;
 		if ($I->seeInCurrentUrlExists($menuItem->getUrlIdentifier())) {

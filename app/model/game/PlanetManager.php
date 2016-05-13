@@ -71,7 +71,7 @@ class PlanetManager extends Object
 
 		//buildings level
 		foreach (Building::getEnums() as $building) {
-			$this->menu->toToPage($building->getMenuLocation());
+			$this->menu->goToPage($building->getMenuLocation());
 			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
 			usleep(random_int(500000, 1000000));
 			$building->setCurrentLevel($planet, $level);
@@ -79,7 +79,7 @@ class PlanetManager extends Object
 
 		//research level
 		foreach (Research::getEnums() as $research) {
-			$this->menu->toToPage($research->getMenuLocation());
+			$this->menu->goToPage($research->getMenuLocation());
 			$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
 			usleep(random_int(500000, 1000000));
 			$research->setCurrentLevel($planet, $level);
@@ -97,7 +97,7 @@ class PlanetManager extends Object
 	public function getTimeToFinish(Enhanceable $enhanceable) : Carbon
 	{
 		$I = $this->I;
-		$I->click(MenuItem::_(MenuItem::OVERVIEW)->getSelector());
+		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
 		$I->wait(1);
 		if ($I->seeElementExists("{$enhanceable->getEnhanceStatusSelector()} #Countdown")) {
 			$interval = $I->grabTextFrom("{$enhanceable->getEnhanceStatusSelector()} #Countdown");
@@ -108,6 +108,7 @@ class PlanetManager extends Object
 
 	public function currentlyProcessing(Enhanceable $enhanceable) : bool
 	{
+		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
 		return ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
 	}
 
