@@ -2,8 +2,10 @@
 
 namespace App\Model\Game;
  
+use App\Enum\Building;
 use App\Enum\Enhanceable;
 use App\Enum\MenuItem;
+use App\Enum\Research;
 use App\Model\Entity\Planet;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -39,10 +41,15 @@ class PlanetManager extends Object
 		return $this->planetRepository->findOneBy(['my' => true]);
 	}
 
-	public function refreshResourceData()
+	/**
+	 * @throws \Exception
+	 */
+	public function refreshData()
 	{
 		//zatím pouze na mou planetu, v budoucnu nude přijímat jako argument planetu a případně pošle sondy
 		$I = $this->I;
+
+		//resources
 		$metal = $I->grabTextFrom('#resources_metal');
 		$crystal = $I->grabTextFrom('#resources_crystal');
 		$deuterium = $I->grabTextFrom('#resources_deuterium');
@@ -57,6 +64,23 @@ class PlanetManager extends Object
 		$planet->setCrystal($crystal);
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
+
+		//buildings level
+		foreach (Building::getEnums() as $building) {
+			$I->click($building->getMenuLocation()->getSelector());
+			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
+			usleep(random_int(500000, 1000000));
+			$building->setCurrentLevel($planet, $level);
+		}
+
+		//research level
+		foreach (Research::getEnums() as $research) {
+			$I->click($research->getMenuLocation()->getSelector());
+			$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
+			usleep(random_int(500000, 1000000));
+			$research->setCurrentLevel($planet, $level);
+		}
+
 		$this->entityManager->flush($planet);
 	}
 
@@ -69,7 +93,7 @@ class PlanetManager extends Object
 	public function getTimeToFinish(Enhanceable $enhanceable) : Carbon
 	{
 		$I = $this->I;
-		$I->click(MenuItem::_(MenuItem::OVERVIEW));
+		$I->click(MenuItem::_(MenuItem::OVERVIEW)->getSelector());
 		$I->wait(1);
 		if ($I->seeElementExists("{$enhanceable->getEnhanceStatusSelector()} #Countdown")) {
 			$interval = $I->grabTextFrom("{$enhanceable->getEnhanceStatusSelector()} #Countdown");

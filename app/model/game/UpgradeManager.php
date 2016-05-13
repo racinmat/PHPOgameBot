@@ -42,7 +42,6 @@ class UpgradeManager extends Object implements ICommandProcessor
 	{
 		$upgradable = $command->getUpgradable();
 		//možná refreshnout všechna data hned po zalogování. Refreshovat vše včetně levelů budov, výzkumů apod.
-		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
 		if (!$this->isProcessingAvailable($planet, $command)) {
 			return false;
@@ -70,7 +69,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var IUpgradeCommand $command */
-		$this->upgrade($command);
+		return $this->upgrade($command);
 	}
 
 	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon

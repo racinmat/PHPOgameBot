@@ -37,7 +37,7 @@ class Research extends Upgradable
 		GRAVITON_TECHNOLOGY = 'graviton technology'
 	;
 
-	protected function getClassSelector() : string
+	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::ESPIONAGE_TECHNOLOGY: return '.research106';
@@ -59,9 +59,6 @@ class Research extends Upgradable
 		}
 	}
 
-	/**
-	 * @return MenuItem
-	 */
 	public function getMenuLocation() : MenuItem
 	{
 		return MenuItem::_(MenuItem::RESEARCH);
@@ -159,5 +156,43 @@ class Research extends Upgradable
 	public function getEnhanceStatusSelector() : string
 	{
 		return '#overviewBottom > div:nth-child(2) table.construction.active';
+	}
+
+	public function setCurrentLevel(Planet $planet, int $currentLevel)
+	{
+		switch ($this->getValue()) {
+			case static::ESPIONAGE_TECHNOLOGY:
+				return $planet->setEspionageTechnologyLevel($currentLevel);
+			case static::COMPUTER_TECHNOLOGY:
+				return $planet->setComputerTechnologyLevel($currentLevel);
+			case static::WEAPON_TECHNOLOGY:
+				return $planet->setWeaponTechnologyLevel($currentLevel);
+			case static::SHIELDING_TECHNOLOGY:
+				return $planet->setShieldingTechnologyLevel($currentLevel);
+			case static::ARMOUR_TECHNOLOGY:
+				return $planet->setArmourTechnologyLevel($currentLevel);
+			case static::ENERGY_TECHNOLOGY:
+				return $planet->setEnergyTechnologyLevel($currentLevel);
+			case static::HYPERSPACE_TECHNOLOGY:
+				return $planet->setHyperspaceTechnologyLevel($currentLevel);
+			case static::COMBUSTION_DRIVE:
+				return $planet->setCombustionDriveLevel($currentLevel);
+			case static::IMPULSE_DRIVE:
+				return $planet->setImpulseDriveLevel($currentLevel);
+			case static::HYPERSPACE_DRIVE:
+				return $planet->setHyperspaceDriveLevel($currentLevel);
+			case static::LASER_TECHNOLOGY:
+				return $planet->setLaserTechnologyLevel($currentLevel);
+			case static::ION_TECHNOLOGY:
+				return $planet->setIonTechnologyLevel($currentLevel);
+			case static::PLASMA_TECHNOLOGY:
+				return $planet->setPlasmaTechnologyLevel($currentLevel);
+			case static::INTERGALACTIC_RESEARCH_NETWORK:
+				return $planet->setIntergalacticResearchNetworkLevel($currentLevel);
+			case static::ASTROPHYSICS:
+				return $planet->setAstrophysicsLevel($currentLevel);
+			case static::GRAVITON_TECHNOLOGY:
+				return $planet->setGravitonTechnologyLevel($currentLevel);
+		}
 	}
 }

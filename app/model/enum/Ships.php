@@ -34,7 +34,7 @@ class Ships extends Buildable
 		COLONY_SHIP = 'colony ship'
 	;
 
-	protected function getClassSelector() : string
+	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::SMALL_CARGO_SHIP: return '.civil202';

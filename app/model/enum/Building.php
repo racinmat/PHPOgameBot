@@ -31,7 +31,7 @@ class Building extends Upgradable
 		DEUTERIUM_TANK = 'deuterium tank'
 	;
 
-	protected function getClassSelector() : string
+	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return '.supply1';
@@ -138,5 +138,31 @@ class Building extends Upgradable
 	public function getEnhanceStatusSelector() : string
 	{
 		return '#overviewBottom > div:nth-child(1) table.construction.active';
+	}
+
+	public function setCurrentLevel(Planet $planet, int $currentLevel)
+	{
+		switch ($this->getValue()) {
+			case static::METAL_MINE:
+				return $planet->setMetalMineLevel($currentLevel);
+			case static::CRYSTAL_MINE:
+				return $planet->setCrystalMineLevel($currentLevel);
+			case static::DEUTERIUM_MINE:
+				return $planet->setDeuteriumMineLevel($currentLevel);
+			case static::SOLAR_POWER_PLANT:
+				return $planet->setSolarPowerPlantLevel($currentLevel);
+			case static::ROBOTIC_FACTORY:
+				return $planet->setRoboticFactoryLevel($currentLevel);
+			case static::SHIPYARD:
+				return $planet->setShipyardLevel($currentLevel);
+			case static::FUSION_REACTOR:
+				return $planet->setFusionReactorLevel($currentLevel);
+			case static::METAL_STORAGE:
+				return $planet->setMetalStorageLevel($currentLevel);
+			case static::CRYSTAL_STORAGE:
+				return $planet->setCrystalStorageLevel($currentLevel);
+			case static::DEUTERIUM_TANK:
+				return $planet->setDeuteriumTankLevel($currentLevel);
+		}
 	}
 }

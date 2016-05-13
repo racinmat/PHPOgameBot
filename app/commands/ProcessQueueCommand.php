@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Model\Game\SignManager;
-use App\Model\QueueConsumer;
+use App\Model\Queue\QueueConsumer;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

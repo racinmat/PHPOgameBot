@@ -42,6 +42,7 @@ class QueueConsumer extends Object
 
 	public function processQueue()
 	{
+		$this->planetManager->refreshData();
 		$queue = $this->queueRepository->loadQueue();
 		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		$lastCommand = null;
@@ -63,7 +64,6 @@ class QueueConsumer extends Object
 		if (!$success) {
 			/** @var Carbon $datetime */
 			$datetime = Carbon::now();
-			$this->planetManager->refreshResourceData();
 			$planet = $this->planetManager->getMyHomePlanet();
 			foreach ($this->processors as $processor) {
 				if ($processor->canProcessCommand($lastCommand)) {

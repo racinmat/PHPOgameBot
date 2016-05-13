@@ -29,7 +29,7 @@ class MenuItem extends Enum
 		GALAXY = 'galaxy'
 	;
 
-	public function getSelector()
+	public function getSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::OVERVIEW: return '#menuTable > li:nth-child(1) > a > span';
@@ -42,4 +42,5 @@ class MenuItem extends Enum
 			case static::GALAXY: return '#menuTable > li:nth-child(9) > a > span';
 		}
 	}
+	
 }

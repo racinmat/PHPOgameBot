@@ -42,7 +42,6 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$buildable = $command->getBuildable();
 		$amount = $command->getAmount();
 		//možná refreshnout všechna data hned po zalogování
-		$this->planetManager->refreshResourceData();
 		$planet = $this->planetManager->getMyHomePlanet();
 		if (!$this->resourcesCalculator->isEnoughResourcesForBuild($planet, $buildable, $amount)) {
 			return false;
@@ -72,7 +71,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var IBuildCommand $command */
-		$this->build($command);
+		return $this->build($command);
 	}
 	
 	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon

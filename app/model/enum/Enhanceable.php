@@ -25,7 +25,7 @@ abstract class Enhanceable extends Enum
 		return '.build-it > span:nth-child(1)';
 	}
 
-	abstract protected function getClassSelector() : string;
+	abstract public function getClassSelector() : string;
 
 	abstract public function getMenuLocation() : MenuItem;
 

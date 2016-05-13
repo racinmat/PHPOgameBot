@@ -138,97 +138,97 @@ class Planet extends Object
 	private $deuteriumTankLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
 	private $espionageTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $computerTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $weaponTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $shieldingTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $armourTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $energyTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $hyperspaceTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $combustionDriveLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $impulseDriveLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $hyperspaceDriveLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $laserTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $ionTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $plasmaTechnologyLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $intergalacticResearchNetworkLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $astrophysicsLevel;
 
 	/**
-	 * @ORMColumn(type="integer")
+	 * @ORM\Column(type="integer")
 	 * @var integer
  	 */
 	private $gravitonTechnologyLevel;

@@ -27,4 +27,6 @@ abstract class Upgradable extends Enhanceable
 	abstract protected function getNextLevelPriceConstant() : float;
 
 	abstract public function getCurrentLevel(Planet $planet) : int;
+
+	abstract public function setCurrentLevel(Planet $planet, int $currentLevel);
 }
