@@ -57,11 +57,11 @@ class AddCommandPresenter extends BasePresenter
 			if ($this->commandAction === UpgradeBuildingCommand::getAction()) {
 				$command = UpgradeBuildingCommand::fromArray(['building' => $values['enum']]);
 			} elseif ($this->commandAction === UpgradeResearchCommand::getAction()) {
-				$command = UpgradeResearchCommand::fromArray(['building' => $values['enum']]);
+				$command = UpgradeResearchCommand::fromArray(['research' => $values['enum']]);
 			} elseif ($this->commandAction === BuildShipsCommand::getAction()) {
-				$command = BuildShipsCommand::fromArray(['building' => $values['enum'], 'amount' => $values['amount']]);
+				$command = BuildShipsCommand::fromArray(['ships' => $values['enum'], 'amount' => $values['amount']]);
 			} elseif ($this->commandAction === BuildDefenseCommand::getAction()) {
-				$command = BuildDefenseCommand::fromArray(['building' => $values['enum'], 'amount' => $values['amount']]);
+				$command = BuildDefenseCommand::fromArray(['defense' => $values['enum'], 'amount' => $values['amount']]);
 			}
 			$this->queueProducer->addToQueue($command);
 			$this->flashMessage('Command added', 'success');
