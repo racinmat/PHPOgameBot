@@ -11,6 +11,7 @@ use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Utils\Random;
 use Carbon\Carbon;
 use Nette;
 
@@ -64,7 +65,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$I = $this->I;
 		$this->menu->goToPage($buildable->getMenuLocation());
 		$I->click($buildable->getSelector());
-		$I->wait(1);
+		usleep(Random::microseconds(1.5, 2));
 	}
 
 	public function canProcessCommand(ICommand $command) : bool

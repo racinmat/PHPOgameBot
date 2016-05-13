@@ -10,6 +10,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IUpgradeCommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Utils\Random;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Nette\Object;
@@ -62,7 +63,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$I = $this->I;
 		$this->menu->goToPage($upgradable->getMenuLocation());
 		$I->click($upgradable->getSelector());
-		$I->wait(1);
+		usleep(Random::microseconds(1.5, 2));
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
