@@ -20,7 +20,7 @@ class Menu extends Nette\Object
 	public function toToPage(MenuItem $menuItem)
 	{
 		$I = $this->I;
-		if ($I->seeInCurrentUrl($menuItem->getUrlIdentifier())) {
+		if ($I->seeInCurrentUrlExists($menuItem->getUrlIdentifier())) {
 			return;
 		}
 		

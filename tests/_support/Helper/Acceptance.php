@@ -13,7 +13,7 @@ class Acceptance extends \Codeception\Module
 	public function seeElementExists($selector, $attributes = [])
 	{
 		/** @var WebDriver $webDriver */
-		$webDriver =  $this->getModule('WebDriver');
+		$webDriver = $this->getModule('WebDriver');
 		$els = $webDriver->matchVisible($selector);
 		$els = $webDriver->filterByAttributes($els, $attributes);
 		return count($els) > 0;
@@ -22,7 +22,7 @@ class Acceptance extends \Codeception\Module
 	public function seeExists($text, $selector = null)
 	{
 		/** @var WebDriver $webDriver */
-		$webDriver =  $this->getModule('WebDriver');
+		$webDriver = $this->getModule('WebDriver');
 		if (!$selector) {
 			//vykucháno z PHPUnit, jádro assertPageContains
 			return stripos(htmlspecialchars_decode($webDriver->getVisibleText()), $text) !== false;
@@ -47,6 +47,13 @@ class Acceptance extends \Codeception\Module
 		}
 		return false;
 
+	}
+
+	public function seeInCurrentUrlExists($uri)
+	{
+		/** @var WebDriver $webDriver */
+		$webDriver = $this->getModule('WebDriver');
+		return strpos($webDriver->_getCurrentUri(), $uri);
 	}
 
 	public function closeBrowser()

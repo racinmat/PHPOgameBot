@@ -28,7 +28,7 @@ abstract class CodeceptionUsingCommand extends Command {
 		} catch(\Throwable $e) {
 			/** @var \AcceptanceTester $acceptanceTester */
 			$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
-			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'codeception-fail-'.Carbon::now()->__toString());
+			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
 			throw $e;
 		}
 //		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
