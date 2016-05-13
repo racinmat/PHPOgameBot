@@ -2,8 +2,7 @@
 
 namespace App\Utils;
 
-use app\model\command\ArraySerializable;
-use App\Model\Command\ICommand;
+use App\Model\Queue\Command\ArraySerializable;
 use Nette\Object;
 
 class Functions extends Object

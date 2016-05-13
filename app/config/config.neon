@@ -37,7 +37,6 @@ services:
 	- App\Model\Queue\QueueProducer
 	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
 	- App\Forms\FormFactory
-	- App\Forms\AddCommandFormFactory
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

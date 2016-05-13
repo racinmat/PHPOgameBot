@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "solar power plant"
+        }
+    }
+]
