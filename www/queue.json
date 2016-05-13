@@ -2,12 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant"
-        }
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "crystal mine"
         }
     },

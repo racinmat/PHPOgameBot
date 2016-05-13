@@ -1,13 +1,22 @@
 {block content}
-	<div class="row">
-		Next run: {$nextRunTime}
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			Next run
+		</div>
+		<div class="panel-body">
+			{$nextRunTime}
+		</div>
 	</div>
-	<div class="row">
-		Queue:
-		<ol>
-			<li n:foreach="$queue as $command">
-				{control displayCommand, $command}
-			</li>
-		</ol>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			Queue
+		</div>
+		<div class="panel-body">
+			<ol>
+				<li n:foreach="$queue as $command">
+					{control displayCommand, $command}
+				</li>
+			</ol>
+		</div>
 	</div>
 {/block}
