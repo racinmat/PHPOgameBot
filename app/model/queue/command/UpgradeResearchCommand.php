@@ -43,4 +43,9 @@ class UpgradeResearchCommand extends Nette\Object implements IUpgradeCommand
 		];
 	}
 
+	public function __toString() : string
+	{
+		return Nette\Utils\Json::encode($this->toArray());
+	}
+
 }

@@ -24,13 +24,13 @@ class QueueRepository extends Object
 	}
 
 	/**
-	 * @return ICommand[]
+	 * @return ICommand[]|ArrayCollection
 	 * @throws \Nette\Utils\JsonException
 	 */
-	public function loadQueue() : array
+	public function loadQueue() : ArrayCollection
 	{
 		$queueCollection = new ArrayCollection(Json::decode(file_get_contents($this->queueFile), Json::FORCE_ARRAY));
-		return $queueCollection->map($this->arrayToCommandCallback())->toArray();
+		return $queueCollection->map($this->arrayToCommandCallback());
 	}
 
 	private function arrayToCommand(array $data) : ICommand
@@ -62,9 +62,9 @@ class QueueRepository extends Object
 		];
 	}
 
-	public function saveQueue(array $queue)
+	public function saveQueue(ArrayCollection $queue)
 	{
-		$array = (new ArrayCollection($queue))->map(Functions::toArray())->getValues();
+		$array = $queue->map(Functions::toArray())->getValues();
 		file_put_contents($this->queueFile, Json::encode($array, Json::PRETTY));
 	}
 

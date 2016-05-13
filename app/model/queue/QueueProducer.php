@@ -22,7 +22,7 @@ class QueueProducer extends Object
 	public function addToQueue(ICommand $command)
 	{
 		$queue = $this->queueRepository->loadQueue();
-		$queue[] = $command;
+		$queue->add($command);
 		$this->queueRepository->saveQueue($queue);
 	}
 

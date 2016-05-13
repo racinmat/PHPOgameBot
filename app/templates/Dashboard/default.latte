@@ -1,2 +1,13 @@
 {block content}
+	<div class="row">
+		Next run: {$nextRunTime}
+	</div>
+	<div class="row">
+		Queue:
+		<ul>
+			<li n:foreach="$queue as $command">
+				{$command}
+			</li>
+		</ul>
+	</div>
 {/block}

@@ -1,12 +1,5 @@
 [
     {
-        "action": "build ships",
-        "data": {
-            "ships": "espionage probe",
-            "amount": "1"
-        }
-    },
-    {
         "action": "upgrade building",
         "data": {
             "building": "solar power plant"
@@ -18,10 +11,10 @@
             "building": "metal mine"
         }
     },
-  {
-    "action": "upgrade research",
-    "data": {
-      "research": "impulse drive"
+    {
+        "action": "upgrade research",
+        "data": {
+            "research": "impulse drive"
+        }
     }
-  }
 ]

@@ -53,4 +53,8 @@ class BuildDefenseCommand extends Nette\Object implements IBuildCommand
 		];
 	}
 
+	public function __toString() : string
+	{
+		return Nette\Utils\Json::encode($this->toArray());
+	}
 }

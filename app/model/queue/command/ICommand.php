@@ -15,4 +15,6 @@ interface ICommand extends ArraySerializable
 
 	public static function getAction() : string;
 
+	public function __toString() : string;
+
 }

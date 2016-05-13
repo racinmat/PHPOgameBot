@@ -38,6 +38,7 @@ services:
 	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
 	- App\Forms\FormFactory
 	- App\Model\Game\Menu
+	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
