@@ -96,4 +96,10 @@ class Defense extends Buildable
 	{
 		return '#overviewBottom > div:nth-child(3) table.construction.active';
 	}
+
+	public function getEnhanceCountdownSelector() : string
+	{
+		return '#shipAllCountdown7';
+	}
+
 }

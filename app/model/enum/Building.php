@@ -165,4 +165,10 @@ class Building extends Upgradable
 				return $planet->setDeuteriumTankLevel($currentLevel);
 		}
 	}
+
+	public function getEnhanceCountdownSelector() : string
+	{
+		return '#countdown';
+	}
+
 }

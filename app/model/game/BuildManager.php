@@ -89,8 +89,9 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 
 	public function isProcessingAvailable(Planet $planet, IBuildCommand $command) : bool
 	{
+		//building ships and defense is stackable. No need to check if sonething is being built right now.
 		/** @var IBuildCommand $command */
-		return $this->resourcesCalculator->isEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount()) && ! $this->planetManager->currentlyProcessing($command->getBuildable());
+		return $this->resourcesCalculator->isEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
 	}
 
 }

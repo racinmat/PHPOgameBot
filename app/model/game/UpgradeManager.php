@@ -92,7 +92,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 	{
 		$currentlyProcessing = $this->planetManager->currentlyProcessing($command->getUpgradable());
 		$enoughResources = $this->resourcesCalculator->isEnoughResourcesForUpgrade($planet, $command->getUpgradable());
-		echo ($enoughResources && ! $currentlyProcessing) ? 'processing available' : 'processing not available';
+		echo ($enoughResources && ! $currentlyProcessing) ? 'processing is available'  . PHP_EOL : 'processing is not available' . PHP_EOL;
 		return $enoughResources && ! $currentlyProcessing;
 	}
 

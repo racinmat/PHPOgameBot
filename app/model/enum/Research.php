@@ -195,4 +195,10 @@ class Research extends Upgradable
 				return $planet->setGravitonTechnologyLevel($currentLevel);
 		}
 	}
+
+	public function getEnhanceCountdownSelector() : string
+	{
+		return '#researchCountdown';
+	}
+	
 }
