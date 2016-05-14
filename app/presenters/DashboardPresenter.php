@@ -56,4 +56,12 @@ class DashboardPresenter extends BasePresenter
 		return $this->displayCommandFactory->create();
 	}
 
+	public function actionRunBot()
+	{
+		$output = shell_exec('cd ' . __DIR__ . '/../.. && php ' . __DIR__ . '/../../www/index.php bot:queue');
+		$this->flashMessage($output);
+		$this->flashMessage('Bot started.', 'info');
+		$this->redirect('default');
+	}
+
 }
