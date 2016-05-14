@@ -35,5 +35,4 @@ abstract class Enhanceable extends Enum
 
 	abstract public function getEnhanceCountdownSelector() : string;
 
-	abstract public function isStackable() : bool ;
 }
