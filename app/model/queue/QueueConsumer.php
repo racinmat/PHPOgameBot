@@ -50,7 +50,9 @@ class QueueConsumer extends Object
 			foreach ($this->processors as $processor) {
 				$this->planetManager->refreshResourcesData();
 				if ($processor->canProcessCommand($command)) {
+					echo 'going to process the command' .  $command->__toString() . PHP_EOL;
 					$success = $processor->processCommand($command);
+					echo 'command failed to process' . PHP_EOL;
 					break;
 				}
 			}

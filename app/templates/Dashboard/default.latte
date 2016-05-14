@@ -11,12 +11,8 @@
 		<div class="panel-heading">
 			Queue
 		</div>
-		<div class="panel-body">
-			<ol>
-				<li n:foreach="$queue as $command">
-					{control displayCommand, $command}
-				</li>
-			</ol>
+		<div class="panel-body dashboard-queue" n:inner-foreach="$queue as $command">
+			{control displayCommand, $iterations+1, $command}
 		</div>
 	</div>
 {/block}

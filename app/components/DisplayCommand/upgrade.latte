@@ -1,2 +1,27 @@
-<h4>{$command->getAction()}</h4>
-<div>{$command->getUpgradable()}</div>
+<div class="row">
+	<span class="col-md-1">
+		{$index}.
+	</span>
+	<span class="col-md-3">
+		{$command->getAction()}
+	</span>
+	<span class="col-md-3">
+		{$command->getUpgradable()}
+	</span>
+	<span class="col-md-3">
+		{*<a class="btn btn-danger" n:href="delete!, id => $item->getId()">Smazat</a>*}
+	</span>
+	<span class="col-md-3" style="font-size: 15px; height: 46px; top: 14px">
+		{*{if !$iterator->isFirst()}*}
+			{*<a n:href="moveUp!, id => $item->getId()">*}
+				{*<span class="glyphicon glyphicon-chevron-up"></span>*}
+			{*</a>*}
+		{*{/if}*}
+		{*{if !$iterator->isLast()}*}
+			{*<a n:href="moveDown!, id => $item->getId()">*}
+				{*<span class="glyphicon glyphicon-chevron-down" style="top: 15px; {if !$iterator->isFirst()}left: -19px;{/if}"></span>*}
+			{*</a>*}
+		{*{/if}*}
+	</span>
+
+</div>

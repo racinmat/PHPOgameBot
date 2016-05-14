@@ -17,7 +17,7 @@ class DisplayCommand extends UI\Control
 		parent::__construct();
 	}
 
-	public function render(ICommand $command)
+	public function render(int $index, ICommand $command)
 	{
 		$classToTemplate = [
 			IUpgradeCommand::class => 'upgrade.latte',
@@ -33,6 +33,7 @@ class DisplayCommand extends UI\Control
 		}
 
 		$this->template->setFile(__DIR__ . "/$controlTemplate");
+		$this->template->index = $index;
 		$this->template->command = $command;
 		$this->template->render();
 	}

@@ -1,21 +1,15 @@
 [
     {
-        "action": "upgrade research",
-        "data": {
-            "research": "espionage technology"
-        }
-    },
-    {
-        "action": "upgrade research",
-        "data": {
-            "research": "espionage technology"
-        }
-    },
-    {
         "action": "build ships",
         "data": {
             "ships": "colony ship",
             "amount": "1"
+        }
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "solar power plant"
         }
     }
 ]

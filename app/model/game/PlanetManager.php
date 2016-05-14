@@ -47,6 +47,8 @@ class PlanetManager extends Object
 
 	public function refreshResourcesData()
 	{
+		$I = $this->I;
+
 		//resources
 		$metal = $I->grabTextFrom('#resources_metal');
 		$crystal = $I->grabTextFrom('#resources_crystal');
