@@ -1,14 +1,21 @@
 [
     {
-        "action": "upgrade building",
+        "action": "upgrade research",
         "data": {
-            "building": "crystal mine"
+            "research": "espionage technology"
         }
     },
     {
-        "action": "upgrade building",
+        "action": "upgrade research",
         "data": {
-            "building": "deuterium mine"
+            "research": "espionage technology"
+        }
+    },
+    {
+        "action": "build ships",
+        "data": {
+            "ships": "colony ship",
+            "amount": "1"
         }
     }
 ]
