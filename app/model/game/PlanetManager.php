@@ -45,14 +45,8 @@ class PlanetManager extends Object
 		return $this->planetRepository->findOneBy(['my' => true]);
 	}
 
-	/**
-	 * @throws \Exception
-	 */
-	public function refreshData()
+	public function refreshResourcesData()
 	{
-		//zatím pouze na mou planetu, v budoucnu nude přijímat jako argument planetu a případně pošle sondy
-		$I = $this->I;
-
 		//resources
 		$metal = $I->grabTextFrom('#resources_metal');
 		$crystal = $I->grabTextFrom('#resources_crystal');
@@ -68,6 +62,21 @@ class PlanetManager extends Object
 		$planet->setCrystal($crystal);
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
+
+		$this->entityManager->flush($planet);
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function refreshData()
+	{
+		//zatím pouze na mou planetu, v budoucnu nude přijímat jako argument planetu a případně pošle sondy
+		$I = $this->I;
+
+		$this->refreshResourcesData();
+
+		$planet = $this->getMyHomePlanet();
 
 		//buildings level
 		foreach (Building::getEnums() as $building) {

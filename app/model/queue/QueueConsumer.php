@@ -48,6 +48,7 @@ class QueueConsumer extends Object
 		$lastCommand = null;
 		foreach ($queue as $key => $command) {
 			foreach ($this->processors as $processor) {
+				$this->planetManager->refreshResourcesData();
 				if ($processor->canProcessCommand($command)) {
 					$success = $processor->processCommand($command);
 					break;
