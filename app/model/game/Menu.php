@@ -21,9 +21,11 @@ class Menu extends Nette\Object
 	{
 		$I = $this->I;
 		if ($I->seeInCurrentUrlExists($menuItem->getUrlIdentifier())) {
+			echo 'i already am on page ' . $menuItem->getValue() . PHP_EOL;
+			echo 'current url is: ' . $I->grabFromCurrentUrl() . PHP_EOL;
 			return;
 		}
-		
+		echo 'going to page ' . $menuItem->getValue() . PHP_EOL;
 		$I->click($menuItem->getSelector());
 		usleep(Random::microseconds(1, 2));
 	}

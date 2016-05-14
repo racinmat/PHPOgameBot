@@ -109,11 +109,11 @@ class PlanetManager extends Object
 	{
 		$I = $this->I;
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
-		$I->wait(1);
 		if ($I->seeElementExists("{$enhanceable->getEnhanceStatusSelector()} #Countdown")) {
 			$interval = $I->grabTextFrom("{$enhanceable->getEnhanceStatusSelector()} #Countdown");
 			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
 		}
+		echo 'Countdown text not found. Can not find when to run queue next time.' . PHP_EOL;
 		return Carbon::now();
 	}
 

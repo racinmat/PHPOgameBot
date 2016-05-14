@@ -52,14 +52,15 @@ class QueueConsumer extends Object
 				if ($processor->canProcessCommand($command)) {
 					echo 'going to process the command' .  $command->__toString() . PHP_EOL;
 					$success = $processor->processCommand($command);
-					echo 'command failed to process' . PHP_EOL;
 					break;
 				}
 			}
 			$lastCommand = $command;
 			if ($success) {
+				echo 'command processed successfully' . PHP_EOL;
 				unset($queue[$key]);
 			} else {
+				echo 'command failed to process' . PHP_EOL;
 				break;
 			}
 		}
@@ -70,7 +71,9 @@ class QueueConsumer extends Object
 			$planet = $this->planetManager->getMyHomePlanet();
 			foreach ($this->processors as $processor) {
 				if ($processor->canProcessCommand($lastCommand)) {
+					echo 'found processor to determine when to process last command' . PHP_EOL;
 					$datetime = $processor->getTimeToProcessingAvailable($planet, $lastCommand);
+					echo 'new run set to ' . $datetime->__toString() . PHP_EOL;
 					break;
 				}
 			}
