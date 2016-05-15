@@ -40,6 +40,7 @@
 		"kdyby/doctrine": "@dev",
         "kdyby/events": "@dev",
 		"codeception/codeception": "@dev",
-		"nesbot/carbon": "^1.21"
+		"nesbot/carbon": "^1.21",
+		"ramsey/uuid": "^3.4"
 	}
 }

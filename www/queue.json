@@ -7,24 +7,13 @@
         "coordinates": {
             "galaxy": 1,
             "system": 357,
-            "planet": 9
+            "planet": 6
         }
     },
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        }
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine"
+            "building": "solar power plant"
         },
         "coordinates": {
             "galaxy": 1,

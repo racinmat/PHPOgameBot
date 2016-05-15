@@ -7,7 +7,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - commands for more planets (now is here only one hardcoded planet)
-- refactor commands to have UUID and planet coordinates. Create manager for commands adding, sorting and deleting. Use QueueRepository only by manager.
+- refactor commands to have UUID and planet coordinates. Create manager for commands adding, sorting and deleting. Use QueueFileRepository only by manager.
 - maybe export/import command lists and routines
 - think about routines implementation (repetitious commands)
 - repetitious fleet checking for attacks

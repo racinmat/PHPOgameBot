@@ -6,16 +6,21 @@ use App\Enum\Buildable;
 use App\Enum\Defense;
 use App\Model\ValueObject\Coordinates;
 use Nette;
- 
+use Ramsey\Uuid\Uuid;
+
 abstract class BaseCommand extends Nette\Object implements ICommand
 {
 
 	/** @var Coordinates */
 	protected $coordinates;
 
+	/** @var Uuid */
+	protected $uuid;
+
 	public function __construct(Coordinates $coordinates, array $data)
 	{
 		$this->coordinates = $coordinates;
+		$this->uuid = Uuid::uuid4();
 		$this->loadFromArray($data);
 	}
 
@@ -38,4 +43,14 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	}
 
 	abstract protected function loadFromArray(array $data);
+
+	public function getUuid() : Uuid
+	{
+		return $this->uuid;
+	}
+
+	public function equals(ICommand $another) : bool 
+	{
+		return $this->getUuid()->equals($another->getUuid());
+	}
 }

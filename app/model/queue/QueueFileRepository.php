@@ -13,7 +13,7 @@ use Nette\Object;
 use Nette\Utils\Arrays;
 use Nette\Utils\Json;
 
-class QueueRepository extends Object
+class QueueFileRepository extends Object
 {
 
 	/** @var string */

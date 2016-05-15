@@ -28,5 +28,13 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 $container = $configurator->createContainer();
 
+//$randomLibFactory = new \RandomLib\Factory();
+//$randomLibGenerator = $randomLibFactory->getHighStrengthGenerator();
+//$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+//$uuidFactory->setRandomGenerator(
+//	new \Ramsey\Uuid\Generator\RandomLibAdapter($randomLibGenerator)
+//);
+//\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
 return $container;
 

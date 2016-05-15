@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Enum\Building;
 use App\Model\Game\SignManager;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
-use App\Model\Queue\QueueProducer;
+use App\Model\Queue\QueueManager;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,7 +33,7 @@ class TestCommand extends CodeceptionUsingCommand {
 	{
 //		$signManager = $this->container->getByType(SignManager::class);
 //		$signManager->signIn();
-		$queueProducer = $this->container->getByType(QueueProducer::class);
+		$queueProducer = $this->container->getByType(QueueManager::class);
 		$queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
 //		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::METAL_MINE)));
 		return 0; // zero return code means everything is ok

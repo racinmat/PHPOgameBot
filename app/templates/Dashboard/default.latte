@@ -13,7 +13,7 @@
 			Queue
 		</div>
 		<div class="panel-body dashboard-queue" n:inner-foreach="$queue as $command">
-			{control displayCommand, $iterations+1, $command}
+			{control displayCommand, $iterator, $command}
 		</div>
 	</div>
 {/block}

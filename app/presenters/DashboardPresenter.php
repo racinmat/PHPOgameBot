@@ -17,7 +17,7 @@ class DashboardPresenter extends BasePresenter
 	private $cronFile;
 
 	/**
-	 * @var Model\Queue\QueueRepository
+	 * @var Model\Queue\QueueFileRepository
 	 * @inject
 	 */
 	public $queueRepository;

@@ -34,8 +34,8 @@ services:
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\Game\PlanetManager
 	- App\Model\CronManager(%cronFile%)
-	- App\Model\Queue\QueueProducer
-	- App\Model\Queue\QueueRepository(queueFile: %queueFile%)
+	- App\Model\Queue\QueueManager
+	- App\Model\Queue\QueueFileRepository(queueFile: %queueFile%)
 	- App\Forms\FormFactory
 	- App\Model\Game\Menu
 	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}

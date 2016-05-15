@@ -1,0 +1,31 @@
+<div class="row">
+	<span class="col-md-1">
+		{$iterator->getCounter()}.
+	</span>
+	<span class="col-md-2">
+		{$command->getCoordinates()}
+	</span>
+	<span class="col-md-2">
+		{$command->getAction()}
+	</span>
+	<span class="col-md-3">
+		{block content}
+		{/block}
+	</span>
+	<span class="col-md-2">
+		<a class="btn btn-danger" n:href="remove!, uuid => $command->getUuid()->__toString()">Smazat</a>
+	</span>
+	<span class="col-md-2">
+		{if !$iterator->isFirst()}
+			<a n:href="moveUp!, uuid => $command->getUuid()->__toString()">
+				<span class="glyphicon glyphicon-chevron-up"></span>
+			</a>
+		{/if}
+		{if !$iterator->isLast()}
+			<a n:href="moveDown!, uuid => $command->getUuid()->__toString()">
+				<span class="glyphicon glyphicon-chevron-down" style="top: 15px; {if !$iterator->isFirst()}left: -19px;{/if}"></span>
+			</a>
+		{/if}
+	</span>
+
+</div>

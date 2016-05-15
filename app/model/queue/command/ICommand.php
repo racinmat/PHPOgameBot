@@ -3,6 +3,7 @@
 namespace App\Model\Queue\Command;
 
 use App\Model\ValueObject\Coordinates;
+use Ramsey\Uuid\Uuid;
 
 interface ICommand extends ArraySerializable
 {
@@ -19,4 +20,9 @@ interface ICommand extends ArraySerializable
 	public function __toString() : string;
 
 	public function getCoordinates() : Coordinates;
+
+	public function getUuid() : Uuid;
+
+	public function equals(ICommand $another) : bool ;
+
 }

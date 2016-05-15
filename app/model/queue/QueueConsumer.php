@@ -25,10 +25,10 @@ class QueueConsumer extends Object
 	/** @var ICommandProcessor[] */
 	private $processors;
 
-	/** @var QueueRepository */
+	/** @var QueueFileRepository */
 	private $queueRepository;
 
-	public function __construct(QueueRepository $queueRepository, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager)
+	public function __construct(QueueFileRepository $queueRepository, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager)
 	{
 		$this->queueRepository = $queueRepository;
 		$this->planetManager = $planetManager;
@@ -44,8 +44,19 @@ class QueueConsumer extends Object
 	{
 		$this->planetManager->refreshAllData();
 		$queue = $this->queueRepository->loadQueue();
+		$planetsQueue = [];
+		foreach ($queue as $command) {
+			$coordinatesString = $command->getCoordinates()->__toString();
+			if (!array_key_exists($coordinatesString, $planetsQueue)) {
+				$planetsQueue[$coordinatesString] = [];
+			}
+			$planetsQueue[$coordinatesString][] = $command;
+		}
 		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		$lastCommand = null;
+		foreach ($planetsQueue as $planetCoordinates => $queue) {
+			
+		}
 		foreach ($queue as $key => $command) {
 			foreach ($this->processors as $processor) {
 				$this->planetManager->refreshAllResourcesData();

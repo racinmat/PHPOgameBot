@@ -13,7 +13,7 @@ use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
-use App\Model\Queue\QueueProducer;
+use App\Model\Queue\QueueManager;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
 
@@ -33,10 +33,10 @@ class AddCommandPresenter extends BasePresenter
 	public $commandAction;
 
 	/**
-	 * @var QueueProducer
+	 * @var QueueManager
 	 * @inject
 	 */
-	public $queueProducer;
+	public $queueManager;
 
 	/**
 	 * @var DatabasePlanetManager
@@ -73,7 +73,7 @@ class AddCommandPresenter extends BasePresenter
 			} elseif ($this->commandAction === BuildDefenseCommand::getAction()) {
 				$command = BuildDefenseCommand::fromArray(['coordinates' => $coordinates, 'data' => ['defense' => $values['enum'], 'amount' => $values['amount']]]);
 			}
-			$this->queueProducer->addToQueue($command);
+			$this->queueManager->addToQueue($command);
 			$this->flashMessage('Command added', 'success');
 			$this->redirect('this');
 		};
