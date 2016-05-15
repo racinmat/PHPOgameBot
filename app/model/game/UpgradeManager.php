@@ -13,6 +13,7 @@ use App\Model\ResourcesCalculator;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Strings;
 
@@ -31,12 +32,16 @@ class UpgradeManager extends Object implements ICommandProcessor
 	/** @var Menu */
 	protected $menu;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->menu = $menu;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -49,11 +54,10 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		if (!$this->isProcessingAvailable($planet, $command)) {
-			echo 'processing not available' . PHP_EOL;
+			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
-		echo 'processing available' . PHP_EOL;
-		echo 'going to upgrade the command' . PHP_EOL;
+		$this->logger->addDebug('Processing available, starting to process the command.');
 		$this->openMenu($upgradable);
 		$I = $this->I;
 		$I->click($upgradable->getBuildButtonSelector());
@@ -93,7 +97,6 @@ class UpgradeManager extends Object implements ICommandProcessor
 	{
 		$currentlyProcessing = $this->planetManager->currentlyProcessing($command->getUpgradable());
 		$enoughResources = $this->resourcesCalculator->isEnoughResourcesForUpgrade($planet, $command->getUpgradable());
-		echo ($enoughResources && ! $currentlyProcessing) ? 'processing is available'  . PHP_EOL : 'processing is not available' . PHP_EOL;
 		return $enoughResources && ! $currentlyProcessing;
 	}
 

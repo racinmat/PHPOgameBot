@@ -13,6 +13,7 @@ use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Kdyby\Monolog\Logger;
 use Nette;
 
 class BuildManager extends Nette\Object implements ICommandProcessor
@@ -30,12 +31,16 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	/** @var Menu */
 	protected $menu;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->menu = $menu;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -49,8 +54,10 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		if (!$this->resourcesCalculator->isEnoughResourcesForBuild($planet, $buildable, $amount)) {
+			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
+		$this->logger->addDebug('Processing available, starting to process the command.');
 		$this->openMenu($buildable);
 		$I = $this->I;
 		$I->fillField('#number', $amount);
