@@ -131,4 +131,13 @@ class Resources extends Nette\Object
 		];
 	}
 
+	public function __toString()
+	{
+		return $this->toString();
+	}
+
+	public function toString()
+	{
+		return "metal: $this->metal, crystal: $this->crystal, deuterium: $this->deuterium";
+	}
 }

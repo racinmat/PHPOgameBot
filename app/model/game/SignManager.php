@@ -2,6 +2,7 @@
 
 namespace App\Model\Game;
  
+use Kdyby\Monolog\Logger;
 use Nette;
  
 class SignManager extends Nette\Object
@@ -16,15 +17,20 @@ class SignManager extends Nette\Object
 	/** @var string */
 	private $password;
 
-	public function __construct(\AcceptanceTester $I, string $user, string $password)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(\AcceptanceTester $I, string $user, string $password, Logger $logger)
 	{
 		$this->I = $I;
 		$this->user = $user;
 		$this->password = $password;
+		$this->logger = $logger;
 	}
 
 	public function signIn()
 	{
+		$this->logger->addDebug('Going to sign in.');
 		$I = $this->I;
 		$I->amOnPage('/');
 		$I->click('#loginBtn');
@@ -36,6 +42,7 @@ class SignManager extends Nette\Object
 
 	public function signOut()
 	{
+		$this->logger->addDebug('Going to sign out.');
 		$I = $this->I;
 		$I->click('Odhlásit se');
 		$I->closeBrowser();

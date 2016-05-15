@@ -17,6 +17,7 @@ use Carbon\CarbonInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Strings;
 
@@ -32,11 +33,15 @@ class PlanetManager extends Object
 	/** @var DatabasePlanetManager */
 	private $databasePlanetManager;
 
-	public function __construct(DatabasePlanetManager $databasePlanetManager, \AcceptanceTester $acceptanceTester, Menu $menu)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(DatabasePlanetManager $databasePlanetManager, \AcceptanceTester $acceptanceTester, Menu $menu, Logger $logger)
 	{
 		$this->databasePlanetManager = $databasePlanetManager;
 		$this->I = $acceptanceTester;
 		$this->menu = $menu;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -130,7 +135,7 @@ class PlanetManager extends Object
 			$interval = $I->grabTextFrom($enhanceable->getEnhanceCountdownSelector());
 			return Carbon::now()->add(OgameParser::parseOgameTimeInterval($interval));
 		}
-		echo 'Countdown text not found. Can not find when to run queue next time.' . PHP_EOL;
+		$this->logger->addCritical('Countdown text not found. Can not find when to run queue next time.');
 		return Carbon::now();
 	}
 
@@ -138,7 +143,12 @@ class PlanetManager extends Object
 	{
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
 		$currentlyProcessing = ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
-		echo 'Currently processing.' . PHP_EOL;
+		if ($currentlyProcessing) {
+			$this->logger->addDebug("Currently processing {$enhanceable->getValue()}.");
+		} else {
+			$class = get_class($enhanceable);
+			$this->logger->addDebug("Not processing {$class}. {$enhanceable->getValue()} can be processed.");
+		}
 		return $currentlyProcessing;
 	}
 

@@ -11,6 +11,7 @@ use App\Model\ValueObject\Resources;
 use App\Utils\Functions;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
+use Kdyby\Monolog\Logger;
 use Nette;
  
 class ResourcesCalculator extends Nette\Object
@@ -19,9 +20,13 @@ class ResourcesCalculator extends Nette\Object
 	/** @var int */
 	private $acceleration;
 
-	public function __construct(int $acceleration)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(int $acceleration, Logger $logger)
 	{
 		$this->acceleration = $acceleration;
+		$this->logger = $logger;
 	}
 
 	public function isEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : bool
@@ -29,7 +34,12 @@ class ResourcesCalculator extends Nette\Object
 		$currentLevel = $upgradable->getCurrentLevel($planet);
 		$missing = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
 		$enough = $missing->forAll(Functions::isZero());
-		echo $enough ? 'Enough resources to upgrade.' . PHP_EOL : 'Not enough resources to upgrade.' . PHP_EOL;
+		$this->logger->addDebug("Checking resources to upgrade {$upgradable->getValue()} from level $currentLevel in planet {$planet->getCoordinates()->toValueObject()->toString()}.");
+		if ($enough) {
+			$this->logger->addDebug("Enough resources.");
+		} else {
+			$this->logger->addDebug("Not enough resources, missing resources: {$missing->toString()}.");
+		}
 		return $enough;
 	}
 
@@ -37,7 +47,12 @@ class ResourcesCalculator extends Nette\Object
 	{
 		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
 		$enough = $missing->forAll(Functions::isZero());
-		echo $enough ? 'Enough resources to build.' . PHP_EOL : 'Not enough resources to build.' . PHP_EOL;
+		$this->logger->addDebug("Enough resources to build {$buildable->getValue()} in amount $amount pieces in planet {$planet->getCoordinates()->toValueObject()->toString()}.");
+		if ($enough) {
+			$this->logger->addDebug("Enough resources.");
+		} else {
+			$this->logger->addDebug("Not enough resources, missing resources: {$missing->toString()}.");
+		}
 		return $enough;
 	}
 
@@ -67,11 +82,14 @@ class ResourcesCalculator extends Nette\Object
 
 		$maxHours = max($missing->divide($productionPerHour));
 		if ($maxHours <= 0) {
+			$this->logger->addDebug("No missing resources, now is enough resources.");
 			return Carbon::now();
 		}
 
 		$minutes = ($maxHours - (int) $maxHours) * 60;
-		return $time->addHours((int) $maxHours)->addMinutes((int) $minutes);
+		$resourcesAvailable = $time->addHours((int) $maxHours)->addMinutes((int) $minutes);
+		$this->logger->addDebug("Missing resources, enough will be in {$resourcesAvailable->__toString()}.");
+		return $resourcesAvailable;
 	}
 
 	private function getMetalProductionPerHour(int $mineLevel) : int

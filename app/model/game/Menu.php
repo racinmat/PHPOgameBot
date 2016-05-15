@@ -7,6 +7,7 @@ use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\OgameParser;
 use App\Utils\Random;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Strings;
 
@@ -16,20 +17,24 @@ class Menu extends Object
 	/** @var \AcceptanceTester */
 	protected $I;
 
-	public function __construct(\AcceptanceTester $I)
+	/** @var Logger */
+	protected $logger;
+
+	public function __construct(\AcceptanceTester $I, Logger $logger)
 	{
 		$this->I = $I;
+		$this->logger = $logger;
 	}
 
 	public function goToPage(MenuItem $menuItem)
 	{
 		$I = $this->I;
+		$this->logger->addDebug("Going to page {$menuItem->getValue()}.");
 		if ($I->seeInCurrentUrlExists($menuItem->getUrlIdentifier())) {
-			echo 'i already am on page ' . $menuItem->getValue() . PHP_EOL;
-			echo 'current url is: ' . $I->grabFromCurrentUrl() . PHP_EOL;
+			$this->logger->addDebug("I already am on requested page, current URL is {$I->grabFromCurrentUrl()}.");
 			return;
 		}
-		echo 'going to page ' . $menuItem->getValue() . PHP_EOL;
+		$this->logger->addDebug("Clicking to go to another page.");
 		$I->click($menuItem->getSelector());
 		usleep(Random::microseconds(1, 2));
 	}
@@ -38,11 +43,12 @@ class Menu extends Object
 	{
 		$I = $this->I;
 		$currentCoordinates = $this->getCurrentPlanetCoordinates();
+		$this->logger->addDebug("Going to planet {$planet->getCoordinates()->toValueObject()->toString()}.");
 		if ($planet->isOnCoordinates($currentCoordinates)) {
-			echo 'i already am on coordinates' . PHP_EOL;
+			$this->logger->addDebug("I already am on requested coordinates.");
 			return;
 		}
-		echo 'going to coordinates' . PHP_EOL;
+		$this->logger->addDebug("Clicking to go to another planet.");
 		$I->click($planet->getCoordinates()->toValueObject()->__toString());
 		usleep(Random::microseconds(1, 2));
 	}

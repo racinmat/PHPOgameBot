@@ -69,6 +69,12 @@ class Coordinates extends Object
 
 	public function __toString() : string
 	{
+		return $this->toString();
+	}
+
+	public function toString() : string
+	{
 		return "[$this->galaxy:$this->system:$this->planet]";
 	}
+
 }

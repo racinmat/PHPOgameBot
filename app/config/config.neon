@@ -54,7 +54,7 @@ monolog:
 	name: serverLogger
 	handlers:                                                                   #aby správně fungovaly handlery a braly pouze své události, musí být registrovány od nejnižšího po nejvyšší
 		main: Monolog\Handler\FingersCrossedHandler(
-			Monolog\Handler\StreamHandler(%appDir%/../log/symfony.log, Monolog\Logger::DEBUG),
+			Monolog\Handler\StreamHandler(%appDir%/../log/bot.log, Monolog\Logger::DEBUG),
 			Monolog\Logger::WARNING
 		)
 
