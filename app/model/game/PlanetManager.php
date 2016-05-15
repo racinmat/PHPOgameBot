@@ -137,7 +137,9 @@ class PlanetManager extends Object
 	public function currentlyProcessing(Enhanceable $enhanceable) : bool
 	{
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
-		return ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
+		$currentlyProcessing = ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
+		echo 'Currently processing.' . PHP_EOL;
+		return $currentlyProcessing;
 	}
 
 	/**

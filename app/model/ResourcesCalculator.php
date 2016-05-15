@@ -24,17 +24,21 @@ class ResourcesCalculator extends Nette\Object
 		$this->acceleration = $acceleration;
 	}
 
-	public function isEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable)
+	public function isEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : bool
 	{
 		$currentLevel = $upgradable->getCurrentLevel($planet);
 		$missing = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
-		return $missing->forAll(Functions::isZero());
+		$enough = $missing->forAll(Functions::isZero());
+		echo $enough ? 'Enough resources to upgrade.' . PHP_EOL : 'Not enough resources to upgrade.' . PHP_EOL;
+		return $enough;
 	}
 
-	public function isEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount)
+	public function isEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount) : bool
 	{
 		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
-		return $missing->forAll(Functions::isZero());
+		$enough = $missing->forAll(Functions::isZero());
+		echo $enough ? 'Enough resources to build.' . PHP_EOL : 'Not enough resources to build.' . PHP_EOL;
+		return $enough;
 	}
 
 	public function getTimeToEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : Carbon
