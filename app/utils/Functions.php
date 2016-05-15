@@ -5,6 +5,7 @@ namespace App\Utils;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ArraySerializable;
 use App\Model\ValueObject\Coordinates;
+use Carbon\Carbon;
 use Nette\Object;
 
 class Functions extends Object
@@ -49,6 +50,13 @@ class Functions extends Object
 	{
 		return function (Planet $planet) :string {
 			return $planet->getName() . ' ' . $planet->getCoordinates()->toValueObject()->__toString();
+		};
+	}
+
+	public static function compareCarbonDateTimes()
+	{
+		return function (Carbon $a, Carbon $b) {
+			return $a->lt($b);
 		};
 	}
 }

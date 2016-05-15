@@ -3,6 +3,7 @@
 namespace App\Model\Queue;
  
 use App\Model\Queue\Command\ICommand;
+use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;
 use Ramsey\Uuid\Uuid;
 use Tracy\Debugger;
@@ -68,4 +69,11 @@ class QueueManager extends Object
 		$this->queueRepository->saveQueue($queue);
 	}
 
+	/**
+	 * @return ICommand[]|ArrayCollection
+	 */
+	public function getQueue()
+	{
+		return $this->queueRepository->loadQueue();
+	}
 }

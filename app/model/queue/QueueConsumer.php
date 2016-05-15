@@ -6,8 +6,11 @@ use App\Model\CronManager;
 use App\Model\Game\BuildManager;
 use App\Model\Game\UpgradeManager;
 use App\Model\Game\PlanetManager;
+use App\Model\Queue\Command\ICommand;
 use App\Model\ResourcesCalculator;
+use App\Utils\Functions;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;
 
 class QueueConsumer extends Object
@@ -25,12 +28,12 @@ class QueueConsumer extends Object
 	/** @var ICommandProcessor[] */
 	private $processors;
 
-	/** @var QueueFileRepository */
-	private $queueRepository;
+	/** @var QueueManager */
+	private $queueManager;
 
-	public function __construct(QueueFileRepository $queueRepository, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager)
+	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager)
 	{
-		$this->queueRepository = $queueRepository;
+		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->cronManager = $cronManager;
@@ -43,7 +46,7 @@ class QueueConsumer extends Object
 	public function processQueue()
 	{
 		$this->planetManager->refreshAllData();
-		$queue = $this->queueRepository->loadQueue();
+		$queue = $this->queueManager->getQueue();
 		$planetsQueue = [];
 		foreach ($queue as $command) {
 			$coordinatesString = $command->getCoordinates()->__toString();
@@ -52,42 +55,46 @@ class QueueConsumer extends Object
 			}
 			$planetsQueue[$coordinatesString][] = $command;
 		}
-		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
-		$lastCommand = null;
+		$failedCommands = [];
 		foreach ($planetsQueue as $planetCoordinates => $queue) {
-			
-		}
-		foreach ($queue as $key => $command) {
-			foreach ($this->processors as $processor) {
-				$this->planetManager->refreshAllResourcesData();
-				if ($processor->canProcessCommand($command)) {
-					echo 'going to process the command' .  $command->__toString() . PHP_EOL;
-					$success = $processor->processCommand($command);
+			$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
+			/** @var ICommand $command */
+			foreach ($queue as $key => $command) {
+				foreach ($this->processors as $processor) {
+					$this->planetManager->refreshAllResourcesData();
+					if ($processor->canProcessCommand($command)) {
+						echo 'going to process the command' .  $command->__toString() . PHP_EOL;
+						$success = $processor->processCommand($command);
+						break;
+					}
+				}
+				if ($success) {
+					echo 'command processed successfully' . PHP_EOL;
+					$this->queueManager->removeFromQueue($command->getUuid());
+				} else {
+					echo 'command failed to process' . PHP_EOL;
+					$failedCommands[] = $command;
 					break;
 				}
 			}
-			$lastCommand = $command;
-			if ($success) {
-				echo 'command processed successfully' . PHP_EOL;
-				unset($queue[$key]);
-			} else {
-				echo 'command failed to process' . PHP_EOL;
-				break;
-			}
-		}
-		$this->queueRepository->saveQueue($queue);
-		if (!$success) {
-			/** @var Carbon $datetime */
-			$datetime = Carbon::now();
-			foreach ($this->processors as $processor) {
-				if ($processor->canProcessCommand($lastCommand)) {
-					echo 'found processor to determine when to process last command' . PHP_EOL;
-					$datetime = $processor->getTimeToProcessingAvailable($lastCommand);
-					echo 'new run set to ' . $datetime->__toString() . PHP_EOL;
-					break;
+			if (!$success) {
+				$nextStarts = [];
+				foreach ($failedCommands as $failedCommand) {
+					foreach ($this->processors as $processor) {
+						if ($processor->canProcessCommand($failedCommand)) {
+							echo 'found processor to determine when to process last command' . PHP_EOL;
+							$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
+							echo 'new run set to ' . $datetime->__toString() . PHP_EOL;
+							$nextStarts[] = $datetime;
+							break;
+						}
+					}
 				}
+
+				usort($nextStarts, Functions::compareCarbonDateTimes());
+				var_dump($nextStarts);
+				$this->cronManager->setNextStart($nextStarts[0]);
 			}
-			$this->cronManager->setNextStart($datetime);
 		}
 	}
 
