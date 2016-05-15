@@ -41,6 +41,7 @@
         "kdyby/events": "@dev",
 		"codeception/codeception": "@dev",
 		"nesbot/carbon": "^1.21",
-		"ramsey/uuid": "^3.4"
+		"ramsey/uuid": "^3.4",
+		"kdyby/monolog": "^1.2"
 	}
 }
