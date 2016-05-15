@@ -11,6 +11,7 @@ use App\Model\ResourcesCalculator;
 use App\Utils\Functions;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 
 class QueueConsumer extends Object
@@ -31,7 +32,10 @@ class QueueConsumer extends Object
 	/** @var QueueManager */
 	private $queueManager;
 
-	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger)
 	{
 		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
@@ -41,6 +45,7 @@ class QueueConsumer extends Object
 			$upgradeManager,
 			$buildManager
 		];
+		$this->logger = $logger;
 	}
 
 	public function processQueue()
@@ -62,39 +67,40 @@ class QueueConsumer extends Object
 			foreach ($queue as $key => $command) {
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($command)) {
-						echo 'going to process the command' .  $command->__toString() . PHP_EOL;
+						$this->logger->addDebug("Going to process the command {$command->__toString()}.");
 						$success = $processor->processCommand($command);
 						$this->planetManager->refreshAllResourcesData();
 						break;
 					}
 				}
 				if ($success) {
-					echo 'command processed successfully' . PHP_EOL;
+					$this->logger->addDebug("Command processed successfully.");
 					$this->queueManager->removeFromQueue($command->getUuid());
 				} else {
-					echo 'command failed to process' . PHP_EOL;
+					$this->logger->addDebug("Command failed to process.");
 					$failedCommands[] = $command;
 					break;
 				}
 			}
-			if (!$success) {
-				$nextStarts = [];
-				foreach ($failedCommands as $failedCommand) {
-					foreach ($this->processors as $processor) {
-						if ($processor->canProcessCommand($failedCommand)) {
-							echo 'found processor to determine when to process last command' . PHP_EOL;
-							$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
-							echo 'new run set to ' . $datetime->__toString() . PHP_EOL;
-							$nextStarts[] = $datetime;
-							break;
-						}
+		}
+
+		if (count($failedCommands) > 0) {
+			$nextStarts = [];
+			/** @var ICommand $failedCommand */
+			foreach ($failedCommands as $failedCommand) {
+				foreach ($this->processors as $processor) {
+					if ($processor->canProcessCommand($failedCommand)) {
+						$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
+						$this->logger->addDebug("Next run of command {$failedCommand->__toString()} is {$datetime->__toString()}.");
+						$nextStarts[] = $datetime;
+						break;
 					}
 				}
-
-				usort($nextStarts, Functions::compareCarbonDateTimes());
-				var_dump($nextStarts);
-				$this->cronManager->setNextStart($nextStarts[0]);
 			}
+
+			usort($nextStarts, Functions::compareCarbonDateTimes());
+			$this->logger->addDebug("Nearest next run is {$nextStarts[0]->__toString()}.");
+			$this->cronManager->setNextStart($nextStarts[0]);
 		}
 	}
 

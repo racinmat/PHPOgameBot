@@ -2,18 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "0a149869-5fd1-4815-853a-84b2ef7cb0d4"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "solar power plant"
         },
         "coordinates": {
@@ -238,18 +226,6 @@
             "planet": 6
         },
         "uuid": "9825e5af-c2ed-42f7-a2af-35fffbf2daca"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "6b862787-ac49-4783-8d10-f9a117a02b7e"
     },
     {
         "action": "upgrade building",

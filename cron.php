@@ -12,7 +12,7 @@ while (true) {
 	$difference = (new DateTime())->getTimestamp() - $datetime->getTimestamp();    //in seconds
 	if ($difference < $interval && $difference > 0) {
 		file_put_contents('www/cron.txt', '');
-		$output = shell_exec('php www/index.php bot:queue');
+		$output = shell_exec('php www/index.php bot:queue --debug-mode');
 		echo $output . PHP_EOL;
 	}
 	sleep($interval);
