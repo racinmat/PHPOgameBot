@@ -16,11 +16,9 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	/** @var int */
 	private $amount;
 
-	public function __construct(Coordinates $coordinates, Defense $defense, $amount)
+	public function __construct(Coordinates $coordinates, array $data)
 	{
-		parent::__construct($coordinates);
-		$this->defense = $defense;
-		$this->amount = $amount;
+		parent::__construct($coordinates, $data);
 	}
 
 	public static function getAction() : string
@@ -40,7 +38,7 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildDefenseCommand
 	{
-		return new BuildDefenseCommand(Coordinates::fromArray($data['coordinates']), Defense::_($data['defense']), $data['amount']);
+		return new BuildDefenseCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
 	}
 
 	public function toArray() : array
@@ -52,6 +50,12 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
+	}
+
+	protected function loadFromArray(array $data)
+	{
+		$this->defense = Defense::_($data['defense']);
+		$this->amount = $data['amount'];
 	}
 
 }

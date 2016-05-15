@@ -19,7 +19,7 @@ abstract class Upgradable extends Enhanceable
 
 	public function getPriceToNextLevel($currentLevel) : Resources
 	{
-		return $this->getBasePrice()->multiplyScalar(pow($this->getNextLevelPriceConstant(), $currentLevel));
+		return $this->getBasePrice()->multiplyByScalar(pow($this->getNextLevelPriceConstant(), $currentLevel));
 	}
 
 	abstract protected function getBasePrice() : Resources;

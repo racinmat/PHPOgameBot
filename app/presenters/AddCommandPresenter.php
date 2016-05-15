@@ -7,6 +7,7 @@ use App\Enum\Defense;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Forms\FormFactory;
+use App\Model\DatabasePlanetManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
@@ -38,7 +39,7 @@ class AddCommandPresenter extends BasePresenter
 	public $queueProducer;
 
 	/**
-	 * @var PlanetManager
+	 * @var DatabasePlanetManager
 	 * @inject
 	 */
 	public $planetManager;
@@ -46,7 +47,7 @@ class AddCommandPresenter extends BasePresenter
 	public function createComponentAddCommandForm()
 	{
 		$form = $this->formFactory->create();
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsFromDatabase());
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates());
 		if ($this->commandAction === UpgradeBuildingCommand::getAction()) {
 			$form->addSelect('enum', 'Type: ', Building::getSelectBoxValues());
 		} elseif ($this->commandAction === UpgradeResearchCommand::getAction()) {
@@ -64,13 +65,13 @@ class AddCommandPresenter extends BasePresenter
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
 			$command = '';
 			if ($this->commandAction === UpgradeBuildingCommand::getAction()) {
-				$command = UpgradeBuildingCommand::fromArray(['coordinates' => $coordinates, 'building' => $values['enum']]);
+				$command = UpgradeBuildingCommand::fromArray(['coordinates' => $coordinates, 'data' => ['building' => $values['enum']]]);
 			} elseif ($this->commandAction === UpgradeResearchCommand::getAction()) {
-				$command = UpgradeResearchCommand::fromArray(['coordinates' => $coordinates, 'research' => $values['enum']]);
+				$command = UpgradeResearchCommand::fromArray(['coordinates' => $coordinates, 'data' => ['research' => $values['enum']]]);
 			} elseif ($this->commandAction === BuildShipsCommand::getAction()) {
-				$command = BuildShipsCommand::fromArray(['coordinates' => $coordinates, 'ships' => $values['enum'], 'amount' => $values['amount']]);
+				$command = BuildShipsCommand::fromArray(['coordinates' => $coordinates, 'data' => ['ships' => $values['enum'], 'amount' => $values['amount']]]);
 			} elseif ($this->commandAction === BuildDefenseCommand::getAction()) {
-				$command = BuildDefenseCommand::fromArray(['coordinates' => $coordinates, 'defense' => $values['enum'], 'amount' => $values['amount']]);
+				$command = BuildDefenseCommand::fromArray(['coordinates' => $coordinates, 'data' => ['defense' => $values['enum'], 'amount' => $values['amount']]]);
 			}
 			$this->queueProducer->addToQueue($command);
 			$this->flashMessage('Command added', 'success');

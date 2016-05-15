@@ -237,14 +237,62 @@ class Planet extends Object
 	/**
 	 * Planet constructor.
 	 * @param string $name
-	 * @param Coordinates $coordinates
+	 * @param ValueObject\Coordinates $coordinates
 	 * @param bool $my
 	 */
 	public function __construct($name, ValueObject\Coordinates $coordinates, $my)
 	{
 		$this->name = $name;
-		$this->coordinates = new ValueObject\Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
+		$this->coordinates = new Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
 		$this->my = $my;
+		$this->metal = 0;
+		$this->crystal = 0;
+		$this->deuterium = 0;
+		$this->lastVisited = Carbon::now();
+		$this->minimalTemperature = 0;
+		$this->maximalTemperature = 0;
+		$this->metalStorageLevel = 0;
+		$this->crystalStorageLevel = 0;
+		$this->deuteriumTankLevel = 0;
+		$this->espionageTechnologyLevel = 0;
+		$this->computerTechnologyLevel = 0;
+		$this->weaponTechnologyLevel = 0;
+		$this->shieldingTechnologyLevel = 0;
+		$this->armourTechnologyLevel = 0;
+		$this->energyTechnologyLevel = 0;
+		$this->hyperspaceTechnologyLevel = 0;
+		$this->combustionDriveLevel = 0;
+		$this->impulseDriveLevel = 0;
+		$this->hyperspaceDriveLevel = 0;
+		$this->laserTechnologyLevel = 0;
+		$this->ionTechnologyLevel = 0;
+		$this->plasmaTechnologyLevel = 0;
+		$this->intergalacticResearchNetworkLevel = 0;
+		$this->astrophysicsLevel = 0;
+		$this->gravitonTechnologyLevel = 0;
+		$this->metalMineLevel = 0;
+		$this->crystalMineLevel = 0;
+		$this->deuteriumMineLevel = 0;
+		$this->solarPowerPlantLevel = 0;
+		$this->roboticFactoryLevel = 0;
+		$this->shipyardLevel = 0;
+		$this->fusionReactorLevel = 0;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
 	}
 
 	/**

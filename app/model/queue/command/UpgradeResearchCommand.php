@@ -14,10 +14,9 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	/** @var Research */
 	private $research;
 
-	public function __construct(Coordinates $coordinates, Research $research)
+	public function __construct(Coordinates $coordinates, array $data)
 	{
-		parent::__construct($coordinates);
-		$this->research = $research;
+		parent::__construct($coordinates, $data);
 	}
 
 	public static function getAction() : string
@@ -32,7 +31,7 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 
 	public static function fromArray(array $data) : UpgradeResearchCommand
 	{
-		return new UpgradeResearchCommand(Coordinates::fromArray($data['coordinates']), Research::_($data['research']));
+		return new UpgradeResearchCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
 	}
 
 	public function toArray() : array
@@ -44,6 +43,11 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
+	}
+
+	protected function loadFromArray(array $data)
+	{
+		$this->research = Research::_($data['research']);
 	}
 
 }

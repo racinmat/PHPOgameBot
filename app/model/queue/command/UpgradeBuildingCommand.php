@@ -13,10 +13,9 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	/** @var Building */
 	private $building;
 
-	public function __construct(Coordinates $coordinates, Building $building)
+	public function __construct(Coordinates $coordinates, array $data)
 	{
-		parent::__construct($coordinates);
-		$this->building = $building;
+		parent::__construct($coordinates, $data);
 	}
 
 	public static function getAction() : string
@@ -31,7 +30,7 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 
 	public static function fromArray(array $data) : UpgradeBuildingCommand
 	{
-		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), Building::_($data['building']));
+		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
 	}
 
 	public function toArray() : array
@@ -43,6 +42,11 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
+	}
+
+	protected function loadFromArray(array $data)
+	{
+		$this->building = Building::_($data['building']);
 	}
 
 }

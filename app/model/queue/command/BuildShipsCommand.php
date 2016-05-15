@@ -16,11 +16,9 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 	/** @var int */
 	private $amount;
 
-	public function __construct(Coordinates $coordinates, Ships $ships, $amount)
+	public function __construct(Coordinates $coordinates, array $data)
 	{
-		parent::__construct($coordinates);
-		$this->ships = $ships;
-		$this->amount = $amount;
+		parent::__construct($coordinates, $data);
 	}
 
 	public static function getAction() : string
@@ -40,7 +38,7 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildShipsCommand
 	{
-		return new BuildShipsCommand(Coordinates::fromArray($data['coordinates']), Ships::_($data['ships']), $data['amount']);
+		return new BuildShipsCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
 	}
 
 	public function toArray() : array
@@ -54,4 +52,10 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 		return Arrays::mergeTree($data, parent::toArray());
 	}
 
+	protected function loadFromArray(array $data)
+	{
+		$this->ships = Ships::_($data['ships']);
+		$this->amount = $data['amount'];
+	}
+	
 }

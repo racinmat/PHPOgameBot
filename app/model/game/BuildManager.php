@@ -79,8 +79,9 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		return $this->build($command);
 	}
 	
-	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon
+	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		/** @var IBuildCommand $command */
 		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
 		$datetime2 = $this->planetManager->getTimeToFinish($command->getBuildable());

@@ -6,10 +6,12 @@ use App\Enum\Building;
 use App\Enum\Enhanceable;
 use App\Enum\MenuItem;
 use App\Enum\Research;
+use App\Model\DatabasePlanetManager;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
+use App\Utils\Random;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,41 +23,29 @@ use Nette\Utils\Strings;
 class PlanetManager extends Object
 {
 
-	/** @var EntityManager */
-	private $entityManager;
-
-	/** @var EntityRepository */
-	private $planetRepository;
-
 	/** @var \AcceptanceTester */
 	private $I;
 
 	/** @var Menu */
 	private $menu;
+	
+	/** @var DatabasePlanetManager */
+	private $databasePlanetManager;
 
-	public function __construct(EntityManager $entityManager, \AcceptanceTester $acceptanceTester, Menu $menu)
+	public function __construct(DatabasePlanetManager $databasePlanetManager, \AcceptanceTester $acceptanceTester, Menu $menu)
 	{
-		$this->entityManager = $entityManager;
-		$this->planetRepository = $entityManager->getRepository(Planet::class);
+		$this->databasePlanetManager = $databasePlanetManager;
 		$this->I = $acceptanceTester;
 		$this->menu = $menu;
 	}
 
 	/**
-	 * @return Planet
+	 * @param Coordinates $coordinates
+	 * @return Planet|null
 	 */
-	public function getMyHomePlanet()
+	public function getPlanet(Coordinates $coordinates)
 	{
-		return $this->planetRepository->findOneBy(['my' => true]);
-	}
-
-	public function getPlanet(Coordinates $coordinates) : Planet
-	{
-		return $this->planetRepository->findOneBy([
-			'coordinates.galaxy' => $coordinates->getGalaxy(),
-			'coordinates.system' => $coordinates->getSystem(),
-			'coordinates.planet' => $coordinates->getPlanet()
-		]);
+		return $this->databasePlanetManager->getPlanet($coordinates);
 	}
 
 	public function refreshResourcesData(Planet $planet)
@@ -78,7 +68,7 @@ class PlanetManager extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
 
-		$this->entityManager->flush($planet);
+		$this->databasePlanetManager->flush($planet);
 	}
 
 	public function refreshAllResourcesData()
@@ -102,12 +92,16 @@ class PlanetManager extends Object
 	{
 		$I = $this->I;
 
+		//planet name
+		$planetName = $I->grabTextFrom('.planetlink.active span.planet-name');
+		$planet->setName($planetName);
+		
 		$this->refreshResourcesData($planet);
 		//buildings level
 		foreach (Building::getEnums() as $building) {
 			$this->menu->goToPage($building->getMenuLocation());
 			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
-			usleep(random_int(500000, 1000000));
+			usleep(Random::microseconds(0.5, 1));
 			$building->setCurrentLevel($planet, $level);
 		}
 
@@ -115,11 +109,11 @@ class PlanetManager extends Object
 		foreach (Research::getEnums() as $research) {
 			$this->menu->goToPage($research->getMenuLocation());
 			$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
-			usleep(random_int(500000, 1000000));
+			usleep(Random::microseconds(0.5, 1));
 			$research->setCurrentLevel($planet, $level);
 		}
 
-		$this->entityManager->flush($planet);
+		$this->databasePlanetManager->flush($planet);
 
 	}
 
@@ -146,7 +140,7 @@ class PlanetManager extends Object
 	 */
 	public function getAllMyPlanetsCoordinates() : ArrayCollection
 	{
-		return (new ArrayCollection($this->I->grabMultiple('.planetlink span.planet-koords')))->map(Functions::coordinatesToValueObject());
+		return (new ArrayCollection($this->I->grabMultiple('.planetlink span.planet-koords')))->map(Functions::textCoordinatesToValueObject());
 	}
 
 	/**
@@ -157,26 +151,10 @@ class PlanetManager extends Object
 		return $this->getAllMyPlanetsCoordinates()->map(function (Coordinates $coordinates) {
 			$planet = $this->getPlanet($coordinates);
 			if ($planet === null) {
-				$this->addPlanet($coordinates, true);
+				$this->databasePlanetManager->addPlanet($coordinates, true);
 			}
 			return $planet;
 		});
 	}
 
-	public function addPlanet(Coordinates $coordinates, bool $my)
-	{
-		$planet = new Planet('', $coordinates, $my);
-		$this->entityManager->persist($planet);
-		$this->entityManager->flush($planet);
-	}
-
-	public function getAllMyPlanetsFromDatabase()
-	{
-		return $this->planetRepository->findAssoc(['my' => true], 'id');
-	}
-
-	public function getPlanetById($id) : Planet
-	{
-		return $this->planetRepository->find($id);
-	}
 }

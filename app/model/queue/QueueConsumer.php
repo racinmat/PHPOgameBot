@@ -68,11 +68,10 @@ class QueueConsumer extends Object
 		if (!$success) {
 			/** @var Carbon $datetime */
 			$datetime = Carbon::now();
-			$planet = $this->planetManager->getMyHomePlanet();
 			foreach ($this->processors as $processor) {
 				if ($processor->canProcessCommand($lastCommand)) {
 					echo 'found processor to determine when to process last command' . PHP_EOL;
-					$datetime = $processor->getTimeToProcessingAvailable($planet, $lastCommand);
+					$datetime = $processor->getTimeToProcessingAvailable($lastCommand);
 					echo 'new run set to ' . $datetime->__toString() . PHP_EOL;
 					break;
 				}

@@ -10,6 +10,7 @@ use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;
+use Nette\Utils\Arrays;
 use Nette\Utils\Json;
 
 class QueueRepository extends Object
@@ -37,7 +38,8 @@ class QueueRepository extends Object
 	{
 		foreach ($this->getCommandList() as $commandClass) {
 			if ($commandClass::getAction() === $data['action']) {
-				return $commandClass::fromArray($data['data']);
+				unset($data['action']);
+				return $commandClass::fromArray($data);
 			}
 		}
 	}

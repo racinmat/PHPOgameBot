@@ -19,6 +19,6 @@ interface ICommandProcessor
 
 	public function processCommand(ICommand $command) : bool;
 
-	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon;
+	public function getTimeToProcessingAvailable(ICommand $command) : Carbon;
 
 }

@@ -80,8 +80,9 @@ class UpgradeManager extends Object implements ICommandProcessor
 		return $this->upgrade($command);
 	}
 
-	public function getTimeToProcessingAvailable(Planet $planet, ICommand $command) : Carbon
+	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		/** @var IUpgradeCommand $command */
 		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForUpgrade($planet, $command->getUpgradable());
 		$datetime2 = $this->planetManager->getTimeToFinish($command->getUpgradable());

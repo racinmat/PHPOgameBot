@@ -10,6 +10,7 @@ use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 use App\Utils\Functions;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Nette;
  
 class ResourcesCalculator extends Nette\Object
@@ -32,7 +33,7 @@ class ResourcesCalculator extends Nette\Object
 
 	public function isEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount)
 	{
-		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyScalar($amount));
+		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
 		return $missing->forAll(Functions::isZero());
 	}
 
@@ -45,7 +46,7 @@ class ResourcesCalculator extends Nette\Object
 
 	public function getTimeToEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount) : Carbon
 	{
-		$missingResources = $this->getMissingResources($planet, $buildable->getPrice()->multiplyScalar($amount));
+		$missingResources = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 
@@ -60,11 +61,7 @@ class ResourcesCalculator extends Nette\Object
 
 		$productionPerHour = $this->getProductionPerHour($planet->getMetalMineLevel(), $planet->getCrystalMineLevel(), $planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
 
-		$metalHours = $missing->getMetal() / $productionPerHour->getMetal();
-		$crystalHours = $missing->getCrystal() / $productionPerHour->getCrystal();
-		$deuteriumHours = $missing->getDeuterium() / $productionPerHour->getDeuterium();
-
-		$maxHours = max($metalHours, $crystalHours, $deuteriumHours);
+		$maxHours = max($missing->divide($productionPerHour));
 		if ($maxHours <= 0) {
 			return Carbon::now();
 		}

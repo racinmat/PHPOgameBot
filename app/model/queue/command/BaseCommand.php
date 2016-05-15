@@ -13,9 +13,10 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	/** @var Coordinates */
 	protected $coordinates;
 
-	public function __construct(Coordinates $coordinates)
+	public function __construct(Coordinates $coordinates, array $data)
 	{
 		$this->coordinates = $coordinates;
+		$this->loadFromArray($data);
 	}
 
 	public function toArray() : array
@@ -36,4 +37,5 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 		return $this->coordinates;
 	}
 
+	abstract protected function loadFromArray(array $data);
 }

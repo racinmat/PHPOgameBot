@@ -2,7 +2,9 @@
 
 namespace App\Utils;
 
+use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ArraySerializable;
+use App\Model\ValueObject\Coordinates;
 use Nette\Object;
 
 class Functions extends Object
@@ -15,24 +17,38 @@ class Functions extends Object
 		};
 	}
 
-	public static function isZero()
+	public static function isZero() : callable
 	{
 		return function(int $e) : bool {
 			return $e === 0;
 		};
 	}
 
-	public static function toArray()
+	public static function toArray() : callable
 	{
 		return function (ArraySerializable $data) {
 			return $data->toArray();
 		};
 	}
 
-	public static function coordinatesToValueObject()
+	public static function textCoordinatesToValueObject() : callable
 	{
-		return function (string $text) {
+		return function (string $text) : Coordinates {
 			return OgameParser::parseOgameCoordinates($text);
+		};
+	}
+
+	public static function valueObjectCoordinatesToText() : callable
+	{
+		return function (Coordinates $coordinates) :string {
+			return $coordinates->__toString();
+		};
+	}
+
+	public static function planetToNameAndTextCoordinates()
+	{
+		return function (Planet $planet) :string {
+			return $planet->getName() . ' ' . $planet->getCoordinates()->toValueObject()->__toString();
 		};
 	}
 }

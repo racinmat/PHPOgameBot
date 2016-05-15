@@ -2,6 +2,7 @@
 
 namespace App\Model\ValueObject;
  
+use Doctrine\Common\Collections\ArrayCollection;
 use Nette;
 
 /**
@@ -68,20 +69,42 @@ class Resources extends Nette\Object
 		return new Resources($this->metal - $resources->getMetal(), $this->crystal - $resources->getCrystal(), $this->deuterium - $resources->getDeuterium());
 	} 
 	
-	public function multiplyScalar(float $number) : Resources
+	public function multiplyByScalar(float $number) : Resources
 	{
 		return new Resources($this->metal * $number, $this->crystal * $number, $this->deuterium * $number);
 	}
 
-	public function divide(Resources $resources) : Resources
+	public function divideByScalar(float $number) : Resources
 	{
-		return new Resources(round($this->metal / $resources->getMetal()), round($this->crystal / $resources->getCrystal()), round($this->deuterium / $resources->getDeuterium()));
+		return new Resources(round($this->metal / $number), round($this->crystal / $number), round($this->deuterium / $number));
 	}
 
+	public function divide(Resources $resources) : array
+	{
+		return $this->map(function($key, $value) use ($resources) {
+			$divisor = $resources->toArray()[$key];
+			if ($value === 0) {
+				return 0;
+			}
+			if ($divisor === 0) {
+				return PHP_INT_MAX;
+			}
+			return $value / $divisor;
+		});
+	}
+
+	public function map(callable $function)
+	{
+		$result = [];
+		foreach ($this->toArray() as $key => $element) {
+			$result[$key] = $function($key, $element);
+		}
+		return $result;
+	}
+	
 	public function forAll(callable $predicate)
 	{
-		$elements = [$this->metal, $this->crystal, $this->deuterium];
-		foreach ($elements as $element) {
+		foreach ($this->toArray() as $element) {
 			if ( ! $predicate($element)) {
 				return false;
 			}
@@ -91,13 +114,21 @@ class Resources extends Nette\Object
 
 	public function forAny(callable $predicate)
 	{
-		$elements = [$this->metal, $this->crystal, $this->deuterium];
-		foreach ($elements as $element) {
+		foreach ($this->toArray() as $element) {
 			if ($predicate($element)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public function toArray() : array
+	{
+		return [
+			'metal' => $this->metal,
+			'crystal' => $this->crystal,
+			'deuterium' => $this->deuterium
+		];
 	}
 
 }
