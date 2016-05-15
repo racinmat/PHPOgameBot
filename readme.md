@@ -6,6 +6,8 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- read mines percentage settings
+- calculate production based on percentage settings and lack of energy
 - maybe export/import command lists and routines
 - think about routines implementation (repetitious commands)
 - repetitious fleet checking for attacks

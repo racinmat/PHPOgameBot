@@ -59,7 +59,7 @@ class ResourcesCalculator extends Nette\Object
 	{
 		$time = $planet->getLastVisited();
 
-		$productionPerHour = $this->getProductionPerHour($planet->getMetalMineLevel(), $planet->getCrystalMineLevel(), $planet->getDeuteriumMineLevel(), $planet->getAverageTemperature());
+		$productionPerHour = $this->getProductionPerHour($planet);
 
 		$maxHours = max($missing->divide($productionPerHour));
 		if ($maxHours <= 0) {
@@ -85,12 +85,12 @@ class ResourcesCalculator extends Nette\Object
 		return round($this->acceleration * 10 * $mineLevel * pow(1.1, $mineLevel) * (1.36 - 0.004 * $averageTemperature));
 	}
 
-	private function getProductionPerHour(int $metalMineLevel, int $crystalMineLevel, int $deuteriumMineLevel, $averageTemperature) : Resources
+	public function getProductionPerHour(Planet $planet) : Resources
 	{
 		return new Resources(
-			$this->getMetalProductionPerHour($metalMineLevel),
-			$this->getCrystalProductionPerHour($crystalMineLevel),
-			$this->getDeuteriumProductionPerHour($deuteriumMineLevel, $averageTemperature)
+			$this->getMetalProductionPerHour($planet->getMetalMineLevel()),
+			$this->getCrystalProductionPerHour($planet->getCrystalMineLevel()),
+			$this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature())
 		);
 	}
 
