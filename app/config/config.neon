@@ -47,6 +47,16 @@ extensions:
 	events: Kdyby\Events\DI\EventsExtension
 	annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	monolog: Kdyby\Monolog\DI\MonologExtension
+
+monolog:
+	hookToTracy: off
+	name: serverLogger
+	handlers:                                                                   #aby správně fungovaly handlery a braly pouze své události, musí být registrovány od nejnižšího po nejvyšší
+		main: Monolog\Handler\FingersCrossedHandler(
+			Monolog\Handler\StreamHandler(%appDir%/../log/symfony.log, Monolog\Logger::DEBUG),
+			Monolog\Logger::WARNING
+		)
 
 console:
 	commands:
