@@ -48,8 +48,9 @@ class PlanetManager extends Object
 		return $this->databasePlanetManager->getPlanet($coordinates);
 	}
 
-	public function refreshResourcesData(Planet $planet)
+	protected function refreshResourcesData(Planet $planet)
 	{
+		$this->menu->goToPlanet($planet);
 		//předělat na více planet a nebo dát do argumentu planetu
 		$I = $this->I;
 
@@ -75,6 +76,7 @@ class PlanetManager extends Object
 	{
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
 			$this->refreshResourcesData($planet);
+			return true;
 		});
 	}
 
@@ -85,12 +87,15 @@ class PlanetManager extends Object
 	{
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
 			$this->refreshPlanetData($planet);
+			return true;
 		});
 	}
 
 	public function refreshPlanetData(Planet $planet)
 	{
 		$I = $this->I;
+
+		$this->menu->goToPlanet($planet);
 
 		//planet name
 		$planetName = $I->grabTextFrom('.planetlink.active span.planet-name');

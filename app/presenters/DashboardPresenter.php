@@ -58,7 +58,7 @@ class DashboardPresenter extends BasePresenter
 
 	public function actionRunBot()
 	{
-		exec('cd ' . __DIR__ . '/../.. && php ' . __DIR__ . '/../../www/index.php bot:queue --debug-mode');
+		exec('cd ' . __DIR__ . '/../.. && start php ' . __DIR__ . '/../../www/index.php bot:queue --debug-mode');
 		$this->flashMessage('Bot started.', 'info');
 		$this->redirect('default');
 	}

@@ -56,7 +56,7 @@ class Functions extends Object
 	public static function compareCarbonDateTimes()
 	{
 		return function (Carbon $a, Carbon $b) {
-			return $a->lt($b);
+			return $a->lt($b) ? -1 : 1;
 		};
 	}
 }
