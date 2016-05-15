@@ -14,9 +14,9 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	/** @var Building */
 	private $building;
 
-	public function __construct(Coordinates $coordinates, array $data)
+	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
 	{
-		parent::__construct($coordinates, $data);
+		parent::__construct($coordinates, $data, $uuid);
 	}
 
 	public static function getAction() : string
