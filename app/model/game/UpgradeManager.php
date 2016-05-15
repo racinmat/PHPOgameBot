@@ -46,8 +46,8 @@ class UpgradeManager extends Object implements ICommandProcessor
 	public function upgrade(IUpgradeCommand $command) : bool
 	{
 		$upgradable = $command->getUpgradable();
-		//možná refreshnout všechna data hned po zalogování. Refreshovat vše včetně levelů budov, výzkumů apod.
-		$planet = $this->planetManager->getMyHomePlanet();
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($planet);
 		if (!$this->isProcessingAvailable($planet, $command)) {
 			echo 'processing not available' . PHP_EOL;
 			return false;

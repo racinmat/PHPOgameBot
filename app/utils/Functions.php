@@ -28,4 +28,11 @@ class Functions extends Object
 			return $data->toArray();
 		};
 	}
+
+	public static function coordinatesToValueObject()
+	{
+		return function (string $text) {
+			return OgameParser::parseOgameCoordinates($text);
+		};
+	}
 }

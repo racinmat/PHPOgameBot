@@ -3,11 +3,11 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\Buildable;
-use App\Enum\Building;
 use App\Enum\Defense;
-use Nette;
- 
-class BuildDefenseCommand extends Nette\Object implements IBuildCommand
+use App\Model\ValueObject\Coordinates;
+use Nette\Utils\Arrays;
+
+class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 {
 
 	/** @var Defense */
@@ -16,8 +16,9 @@ class BuildDefenseCommand extends Nette\Object implements IBuildCommand
 	/** @var int */
 	private $amount;
 
-	public function __construct(Defense $defense, $amount)
+	public function __construct(Coordinates $coordinates, Defense $defense, $amount)
 	{
+		parent::__construct($coordinates);
 		$this->defense = $defense;
 		$this->amount = $amount;
 	}
@@ -39,22 +40,18 @@ class BuildDefenseCommand extends Nette\Object implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildDefenseCommand
 	{
-		return new BuildDefenseCommand(Defense::_($data['defense']), $data['amount']);
+		return new BuildDefenseCommand(Coordinates::fromArray($data['coordinates']), Defense::_($data['defense']), $data['amount']);
 	}
 
 	public function toArray() : array
 	{
-		return [
-			'action' => $this->getAction(),
+		$data = [
 			'data' => [
 				'defense' => $this->defense->getValue(),
 				'amount' => $this->amount
 			]
 		];
+		return Arrays::mergeTree($data, parent::toArray());
 	}
 
-	public function __toString() : string
-	{
-		return Nette\Utils\Json::encode($this->toArray());
-	}
 }

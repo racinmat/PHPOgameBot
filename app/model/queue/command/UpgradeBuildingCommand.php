@@ -4,16 +4,18 @@ namespace App\Model\Queue\Command;
  
 use App\Enum\Building;
 use App\Enum\Upgradable;
-use Nette;
- 
-class UpgradeBuildingCommand extends Nette\Object implements IUpgradeCommand
+use App\Model\ValueObject\Coordinates;
+use Nette\Utils\Arrays;
+
+class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 {
 
 	/** @var Building */
 	private $building;
 
-	public function __construct(Building $building)
+	public function __construct(Coordinates $coordinates, Building $building)
 	{
+		parent::__construct($coordinates);
 		$this->building = $building;
 	}
 
@@ -29,22 +31,18 @@ class UpgradeBuildingCommand extends Nette\Object implements IUpgradeCommand
 
 	public static function fromArray(array $data) : UpgradeBuildingCommand
 	{
-		return new UpgradeBuildingCommand(Building::_($data['building']));
+		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), Building::_($data['building']));
 	}
 
 	public function toArray() : array
 	{
-		return [
+		$data = [
 			'action' => $this->getAction(),
 			'data' => [
 				'building' => $this->building->getValue()
 			]
 		];
-	}
-
-	public function __toString() : string
-	{
-		return Nette\Utils\Json::encode($this->toArray());
+		return Arrays::mergeTree($data, parent::toArray());
 	}
 
 }

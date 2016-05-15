@@ -5,16 +5,18 @@ namespace App\Model\Queue\Command;
 use App\Enum\Building;
 use App\Enum\Research;
 use App\Enum\Upgradable;
-use Nette;
- 
-class UpgradeResearchCommand extends Nette\Object implements IUpgradeCommand
+use App\Model\ValueObject\Coordinates;
+use Nette\Utils\Arrays;
+
+class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 {
 
 	/** @var Research */
 	private $research;
 
-	public function __construct(Research $research)
+	public function __construct(Coordinates $coordinates, Research $research)
 	{
+		parent::__construct($coordinates);
 		$this->research = $research;
 	}
 
@@ -30,22 +32,18 @@ class UpgradeResearchCommand extends Nette\Object implements IUpgradeCommand
 
 	public static function fromArray(array $data) : UpgradeResearchCommand
 	{
-		return new UpgradeResearchCommand(Research::_($data['research']));
+		return new UpgradeResearchCommand(Coordinates::fromArray($data['coordinates']), Research::_($data['research']));
 	}
 
 	public function toArray() : array
 	{
-		return [
+		$data = [
 			'action' => $this->getAction(),
 			'data' => [
 				'research' => $this->research->getValue()
 			]
 		];
-	}
-
-	public function __toString() : string
-	{
-		return Nette\Utils\Json::encode($this->toArray());
+		return Arrays::mergeTree($data, parent::toArray());
 	}
 
 }

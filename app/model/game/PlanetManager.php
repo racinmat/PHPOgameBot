@@ -7,8 +7,12 @@ use App\Enum\Enhanceable;
 use App\Enum\MenuItem;
 use App\Enum\Research;
 use App\Model\Entity\Planet;
+use App\Model\ValueObject\Coordinates;
+use App\Utils\Functions;
+use App\Utils\OgameParser;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
@@ -45,8 +49,18 @@ class PlanetManager extends Object
 		return $this->planetRepository->findOneBy(['my' => true]);
 	}
 
-	public function refreshResourcesData()
+	public function getPlanet(Coordinates $coordinates) : Planet
 	{
+		return $this->planetRepository->findOneBy([
+			'coordinates.galaxy' => $coordinates->getGalaxy(),
+			'coordinates.system' => $coordinates->getSystem(),
+			'coordinates.planet' => $coordinates->getPlanet()
+		]);
+	}
+
+	public function refreshResourcesData(Planet $planet)
+	{
+		//předělat na více planet a nebo dát do argumentu planetu
 		$I = $this->I;
 
 		//resources
@@ -58,7 +72,6 @@ class PlanetManager extends Object
 		$crystal = Strings::replace($crystal, '~\.~');
 		$deuterium = Strings::replace($deuterium, '~\.~');
 
-		$planet = $this->getMyHomePlanet();
 		//v budoucnu předělat na nastavení jedním DTO, které bude mít suroviny a čas
 		$planet->setMetal($metal);
 		$planet->setCrystal($crystal);
@@ -68,18 +81,28 @@ class PlanetManager extends Object
 		$this->entityManager->flush($planet);
 	}
 
+	public function refreshAllResourcesData()
+	{
+		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
+			$this->refreshResourcesData($planet);
+		});
+	}
+
 	/**
 	 * @throws \Exception
 	 */
-	public function refreshData()
+	public function refreshAllData()
 	{
-		//zatím pouze na mou planetu, v budoucnu nude přijímat jako argument planetu a případně pošle sondy
+		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
+			$this->refreshPlanetData($planet);
+		});
+	}
+
+	public function refreshPlanetData(Planet $planet)
+	{
 		$I = $this->I;
 
-		$this->refreshResourcesData();
-
-		$planet = $this->getMyHomePlanet();
-
+		$this->refreshResourcesData($planet);
 		//buildings level
 		foreach (Building::getEnums() as $building) {
 			$this->menu->goToPage($building->getMenuLocation());
@@ -97,12 +120,7 @@ class PlanetManager extends Object
 		}
 
 		$this->entityManager->flush($planet);
-	}
 
-	protected function parseOgameTimeInterval(string $interval) : CarbonInterval
-	{
-		$params = Strings::match($interval, '~((?<weeks>\d{1,2})t)? ?((?<days>\d{1,2})d)? ?((?<hours>\d{1,2})hod)? ?((?<minutes>\d{1,2})min)? ?((?<seconds>\d{1,2})s)?~');
-		return new CarbonInterval(0, 0, $params['weeks'], $params['days'], $params['hours'], $params['minutes'], $params['seconds']);
 	}
 
 	public function getTimeToFinish(Enhanceable $enhanceable) : Carbon
@@ -111,7 +129,7 @@ class PlanetManager extends Object
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
 		if ($I->seeElementExists($enhanceable->getEnhanceCountdownSelector())) {
 			$interval = $I->grabTextFrom($enhanceable->getEnhanceCountdownSelector());
-			return Carbon::now()->add($this->parseOgameTimeInterval($interval));
+			return Carbon::now()->add(OgameParser::parseOgameTimeInterval($interval));
 		}
 		echo 'Countdown text not found. Can not find when to run queue next time.' . PHP_EOL;
 		return Carbon::now();
@@ -123,4 +141,42 @@ class PlanetManager extends Object
 		return ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
 	}
 
+	/**
+	 * @return Coordinates[]|ArrayCollection
+	 */
+	public function getAllMyPlanetsCoordinates() : ArrayCollection
+	{
+		return (new ArrayCollection($this->I->grabMultiple('.planetlink span.planet-koords')))->map(Functions::coordinatesToValueObject());
+	}
+
+	/**
+	 * @return Planet[]|ArrayCollection
+	 */
+	public function getAllMyPlanets() : ArrayCollection
+	{
+		return $this->getAllMyPlanetsCoordinates()->map(function (Coordinates $coordinates) {
+			$planet = $this->getPlanet($coordinates);
+			if ($planet === null) {
+				$this->addPlanet($coordinates, true);
+			}
+			return $planet;
+		});
+	}
+
+	public function addPlanet(Coordinates $coordinates, bool $my)
+	{
+		$planet = new Planet('', $coordinates, $my);
+		$this->entityManager->persist($planet);
+		$this->entityManager->flush($planet);
+	}
+
+	public function getAllMyPlanetsFromDatabase()
+	{
+		return $this->planetRepository->findAssoc(['my' => true], 'id');
+	}
+
+	public function getPlanetById($id) : Planet
+	{
+		return $this->planetRepository->find($id);
+	}
 }

@@ -1,9 +1,1 @@
-[
-    {
-        "action": "build ships",
-        "data": {
-            "ships": "colony ship",
-            "amount": "1"
-        }
-    }
-]
+[]

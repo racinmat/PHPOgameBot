@@ -46,8 +46,8 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	{
 		$buildable = $command->getBuildable();
 		$amount = $command->getAmount();
-		//možná refreshnout všechna data hned po zalogování
-		$planet = $this->planetManager->getMyHomePlanet();
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($planet);
 		if (!$this->resourcesCalculator->isEnoughResourcesForBuild($planet, $buildable, $amount)) {
 			return false;
 		}
@@ -89,7 +89,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 
 	public function isProcessingAvailable(Planet $planet, IBuildCommand $command) : bool
 	{
-		//building ships and defense is stackable. No need to check if sonething is being built right now.
+		//building ships and defense is stackable. No need to check if something is being built right now.
 		/** @var IBuildCommand $command */
 		return $this->resourcesCalculator->isEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
 	}

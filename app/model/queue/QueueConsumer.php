@@ -42,13 +42,13 @@ class QueueConsumer extends Object
 
 	public function processQueue()
 	{
-		$this->planetManager->refreshData();
+		$this->planetManager->refreshAllData();
 		$queue = $this->queueRepository->loadQueue();
 		$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 		$lastCommand = null;
 		foreach ($queue as $key => $command) {
 			foreach ($this->processors as $processor) {
-				$this->planetManager->refreshResourcesData();
+				$this->planetManager->refreshAllResourcesData();
 				if ($processor->canProcessCommand($command)) {
 					echo 'going to process the command' .  $command->__toString() . PHP_EOL;
 					$success = $processor->processCommand($command);

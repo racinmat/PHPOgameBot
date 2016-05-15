@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Building;
+use App\Model\ValueObject;
 use App\Model\ValueObject\Resources;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -239,10 +240,10 @@ class Planet extends Object
 	 * @param Coordinates $coordinates
 	 * @param bool $my
 	 */
-	public function __construct($name, Coordinates $coordinates, $my)
+	public function __construct($name, ValueObject\Coordinates $coordinates, $my)
 	{
 		$this->name = $name;
-		$this->coordinates = $coordinates;
+		$this->coordinates = new ValueObject\Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
 		$this->my = $my;
 	}
 
@@ -759,5 +760,15 @@ class Planet extends Object
 	{
 		$this->gravitonTechnologyLevel = $gravitonTechnologyLevel;
 	}
-	
+
+	public function isOnCoordinates(ValueObject\Coordinates $coordinates) : bool
+	{
+		return $this->coordinates->isSame($coordinates);
+	}
+
+	public function getCoordinates() : Coordinates
+	{
+		return $this->coordinates;
+	}
+
 }

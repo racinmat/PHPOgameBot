@@ -3,12 +3,11 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\Buildable;
-use App\Enum\Building;
-use App\Enum\Defense;
 use App\Enum\Ships;
-use Nette;
- 
-class BuildShipsCommand extends Nette\Object implements IBuildCommand
+use App\Model\ValueObject\Coordinates;
+use Nette\Utils\Arrays;
+
+class BuildShipsCommand extends BaseCommand implements IBuildCommand
 {
 
 	/** @var Ships */
@@ -17,8 +16,9 @@ class BuildShipsCommand extends Nette\Object implements IBuildCommand
 	/** @var int */
 	private $amount;
 
-	public function __construct(Ships $ships, $amount)
+	public function __construct(Coordinates $coordinates, Ships $ships, $amount)
 	{
+		parent::__construct($coordinates);
 		$this->ships = $ships;
 		$this->amount = $amount;
 	}
@@ -40,23 +40,18 @@ class BuildShipsCommand extends Nette\Object implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildShipsCommand
 	{
-		return new BuildShipsCommand(Ships::_($data['ships']), $data['amount']);
+		return new BuildShipsCommand(Coordinates::fromArray($data['coordinates']), Ships::_($data['ships']), $data['amount']);
 	}
 
 	public function toArray() : array
 	{
-		return [
-			'action' => $this->getAction(),
+		$data = [
 			'data' => [
 				'ships' => $this->ships->getValue(),
 				'amount' => $this->amount
 			]
 		];
-	}
-
-	public function __toString() : string
-	{
-		return Nette\Utils\Json::encode($this->toArray());
+		return Arrays::mergeTree($data, parent::toArray());
 	}
 
 }
