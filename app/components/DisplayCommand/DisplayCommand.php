@@ -48,16 +48,19 @@ class DisplayCommand extends UI\Control
 	public function handleRemove(string $uuid)
 	{
 		$this->queueManager->removeFromQueue(Uuid::fromString($uuid));
+		$this->presenter->redirect('default');
 	}
 
 	public function handleMoveUp(string $uuid)
 	{
 		$this->queueManager->moveCommandUp(Uuid::fromString($uuid));
+		$this->presenter->redirect('default');
 	}
 
 	public function handleMoveDown(string $uuid)
 	{
 		$this->queueManager->moveCommandDown(Uuid::fromString($uuid));
+		$this->presenter->redirect('default');
 	}
 
 }

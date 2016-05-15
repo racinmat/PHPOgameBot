@@ -6,6 +6,7 @@ use App\Enum\Building;
 use App\Enum\Upgradable;
 use App\Model\ValueObject\Coordinates;
 use Nette\Utils\Arrays;
+use Ramsey\Uuid\Uuid;
 
 class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 {
@@ -30,7 +31,7 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 
 	public static function fromArray(array $data) : UpgradeBuildingCommand
 	{
-		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
+		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
 	}
 
 	public function toArray() : array

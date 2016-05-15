@@ -8,7 +8,8 @@
             "galaxy": 1,
             "system": 357,
             "planet": 6
-        }
+        },
+        "uuid": "5d0fea7c-3a2e-41eb-8c8a-1e94bbf7b84d"
     },
     {
         "action": "upgrade building",
@@ -19,6 +20,7 @@
             "galaxy": 1,
             "system": 357,
             "planet": 9
-        }
+        },
+        "uuid": "0e07eb03-05f3-4e58-85b9-fda061050ccd"
     }
 ]

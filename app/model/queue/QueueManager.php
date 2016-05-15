@@ -5,6 +5,7 @@ namespace App\Model\Queue;
 use App\Model\Queue\Command\ICommand;
 use Nette\Object;
 use Ramsey\Uuid\Uuid;
+use Tracy\Debugger;
 
 class QueueManager extends Object
 {
@@ -38,10 +39,13 @@ class QueueManager extends Object
 
 	public function moveCommandUp(Uuid $uuid)
 	{
+		Debugger::barDump($uuid, 'uuid');
 		$queue = $this->queueRepository->loadQueue();
 		foreach ($queue as $key => $item) {
+			Debugger::barDump($item->getUuid(), $key . '. uuid');
 			if ($item->getUuid()->equals($uuid) && $key !== 0) {
 				$temp = $queue[$key];
+				Debugger::barDump($temp, 'switching');
 				$queue[$key] = $queue[$key - 1];
 				$queue[$key - 1] = $temp;
 				break;

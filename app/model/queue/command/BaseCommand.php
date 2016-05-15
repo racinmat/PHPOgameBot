@@ -17,10 +17,14 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	/** @var Uuid */
 	protected $uuid;
 
-	public function __construct(Coordinates $coordinates, array $data)
+	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
 	{
 		$this->coordinates = $coordinates;
-		$this->uuid = Uuid::uuid4();
+		if ($uuid) {
+			$this->uuid = $uuid;
+		} else {
+			$this->uuid = Uuid::uuid4();
+		}
 		$this->loadFromArray($data);
 	}
 
@@ -28,6 +32,7 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	{
 		return [
 			'coordinates' => $this->coordinates->toArray(),
+			'uuid' => $this->getUuid()->toString(),
 			'action' => $this->getAction()
 		];
 	}

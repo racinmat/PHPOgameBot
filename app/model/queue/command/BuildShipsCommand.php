@@ -6,6 +6,7 @@ use App\Enum\Buildable;
 use App\Enum\Ships;
 use App\Model\ValueObject\Coordinates;
 use Nette\Utils\Arrays;
+use Ramsey\Uuid\Uuid;
 
 class BuildShipsCommand extends BaseCommand implements IBuildCommand
 {
@@ -38,7 +39,7 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 
 	public static function fromArray(array $data) : BuildShipsCommand
 	{
-		return new BuildShipsCommand(Coordinates::fromArray($data['coordinates']), $data['data']);
+		return new BuildShipsCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
 	}
 
 	public function toArray() : array
