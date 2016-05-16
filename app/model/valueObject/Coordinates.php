@@ -9,13 +9,13 @@ use Nette\Object;
 class Coordinates extends Object
 {
 
-	private $minGalaxy = 1;
-	private $minSystem = 1;
-	private $minPlanet = 1;
+	public static $minGalaxy = 1;
+	public static $minSystem = 1;
+	public static $minPlanet = 1;
 
-	private $maxGalaxy = 6;
-	private $maxSystem = 499;
-	private $maxPlanet = 15;
+	public static $maxGalaxy = 6;
+	public static $maxSystem = 499;
+	public static $maxPlanet = 15;
 
 	/**
 	 * @var integer
