@@ -125,30 +125,31 @@ class AddCommandPresenter extends BasePresenter
 		return $form;
 	}
 
-	public function createComponentScanGalaxyCommandForm()
+	public function createComponentAddScanGalaxyCommandForm()
 	{
 		$form = $this->formFactory->create();
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates())
-			->setDefaultValue($this->planet);
+
+		$general = $form->addGroup('General', false);
+
+		$general->add($form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates())
+			->setDefaultValue($this->planet));
 
 		$middle = $form->addContainer('middle');
-		$middleGroup = $form->addGroup('Middle of scanning');
+		$middleGroup = $form->addGroup('Middle of scanning', false);
 
-		$middleGroup->add($middle->addText('galaxy')
+		$middleGroup->add($middle->addText('galaxy', 'Galaxy:')
 			->setType('number'));
-		$middleGroup->add($middle->addText('system')
+		$middleGroup->add($middle->addText('system', 'System:')
 			->setType('number'));
 
-		$rangeGroup = $form->addGroup('Range of scanning');
+		$rangeGroup = $form->addGroup('Range of scanning', false);
 		$range = $form->addContainer('range');
-		$rangeGroup->add($range->addText('galaxy')
+		$rangeGroup->add($range->addText('galaxy', 'Galaxy:')
 			->setType('number'));
-		$rangeGroup->add($range->addText('system')
+		$rangeGroup->add($range->addText('system', 'System:')
 			->setType('number'));
 
-		$form->addCheckbox('onlyInactive', 'Only inactive: ');
-
-		$form->addSubmit('send', 'Add commands');
+		$form->addSubmit('send', 'Add command');
 
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
@@ -157,15 +158,14 @@ class AddCommandPresenter extends BasePresenter
 			$command = ScanGalaxyCommand::fromArray([
 				'coordinates' => $coordinates, 
 				'data' => [
-					'onlyInactive' => $values['onlyInactive'],
 					'middle' => [
 						'galaxy' => $values['middle']['galaxy'],
-						'system' => $values['middle']['galaxy'],
+						'system' => $values['middle']['system'],
 						'planet' => Coordinates::$minPlanet
 					],
 					'range' => [
 						'galaxy' => $values['range']['galaxy'],
-						'system' => $values['range']['galaxy'],
+						'system' => $values['range']['system'],
 						'planet' => Coordinates::$maxPlanet,
 					]
 				]

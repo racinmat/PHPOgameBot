@@ -5,19 +5,17 @@ namespace App\Model\Queue\Command;
 use App\Enum\Buildable;
 use App\Enum\Defense;
 use App\Model\ValueObject\Coordinates;
+use App\Model\ValueObject\CoordinatesDifference;
 use Nette\Utils\Arrays;
 use Ramsey\Uuid\Uuid;
 
 class ScanGalaxyCommand extends BaseCommand
 {
 
-	/** @var bool */
-	private $onlyInactive;
-
 	/** @var Coordinates */
 	private $middle;
 
-	/** @var Coordinates */
+	/** @var CoordinatesDifference */
 	private $range;
 
 	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
@@ -39,7 +37,6 @@ class ScanGalaxyCommand extends BaseCommand
 	{
 		$data = [
 			'data' => [
-				'onlyInactive' => $this->onlyInactive,
 				'middle' => $this->middle->toArray(),
 				'range' => $this->range->toArray()
 			]
@@ -49,9 +46,8 @@ class ScanGalaxyCommand extends BaseCommand
 
 	protected function loadFromArray(array $data)
 	{
-		$this->onlyInactive = $data['onlyInteractive'];
 		$this->middle = Coordinates::fromArray($data['middle']);
-		$this->range = Coordinates::fromArray($data['range']);
+		$this->range = CoordinatesDifference::fromArray($data['range']);
 	}
 
 	/**

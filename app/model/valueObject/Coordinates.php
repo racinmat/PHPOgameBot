@@ -5,6 +5,7 @@ namespace App\Model\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
 use Nette\Object;
+use Tracy\Debugger;
 
 class Coordinates extends Object
 {
@@ -33,25 +34,28 @@ class Coordinates extends Object
 
 	public function __construct(int $galaxy, int $system, int $planet)
 	{
-		if ($galaxy < $this->minGalaxy) {
-			$galaxy = $this->minGalaxy;
+		Debugger::barDump($galaxy, 'galaxy');
+		Debugger::barDump($system, 'system');
+		Debugger::barDump($planet, 'planet');
+		if ($galaxy < static::$minGalaxy) {
+			$galaxy = static::$minGalaxy;
 		}
-		if ($galaxy > $this->maxGalaxy) {
-			$galaxy = $this->maxGalaxy;
-		}
-
-		if ($system < $this->minSystem) {
-			$system = $this->minSystem;
-		}
-		if ($system > $this->maxSystem) {
-			$system = $this->maxSystem;
+		if ($galaxy > static::$maxGalaxy) {
+			$galaxy = static::$maxGalaxy;
 		}
 
-		if ($planet < $this->minPlanet) {
-			$planet = $this->minPlanet;
+		if ($system < static::$minSystem) {
+			$system = static::$minSystem;
 		}
-		if ($planet > $this->maxPlanet) {
-			$planet = $this->maxPlanet;
+		if ($system > static::$maxSystem) {
+			$system = static::$maxSystem;
+		}
+
+		if ($planet < static::$minPlanet) {
+			$planet = static::$minPlanet;
+		}
+		if ($planet > static::$maxPlanet) {
+			$planet = static::$maxPlanet;
 		}
 
 		$this->galaxy = $galaxy;

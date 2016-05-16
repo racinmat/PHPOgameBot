@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IUpgradeCommand;
+use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\QueueManager;
 use Latte\Runtime\CachingIterator;
 use Nette;
@@ -28,7 +29,8 @@ class DisplayCommand extends UI\Control
 	{
 		$classToTemplate = [
 			IUpgradeCommand::class => 'upgrade.latte',
-			IBuildCommand::class => 'build.latte'
+			IBuildCommand::class => 'build.latte',
+			ScanGalaxyCommand::class => 'scanGalaxy.latte'
 		];
 
 		$controlTemplate = '';

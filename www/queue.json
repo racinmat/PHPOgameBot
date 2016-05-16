@@ -490,5 +490,47 @@
             "planet": 9
         },
         "uuid": "6cd60e63-aba3-4eb8-958c-d4f539e6a22b"
+    },
+    {
+        "data": {
+            "middle": {
+                "galaxy": 1,
+                "system": 1,
+                "planet": 1
+            },
+            "range": {
+                "galaxy": 1,
+                "system": 1,
+                "planet": 15
+            }
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "32bbdb53-92f6-477d-a2a6-b1dcf5c3d99e",
+        "action": "scan galaxy"
+    },
+    {
+        "data": {
+            "middle": {
+                "galaxy": 1,
+                "system": 357,
+                "planet": 1
+            },
+            "range": {
+                "galaxy": 1,
+                "system": 5,
+                "planet": 15
+            }
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "4a41e7d9-a1e4-496b-932d-99f2179ec143",
+        "action": "scan galaxy"
     }
 ]
