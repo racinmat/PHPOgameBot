@@ -15,6 +15,7 @@ class Player extends Object
 
 	const
 		STATUS_INACTIVE = 'inactive',
+		STATUS_LONG_INACTIVE = 'long inactive',
 		STATUS_NOOB = 'noob',
 		STATUS_HONORABLE_TARGET = 'honorable target',
 		STATUS_ACTIVE = 'active',

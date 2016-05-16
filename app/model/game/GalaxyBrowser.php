@@ -59,7 +59,11 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 	protected function scanSystem(Coordinates $coordinates)
 	{
-//		$isNext = ;
+		$I = $this->I;
+
+		$currentGalaxy = $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
+		$currentSystem = $I->grabValueFrom('#system_input', $coordinates->getSystem());
+		$isNextSystem = $currentGalaxy === $coordinates->getGalaxy() && ($currentSystem + 1) === $coordinates->getSystem();
 
 		$classToStatus = [
 			'status_abbr_noob' => Player::STATUS_NOOB,
@@ -68,20 +72,19 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			'status_abbr_vacation' => Player::STATUS_VACATION,
 			'status_abbr_inactive' => Player::STATUS_INACTIVE,
 			'status_abbr_strong' => Player::STATUS_STRONG,
+			'status_abbr_longinactive' => Player::STATUS_LONG_INACTIVE
 		];
 
-		$I = $this->I;
-
-//		if ($isNext) {
-//			$this->goToNextSystem();
-//		} else {
+		if ($isNextSystem) {
+			$this->goToNextSystem();
+		} else {
 			$this->goToSystem($coordinates);
-//		}
+		}
 
-		$planetCount = $I->getNumberOfElements('tr.ago_galaxy_row');
+		$planetCount = Coordinates::$maxPlanet;
 		for ($i = 1; $i <= $planetCount; $i++) {
 			//check to avoid parsing empty spots
-			if ( ! $I->seeElementExists("tbody tr:nth-of-type($i)", ['class' => 'ago_galaxy_row'])) {
+			if ( ! $I->seeElementExists("tbody tr:nth-of-type($i) > td.colonized")) {
 				continue;
 			}
 
