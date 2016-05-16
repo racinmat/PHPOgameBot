@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Model\Game\SignManager;
 use Carbon\Carbon;
+use Kdyby\Monolog\Logger;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +29,10 @@ abstract class CodeceptionUsingCommand extends Command {
 		} catch(\Throwable $e) {
 			/** @var \AcceptanceTester $acceptanceTester */
 			$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
+			/** @var Logger $logger */
+			$logger = $this->container->getByType(Logger::class);
 			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
+			$logger->addCritical('Exception thrown: ' . $e->getMessage());
 			throw $e;
 		}
 //		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
