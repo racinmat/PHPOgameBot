@@ -4,6 +4,7 @@ namespace App\Model\Queue;
  
 use App\Model\CronManager;
 use App\Model\Game\BuildManager;
+use App\Model\Game\GalaxyBrowser;
 use App\Model\Game\UpgradeManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\ICommand;
@@ -35,7 +36,7 @@ class QueueConsumer extends Object
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger)
+	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser)
 	{
 		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
@@ -43,7 +44,8 @@ class QueueConsumer extends Object
 		$this->cronManager = $cronManager;
 		$this->processors = [
 			$upgradeManager,
-			$buildManager
+			$buildManager,
+			$galaxyBrowser
 		];
 		$this->logger = $logger;
 	}
@@ -67,17 +69,17 @@ class QueueConsumer extends Object
 			foreach ($queue as $key => $command) {
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($command)) {
-						$this->logger->addDebug("Going to process the command {$command->__toString()}.");
+						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
 						$success = $processor->processCommand($command);
 						$this->planetManager->refreshAllResourcesData();
 						break;
 					}
 				}
 				if ($success) {
-					$this->logger->addDebug("Command processed successfully.");
+					$this->logger->addInfo("Command processed successfully.");
 					$this->queueManager->removeFromQueue($command->getUuid());
 				} else {
-					$this->logger->addDebug("Command failed to process.");
+					$this->logger->addInfo("Command failed to process.");
 					$failedCommands[] = $command;
 					break;
 				}
@@ -90,9 +92,9 @@ class QueueConsumer extends Object
 			foreach ($failedCommands as $failedCommand) {
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($failedCommand)) {
-						$this->logger->addDebug("Going to find the next run of command {$failedCommand->__toString()}.");
+						$this->logger->addInfo("Going to find the next run of command {$failedCommand->__toString()}.");
 						$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
-						$this->logger->addDebug("Next run of command {$failedCommand->__toString()} is {$datetime->__toString()}.");
+						$this->logger->addInfo("Next run of command {$failedCommand->__toString()} is {$datetime->__toString()}.");
 						$nextStarts[] = $datetime;
 						break;
 					}

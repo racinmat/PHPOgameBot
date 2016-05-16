@@ -90,11 +90,13 @@ class PlanetManager extends Object
 	 */
 	public function refreshAllData()
 	{
+		$this->logger->addInfo('Going to refresh all data.');
 		$this->refreshResearchData();
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
 			$this->refreshPlanetData($planet);
 			return true;
 		});
+		$this->logger->addInfo('Done refreshing all data.');
 	}
 
 	protected function refreshResearchData()
@@ -150,11 +152,11 @@ class PlanetManager extends Object
 	{
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
 		$currentlyProcessing = ! $this->I->seeExists($enhanceable->getFreeToEnhanceText(), $enhanceable->getEnhanceStatusSelector());
+		$class = get_class($enhanceable);
 		if ($currentlyProcessing) {
-			$this->logger->addDebug("Currently processing {$enhanceable->getValue()}.");
+			$this->logger->addDebug("Currently processing $class.");
 		} else {
-			$class = get_class($enhanceable);
-			$this->logger->addDebug("Not processing {$class}. {$enhanceable->getValue()} can be processed.");
+			$this->logger->addDebug("Currently not processing $class. {$enhanceable->getValue()} can be processed.");
 		}
 		return $currentlyProcessing;
 	}

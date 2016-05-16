@@ -51,11 +51,21 @@ class DatabaseManager extends Object
 		]);
 	}
 
-	public function addPlanet(Coordinates $coordinates, Player $player)
+	/**
+	 * @param string $name
+	 * @return Player|null
+	 */
+	public function getPlayer(string $name)
+	{
+		return $this->playerRepository->findOneBy(['name' => $name]);
+	}
+
+	public function addPlanet(Coordinates $coordinates, Player $player) : Planet
 	{
 		$planet = new Planet('', $coordinates, $player);
 		$this->entityManager->persist($planet);
 		$this->entityManager->flush($planet);
+		return $planet;
 	}
 
 	public function getAllMyPlanets()
@@ -79,10 +89,11 @@ class DatabaseManager extends Object
 		$this->entityManager->flush();
 	}
 
-	public function addPlayer(string $name, bool $me = false)
+	public function addPlayer(string $name, bool $me = false) : Player
 	{
 		$player = new Player($name, $me);
 		$this->entityManager->persist($player);
+		return $player;
 	}
 
 	public function getMe() : Player

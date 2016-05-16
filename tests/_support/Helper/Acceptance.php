@@ -6,6 +6,7 @@ namespace Helper;
 
 use Codeception\Module\WebDriver;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverElement;
 
 class Acceptance extends \Codeception\Module
 {
@@ -17,6 +18,18 @@ class Acceptance extends \Codeception\Module
 		$els = $webDriver->matchVisible($selector);
 		$els = $webDriver->filterByAttributes($els, $attributes);
 		return count($els) > 0;
+	}
+
+	/**
+	 * @param $selector
+	 * @return int
+	 * @throws \Codeception\Exception\ModuleException
+	 */
+	public function getNumberOfElements($selector)
+	{
+		/** @var WebDriver $webDriver */
+		$webDriver = $this->getModule('WebDriver');
+		return count($webDriver->matchVisible($selector));
 	}
 
 	public function seeExists($text, $selector = null)

@@ -13,6 +13,15 @@ use Nette\Object;
 class Player extends Object
 {
 
+	const
+		STATUS_INACTIVE = 'inactive',
+		STATUS_NOOB = 'noob',
+		STATUS_HONORABLE_TARGET = 'honorable target',
+		STATUS_ACTIVE = 'active',
+		STATUS_VACATION = 'vacation',
+		STATUS_STRONG = 'strong'
+	;
+
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
@@ -38,6 +47,18 @@ class Player extends Object
 	 * @var bool
 	 */
 	private $me;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $status;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	private $alliance;
 
 	/**
 	 * @ORM\Column(type="carbon")
@@ -141,15 +162,12 @@ class Player extends Object
  	 */
 	private $gravitonTechnologyLevel;
 
-	/**
-	 * Planet constructor.
-	 * @param string $name
-	 * @param bool $me
-	 */
 	public function __construct(string $name, bool $me = false)
 	{
 		$this->name = $name;
 		$this->me = $me;
+		$this->status = Player::STATUS_ACTIVE;
+		$this->alliance = null;
 		$this->lastVisited = Carbon::now();
 		$this->espionageTechnologyLevel = 0;
 		$this->computerTechnologyLevel = 0;
@@ -479,6 +497,22 @@ class Player extends Object
 	public function setGravitonTechnologyLevel($gravitonTechnologyLevel)
 	{
 		$this->gravitonTechnologyLevel = $gravitonTechnologyLevel;
+	}
+
+	/**
+	 * @param string $status
+	 */
+	public function setStatus($status)
+	{
+		$this->status = $status;
+	}
+
+	/**
+	 * @param string $alliance
+	 */
+	public function setAlliance($alliance)
+	{
+		$this->alliance = $alliance;
 	}
 
 }

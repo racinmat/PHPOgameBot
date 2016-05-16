@@ -43,6 +43,12 @@ class Planet extends Object
 	private $player;
 
 	/**
+	 * @ORM\Column(type="boolean")
+	 * @var bool
+	 */
+	private $moon;
+
+	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
@@ -139,16 +145,23 @@ class Planet extends Object
 	private $deuteriumTankLevel;
 
 	/**
-	 * Planet constructor.
-	 * @param string $name
-	 * @param ValueObject\Coordinates $coordinates
-	 * @param Player $player
+	 * @ORM\Column(type="integer")
+	 * @var int
 	 */
-	public function __construct($name, ValueObject\Coordinates $coordinates, Player $player)
+	private $debrisMetal;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var int
+	 */
+	private $debrisCrystal;
+
+	public function __construct(string $name, ValueObject\Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
 		$this->coordinates = new Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
 		$this->player = $player;
+		$this->moon = false;
 		$this->metal = 0;
 		$this->crystal = 0;
 		$this->deuterium = 0;
@@ -165,6 +178,8 @@ class Planet extends Object
 		$this->roboticFactoryLevel = 0;
 		$this->shipyardLevel = 0;
 		$this->fusionReactorLevel = 0;
+		$this->debrisMetal = 0;
+		$this->debrisCrystal = 0;
 	}
 
 	/**
@@ -454,6 +469,54 @@ class Planet extends Object
 	public function getPlayer() : Player
 	{
 		return $this->player;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasMoon()
+	{
+		return $this->moon;
+	}
+
+	/**
+	 * @param boolean $moon
+	 */
+	public function setMoon($moon)
+	{
+		$this->moon = $moon;
+	}
+
+	/**
+	 * @param int $debrisMetal
+	 */
+	public function setDebrisMetal($debrisMetal)
+	{
+		$this->debrisMetal = $debrisMetal;
+	}
+
+	/**
+	 * @param mixed $debrisCrystal
+	 */
+	public function setDebrisCrystal($debrisCrystal)
+	{
+		$this->debrisCrystal = $debrisCrystal;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDebrisMetal()
+	{
+		return $this->debrisMetal;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDebrisCrystal()
+	{
+		return $this->debrisCrystal;
 	}
 
 }

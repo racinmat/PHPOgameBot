@@ -2,42 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "8f667783-0ef8-4b8a-9021-e047bf823d92"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "be16d805-95fd-42e1-9916-c6533b8050f5"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "deuterium mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "0f6c26dd-6740-4d3b-854e-79e1ece63ad8"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "solar power plant"
         },
         "coordinates": {
@@ -214,42 +178,6 @@
             "planet": 6
         },
         "uuid": "9825e5af-c2ed-42f7-a2af-35fffbf2daca"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "solar power plant"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "7cd06a85-1508-405f-a008-34534f053851"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "2bdc7eaa-33e5-4308-a6a0-ef5fa553b6a4"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "dd4388ad-30a6-40bc-8102-09c47cb3bd67"
     },
     {
         "action": "upgrade building",

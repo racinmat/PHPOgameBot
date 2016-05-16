@@ -61,9 +61,9 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$this->openMenu($buildable);
 		$I = $this->I;
 		$I->fillField('#number', $amount);
-		$I->wait(1);
+		usleep(Random::microseconds(1.5, 2));
 		$I->click($buildable->getBuildButtonSelector());
-		$I->wait(1);
+		usleep(Random::microseconds(2, 2.5));
 		return true;
 	}
 

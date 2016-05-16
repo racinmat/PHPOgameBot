@@ -61,7 +61,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$this->openMenu($upgradable);
 		$I = $this->I;
 		$I->click($upgradable->getBuildButtonSelector());
-		$I->wait(1);
+		usleep(Random::microseconds(2, 2.5));
 		return true;
 	}
 
