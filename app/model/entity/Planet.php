@@ -37,6 +37,12 @@ class Planet extends Object
 	private $coordinates;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Player", inversedBy="planets")
+	 * @var Player
+	 */
+	private $player;
+
+	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
@@ -77,12 +83,6 @@ class Planet extends Object
 	 * @var int
 	 */
 	private $fusionReactorLevel;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
-	 */
-	private $my;
 
 	/**
 	 * @ORM\Column(type="integer")
@@ -139,112 +139,16 @@ class Planet extends Object
 	private $deuteriumTankLevel;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
-	 */
-	private $espionageTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $computerTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $weaponTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $shieldingTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $armourTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $energyTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $hyperspaceTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $combustionDriveLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $impulseDriveLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $hyperspaceDriveLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $laserTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $ionTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $plasmaTechnologyLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $intergalacticResearchNetworkLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $astrophysicsLevel;
-
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
- 	 */
-	private $gravitonTechnologyLevel;
-
-	/**
 	 * Planet constructor.
 	 * @param string $name
 	 * @param ValueObject\Coordinates $coordinates
-	 * @param bool $my
+	 * @param Player $player
 	 */
-	public function __construct($name, ValueObject\Coordinates $coordinates, $my)
+	public function __construct($name, ValueObject\Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
 		$this->coordinates = new Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
-		$this->my = $my;
+		$this->player = $player;
 		$this->metal = 0;
 		$this->crystal = 0;
 		$this->deuterium = 0;
@@ -254,22 +158,6 @@ class Planet extends Object
 		$this->metalStorageLevel = 0;
 		$this->crystalStorageLevel = 0;
 		$this->deuteriumTankLevel = 0;
-		$this->espionageTechnologyLevel = 0;
-		$this->computerTechnologyLevel = 0;
-		$this->weaponTechnologyLevel = 0;
-		$this->shieldingTechnologyLevel = 0;
-		$this->armourTechnologyLevel = 0;
-		$this->energyTechnologyLevel = 0;
-		$this->hyperspaceTechnologyLevel = 0;
-		$this->combustionDriveLevel = 0;
-		$this->impulseDriveLevel = 0;
-		$this->hyperspaceDriveLevel = 0;
-		$this->laserTechnologyLevel = 0;
-		$this->ionTechnologyLevel = 0;
-		$this->plasmaTechnologyLevel = 0;
-		$this->intergalacticResearchNetworkLevel = 0;
-		$this->astrophysicsLevel = 0;
-		$this->gravitonTechnologyLevel = 0;
 		$this->metalMineLevel = 0;
 		$this->crystalMineLevel = 0;
 		$this->deuteriumMineLevel = 0;
@@ -553,262 +441,6 @@ class Planet extends Object
 		$this->deuteriumTankLevel = $deuteriumTankLevel;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getEspionageTechnologyLevel()
-	{
-		return $this->espionageTechnologyLevel;
-	}
-
-	/**
-	 * @param int $espionageTechnologyLevel
-	 */
-	public function setEspionageTechnologyLevel($espionageTechnologyLevel)
-	{
-		$this->espionageTechnologyLevel = $espionageTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getComputerTechnologyLevel()
-	{
-		return $this->computerTechnologyLevel;
-	}
-
-	/**
-	 * @param int $computerTechnologyLevel
-	 */
-	public function setComputerTechnologyLevel($computerTechnologyLevel)
-	{
-		$this->computerTechnologyLevel = $computerTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getWeaponTechnologyLevel()
-	{
-		return $this->weaponTechnologyLevel;
-	}
-
-	/**
-	 * @param int $weaponTechnologyLevel
-	 */
-	public function setWeaponTechnologyLevel($weaponTechnologyLevel)
-	{
-		$this->weaponTechnologyLevel = $weaponTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getShieldingTechnologyLevel()
-	{
-		return $this->shieldingTechnologyLevel;
-	}
-
-	/**
-	 * @param int $shieldingTechnologyLevel
-	 */
-	public function setShieldingTechnologyLevel($shieldingTechnologyLevel)
-	{
-		$this->shieldingTechnologyLevel = $shieldingTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getArmourTechnologyLevel()
-	{
-		return $this->armourTechnologyLevel;
-	}
-
-	/**
-	 * @param int $armourTechnologyLevel
-	 */
-	public function setArmourTechnologyLevel($armourTechnologyLevel)
-	{
-		$this->armourTechnologyLevel = $armourTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getEnergyTechnologyLevel()
-	{
-		return $this->energyTechnologyLevel;
-	}
-
-	/**
-	 * @param int $energyTechnologyLevel
-	 */
-	public function setEnergyTechnologyLevel($energyTechnologyLevel)
-	{
-		$this->energyTechnologyLevel = $energyTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getHyperspaceTechnologyLevel()
-	{
-		return $this->hyperspaceTechnologyLevel;
-	}
-
-	/**
-	 * @param int $hyperspaceTechnologyLevel
-	 */
-	public function setHyperspaceTechnologyLevel($hyperspaceTechnologyLevel)
-	{
-		$this->hyperspaceTechnologyLevel = $hyperspaceTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getCombustionDriveLevel()
-	{
-		return $this->combustionDriveLevel;
-	}
-
-	/**
-	 * @param int $combustionDriveLevel
-	 */
-	public function setCombustionDriveLevel($combustionDriveLevel)
-	{
-		$this->combustionDriveLevel = $combustionDriveLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getImpulseDriveLevel()
-	{
-		return $this->impulseDriveLevel;
-	}
-
-	/**
-	 * @param int $impulseDriveLevel
-	 */
-	public function setImpulseDriveLevel($impulseDriveLevel)
-	{
-		$this->impulseDriveLevel = $impulseDriveLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getHyperspaceDriveLevel()
-	{
-		return $this->hyperspaceDriveLevel;
-	}
-
-	/**
-	 * @param int $hyperspaceDriveLevel
-	 */
-	public function setHyperspaceDriveLevel($hyperspaceDriveLevel)
-	{
-		$this->hyperspaceDriveLevel = $hyperspaceDriveLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getLaserTechnologyLevel()
-	{
-		return $this->laserTechnologyLevel;
-	}
-
-	/**
-	 * @param int $laserTechnologyLevel
-	 */
-	public function setLaserTechnologyLevel($laserTechnologyLevel)
-	{
-		$this->laserTechnologyLevel = $laserTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getIonTechnologyLevel()
-	{
-		return $this->ionTechnologyLevel;
-	}
-
-	/**
-	 * @param int $ionTechnologyLevel
-	 */
-	public function setIonTechnologyLevel($ionTechnologyLevel)
-	{
-		$this->ionTechnologyLevel = $ionTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPlasmaTechnologyLevel()
-	{
-		return $this->plasmaTechnologyLevel;
-	}
-
-	/**
-	 * @param int $plasmaTechnologyLevel
-	 */
-	public function setPlasmaTechnologyLevel($plasmaTechnologyLevel)
-	{
-		$this->plasmaTechnologyLevel = $plasmaTechnologyLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getIntergalacticResearchNetworkLevel()
-	{
-		return $this->intergalacticResearchNetworkLevel;
-	}
-
-	/**
-	 * @param int $intergalacticResearchNetworkLevel
-	 */
-	public function setIntergalacticResearchNetworkLevel($intergalacticResearchNetworkLevel)
-	{
-		$this->intergalacticResearchNetworkLevel = $intergalacticResearchNetworkLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAstrophysicsLevel()
-	{
-		return $this->astrophysicsLevel;
-	}
-
-	/**
-	 * @param int $astrophysicsLevel
-	 */
-	public function setAstrophysicsLevel($astrophysicsLevel)
-	{
-		$this->astrophysicsLevel = $astrophysicsLevel;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getGravitonTechnologyLevel()
-	{
-		return $this->gravitonTechnologyLevel;
-	}
-
-	/**
-	 * @param int $gravitonTechnologyLevel
-	 */
-	public function setGravitonTechnologyLevel($gravitonTechnologyLevel)
-	{
-		$this->gravitonTechnologyLevel = $gravitonTechnologyLevel;
-	}
-
 	public function isOnCoordinates(ValueObject\Coordinates $coordinates) : bool
 	{
 		return $this->coordinates->isSame($coordinates);
@@ -817,6 +449,11 @@ class Planet extends Object
 	public function getCoordinates() : Coordinates
 	{
 		return $this->coordinates;
+	}
+
+	public function getPlayer() : Player
+	{
+		return $this->player;
 	}
 
 }

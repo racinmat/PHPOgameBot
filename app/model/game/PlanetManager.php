@@ -6,7 +6,7 @@ use App\Enum\Building;
 use App\Enum\Enhanceable;
 use App\Enum\MenuItem;
 use App\Enum\Research;
-use App\Model\DatabasePlanetManager;
+use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
@@ -30,15 +30,15 @@ class PlanetManager extends Object
 	/** @var Menu */
 	private $menu;
 	
-	/** @var DatabasePlanetManager */
-	private $databasePlanetManager;
+	/** @var DatabaseManager */
+	private $databaseManager;
 
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(DatabasePlanetManager $databasePlanetManager, \AcceptanceTester $acceptanceTester, Menu $menu, Logger $logger)
+	public function __construct(DatabaseManager $databaseManager, \AcceptanceTester $acceptanceTester, Menu $menu, Logger $logger)
 	{
-		$this->databasePlanetManager = $databasePlanetManager;
+		$this->databaseManager = $databaseManager;
 		$this->I = $acceptanceTester;
 		$this->menu = $menu;
 		$this->logger = $logger;
@@ -50,7 +50,7 @@ class PlanetManager extends Object
 	 */
 	public function getPlanet(Coordinates $coordinates)
 	{
-		return $this->databasePlanetManager->getPlanet($coordinates);
+		return $this->databaseManager->getPlanet($coordinates);
 	}
 
 	protected function refreshResourcesData(Planet $planet)
@@ -74,7 +74,7 @@ class PlanetManager extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
 
-		$this->databasePlanetManager->flush($planet);
+		$this->databaseManager->flush();
 	}
 
 	public function refreshAllResourcesData()
@@ -90,13 +90,27 @@ class PlanetManager extends Object
 	 */
 	public function refreshAllData()
 	{
+		$this->refreshResearchData();
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
 			$this->refreshPlanetData($planet);
 			return true;
 		});
 	}
 
-	public function refreshPlanetData(Planet $planet)
+	protected function refreshResearchData()
+	{
+		$me = $this->databaseManager->getMe();
+		//research level
+		foreach (Research::getEnums() as $research) {
+			$this->menu->goToPage($research->getMenuLocation());
+			$level = $this->I->grabTextFrom($research->getClassSelector() . ' .level');
+			usleep(Random::microseconds(0.5, 1));
+			$research->setCurrentLevel($me->getPlanets()[0], $level);
+		}
+
+	}
+	
+	protected function refreshPlanetData(Planet $planet)
 	{
 		$I = $this->I;
 
@@ -115,15 +129,8 @@ class PlanetManager extends Object
 			$building->setCurrentLevel($planet, $level);
 		}
 
-		//research level
-		foreach (Research::getEnums() as $research) {
-			$this->menu->goToPage($research->getMenuLocation());
-			$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
-			usleep(Random::microseconds(0.5, 1));
-			$research->setCurrentLevel($planet, $level);
-		}
 
-		$this->databasePlanetManager->flush($planet);
+		$this->databaseManager->flush();
 
 	}
 
@@ -166,9 +173,10 @@ class PlanetManager extends Object
 	public function getAllMyPlanets() : ArrayCollection
 	{
 		return $this->getAllMyPlanetsCoordinates()->map(function (Coordinates $coordinates) {
+			$me = $this->databaseManager->getMe();
 			$planet = $this->getPlanet($coordinates);
 			if ($planet === null) {
-				$this->databasePlanetManager->addPlanet($coordinates, true);
+				$this->databaseManager->addPlanet($coordinates, $me);
 			}
 			return $planet;
 		});

@@ -40,7 +40,7 @@ services:
 	- App\Model\Game\Menu
 	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
 	- {implement: App\Components\IDisplayCommandFactory}
-	- App\Model\DatabasePlanetManager
+	- App\Model\DatabaseManager
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

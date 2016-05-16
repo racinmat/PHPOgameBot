@@ -114,37 +114,37 @@ class Research extends Upgradable
 	{
 		switch ($this->getValue()) {
 			case static::ESPIONAGE_TECHNOLOGY:
-				return $planet->getEspionageTechnologyLevel();
+				return $planet->getPlayer()->getEspionageTechnologyLevel();
 			case static::COMPUTER_TECHNOLOGY:
-				return $planet->getComputerTechnologyLevel();
+				return $planet->getPlayer()->getComputerTechnologyLevel();
 			case static::WEAPON_TECHNOLOGY:
-				return $planet->getWeaponTechnologyLevel();
+				return $planet->getPlayer()->getWeaponTechnologyLevel();
 			case static::SHIELDING_TECHNOLOGY:
-				return $planet->getShieldingTechnologyLevel();
+				return $planet->getPlayer()->getShieldingTechnologyLevel();
 			case static::ARMOUR_TECHNOLOGY:
-				return $planet->getArmourTechnologyLevel();
+				return $planet->getPlayer()->getArmourTechnologyLevel();
 			case static::ENERGY_TECHNOLOGY:
-				return $planet->getEnergyTechnologyLevel();
+				return $planet->getPlayer()->getEnergyTechnologyLevel();
 			case static::HYPERSPACE_TECHNOLOGY:
-				return $planet->getHyperspaceTechnologyLevel();
+				return $planet->getPlayer()->getHyperspaceTechnologyLevel();
 			case static::COMBUSTION_DRIVE:
-				return $planet->getCombustionDriveLevel();
+				return $planet->getPlayer()->getCombustionDriveLevel();
 			case static::IMPULSE_DRIVE:
-				return $planet->getImpulseDriveLevel();
+				return $planet->getPlayer()->getImpulseDriveLevel();
 			case static::HYPERSPACE_DRIVE:
-				return $planet->getHyperspaceDriveLevel();
+				return $planet->getPlayer()->getHyperspaceDriveLevel();
 			case static::LASER_TECHNOLOGY:
-				return $planet->getLaserTechnologyLevel();
+				return $planet->getPlayer()->getLaserTechnologyLevel();
 			case static::ION_TECHNOLOGY:
-				return $planet->getIonTechnologyLevel();
+				return $planet->getPlayer()->getIonTechnologyLevel();
 			case static::PLASMA_TECHNOLOGY:
-				return $planet->getPlasmaTechnologyLevel();
+				return $planet->getPlayer()->getPlasmaTechnologyLevel();
 			case static::INTERGALACTIC_RESEARCH_NETWORK:
-				return $planet->getIntergalacticResearchNetworkLevel();
+				return $planet->getPlayer()->getIntergalacticResearchNetworkLevel();
 			case static::ASTROPHYSICS:
-				return $planet->getAstrophysicsLevel();
+				return $planet->getPlayer()->getAstrophysicsLevel();
 			case static::GRAVITON_TECHNOLOGY:
-				return $planet->getGravitonTechnologyLevel();
+				return $planet->getPlayer()->getGravitonTechnologyLevel();
 		}
 	}
 
@@ -162,37 +162,37 @@ class Research extends Upgradable
 	{
 		switch ($this->getValue()) {
 			case static::ESPIONAGE_TECHNOLOGY:
-				return $planet->setEspionageTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setEspionageTechnologyLevel($currentLevel);
 			case static::COMPUTER_TECHNOLOGY:
-				return $planet->setComputerTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setComputerTechnologyLevel($currentLevel);
 			case static::WEAPON_TECHNOLOGY:
-				return $planet->setWeaponTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setWeaponTechnologyLevel($currentLevel);
 			case static::SHIELDING_TECHNOLOGY:
-				return $planet->setShieldingTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setShieldingTechnologyLevel($currentLevel);
 			case static::ARMOUR_TECHNOLOGY:
-				return $planet->setArmourTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setArmourTechnologyLevel($currentLevel);
 			case static::ENERGY_TECHNOLOGY:
-				return $planet->setEnergyTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setEnergyTechnologyLevel($currentLevel);
 			case static::HYPERSPACE_TECHNOLOGY:
-				return $planet->setHyperspaceTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setHyperspaceTechnologyLevel($currentLevel);
 			case static::COMBUSTION_DRIVE:
-				return $planet->setCombustionDriveLevel($currentLevel);
+				return $planet->getPlayer()->setCombustionDriveLevel($currentLevel);
 			case static::IMPULSE_DRIVE:
-				return $planet->setImpulseDriveLevel($currentLevel);
+				return $planet->getPlayer()->setImpulseDriveLevel($currentLevel);
 			case static::HYPERSPACE_DRIVE:
-				return $planet->setHyperspaceDriveLevel($currentLevel);
+				return $planet->getPlayer()->setHyperspaceDriveLevel($currentLevel);
 			case static::LASER_TECHNOLOGY:
-				return $planet->setLaserTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setLaserTechnologyLevel($currentLevel);
 			case static::ION_TECHNOLOGY:
-				return $planet->setIonTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setIonTechnologyLevel($currentLevel);
 			case static::PLASMA_TECHNOLOGY:
-				return $planet->setPlasmaTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setPlasmaTechnologyLevel($currentLevel);
 			case static::INTERGALACTIC_RESEARCH_NETWORK:
-				return $planet->setIntergalacticResearchNetworkLevel($currentLevel);
+				return $planet->getPlayer()->setIntergalacticResearchNetworkLevel($currentLevel);
 			case static::ASTROPHYSICS:
-				return $planet->setAstrophysicsLevel($currentLevel);
+				return $planet->getPlayer()->setAstrophysicsLevel($currentLevel);
 			case static::GRAVITON_TECHNOLOGY:
-				return $planet->setGravitonTechnologyLevel($currentLevel);
+				return $planet->getPlayer()->setGravitonTechnologyLevel($currentLevel);
 		}
 	}
 

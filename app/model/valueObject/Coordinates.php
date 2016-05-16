@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
 use Nette\Object;
 
-/**
- * @ORM\Entity
- */
 class Coordinates extends Object
 {
 

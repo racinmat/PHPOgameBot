@@ -218,18 +218,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "deuterium mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "37002141-abf4-4a32-b897-b3067e549faa"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "solar power plant"
         },
         "coordinates": {

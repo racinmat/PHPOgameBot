@@ -7,7 +7,7 @@ use App\Enum\Defense;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Forms\FormFactory;
-use App\Model\DatabasePlanetManager;
+use App\Model\DatabaseManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
@@ -39,7 +39,7 @@ class AddCommandPresenter extends BasePresenter
 	public $queueManager;
 
 	/**
-	 * @var DatabasePlanetManager
+	 * @var DatabaseManager
 	 * @inject
 	 */
 	public $planetManager;

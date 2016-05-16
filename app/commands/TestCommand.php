@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Enum\Building;
-use App\Model\DatabasePlanetManager;
+use App\Model\DatabaseManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Game\SignManager;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
@@ -42,8 +42,8 @@ class TestCommand extends CodeceptionUsingCommand {
 //		$queueConsumer->processQueue();
 		/** @var ResourcesCalculator $resourcesCalculator */
 		$resourcesCalculator = $this->container->getByType(ResourcesCalculator::class);
-		/** @var DatabasePlanetManager $databasePlanetManager */
-		$databasePlanetManager = $this->container->getByType(DatabasePlanetManager::class);
+		/** @var DatabaseManager $databasePlanetManager */
+		$databasePlanetManager = $this->container->getByType(DatabaseManager::class);
 		$planet = array_values($databasePlanetManager->getAllMyPlanets())[0];
 		$production = $resourcesCalculator->getProductionPerHour($planet);
 		var_dump($production);

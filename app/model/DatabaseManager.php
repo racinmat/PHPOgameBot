@@ -7,6 +7,7 @@ use App\Enum\Enhanceable;
 use App\Enum\MenuItem;
 use App\Enum\Research;
 use App\Model\Entity\Planet;
+use App\Model\Entity\Player;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
@@ -18,7 +19,7 @@ use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
 use Nette\Utils\Strings;
 
-class DatabasePlanetManager extends Object
+class DatabaseManager extends Object
 {
 
 	/** @var EntityManager */
@@ -27,10 +28,14 @@ class DatabasePlanetManager extends Object
 	/** @var EntityRepository */
 	private $planetRepository;
 
+	/** @var EntityRepository */
+	private $playerRepository;
+
 	public function __construct(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 		$this->planetRepository = $entityManager->getRepository(Planet::class);
+		$this->playerRepository = $entityManager->getRepository(Player::class);
 	}
 
 	/**
@@ -46,16 +51,16 @@ class DatabasePlanetManager extends Object
 		]);
 	}
 
-	public function addPlanet(Coordinates $coordinates, bool $my)
+	public function addPlanet(Coordinates $coordinates, Player $player)
 	{
-		$planet = new Planet('', $coordinates, $my);
+		$planet = new Planet('', $coordinates, $player);
 		$this->entityManager->persist($planet);
 		$this->entityManager->flush($planet);
 	}
 
 	public function getAllMyPlanets()
 	{
-		return $this->planetRepository->findAssoc(['my' => true], 'id');
+		return $this->planetRepository->findAssoc(['player.me' => true], 'id');
 	}
 
 	public function getAllMyPlanetIdsAndCoordinates() : array
@@ -69,8 +74,19 @@ class DatabasePlanetManager extends Object
 		return $this->planetRepository->find($id);
 	}
 
-	public function flush(Planet $planet)
+	public function flush()
 	{
-		$this->entityManager->flush($planet);
+		$this->entityManager->flush();
+	}
+
+	public function addPlayer(string $name, bool $me = false)
+	{
+		$player = new Player($name, $me);
+		$this->entityManager->persist($player);
+	}
+
+	public function getMe() : Player
+	{
+		return $this->playerRepository->findOneBy(['me' => true]);
 	}
 }
