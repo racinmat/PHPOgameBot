@@ -70,7 +70,7 @@ class Functions extends Object
 
 	public static function equalCoordinates(Coordinates $coordinates)
 	{
-		return function (Coordinates $c) use ($coordinates) : bool {
+		return function (int $i, Coordinates $c) use ($coordinates) : bool {
 			return $c->equals($coordinates);
 		};
 	}

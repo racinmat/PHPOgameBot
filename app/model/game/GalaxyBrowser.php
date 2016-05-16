@@ -76,7 +76,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			'status_abbr_inactive' => Player::STATUS_INACTIVE,
 			'status_abbr_strong' => Player::STATUS_STRONG,
 			'status_abbr_longinactive' => Player::STATUS_LONG_INACTIVE,
-			'status_abbr_admin' => Player::STATUS_ADMIN
+			'status_abbr_admin' => Player::STATUS_ADMIN,
+			'status_abbr_outlaw' => Player::STATUS_OUTLAW
 		];
 
 		if ($isNextSystem) {
