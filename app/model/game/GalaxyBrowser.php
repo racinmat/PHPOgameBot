@@ -91,9 +91,9 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			$planetName = $I->grabTextFrom("tbody tr:nth-of-type($i) .planetname");
 			$playerName = $I->grabTextFrom("tbody tr:nth-of-type($i) .playername > a > span");
 			$playerStatusClass = $I->grabAttributeFrom("tbody tr:nth-of-type($i) .playername > a > span", 'class');
-			$alliance = $I->grabTextFrom("tr.ago_galaxy_row:nth-of-type($i) .allytagwrapper");
-			$hasDebris = ! $I->seeElementExists("tr.ago_galaxy_row:nth-of-type($i) .debris.js_no_action");
-			$hasMoon = ! $I->seeElementExists("tr.ago_galaxy_row:nth-of-type($i) .moon.js_no_action");
+			$alliance = $I->grabTextFrom("tbody tr:nth-of-type($i) .allytagwrapper");
+			$hasDebris = ! $I->seeElementExists("tbody tr:nth-of-type($i) .debris.js_no_action");
+			$hasMoon = ! $I->seeElementExists("tbody tr:nth-of-type($i) .moon.js_no_action");
 
 			$playerStatus = $classToStatus[$playerStatusClass];
 			if ($hasDebris) {

@@ -56,7 +56,7 @@ class Player extends Object
 	private $status;
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	private $alliance;
