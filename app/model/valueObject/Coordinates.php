@@ -171,4 +171,9 @@ class Coordinates extends Object
 		return $this->galaxy === $this->maxGalaxy;
 	}
 
+	public function planet(int $planet) : Coordinates
+	{
+		return new Coordinates($this->galaxy, $this->system, $planet);
+	}
+
 }

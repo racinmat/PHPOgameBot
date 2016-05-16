@@ -73,7 +73,16 @@ class DatabaseManager extends Object
 		return $this->planetRepository->findAssoc(['player.me' => true], 'id');
 	}
 
-	public function getAllMyPlanetIdsAndCoordinates() : array
+	/**
+	 * @return Coordinates[]|ArrayCollection
+	 */
+	public function getAllMyPlanetsCoordinates() : ArrayCollection
+	{
+		$planets = new ArrayCollection($this->getAllMyPlanets());
+		return $planets->map(Functions::planetToCoordinates());
+	}
+	
+	public function getAllMyPlanetsIdsNamesAndCoordinates() : array
 	{
 		$planets = new ArrayCollection($this->getAllMyPlanets());
 		return $planets->map(Functions::planetToNameAndTextCoordinates())->toArray();

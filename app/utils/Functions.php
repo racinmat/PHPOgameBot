@@ -41,15 +41,23 @@ class Functions extends Object
 
 	public static function valueObjectCoordinatesToText() : callable
 	{
-		return function (Coordinates $coordinates) :string {
+		return function (Coordinates $coordinates) : string {
 			return $coordinates->__toString();
 		};
 	}
 
 	public static function planetToNameAndTextCoordinates()
 	{
-		return function (Planet $planet) :string {
+		return function (Planet $planet) : string {
 			return $planet->getName() . ' ' . $planet->getCoordinates()->toValueObject()->__toString();
+		};
+	}
+
+
+	public static function planetToCoordinates()
+	{
+		return function (Planet $planet) : Coordinates {
+			return $planet->getCoordinates()->toValueObject();
 		};
 	}
 
@@ -57,6 +65,13 @@ class Functions extends Object
 	{
 		return function (Carbon $a, Carbon $b) {
 			return $a->lt($b) ? -1 : 1;
+		};
+	}
+
+	public static function equalCoordinates(Coordinates $coordinates)
+	{
+		return function (Coordinates $c) use ($coordinates) : bool {
+			return $c->equals($coordinates);
 		};
 	}
 }

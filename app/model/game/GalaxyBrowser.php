@@ -9,6 +9,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ValueObject\Coordinates;
+use App\Utils\Functions;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Facebook\WebDriver\WebDriverKeys;
@@ -59,6 +60,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 	protected function scanSystem(Coordinates $coordinates)
 	{
+		$myPlanetsCoordinates = $this->databaseManager->getAllMyPlanetsCoordinates();
+		
 		$I = $this->I;
 
 		$currentGalaxy = $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
@@ -72,7 +75,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			'status_abbr_vacation' => Player::STATUS_VACATION,
 			'status_abbr_inactive' => Player::STATUS_INACTIVE,
 			'status_abbr_strong' => Player::STATUS_STRONG,
-			'status_abbr_longinactive' => Player::STATUS_LONG_INACTIVE
+			'status_abbr_longinactive' => Player::STATUS_LONG_INACTIVE,
+			'status_abbr_admin' => Player::STATUS_ADMIN
 		];
 
 		if ($isNextSystem) {
@@ -83,15 +87,25 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 		$planetCount = Coordinates::$maxPlanet;
 		for ($i = 1; $i <= $planetCount; $i++) {
+			$coordinates = $coordinates->planet($i);
 			//check to avoid parsing empty spots
 			if ( ! $I->seeElementExists("tbody tr:nth-of-type($i) > td.colonized")) {
+				continue;
+			}
+
+			//checking my planet, do not wate time with it. Status of my planets is missing
+			if ($myPlanetsCoordinates->exists(Functions::equalCoordinates($coordinates))) {
 				continue;
 			}
 
 			$planetName = $I->grabTextFrom("tbody tr:nth-of-type($i) .planetname");
 			$playerName = $I->grabTextFrom("tbody tr:nth-of-type($i) .playername > a > span");
 			$playerStatusClass = $I->grabAttributeFrom("tbody tr:nth-of-type($i) .playername > a > span", 'class');
-			$alliance = $I->grabTextFrom("tbody tr:nth-of-type($i) .allytagwrapper");
+			if ($I->seeElementExists("tbody tr:nth-of-type($i) .allytagwrapper")) {
+				$alliance = $I->grabTextFrom("tbody tr:nth-of-type($i) .allytagwrapper");
+			} else {
+				$alliance = null;
+			}
 			$hasDebris = ! $I->seeElementExists("tbody tr:nth-of-type($i) .debris.js_no_action");
 			$hasMoon = ! $I->seeElementExists("tbody tr:nth-of-type($i) .moon.js_no_action");
 

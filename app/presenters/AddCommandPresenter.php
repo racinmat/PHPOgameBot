@@ -50,7 +50,7 @@ class AddCommandPresenter extends BasePresenter
 	public function createComponentAddEnhanceCommandsForm()
 	{
 		$form = $this->formFactory->create();
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates())
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
 			->setDefaultValue($this->planet);
 
 		$form->addSelect('building', 'Building: ', Building::getSelectBoxValues())
@@ -131,7 +131,7 @@ class AddCommandPresenter extends BasePresenter
 
 		$general = $form->addGroup('General', false);
 
-		$general->add($form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates())
+		$general->add($form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
 			->setDefaultValue($this->planet));
 
 		$middle = $form->addContainer('middle');
