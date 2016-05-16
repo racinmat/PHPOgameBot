@@ -90,6 +90,7 @@ class QueueConsumer extends Object
 			foreach ($failedCommands as $failedCommand) {
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($failedCommand)) {
+						$this->logger->addDebug("Going to find the next run of command {$failedCommand->__toString()}.");
 						$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
 						$this->logger->addDebug("Next run of command {$failedCommand->__toString()} is {$datetime->__toString()}.");
 						$nextStarts[] = $datetime;

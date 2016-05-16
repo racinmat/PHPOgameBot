@@ -34,7 +34,7 @@ class Menu extends Object
 			$this->logger->addDebug("I already am on requested page, current URL is {$I->grabFromCurrentUrl()}.");
 			return;
 		}
-		$this->logger->addDebug("Clicking to go to another page.");
+		$this->logger->addDebug("Clicking to go to requested page.");
 		$I->click($menuItem->getSelector());
 		usleep(Random::microseconds(1, 2));
 	}
@@ -48,7 +48,7 @@ class Menu extends Object
 			$this->logger->addDebug("I already am on requested coordinates.");
 			return;
 		}
-		$this->logger->addDebug("Clicking to go to another planet.");
+		$this->logger->addDebug("Clicking to go to requested planet.");
 		$I->click($planet->getCoordinates()->toValueObject()->__toString());
 		usleep(Random::microseconds(1, 2));
 	}

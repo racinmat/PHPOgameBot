@@ -96,6 +96,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 
 	public function isProcessingAvailable(Planet $planet, IUpgradeCommand $command) : bool
 	{
+		$this->menu->goToPlanet($planet);
 		$currentlyProcessing = $this->planetManager->currentlyProcessing($command->getUpgradable());
 		$enoughResources = $this->resourcesCalculator->isEnoughResourcesForUpgrade($planet, $command->getUpgradable());
 		return $enoughResources && ! $currentlyProcessing;

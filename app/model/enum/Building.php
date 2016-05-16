@@ -168,7 +168,7 @@ class Building extends Upgradable
 
 	public function getEnhanceCountdownSelector() : string
 	{
-		return '#countdown';
+		return '#Countdown';
 	}
 
 }
