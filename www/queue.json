@@ -490,5 +490,26 @@
             "planet": 9
         },
         "uuid": "6cd60e63-aba3-4eb8-958c-d4f539e6a22b"
+    },
+    {
+        "data": {
+            "middle": {
+                "galaxy": 1,
+                "system": 357,
+                "planet": 1
+            },
+            "range": {
+                "galaxy": 0,
+                "system": 5,
+                "planet": 14
+            }
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "75716f43-dc3c-4d81-8e92-039ce35290da",
+        "action": "scan galaxy"
     }
 ]

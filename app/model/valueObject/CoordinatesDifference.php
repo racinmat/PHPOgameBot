@@ -23,4 +23,10 @@ class CoordinatesDifference extends Coordinates
 		parent::__construct($galaxy, $system, $planet);
 	}
 
+	public static function fromArray(array $data) : Coordinates
+	{
+		return new CoordinatesDifference($data['galaxy'], $data['system'], $data['planet']);
+	}
+
+
 }

@@ -12,6 +12,7 @@ use App\Model\ValueObject\Coordinates;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Facebook\WebDriver\WebDriverKeys;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Strings;
 
@@ -30,12 +31,16 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 	/** @var DatabaseManager */
 	private $databaseManager;
 
-	public function __construct(\AcceptanceTester $I, Menu $menu, PlanetManager $planetManager, DatabaseManager $databaseManager)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(\AcceptanceTester $I, Menu $menu, PlanetManager $planetManager, DatabaseManager $databaseManager, Logger $logger)
 	{
 		$this->I = $I;
 		$this->menu = $menu;
 		$this->planetManager = $planetManager;
 		$this->databaseManager = $databaseManager;
+		$this->logger = $logger;
 	}
 
 	protected function scanGalaxy(ScanGalaxyCommand $command)
@@ -46,15 +51,16 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$from = $command->getMiddle()->subtract($command->getRange());
 		$to = $command->getMiddle()->add($command->getRange());
 
-		$this->scanSystem($from);
-		$from = $from->nextSystem();
+		$this->logger->addInfo("Going to scan galaxy from system {$from->toString()} to system {$to->toString()}.");
 		for ($i = $from; $i->isLesserThanOrEquals($to); $i = $i->nextSystem()) {
-			$this->scanSystem($i, true);
+			$this->scanSystem($i);
 		}
 	}
 
-	protected function scanSystem(Coordinates $coordinates, bool $isNext = false)
+	protected function scanSystem(Coordinates $coordinates)
 	{
+//		$isNext = ;
+
 		$classToStatus = [
 			'status_abbr_noob' => Player::STATUS_NOOB,
 			'status_abbr_active' => Player::STATUS_NOOB,
@@ -66,11 +72,11 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 		$I = $this->I;
 
-		if ($isNext) {
-			$this->goToNextSystem();
-		} else {
+//		if ($isNext) {
+//			$this->goToNextSystem();
+//		} else {
 			$this->goToSystem($coordinates);
-		}
+//		}
 
 		$planetCount = $I->getNumberOfElements('tr.ago_galaxy_row');
 		for ($i = 1; $i <= $planetCount; $i++) {
@@ -125,16 +131,18 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 	protected function goToNextSystem()
 	{
 		$I = $this->I;
-		$I->pressKey('', WebDriverKeys::ARROW_RIGHT);
-		usleep(Random::microseconds(1.5, 2.5));
+		$I->pressKey('body', WebDriverKeys::ARROW_RIGHT);
+		usleep(Random::microseconds(2.5, 3.5));
 	}
 
 	protected function goToSystem(Coordinates $coordinates)
 	{
+		$I = $this->I;
+
 		$I->fillField('#galaxy_input', $coordinates->getGalaxy());
 		$I->fillField('#system_input', $coordinates->getSystem());
 		$I->click('#galaxyHeader > form > div:nth-child(9)');
-		usleep(Random::microseconds(1.5, 2.5));
+		usleep(Random::microseconds(2.5, 3.5));
 	}
 	
 	public function canProcessCommand(ICommand $command) : bool

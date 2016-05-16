@@ -8,6 +8,7 @@ use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\CoordinatesDifference;
 use Nette\Utils\Arrays;
 use Ramsey\Uuid\Uuid;
+use Tracy\Debugger;
 
 class ScanGalaxyCommand extends BaseCommand
 {
@@ -46,6 +47,7 @@ class ScanGalaxyCommand extends BaseCommand
 
 	protected function loadFromArray(array $data)
 	{
+		Debugger::barDump($data, 'array data');
 		$this->middle = Coordinates::fromArray($data['middle']);
 		$this->range = CoordinatesDifference::fromArray($data['range']);
 	}

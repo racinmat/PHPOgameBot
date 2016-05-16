@@ -34,9 +34,6 @@ class Coordinates extends Object
 
 	public function __construct(int $galaxy, int $system, int $planet)
 	{
-		Debugger::barDump($galaxy, 'galaxy');
-		Debugger::barDump($system, 'system');
-		Debugger::barDump($planet, 'planet');
 		if ($galaxy < static::$minGalaxy) {
 			$galaxy = static::$minGalaxy;
 		}
