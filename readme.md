@@ -7,7 +7,6 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - add checking whether command was really done (reding build/upgrade status, checking fleet status...)
-- add Player entity and more research to Player entity, because it is shared among all planets. Make only one scanning of research, do not scan research per planet in processing queue.
 - read mines percentage settings
 - calculate production based on percentage settings and lack of energy
 - maybe export/import command lists and routines

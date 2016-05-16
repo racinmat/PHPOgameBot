@@ -15,6 +15,7 @@ use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Model\Queue\QueueManager;
 use Nette\Application\UI\Form;
+use Nette\Forms\Controls\SubmitButton;
 use Tracy\Debugger;
 
 class AddCommandPresenter extends BasePresenter
@@ -25,12 +26,6 @@ class AddCommandPresenter extends BasePresenter
 	 * @inject
 	 */
 	public $formFactory;
-
-	/**
-	 * @var string
-	 * @persistent
-	 */
-	public $commandAction;
 
 	/**
 	 * @var QueueManager
@@ -44,37 +39,62 @@ class AddCommandPresenter extends BasePresenter
 	 */
 	public $planetManager;
 
-	public function createComponentAddCommandForm()
+	/**
+	 * @var string
+	 * @persistent
+	 */
+	public $planet;
+	
+	public function createComponentAddEnhanceCommandsForm()
 	{
 		$form = $this->formFactory->create();
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates());
-		if ($this->commandAction === UpgradeBuildingCommand::getAction()) {
-			$form->addSelect('enum', 'Type: ', Building::getSelectBoxValues());
-		} elseif ($this->commandAction === UpgradeResearchCommand::getAction()) {
-			$form->addSelect('enum', 'Type: ', Research::getSelectBoxValues());
-		} elseif ($this->commandAction === BuildShipsCommand::getAction()) {
-			$form->addSelect('enum', 'Type: ', Ships::getSelectBoxValues());
-			$form->addText('amount', 'Amount: ')->setType('number');
-		} elseif ($this->commandAction === BuildDefenseCommand::getAction()) {
-			$form->addSelect('enum', 'Type: ', Defense::getSelectBoxValues());
-			$form->addText('amount', 'Amount: ')->setType('number');
-		}
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetIdsAndCoordinates())
+			->setDefaultValue($this->planet);
 
-		$form->addSubmit('send', 'Add command');
+		$form->addSelect('building', 'Building: ', Building::getSelectBoxValues())
+			->setPrompt('-');
+
+		$form->addSelect('research', 'Research: ', Research::getSelectBoxValues())
+			->setPrompt('-');
+
+		$form->addSelect('ships', 'Ships: ', Ships::getSelectBoxValues())
+			->setPrompt('-');
+		$form->addText('shipsAmount', 'Ships amount: ')->setType('number');
+
+		$form->addSelect('defense', 'Defense: ', Defense::getSelectBoxValues())
+			->setPrompt('-');
+		$form->addText('defenseAmount', 'Defense amount: ')->setType('number');
+
+		$form->addSubmit('send', 'Add commands');
+
 		$form->onSuccess[] = function (Form $form, array $values) {
+			$this->planet = $values['planet'];
+			
+			$commands = [];
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
-			$command = '';
-			if ($this->commandAction === UpgradeBuildingCommand::getAction()) {
-				$command = UpgradeBuildingCommand::fromArray(['coordinates' => $coordinates, 'data' => ['building' => $values['enum']]]);
-			} elseif ($this->commandAction === UpgradeResearchCommand::getAction()) {
-				$command = UpgradeResearchCommand::fromArray(['coordinates' => $coordinates, 'data' => ['research' => $values['enum']]]);
-			} elseif ($this->commandAction === BuildShipsCommand::getAction()) {
-				$command = BuildShipsCommand::fromArray(['coordinates' => $coordinates, 'data' => ['ships' => $values['enum'], 'amount' => $values['amount']]]);
-			} elseif ($this->commandAction === BuildDefenseCommand::getAction()) {
-				$command = BuildDefenseCommand::fromArray(['coordinates' => $coordinates, 'data' => ['defense' => $values['enum'], 'amount' => $values['amount']]]);
+			if ($values['building'] !== null) {
+				$commands[] = UpgradeBuildingCommand::fromArray(['coordinates' => $coordinates, 'data' => ['building' => $values['building']]]);
 			}
-			$this->queueManager->addToQueue($command);
-			$this->flashMessage('Command added', 'success');
+			if ($values['research'] !== null) {
+				$commands[] = UpgradeResearchCommand::fromArray(['coordinates' => $coordinates, 'data' => ['research' => $values['research']]]);
+			}
+			if ($values['ships'] !== null) {
+				$commands[] = BuildShipsCommand::fromArray(['coordinates' => $coordinates, 'data' => ['ships' => $values['ships'], 'amount' => $values['shipsAmount']]]);
+			}
+			if ($values['defense'] !== null) {
+				$commands[] = BuildDefenseCommand::fromArray(['coordinates' => $coordinates, 'data' => ['defense' => $values['defense'], 'amount' => $values['defenseAmount']]]);
+			}
+			foreach ($commands as $command) {
+				$this->queueManager->addToQueue($command);
+			}
+			if (count($commands) == 0) {
+				$message = 'No command added';
+			} elseif (count($commands) == 1) {
+				$message = 'Command added';
+			} else {
+				$message = 'Commands added';
+			}
+			$this->flashMessage($message, 'success');
 			$this->redirect('this');
 		};
 
