@@ -1,11 +1,17 @@
 {block content}
-	<a n:href="runBot" class="btn btn-warning">Run bot</a>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			Next run
 		</div>
 		<div class="panel-body">
-			{$nextRunTime}
+			<div class="row">
+				<span class="col-md-3">
+					{$nextRunTime}
+				</span>
+				<span class="col-md-6">
+					<a n:href="runBot" class="btn btn-warning" style="float: right">Run bot</a>
+				</span>
+			</div>
 		</div>
 	</div>
 	<div class="panel panel-info">
