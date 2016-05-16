@@ -59,4 +59,9 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 		$this->amount = $data['amount'];
 	}
 
+	public function getDependencyType() : string
+	{
+		return $this->coordinates->toString() . self::DEPENDENCY_RESOURCES;
+	}
+
 }

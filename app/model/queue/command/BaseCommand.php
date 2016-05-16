@@ -11,6 +11,12 @@ use Ramsey\Uuid\Uuid;
 abstract class BaseCommand extends Nette\Object implements ICommand
 {
 
+	const
+		DEPENDENCY_RESOURCES = 'resources',
+		DEPENDENCY_FLEET = 'fleet',
+		DEPENDENCY_NOTHING = 'nothing'
+	;
+
 	/** @var Coordinates */
 	protected $coordinates;
 

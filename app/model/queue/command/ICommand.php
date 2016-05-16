@@ -26,4 +26,14 @@ interface ICommand extends ArraySerializable
 
 	public function equals(ICommand $another) : bool ;
 
+	/**
+	 * Every command has its dependency which it needs to be compoleted.
+	 * This method returns string unique to dependency.
+	 * When two commands return same string, they has same dependency.
+	 * For example, planet coordinates and 'resources' is dependency.
+	 * Or 'fleet' is dependency.
+	 * @return string
+	 */
+	public function getDependencyType() : string;
+
 }

@@ -50,4 +50,9 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 		$this->building = Building::_($data['building']);
 	}
 
+	public function getDependencyType() : string
+	{
+		return $this->coordinates->toString() . self::DEPENDENCY_RESOURCES;
+	}
+
 }

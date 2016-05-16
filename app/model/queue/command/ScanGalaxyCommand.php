@@ -74,4 +74,9 @@ class ScanGalaxyCommand extends BaseCommand
 		return $this->range;
 	}
 
+	public function getDependencyType() : string
+	{
+		return self::DEPENDENCY_NOTHING;
+	}
+
 }

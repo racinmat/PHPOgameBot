@@ -54,16 +54,16 @@ class QueueConsumer extends Object
 	{
 		$this->planetManager->refreshAllData();
 		$queue = $this->queueManager->getQueue();
-		$planetsQueue = [];
+		$dependencyTypes = [];
 		foreach ($queue as $command) {
-			$coordinatesString = $command->getCoordinates()->__toString();
-			if (!array_key_exists($coordinatesString, $planetsQueue)) {
-				$planetsQueue[$coordinatesString] = [];
+			$dependencyType = $command->getDependencyType();
+			if (!array_key_exists($dependencyType, $dependencyTypes)) {
+				$dependencyTypes[$dependencyType] = [];
 			}
-			$planetsQueue[$coordinatesString][] = $command;
+			$dependencyTypes[$dependencyType][] = $command;
 		}
 		$failedCommands = [];
-		foreach ($planetsQueue as $planetCoordinates => $queue) {
+		foreach ($dependencyTypes as $planetCoordinates => $queue) {
 			$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
 			/** @var ICommand $command */
 			foreach ($queue as $key => $command) {

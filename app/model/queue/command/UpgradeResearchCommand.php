@@ -51,4 +51,9 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 		$this->research = Research::_($data['research']);
 	}
 
+	public function getDependencyType() : string
+	{
+		return $this->coordinates->toString() . self::DEPENDENCY_RESOURCES;
+	}
+
 }
