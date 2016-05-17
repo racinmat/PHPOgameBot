@@ -3,6 +3,7 @@
 namespace App\Model\Game;
  
 use App\Enum\Buildable;
+use App\Enum\Enhanceable;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
@@ -79,11 +80,11 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 
 	abstract public function isProcessingAvailable(Planet $planet, IEnhanceCommand $command) : bool;
 
-	protected function openMenu(Buildable $buildable)
+	protected function openMenu(Enhanceable $enhanceable)
 	{
 		$I = $this->I;
-		$this->menu->goToPage($buildable->getMenuLocation());
-		$I->click($buildable->getSelector());
+		$this->menu->goToPage($enhanceable->getMenuLocation());
+		$I->click($enhanceable->getSelector());
 		usleep(Random::microseconds(1.5, 2));
 	}
 
