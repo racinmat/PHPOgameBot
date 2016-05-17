@@ -4,6 +4,7 @@ namespace App\Model\Queue\Command;
  
 use App\Enum\Buildable;
 use App\Enum\Defense;
+use App\Enum\Enhanceable;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Resources;
@@ -79,6 +80,11 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	public function getPrice(Planet $planet) : Resources
 	{
 		return $this->getBuildable()->getPrice()->multiplyByScalar($this->amount);
+	}
+
+	public function getEnhanceable() : Enhanceable
+	{
+		return $this->getBuildable();
 	}
 
 }

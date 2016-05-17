@@ -3,6 +3,7 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\Buildable;
+use App\Enum\Enhanceable;
 use App\Enum\Ships;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
@@ -79,6 +80,11 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 	public function getPrice(Planet $planet) : Resources
 	{
 		return $this->getBuildable()->getPrice()->multiplyByScalar($this->amount);
+	}
+
+	public function getEnhanceable() : Enhanceable
+	{
+		return $this->getBuildable();
 	}
 
 }

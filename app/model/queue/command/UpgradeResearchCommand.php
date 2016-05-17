@@ -3,6 +3,7 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\Building;
+use App\Enum\Enhanceable;
 use App\Enum\Research;
 use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
@@ -72,6 +73,11 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	{
 		$currentLevel = $this->getUpgradable()->getCurrentLevel($planet);
 		return $this->getUpgradable()->getPriceToNextLevel($currentLevel);
+	}
+
+	public function getEnhanceable() : Enhanceable
+	{
+		return $this->getUpgradable();
 	}
 
 }
