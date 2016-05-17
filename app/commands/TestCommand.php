@@ -40,13 +40,218 @@ class TestCommand extends CodeceptionUsingCommand {
 //		/** @var QueueConsumer $queueConsumer */
 //		$queueConsumer = $this->container->getByType(QueueConsumer::class);
 //		$queueConsumer->processQueue();
-		/** @var ResourcesCalculator $resourcesCalculator */
-		$resourcesCalculator = $this->container->getByType(ResourcesCalculator::class);
-		/** @var DatabaseManager $databasePlanetManager */
-		$databasePlanetManager = $this->container->getByType(DatabaseManager::class);
-		$planet = array_values($databasePlanetManager->getAllMyPlanets())[0];
-		$production = $resourcesCalculator->getProductionPerHour($planet);
-		var_dump($production);
+//		/** @var ResourcesCalculator $resourcesCalculator */
+//		$resourcesCalculator = $this->container->getByType(ResourcesCalculator::class);
+//		/** @var DatabaseManager $databasePlanetManager */
+//		$databasePlanetManager = $this->container->getByType(DatabaseManager::class);
+//		$planet = array_values($databasePlanetManager->getAllMyPlanets())[0];
+//		$production = $resourcesCalculator->getProductionPerHour($planet);
+//		var_dump($production);
+		$coordinates = [
+			'galaxy' => 1,
+			'system' => 357,
+			'planet' => 7
+		];
+		//metal/crystal/deu/power
+		$c = [];
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		//1/1/0/1
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		//2/2/1/3
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		//3/2/2/4
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		//3/3/3/5
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		//5/4/4/7
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		//6/6/5/9
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		//8/8/7/11
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		//10/9/7/12
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_STORAGE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::SOLAR_POWER_PLANT]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::DEUTERIUM_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::METAL_MINE]
+		]);
+		$c[] = UpgradeBuildingCommand::fromArray([
+			'coordinates' => $coordinates,
+			'data' => ['building' => Building::CRYSTAL_MINE]
+		]);
+		//12/11/8/14
+		/** @var QueueManager $queueManager */
+		$queueManager = $this->container->getByType(QueueManager::class);
+		foreach ($c as $command) {
+			$queueManager->addToQueue($command);
+		}
 		return 0; // zero return code means everything is ok
 	}
 

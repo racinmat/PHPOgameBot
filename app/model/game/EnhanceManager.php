@@ -8,13 +8,14 @@ use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use app\model\queue\ICommandProcessor;
+use App\Model\Queue\QueueManager;
 use App\Model\ResourcesCalculator;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
-use Nette;
+use Nette\Object;
 
-abstract class EnhanceManager extends Nette\Object implements ICommandProcessor
+abstract class EnhanceManager extends Object implements ICommandProcessor
 {
 
 	/** @var \AcceptanceTester */
@@ -31,6 +32,9 @@ abstract class EnhanceManager extends Nette\Object implements ICommandProcessor
 
 	/** @var Logger */
 	protected $logger;
+
+	/** @var QueueManager */
+	protected $queueManager;
 
 	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
 	{
@@ -50,6 +54,15 @@ abstract class EnhanceManager extends Nette\Object implements ICommandProcessor
 		$enhanceable = $command->getEnhanceable();
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
+
+//		if ($command->buildStoragesIfNeeded() && $this->resourcesCalculator->isNeedToUpgradeStoragesToHaveResources($planet, $command->getPrice($planet))) {
+//			$neededStoragesLevels = $this->resourcesCalculator->getMinimalStorageLevelsForResources($command->getPrice($planet));
+//			$metalStorageLevel = $planet->getMetalStorageLevel();
+//			$crystalStorageLevel = $planet->getCrystalStorageLevel();
+//			$deueriumTankLevel = $planet->getDeuteriumTankLevel();
+//
+//		}
+
 		if (!$this->isProcessingAvailable($planet, $command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;

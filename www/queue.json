@@ -1,32 +1,5 @@
 [
     {
-        "action": "upgrade research",
-        "data": {
-            "research": "astrophysics",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "c708af07-8844-4d70-baa6-4a6056666dad"
-    },
-    {
-        "data": {
-            "ships": "colony ship",
-            "amount": "1",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "2e76c92d-aac0-4a90-91e6-88a27d3eec89",
-        "action": "build ships"
-    },
-    {
         "action": "upgrade building",
         "data": {
             "building": "deuterium mine",
