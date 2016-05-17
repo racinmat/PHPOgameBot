@@ -11,6 +11,7 @@ use App\Model\DatabaseManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
+use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
@@ -53,6 +54,9 @@ class AddCommandPresenter extends BasePresenter
 		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
 			->setDefaultValue($this->planet);
 
+		$form->addCheckbox('buildStoragesIfNeeded', 'Build storages if needed')
+			->setDefaultValue(IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED);
+
 		$form->addSelect('building', 'Building: ', Building::getSelectBoxValues())
 			->setPrompt('-');
 
@@ -78,7 +82,8 @@ class AddCommandPresenter extends BasePresenter
 				$commands[] = UpgradeBuildingCommand::fromArray([
 					'coordinates' => $coordinates, 
 					'data' => [
-						'building' => $values['building']
+						'building' => $values['building'],
+						'buildStoragesIfNeeded' => $values['buildStoragesIfNeeded']
 					]
 				]);
 			}
@@ -86,7 +91,8 @@ class AddCommandPresenter extends BasePresenter
 				$commands[] = UpgradeResearchCommand::fromArray([
 					'coordinates' => $coordinates, 
 					'data' => [
-						'research' => $values['research']
+						'research' => $values['research'],
+						'buildStoragesIfNeeded' => $values['buildStoragesIfNeeded']
 					]
 				]);
 			}
@@ -95,7 +101,8 @@ class AddCommandPresenter extends BasePresenter
 					'coordinates' => $coordinates, 
 					'data' => [
 						'ships' => $values['ships'], 
-						'amount' => $values['shipsAmount']
+						'amount' => $values['shipsAmount'],
+						'buildStoragesIfNeeded' => $values['buildStoragesIfNeeded']
 					]
 				]);
 			}
@@ -104,7 +111,8 @@ class AddCommandPresenter extends BasePresenter
 					'coordinates' => $coordinates, 
 					'data' => [
 						'defense' => $values['defense'], 
-						'amount' => $values['defenseAmount']
+						'amount' => $values['defenseAmount'],
+						'buildStoragesIfNeeded' => $values['buildStoragesIfNeeded']
 					]
 				]);
 			}

@@ -61,7 +61,7 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 	{
 		$this->ships = Ships::_($data['ships']);
 		$this->amount = $data['amount'];
-		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'];
+		$this->buildStoragesIfNeeded = isset($data['buildStoragesIfNeeded']) ? $data['buildStoragesIfNeeded'] : IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
 	}
 
 	public function getDependencyType() : string
