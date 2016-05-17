@@ -22,7 +22,8 @@ class Player extends Object
 		STATUS_VACATION = 'vacation',
 		STATUS_STRONG = 'strong',
 		STATUS_ADMIN = 'admin',
-		STATUS_OUTLAW = 'outlaw'
+		STATUS_OUTLAW = 'outlaw',
+		STATUS_BANNED = 'banned'
 	;
 
 	/**
