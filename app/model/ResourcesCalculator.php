@@ -80,14 +80,15 @@ class ResourcesCalculator extends Nette\Object
 
 		$productionPerHour = $this->getProductionPerHour($planet);
 
-		$maxHours = max($missing->divide($productionPerHour));
-		if ($maxHours <= 0) {
+		$hours = max($missing->divide($productionPerHour));
+		if ($hours <= 0) {
 			$this->logger->addDebug("No missing resources, now is enough resources.");
 			return Carbon::now();
 		}
 
-		$minutes = ($maxHours - (int) $maxHours) * 60;
-		$resourcesAvailable = $time->addHours((int) $maxHours)->addMinutes((int) $minutes);
+		$minutes = ($hours - (int) $hours) * 60;
+		$seconds = ($minutes - (int) $minutes) * 60;
+		$resourcesAvailable = $time->addHours((int) $hours)->addMinutes((int) $minutes)->addSeconds((int) $seconds);
 		$this->logger->addDebug("Missing resources, enough will be in {$resourcesAvailable->__toString()}.");
 		return $resourcesAvailable;
 	}

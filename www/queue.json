@@ -2,18 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "fe632aa8-61d5-45f4-9134-033188871dff"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal mine"
         },
         "coordinates": {
@@ -178,42 +166,6 @@
             "planet": 6
         },
         "uuid": "9825e5af-c2ed-42f7-a2af-35fffbf2daca"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "solar power plant"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "76419fd6-9cdd-4f0d-a512-c2a19e8ce1ee"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "5984b2a2-53e0-4817-9dad-0b7bf249f6f5"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "deuterium mine"
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "6bb12298-b0d3-44dc-8388-20fe935fea61"
     },
     {
         "action": "upgrade building",
@@ -490,26 +442,5 @@
             "planet": 9
         },
         "uuid": "6cd60e63-aba3-4eb8-958c-d4f539e6a22b"
-    },
-    {
-        "data": {
-            "middle": {
-                "galaxy": 1,
-                "system": 357,
-                "planet": 1
-            },
-            "range": {
-                "galaxy": 0,
-                "system": 5,
-                "planet": 14
-            }
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "75716f43-dc3c-4d81-8e92-039ce35290da",
-        "action": "scan galaxy"
     }
 ]
