@@ -14,6 +14,9 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	/** @var Building */
 	private $building;
 
+	/** @var bool */
+	private $buildStoragesIfNeeded;
+
 	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
 	{
 		parent::__construct($coordinates, $data, $uuid);
@@ -39,7 +42,8 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 		$data = [
 			'action' => $this->getAction(),
 			'data' => [
-				'building' => $this->building->getValue()
+				'building' => $this->building->getValue(),
+				'buildStoragesIfNeeded' => $this->buildStoragesIfNeeded
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -48,11 +52,17 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->building = Building::_($data['building']);
+		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'];
 	}
 
 	public function getDependencyType() : string
 	{
 		return $this->coordinates->toString() . self::DEPENDENCY_RESOURCES;
+	}
+
+	public function buildStoragesIfNeeded() : bool
+	{
+		return $this->buildStoragesIfNeeded;
 	}
 
 }

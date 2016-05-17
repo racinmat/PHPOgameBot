@@ -5,7 +5,7 @@ namespace App\Model\Queue\Command;
 
 use App\Enum\Upgradable;
 
-interface IUpgradeCommand extends ICommand
+interface IUpgradeCommand extends IEnhanceCommand
 {
 
 	public function getUpgradable() : Upgradable;

@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- resolve problem with galaxy scanning and non disappearing load circle
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)
 - add checking whether command was really done (reding build/upgrade status, checking fleet status...)
@@ -16,8 +17,7 @@ TODO
 - repetitious fleet checking for attacks
 - commands for sending fleet
 - automatically buy new probes when probes are destroyed when gathering data and buy new sattelites when destroyed (Maintain quantity in Ogame Automizer)
-- logging to monolog
-	- log attacks, full storages and other important messages to some android app
+- log attacks, full storages and other important messages to some android app via monolog
 - repetitious tasks
 	- set repeating frequency
 	- checking if someone attacks me

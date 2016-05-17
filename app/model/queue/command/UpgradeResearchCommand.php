@@ -15,6 +15,9 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	/** @var Research */
 	private $research;
 
+	/** @var bool */
+	private $buildStoragesIfNeeded;
+
 	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
 	{
 		parent::__construct($coordinates, $data, $uuid);
@@ -40,7 +43,8 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 		$data = [
 			'action' => $this->getAction(),
 			'data' => [
-				'research' => $this->research->getValue()
+				'research' => $this->research->getValue(),
+				'buildStoragesIfNeeded' => $this->buildStoragesIfNeeded
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -49,11 +53,17 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->research = Research::_($data['research']);
+		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'];
 	}
 
 	public function getDependencyType() : string
 	{
 		return $this->coordinates->toString() . self::DEPENDENCY_RESOURCES;
+	}
+
+	public function buildStoragesIfNeeded() : bool
+	{
+		return $this->buildStoragesIfNeeded;
 	}
 
 }
