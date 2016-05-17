@@ -152,6 +152,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$I = $this->I;
 		$I->pressKey('body', WebDriverKeys::ARROW_RIGHT);
 		usleep(Random::microseconds(2.5, 3.5));
+		$I->waitForElementNotVisible('#galaxyLoading');
 	}
 
 	protected function goToSystem(Coordinates $coordinates)
@@ -162,6 +163,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$I->fillField('#system_input', $coordinates->getSystem());
 		$I->click('#galaxyHeader > form > div:nth-child(9)');
 		usleep(Random::microseconds(2.5, 3.5));
+		$I->waitForElementNotVisible('#galaxyLoading');
 	}
 	
 	public function canProcessCommand(ICommand $command) : bool
