@@ -1,8 +1,8 @@
 [
     {
-        "action": "upgrade building",
+        "action": "upgrade research",
         "data": {
-            "building": "crystal mine",
+            "research": "astrophysics",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -10,7 +10,21 @@
             "system": 357,
             "planet": 6
         },
-        "uuid": "98e9e6d2-a980-4f51-aac6-f40f5f3bc7a4"
+        "uuid": "c708af07-8844-4d70-baa6-4a6056666dad"
+    },
+    {
+        "data": {
+            "ships": "colony ship",
+            "amount": "1",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "2e76c92d-aac0-4a90-91e6-88a27d3eec89",
+        "action": "build ships"
     },
     {
         "action": "upgrade building",
@@ -167,32 +181,6 @@
             "planet": 6
         },
         "uuid": "9825e5af-c2ed-42f7-a2af-35fffbf2daca"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "86680ff9-70ca-4c9b-bb6b-57afb8fcae0b"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "a95e33b3-fcdc-4875-a1f3-663c0562bf81"
     },
     {
         "action": "upgrade building",

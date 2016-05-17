@@ -3,9 +3,6 @@
 namespace App\Model\Game;
  
 use App\Enum\Buildable;
-use App\Enum\Building;
-use App\Enum\Defense;
-use App\Enum\MenuItem;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
@@ -96,7 +93,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		/** @var IBuildCommand $command */
-		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
+		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesToEnhance($planet, $command);
 		$datetime2 = $this->planetManager->getTimeToFinish($command->getBuildable());
 		return $datetime1->max($datetime2);
 	}
@@ -105,7 +102,7 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 	{
 		//building ships and defense is stackable. No need to check if something is being built right now.
 		/** @var IBuildCommand $command */
-		return $this->resourcesCalculator->isEnoughResourcesForBuild($planet, $command->getBuildable(), $command->getAmount());
+		return $this->resourcesCalculator->isEnoughResourcesToEnhance($planet, $command);
 	}
 
 }

@@ -43,16 +43,9 @@ class ResourcesCalculator extends Nette\Object
 		return $enough;
 	}
 
-	public function getTimeToEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : Carbon
+	public function getTimeToEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : Carbon
 	{
-		$currentLevel = $upgradable->getCurrentLevel($planet);
-		$missingResources = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
-		return $this->getTimeToResources($planet, $missingResources);
-	}
-
-	public function getTimeToEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount) : Carbon
-	{
-		$missingResources = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
+		$missingResources = $this->getMissingResources($planet, $command->getPrice($planet));
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 

@@ -2,8 +2,6 @@
 
 namespace App\Model\Game;
  
-use App\Enum\Building;
-use App\Enum\MenuItem;
 use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ICommand;
@@ -12,10 +10,8 @@ use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
 use App\Utils\Random;
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
-use Nette\Utils\Strings;
 
 class UpgradeManager extends Object implements ICommandProcessor
 {
@@ -89,7 +85,7 @@ class UpgradeManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		/** @var IUpgradeCommand $command */
-		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesForUpgrade($planet, $command->getUpgradable());
+		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesToEnhance($planet, $command);
 		$datetime2 = $this->planetManager->getTimeToFinish($command->getUpgradable());
 		return $datetime1->max($datetime2);
 	}
