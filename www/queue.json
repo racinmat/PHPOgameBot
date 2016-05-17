@@ -446,13 +446,13 @@
     {
         "data": {
             "middle": {
-                "galaxy": 1,
-                "system": 400,
+                "galaxy": 4,
+                "system": 250,
                 "planet": 1
             },
             "range": {
-                "galaxy": 0,
-                "system": 200,
+                "galaxy": 2,
+                "system": 498,
                 "planet": 14
             }
         },

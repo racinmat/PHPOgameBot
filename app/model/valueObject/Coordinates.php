@@ -158,6 +158,9 @@ class Coordinates extends Object
 
 	public function nextSystem() : Coordinates
 	{
+		if ($this->system == static::$maxSystem) {
+			return new Coordinates($this->galaxy + 1, static::$minSystem, $this->planet);
+		}
 		return new Coordinates($this->galaxy, $this->system + 1, $this->planet);
 	}
 
