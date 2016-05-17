@@ -112,7 +112,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 			$playerStatus = $classToStatus[$playerStatusClass];
 			if ($hasDebris) {
-				$I->moveMouseOver("tr.ago_galaxy_row:nth-of-type($i) .debris");
+				$I->moveMouseOver("tbody tr:nth-of-type($i) .debris");
 				usleep(Random::microseconds(0.5, 1));
 				$debrisMetalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(1)");
 				$debrisCrystalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(2)");
