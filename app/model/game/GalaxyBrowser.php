@@ -64,8 +64,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		
 		$I = $this->I;
 
-		$currentGalaxy = $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
-		$currentSystem = $I->grabValueFrom('#system_input', $coordinates->getSystem());
+		$currentGalaxy = (int) $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
+		$currentSystem = (int) $I->grabValueFrom('#system_input', $coordinates->getSystem());
 		$isNextSystem = $currentGalaxy === $coordinates->getGalaxy() && ($currentSystem + 1) === $coordinates->getSystem();
 
 		$classToStatus = [
@@ -117,8 +117,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				usleep(Random::microseconds(0.5, 1));
 				$debrisMetalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(1)");
 				$debrisCrystalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(2)");
-				$debrisMetal = Strings::split($debrisMetalString, '~:~')[1];
-				$debrisCrystal = Strings::split($debrisCrystalString, '~:~')[1];
+				$debrisMetal = Strings::replace(Strings::split($debrisMetalString, '~:~')[1], '~\.~');
+				$debrisCrystal = Strings::replace(Strings::split($debrisCrystalString, '~:~')[1], '~\.~');
 			} else {
 				$debrisMetal = 0;
 				$debrisCrystal = 0;
