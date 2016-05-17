@@ -13,9 +13,14 @@ while (true) {
 		continue;
 	}
 
+	$string = file_get_contents('www/running.txt');
+	if ($string != '') {
+		continue;
+	}
+
 	$datetime = new DateTime($string);
 	$difference = (new DateTime())->getTimestamp() - $datetime->getTimestamp();    //in seconds
-	if ($difference > $interval || $difference < 0) {
+	if ($difference < 0) {
 		continue;
 	}
 

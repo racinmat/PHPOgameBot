@@ -24,6 +24,7 @@ abstract class CodeceptionUsingCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', 'running');
 		try {
 			$this->executeDelegated($input, $output);
 		} catch(\Throwable $e) {
@@ -35,8 +36,7 @@ abstract class CodeceptionUsingCommand extends Command {
 			$logger->addCritical('Exception thrown: ' . $e->getMessage());
 			throw $e;
 		}
-//		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::SOLAR_POWER_PLANT)));
-//		$this->queueProducer->addToQueue(new UpgradeBuildingCommand(Building::_(Building::METAL_MINE)));
+		file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', '');
 		return 0; // zero return code means everything is ok
 	}
 
