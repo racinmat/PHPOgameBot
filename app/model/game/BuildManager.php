@@ -53,7 +53,12 @@ class BuildManager extends Nette\Object implements ICommandProcessor
 		$amount = $command->getAmount();
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
-		if (!$this->resourcesCalculator->isEnoughResourcesForBuild($planet, $buildable, $amount)) {
+//		$needToUpgradeStorages =
+//		if ($command->buildStoragesIfNeeded() && $needToUpgrade) {
+//
+//		}
+		
+		if (!$this->resourcesCalculator->isEnoughResourcesToEnhance($planet, $command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;
 		}

@@ -20,6 +20,8 @@ interface ICommand extends ArraySerializable
 
 	public function __toString() : string;
 
+	public function toString() : string;
+
 	public function getCoordinates() : Coordinates;
 
 	public function getUuid() : Uuid;

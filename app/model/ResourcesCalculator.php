@@ -7,6 +7,7 @@ use App\Enum\Building;
 use App\Enum\Defense;
 use App\Enum\Upgradable;
 use App\Model\Entity\Planet;
+use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Resources;
 use App\Utils\Functions;
 use Carbon\Carbon;
@@ -29,25 +30,11 @@ class ResourcesCalculator extends Nette\Object
 		$this->logger = $logger;
 	}
 
-	public function isEnoughResourcesForUpgrade(Planet $planet, Upgradable $upgradable) : bool
+	public function isEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : bool
 	{
-		$currentLevel = $upgradable->getCurrentLevel($planet);
-		$missing = $this->getMissingResources($planet, $upgradable->getPriceToNextLevel($currentLevel));
-		$enough = $missing->forAll(Functions::isZero());
-		$this->logger->addDebug("Checking resources to upgrade {$upgradable->getValue()} from level $currentLevel in planet {$planet->getCoordinates()->toValueObject()->toString()}.");
-		if ($enough) {
-			$this->logger->addDebug("Enough resources.");
-		} else {
-			$this->logger->addDebug("Not enough resources, missing resources: {$missing->toString()}.");
-		}
-		return $enough;
-	}
-
-	public function isEnoughResourcesForBuild(Planet $planet, Buildable $buildable, int $amount) : bool
-	{
-		$missing = $this->getMissingResources($planet, $buildable->getPrice()->multiplyByScalar($amount));
-		$enough = $missing->forAll(Functions::isZero());
-		$this->logger->addDebug("Enough resources to build {$buildable->getValue()} in amount $amount pieces in planet {$planet->getCoordinates()->toValueObject()->toString()}.");
+		$missing = $this->getMissingResources($planet, $command->getPrice($planet));
+		$enough = $missing->isZero();
+		$this->logger->addDebug("Checking resources to process command {$command->toString()} in planet {$planet->getCoordinates()->toValueObject()->toString()} which needs {$command->getPrice($planet)->toString()} resources.");
 		if ($enough) {
 			$this->logger->addDebug("Enough resources.");
 		} else {
@@ -115,6 +102,42 @@ class ResourcesCalculator extends Nette\Object
 			$this->getCrystalProductionPerHour($planet->getCrystalMineLevel()),
 			$this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature())
 		);
+	}
+
+	public function isNeedToUpgradeStoragesToHaveResources(Planet $planet, Resources $resources) : bool
+	{
+		return $resources->subtract($this->getStoragesCapacity($planet))->isZero();
+	}
+
+	private function getStorageCapacity(int $storageLevel) : int
+	{
+		return 5000 * (int) (2.5 * pow(M_E, (20 * $storageLevel)/33));
+	}
+
+	private function getStoragesCapacity(Planet $planet) : Resources
+	{
+		return new Resources(
+			$this->getStorageCapacity($planet->getMetalStorageLevel()),
+			$this->getStorageCapacity($planet->getCrystalStorageLevel()),
+			$this->getStorageCapacity($planet->getDeuteriumTankLevel())
+		);
+	}
+
+	public function getMinimalStorageLevelsForResources(Resources $resources) : Resources
+	{
+		$metalLevel = 0;
+		$crystalLevel = 0;
+		$deuteriumLevel = 0;
+		while ($this->getStorageCapacity($metalLevel) < $resources->getMetal()) {
+			$metalLevel++;
+		}
+		while ($this->getStorageCapacity($crystalLevel) < $resources->getCrystal()) {
+			$metalLevel++;
+		}
+		while ($this->getStorageCapacity($deuteriumLevel) < $resources->getDeuterium()) {
+			$metalLevel++;
+		}
+		return new Resources($metalLevel, $crystalLevel, $deuteriumLevel);
 	}
 
 }

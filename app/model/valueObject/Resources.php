@@ -2,6 +2,7 @@
 
 namespace App\Model\ValueObject;
  
+use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette;
 
@@ -139,5 +140,10 @@ class Resources extends Nette\Object
 	public function toString()
 	{
 		return "metal: $this->metal, crystal: $this->crystal, deuterium: $this->deuterium";
+	}
+
+	public function isZero() : bool
+	{
+		return $this->forAll(Functions::isZero());
 	}
 }

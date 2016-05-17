@@ -45,6 +45,11 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 
 	public function __toString() : string
 	{
+		return $this->toString();
+	}
+
+	public function toString() : string
+	{
 		return Nette\Utils\Json::encode($this->toArray());
 	}
 

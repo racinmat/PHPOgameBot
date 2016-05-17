@@ -4,7 +4,9 @@ namespace App\Model\Queue\Command;
  
 use App\Enum\Building;
 use App\Enum\Upgradable;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
+use App\Model\ValueObject\Resources;
 use Nette\Utils\Arrays;
 use Ramsey\Uuid\Uuid;
 
@@ -63,6 +65,12 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	public function buildStoragesIfNeeded() : bool
 	{
 		return $this->buildStoragesIfNeeded;
+	}
+
+	public function getPrice(Planet $planet) : Resources
+	{
+		$currentLevel = $this->getUpgradable()->getCurrentLevel($planet);
+		return $this->getUpgradable()->getPriceToNextLevel($currentLevel);
 	}
 
 }

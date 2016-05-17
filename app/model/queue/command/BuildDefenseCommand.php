@@ -4,7 +4,9 @@ namespace App\Model\Queue\Command;
  
 use App\Enum\Buildable;
 use App\Enum\Defense;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
+use App\Model\ValueObject\Resources;
 use Nette\Utils\Arrays;
 use Ramsey\Uuid\Uuid;
 
@@ -72,6 +74,11 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	public function buildStoragesIfNeeded() : bool
 	{
 		return $this->buildStoragesIfNeeded;
+	}
+
+	public function getPrice(Planet $planet) : Resources
+	{
+		return $this->getBuildable()->getPrice()->multiplyByScalar($this->amount);
 	}
 
 }
