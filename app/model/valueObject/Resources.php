@@ -146,4 +146,10 @@ class Resources extends Nette\Object
 	{
 		return $this->forAll(Functions::isZero());
 	}
+
+	public function getTotal() : int
+	{
+		return $this->metal + $this->crystal + $this->deuterium;
+	}
+
 }

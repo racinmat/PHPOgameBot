@@ -56,14 +56,6 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 
-//		if ($command->buildStoragesIfNeeded() && $this->resourcesCalculator->isNeedToUpgradeStoragesToHaveResources($planet, $command->getPrice($planet))) {
-//			$neededStoragesLevels = $this->resourcesCalculator->getMinimalStorageLevelsForResources($command->getPrice($planet));
-//			$metalStorageLevel = $planet->getMetalStorageLevel();
-//			$crystalStorageLevel = $planet->getCrystalStorageLevel();
-//			$deueriumTankLevel = $planet->getDeuteriumTankLevel();
-//
-//		}
-
 		if (!$this->isProcessingAvailable($planet, $command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;

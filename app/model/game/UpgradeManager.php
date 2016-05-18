@@ -6,9 +6,11 @@ use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\IUpgradeCommand;
+use app\model\queue\ICommandPreProcessor;
 use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Monolog\Logger;
 
 class UpgradeManager extends EnhanceManager implements ICommandProcessor

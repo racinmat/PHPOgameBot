@@ -64,7 +64,7 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	{
 		$this->defense = Defense::_($data['defense']);
 		$this->amount = $data['amount'];
-		$this->buildStoragesIfNeeded = isset($data['buildStoragesIfNeeded']) ? $data['buildStoragesIfNeeded'] : IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
+		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'] ?? IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
 	}
 
 	public function getDependencyType() : string

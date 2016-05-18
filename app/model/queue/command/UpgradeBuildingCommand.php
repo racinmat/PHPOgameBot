@@ -55,7 +55,7 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->building = Building::_($data['building']);
-		$this->buildStoragesIfNeeded = isset($data['buildStoragesIfNeeded']) ? $data['buildStoragesIfNeeded'] : IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
+		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'] ?? IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
 	}
 
 	public function getDependencyType() : string

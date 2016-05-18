@@ -18,6 +18,10 @@
         {
           "type": "vcs",
           "url":  "https://github.com/racinmat/Codeception.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/racinmat/collections.git"
         }
     ],
 	"require": {
@@ -25,7 +29,6 @@
 		"nette/application": "~2.3.6",
 		"nette/bootstrap": "~2.3.0",
 		"nette/caching": "~2.3.0",
-		"nette/database": "~2.3.0",
 		"nette/di": "~2.3.0",
 		"nette/finder": "~2.3.0",
 		"nette/forms": "~2.3.0",
@@ -42,6 +45,7 @@
 		"codeception/codeception": "@dev",
 		"nesbot/carbon": "^1.21",
 		"ramsey/uuid": "^3.4",
-		"kdyby/monolog": "^1.2"
+		"kdyby/monolog": "^1.2",
+        "doctrine/collections": "@dev"
 	}
 }

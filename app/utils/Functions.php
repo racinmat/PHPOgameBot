@@ -4,6 +4,7 @@ namespace App\Utils;
 
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ArraySerializable;
+use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Coordinates;
 use Carbon\Carbon;
 use Nette\Object;
@@ -72,6 +73,13 @@ class Functions extends Object
 	{
 		return function (int $i, Coordinates $c) use ($coordinates) : bool {
 			return $c->equals($coordinates);
+		};
+	}
+
+	public static function compareEnhanceCommandsByPrice(Planet $planet)
+	{
+		return function (IEnhanceCommand $a, IEnhanceCommand $b) use ($planet) {
+			return $a->getPrice($planet)->getTotal() - $b->getPrice($planet)->getTotal();
 		};
 	}
 }

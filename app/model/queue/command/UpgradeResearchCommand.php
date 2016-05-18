@@ -56,7 +56,7 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->research = Research::_($data['research']);
-		$this->buildStoragesIfNeeded = isset($data['buildStoragesIfNeeded']) ? $data['buildStoragesIfNeeded'] : IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
+		$this->buildStoragesIfNeeded = $data['buildStoragesIfNeeded'] ?? IEnhanceCommand::DEFAULT_BUILD_STORAGE_IF_NEEDED;
 	}
 
 	public function getDependencyType() : string

@@ -2,6 +2,7 @@
 
 namespace App\Model\Queue;
  
+use App\Model\UpgradeStoragesPreProcessor;
 use App\Model\CronManager;
 use App\Model\Game\BuildManager;
 use App\Model\Game\GalaxyBrowser;
@@ -9,9 +10,9 @@ use App\Model\Game\UpgradeManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\ICommand;
 use App\Model\ResourcesCalculator;
+use App\Utils\ArrayCollection;
+use App\Utils\ChangesAwareCollection;
 use App\Utils\Functions;
-use Carbon\Carbon;
-use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -30,13 +31,16 @@ class QueueConsumer extends Object
 	/** @var ICommandProcessor[] */
 	private $processors;
 
+	/** @var ICommandPreProcessor[] */
+	private $preprocessors;
+
 	/** @var QueueManager */
 	private $queueManager;
 
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser)
+	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser, UpgradeStoragesPreProcessor $buildStoragesPreProcessor)
 	{
 		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
@@ -48,25 +52,44 @@ class QueueConsumer extends Object
 			$galaxyBrowser
 		];
 		$this->logger = $logger;
+		$this->preprocessors = [
+			$buildStoragesPreProcessor
+		];
 	}
 
 	public function processQueue()
 	{
 		$this->planetManager->refreshAllData();
 		$queue = $this->queueManager->getQueue();
+		/** @var ArrayCollection[] $dependencyTypes */
 		$dependencyTypes = [];
 		foreach ($queue as $command) {
 			$dependencyType = $command->getDependencyType();
-			if (!array_key_exists($dependencyType, $dependencyTypes)) {
-				$dependencyTypes[$dependencyType] = [];
+			if (!isset($dependencyTypes[$dependencyType])) {
+				$dependencyTypes[$dependencyType] = new ArrayCollection();
 			}
-			$dependencyTypes[$dependencyType][] = $command;
+			$dependencyTypes[$dependencyType]->add($command);
 		}
 		$failedCommands = [];
 		foreach ($dependencyTypes as $planetCoordinates => $queue) {
-			$success = true;    //aby se zastavilo procházení fronty, když se nepodaří postavit budovu a zpracování tak skončilo
+			$success = true;    //aby se zastavilo procházení fronty, když se nepodaří vykonat příkaz a zpracování tak skončilo
 			/** @var ICommand $command */
-			foreach ($queue as $key => $command) {
+			while(!$queue->isEmpty()) {
+				$command = $queue->first();
+				$queue = new ChangesAwareCollection($queue);
+
+				foreach ($this->preprocessors as $preprocessor) {
+					if ($preprocessor->canPreProcessCommand($command)) {
+						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
+						$preprocessor->preProcessCommand($command, $queue);
+						break;
+					}
+				}
+
+				if ($queue->isChanged()) {
+					//todo: udělat ukládání změněné fronty
+				}
+
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($command)) {
 						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
@@ -75,9 +98,11 @@ class QueueConsumer extends Object
 						break;
 					}
 				}
+
 				if ($success) {
 					$this->logger->addInfo("Command processed successfully.");
 					$this->queueManager->removeFromQueue($command->getUuid());
+					$queue->remove(0);
 				} else {
 					$this->logger->addInfo("Command failed to process.");
 					$failedCommands[] = $command;

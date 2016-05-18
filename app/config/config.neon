@@ -41,6 +41,7 @@ services:
 	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
 	- {implement: App\Components\IDisplayCommandFactory}
 	- App\Model\DatabaseManager
+	- App\Model\UpgradeStoragesPreProcessor
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
