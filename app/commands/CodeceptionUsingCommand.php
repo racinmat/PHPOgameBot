@@ -34,6 +34,7 @@ abstract class CodeceptionUsingCommand extends Command {
 			$logger = $this->container->getByType(Logger::class);
 			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
 			$logger->addCritical('Exception thrown: ' . $e->getMessage());
+			file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', '');
 			throw $e;
 		}
 		file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', '');

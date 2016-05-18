@@ -13,13 +13,14 @@ while (true) {
 		continue;
 	}
 
-	$string = file_get_contents('www/running.txt');
-	if ($string != '') {
+	$locked = file_get_contents('www/running.txt');
+	if ($locked != '') {
 		continue;
 	}
 
 	$datetime = new DateTime($string);
 	$difference = (new DateTime())->getTimestamp() - $datetime->getTimestamp();    //in seconds
+	echo $difference . PHP_EOL;
 	if ($difference < 0) {
 		continue;
 	}
