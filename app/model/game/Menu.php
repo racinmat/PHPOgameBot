@@ -36,6 +36,7 @@ class Menu extends Object
 		}
 		$this->logger->addDebug("Clicking to go to requested page.");
 		$I->click($menuItem->getSelector());
+		$I->waitForElementVisible('body');
 		usleep(Random::microseconds(1.5, 2));
 	}
 
@@ -56,6 +57,7 @@ class Menu extends Object
 	private function getCurrentPlanetCoordinates() : Coordinates
 	{
 		$I = $this->I;
+		$I->waitForElementVisible('.planetlink.active span.planet-koords');
 		$text = $I->grabTextFrom('.planetlink.active span.planet-koords');
 		return OgameParser::parseOgameCoordinates($text);
 	}
