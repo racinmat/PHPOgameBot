@@ -2,8 +2,10 @@
 
 namespace App\Model;
  
+use Codeception\Scenario;
 use Nette;
- 
+use SimpleA\SimpleTest;
+
 class AcceptanceTesterFactory extends Nette\Object
 {
 

@@ -301,19 +301,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal storage",
-            "buildStoragesIfNeeded": false
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "a1aadc94-6fb8-476f-9280-0de584945703"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "solar power plant",
             "buildStoragesIfNeeded": false
         },

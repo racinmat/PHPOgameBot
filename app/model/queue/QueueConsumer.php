@@ -59,7 +59,7 @@ class QueueConsumer extends Object
 
 	public function processQueue()
 	{
-		$this->planetManager->refreshAllData();
+//		$this->planetManager->refreshAllData();
 		$queue = $this->queueManager->getQueue();
 		/** @var ArrayCollection[] $dependencyTypes */
 		$dependencyTypes = [];

@@ -1,0 +1,171 @@
+[
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "deabeb52-9dd9-47f0-af9d-e1f14f14e962"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "ad0a76c8-ec70-4f77-a322-2c3b3edb3dc1"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "8975e3d2-82ca-4c37-ad16-0ef4f4023ba6"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "2d7dee2f-56ed-4559-a1d0-c3b63d4a27c1"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "b34cae0b-44bd-435c-81dc-0d6e6b60e518"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "e3a61a59-62b3-47c5-b97c-106cd2076e89"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "94049cd6-d564-4fc2-ad57-923ab1f92d01"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "39b85365-257c-45a7-917c-111ddd0b4a3f"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "4d0ea2c1-150b-4acd-a380-bd0a42a0a56e"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "27713caf-4ce2-4204-8820-d586897d4bba"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "6cb88701-75d5-4de2-839e-e947eff571a9"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "8bba7b4e-2c56-4f87-8c9d-5a9fe44fdedd"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "929da803-c793-4831-9fa6-bf4ae8d4884e"
+    }
+]

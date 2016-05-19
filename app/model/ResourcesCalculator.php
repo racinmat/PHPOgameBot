@@ -99,7 +99,7 @@ class ResourcesCalculator extends Nette\Object
 
 	public function isNeedToUpgradeStoragesToHaveResources(Planet $planet, Resources $resources) : bool
 	{
-		return $resources->subtract($this->getStoragesCapacity($planet))->isZero();
+		return ! $resources->subtract($this->getStoragesCapacity($planet))->isZero();
 	}
 
 	private function getStorageCapacity(int $storageLevel) : int
@@ -125,10 +125,10 @@ class ResourcesCalculator extends Nette\Object
 			$metalLevel++;
 		}
 		while ($this->getStorageCapacity($crystalLevel) < $resources->getCrystal()) {
-			$metalLevel++;
+			$crystalLevel++;
 		}
 		while ($this->getStorageCapacity($deuteriumLevel) < $resources->getDeuterium()) {
-			$metalLevel++;
+			$deuteriumLevel++;
 		}
 		return new Resources($metalLevel, $crystalLevel, $deuteriumLevel);
 	}

@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- fix storages upgrading
 - resolve problem with galaxy scanning and non disappearing load circle
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)
