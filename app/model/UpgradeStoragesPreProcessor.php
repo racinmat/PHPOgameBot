@@ -13,6 +13,7 @@ use App\Model\Queue\QueueManager;
 use App\Utils\Collection;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 
 class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
@@ -30,12 +31,16 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 	/** @var QueueManager */
 	private $queueManager;
 
-	public function __construct(UpgradeManager $upgradeManager, ResourcesCalculator $resourcesCalculator, PlanetManager $planetManager, QueueManager $queueManager)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(UpgradeManager $upgradeManager, ResourcesCalculator $resourcesCalculator, PlanetManager $planetManager, QueueManager $queueManager, Logger $logger)
 	{
 		$this->upgradeManager = $upgradeManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->planetManager = $planetManager;
 		$this->queueManager = $queueManager;
+		$this->logger = $logger;
 	}
 
 	public function canPreProcessCommand(ICommand $command) : bool
@@ -84,8 +89,10 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		//I want to build storages uniformly
 		usort($commands, Functions::compareEnhanceCommandsByPrice($planet));
 
+		/** @var ICommand $newCommand */
 		foreach ($commands as $newCommand) {
 			$this->queueManager->addBefore($newCommand, $command->getUuid());
+			$this->logger->addInfo("Adding new command {$newCommand->toString()} before command {$command->toString()}.");
 		}
 		$queue->prepend($commands);
 		return true;

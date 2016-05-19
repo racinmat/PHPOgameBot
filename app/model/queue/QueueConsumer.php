@@ -78,7 +78,7 @@ class QueueConsumer extends Object
 				$command = $queue->first();
 				foreach ($this->preprocessors as $preprocessor) {
 					if ($preprocessor->canPreProcessCommand($command)) {
-						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
+						$this->logger->addInfo("Going to preProcess the command {$command->__toString()}.");
 						$preprocessor->preProcessCommand($command, $queue);
 						$command = $queue->first();
 						break;
