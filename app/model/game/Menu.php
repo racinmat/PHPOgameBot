@@ -36,7 +36,7 @@ class Menu extends Object
 		}
 		$this->logger->addDebug("Clicking to go to requested page.");
 		$I->click($menuItem->getSelector());
-		usleep(Random::microseconds(1, 2));
+		usleep(Random::microseconds(1.5, 2));
 	}
 
 	public function goToPlanet(Planet $planet)

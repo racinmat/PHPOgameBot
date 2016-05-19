@@ -93,19 +93,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "crystal storage",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "a1384ca5-7cdb-46a9-a89f-d92bbd3c17d9"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal storage",
             "buildStoragesIfNeeded": true
         },
