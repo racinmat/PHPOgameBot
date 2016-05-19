@@ -30,11 +30,6 @@ class Defense extends Buildable
 		INTERPLANETARY_MISSILE = 'Interplanetary Missile'
 	;
 
-	public function getSelector() : string
-	{
-		return $this->getClassSelector() . ' > div:nth-child(1) > a.detail_button';
-	}
-
 	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {

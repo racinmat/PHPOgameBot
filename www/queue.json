@@ -15,19 +15,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "deuterium mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "26580d4c-f340-4b77-a6c9-ec628d97187b"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal mine",
             "buildStoragesIfNeeded": true
         },
@@ -41,7 +28,7 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "crystal mine",
+            "building": "deuterium mine",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -49,7 +36,7 @@
             "system": 357,
             "planet": 6
         },
-        "uuid": "70bb8486-9e0c-4617-b3c9-f2ea4bf627cd"
+        "uuid": "26580d4c-f340-4b77-a6c9-ec628d97187b"
     },
     {
         "action": "upgrade building",
@@ -106,7 +93,7 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine",
+            "building": "crystal storage",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -114,12 +101,12 @@
             "system": 357,
             "planet": 9
         },
-        "uuid": "a574d2d2-ff17-4e6e-a46d-aa99d22b174b"
+        "uuid": "a1384ca5-7cdb-46a9-a89f-d92bbd3c17d9"
     },
     {
         "action": "upgrade building",
         "data": {
-            "building": "crystal mine",
+            "building": "metal storage",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -127,7 +114,7 @@
             "system": 357,
             "planet": 9
         },
-        "uuid": "b181d5b9-eb0d-4b43-ab0e-afb2e759f79f"
+        "uuid": "fbf43b15-112e-492a-aeb6-75cc45b42551"
     },
     {
         "action": "upgrade building",
@@ -288,28 +275,41 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": false
+            "building": "metal mine",
+            "buildStoragesIfNeeded": true
         },
         "coordinates": {
             "galaxy": 1,
             "system": 357,
             "planet": 7
         },
-        "uuid": "fbe312fc-4948-41b4-9ded-0c5abf1184c2"
+        "uuid": "75731bad-93fa-4342-b821-a4f0891c428f"
     },
     {
         "action": "upgrade building",
         "data": {
             "building": "deuterium mine",
-            "buildStoragesIfNeeded": false
+            "buildStoragesIfNeeded": true
         },
         "coordinates": {
             "galaxy": 1,
             "system": 357,
             "planet": 7
         },
-        "uuid": "91a45b61-ed64-4942-a205-a6448a0c01fc"
+        "uuid": "c3b61459-202b-489e-9042-f7ef4e422815"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "solar power plant",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "33c12556-3e17-4f6b-a0ed-d9962a4d18c4"
     },
     {
         "action": "upgrade building",
@@ -322,7 +322,7 @@
             "system": 357,
             "planet": 7
         },
-        "uuid": "3f2b07fa-b2b1-4c55-b4ea-aa242f17ee9d"
+        "uuid": "cef2e9f5-5e24-4ab6-9d34-17faaecc5fe2"
     },
     {
         "action": "upgrade building",
@@ -335,6 +335,19 @@
             "system": 357,
             "planet": 7
         },
-        "uuid": "d05efa40-6e53-4e7f-822e-a833f02a23cd"
+        "uuid": "c543a59e-d98a-4670-94b5-0397599373c9"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "5b67bfb9-ccbe-469b-b1d1-1f35fb86e8f3"
     }
 ]
