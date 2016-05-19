@@ -9,7 +9,7 @@ use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Utils\ArrayCollection;
 use Nette\Object;
 use Nette\Utils\Arrays;
 use Nette\Utils\Json;

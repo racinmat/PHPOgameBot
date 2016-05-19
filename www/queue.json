@@ -2,19 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "bb89a92a-1612-47b2-b3f6-33dc9355f73f"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "solar power plant",
             "buildStoragesIfNeeded": true
         },
@@ -310,58 +297,6 @@
             "planet": 9
         },
         "uuid": "6cd60e63-aba3-4eb8-958c-d4f539e6a22b"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "dc380839-ab00-4fa3-8025-b9ff1b5a51d7"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "deuterium mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "218e92c6-d909-47a9-963a-8032d088fe0c"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "0da64fab-67cb-4dfe-9bc9-0f3bdf8ccc31"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "3e5b7e5b-b789-42d7-a510-aa4c6df1b4f2"
     },
     {
         "action": "upgrade building",

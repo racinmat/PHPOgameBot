@@ -76,18 +76,13 @@ class QueueConsumer extends Object
 			/** @var ICommand $command */
 			while(!$queue->isEmpty()) {
 				$command = $queue->first();
-				$queue = new ChangesAwareCollection($queue);
-
 				foreach ($this->preprocessors as $preprocessor) {
 					if ($preprocessor->canPreProcessCommand($command)) {
 						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
 						$preprocessor->preProcessCommand($command, $queue);
+						$command = $queue->first();
 						break;
 					}
-				}
-
-				if ($queue->isChanged()) {
-					//todo: udělat ukládání změněné fronty
 				}
 
 				foreach ($this->processors as $processor) {

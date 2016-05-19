@@ -11,8 +11,18 @@ namespace App\Utils;
 class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection implements Collection
 {
 
-	public function prepend(array $array)
+	public function prepend(array $array) : Collection
 	{
 		$this->elements = array_merge($array, $this->elements);
+		return $this;
 	}
+
+	public function addBefore($element, $key) : Collection
+	{
+		$before = $this->slice(0, $key);
+		$after = $this->slice($key, $this->count() - $key);
+		$this->elements = array_merge($before, [$element], $after);
+		return $this;
+	}
+
 }

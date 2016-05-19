@@ -9,6 +9,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\ICommandPreProcessor;
+use App\Model\Queue\QueueManager;
 use App\Utils\Collection;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,11 +27,15 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 	/** @var PlanetManager */
 	private $planetManager;
 
-	public function __construct(UpgradeManager $upgradeManager, ResourcesCalculator $resourcesCalculator, PlanetManager $planetManager)
+	/** @var QueueManager */
+	private $queueManager;
+
+	public function __construct(UpgradeManager $upgradeManager, ResourcesCalculator $resourcesCalculator, PlanetManager $planetManager, QueueManager $queueManager)
 	{
 		$this->upgradeManager = $upgradeManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->planetManager = $planetManager;
+		$this->queueManager = $queueManager;
 	}
 
 	public function canPreProcessCommand(ICommand $command) : bool
@@ -79,6 +84,9 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		//I want to build storages uniformly
 		usort($commands, Functions::compareEnhanceCommandsByPrice($planet));
 
+		foreach ($commands as $newCommand) {
+			$this->queueManager->addBefore($newCommand, $command->getUuid());
+		}
 		$queue->prepend($commands);
 		return true;
 	}

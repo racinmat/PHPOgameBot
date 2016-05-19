@@ -4,10 +4,12 @@ namespace App\Utils;
 
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ArraySerializable;
+use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Coordinates;
 use Carbon\Carbon;
 use Nette\Object;
+use Ramsey\Uuid\Uuid;
 
 class Functions extends Object
 {
@@ -62,24 +64,31 @@ class Functions extends Object
 		};
 	}
 
-	public static function compareCarbonDateTimes()
+	public static function compareCarbonDateTimes() : callable
 	{
-		return function (Carbon $a, Carbon $b) {
+		return function (Carbon $a, Carbon $b) : int {
 			return $a->lt($b) ? -1 : 1;
 		};
 	}
 
-	public static function equalCoordinates(Coordinates $coordinates)
+	public static function equalCoordinates(Coordinates $coordinates) : callable
 	{
 		return function (int $i, Coordinates $c) use ($coordinates) : bool {
 			return $c->equals($coordinates);
 		};
 	}
 
-	public static function compareEnhanceCommandsByPrice(Planet $planet)
+	public static function compareEnhanceCommandsByPrice(Planet $planet) : callable
 	{
-		return function (IEnhanceCommand $a, IEnhanceCommand $b) use ($planet) {
+		return function (IEnhanceCommand $a, IEnhanceCommand $b) use ($planet) : bool {
 			return $a->getPrice($planet)->getTotal() - $b->getPrice($planet)->getTotal();
+		};
+	}
+
+	public static function hasCommandUuid(Uuid $uuid) : callable
+	{
+		return function (ICommand $command) use ($uuid) {
+			return $command->getUuid()->equals($uuid);
 		};
 	}
 }

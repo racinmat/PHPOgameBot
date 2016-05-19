@@ -2,6 +2,13 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+$configurator = new \Nette\Configurator();
+$configurator->setDebugMode(true);
+$configurator->setTempDirectory(__DIR__ . '/../temp');
+$configurator->createRobotLoader()
+	->addDirectory(__DIR__ . '/../app')
+	->register();
+
 //$hours = 1 + 24/60 + 38/3600;
 //$minutes = ($hours - (int) $hours) * 60;
 //$seconds = ($minutes - (int) $minutes) * 60;
@@ -80,3 +87,6 @@ class Queue implements IteratorAggregate {
 //	array_shift($array);
 //}//	echo $item . PHP_EOL;
 
+
+//var_dump(array_merge([1,2], [3], [4,5]));
+var_dump((new \App\Utils\ArrayCollection([1,2,4,5]))->addBefore(3, 2)->toArray());

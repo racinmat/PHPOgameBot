@@ -3,10 +3,10 @@
 namespace App\Model\Queue;
  
 use App\Model\Queue\Command\ICommand;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Utils\ArrayCollection;
+use App\Utils\Functions;
 use Nette\Object;
 use Ramsey\Uuid\Uuid;
-use Tracy\Debugger;
 
 class QueueManager extends Object
 {
@@ -72,5 +72,13 @@ class QueueManager extends Object
 	public function getQueue()
 	{
 		return $this->queueRepository->loadQueue();
+	}
+
+	public function addBefore(ICommand $command, Uuid $uuid)
+	{
+		$queue = $this->queueRepository->loadQueue();
+		$key = $queue->indexOf($queue->filter(Functions::hasCommandUuid($uuid))->first());
+		$queue->addBefore($command, $key);
+		$this->queueRepository->saveQueue($queue);
 	}
 }
