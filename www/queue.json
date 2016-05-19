@@ -106,19 +106,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "559f5bcd-b184-4ca6-8522-1a117723097c"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal mine",
             "buildStoragesIfNeeded": true
         },

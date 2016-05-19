@@ -5,7 +5,7 @@
 parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
-	queueFile: %wwwDir%/testing-queue.json
+	queueFile: %wwwDir%/queue.json
 
 php:
 	date.timezone: Europe/Prague
