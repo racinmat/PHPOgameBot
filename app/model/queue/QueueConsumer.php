@@ -78,7 +78,7 @@ class QueueConsumer extends Object
 				$command = $queue->first();
 				foreach ($this->preprocessors as $preprocessor) {
 					if ($preprocessor->canPreProcessCommand($command)) {
-						$this->logger->addInfo("Going to preProcess the command {$command->__toString()}.");
+						$this->logger->addInfo("Going to preProcess the command {$command->toString()}.");
 						$preprocessor->preProcessCommand($command, $queue);
 						$command = $queue->first();
 						break;
@@ -87,15 +87,15 @@ class QueueConsumer extends Object
 
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($command)) {
-						$this->logger->addInfo("Going to process the command {$command->__toString()}.");
+						$this->logger->addInfo("Going to process the command {$command->toString()}.");
 						$success = $processor->processCommand($command);
-						$this->planetManager->refreshAllResourcesData();
+						$this->planetManager->refreshResourcesDataOnCoordinates($command->getCoordinates());
 						break;
 					}
 				}
 
 				if ($success) {
-					$this->logger->addInfo("Command processed successfully.");
+					$this->logger->addInfo("Command processed successfully. Removing command from queue.");
 					$this->queueManager->removeFromQueue($command->getUuid());
 					$queue->remove(0);
 				} else {

@@ -77,6 +77,12 @@ class PlanetManager extends Object
 		$this->databaseManager->flush();
 	}
 
+	public function refreshResourcesDataOnCoordinates(Coordinates $coordinates)
+	{
+		$planet = $this->getPlanet($coordinates);
+		$this->refreshResourcesData($planet);
+	}
+
 	public function refreshAllResourcesData()
 	{
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
