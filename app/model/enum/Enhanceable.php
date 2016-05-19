@@ -17,7 +17,7 @@ abstract class Enhanceable extends Enum
 
 	public function getSelector() : string
 	{
-		return $this->getClassSelector() . ' > div:nth-child(1) > a';
+		return $this->getClassSelector() . ' > div:nth-child(1) > a.slideIn';
 	}
 
 	public function getBuildButtonSelector() : string
