@@ -9,6 +9,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\ICommandPreProcessor;
+use App\Utils\Collection;
 use App\Utils\Functions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Object;
@@ -37,7 +38,7 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		return $command instanceof IEnhanceCommand;
 	}
 
-	public function preProcessCommand(ICommand $command, ArrayCollection $queue) : bool
+	public function preProcessCommand(ICommand $command, Collection $queue) : bool
 	{
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		/** @var IEnhanceCommand $command */
@@ -78,7 +79,7 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		//I want to build storages uniformly
 		usort($commands, Functions::compareEnhanceCommandsByPrice($planet));
 
-		$queue = new ArrayCollection(array_merge($commands, $queue->toArray()));    //todo: vymyslet, jak dostat do původní fronty. Možná podědit ArrayCollection a přidat potřebné metody.
+		$queue->prepend($commands);
 		return true;
 	}
 
