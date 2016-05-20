@@ -1,1 +1,132 @@
-[]
+[
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "683d6059-e9e5-45a9-bcde-cc050591b868"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 6
+        },
+        "uuid": "26580d4c-f340-4b77-a6c9-ec628d97187b"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal storage",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 9
+        },
+        "uuid": "5408ad9e-3882-4589-b8cd-bd836d285c47"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "solar power plant",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 9
+        },
+        "uuid": "0f7114db-9b22-42e3-9c06-b39a314e272b"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 9
+        },
+        "uuid": "40d81407-3d5f-4636-970b-d5a79269c329"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "crystal mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 9
+        },
+        "uuid": "fc8da3b3-c643-4de8-bc27-c3575a522148"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "metal mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 9
+        },
+        "uuid": "69a35c29-5b47-4e05-9612-42ceb8d9cadb"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "solar power plant",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "0d4e7205-7489-4b74-935f-24be2edcb8e2"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "82eaf898-8f97-472c-8399-3192f8bce396"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "59dd4970-ffe2-4811-bf39-11243b6ce934"
+    }
+]
