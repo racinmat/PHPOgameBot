@@ -4,7 +4,10 @@ namespace App\Model\Game;
  
 use App\Enum\Buildable;
 use App\Enum\Building;
+use App\Enum\Defense;
 use App\Enum\MenuItem;
+use App\Enum\Research;
+use App\Enum\Ships;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IBuildCommand;
@@ -98,7 +101,7 @@ class ReportReader extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
 
-		$this->databaseManager->flush();
+		//todo: přidat do entity planeta informace o letce a obraně
 
 		$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
 		for ($i = 1; $i <= $buildingsCount; $i++) {
@@ -109,7 +112,33 @@ class ReportReader extends Object
 			$building->setCurrentLevel($planet, $level);
 		}
 
+		$researchCount = $I->getNumberOfElements($researchSelector . ' li');
+		for ($i = 1; $i <= $researchCount; $i++) {
+			$name = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.detail_list_txt");
+			$level = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.fright");
+
+			$research = Research::_(Research::getFromTranslatedName($name));
+			$research->setCurrentLevel($planet, $level);
+		}
+
+		$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
+		for ($i = 1; $i <= $defenseCount; $i++) {
+			$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
+			$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
+
+			$defense = Defense::_(Defense::getFromTranslatedName($name));
+//			$building->setCurrentLevel($planet, $level);
+		}
+
+		$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
+		for ($i = 1; $i <= $fleetCount; $i++) {
+			$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
+			$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
+
+			$ships = Ships::_(Ships::getFromTranslatedName($name));
+//			$ships->setCurrentLevel($planet, $level);
+		}
+
 		$this->databaseManager->flush();
-		//todo: dodělat parsování zbytku reportů
 	}
 }

@@ -30,6 +30,27 @@ class Defense extends Buildable
 		INTERPLANETARY_MISSILE = 'Interplanetary Missile'
 	;
 
+	public static function getFromTranslatedName(string $name) : string
+	{
+		switch ($name) {
+//			case 'Důl na Kov': return static::METAL_MINE;
+//			case 'Důl na krystaly': return static::CRYSTAL_MINE;
+//			case 'Syntetizér deuteria': return static::DEUTERIUM_MINE;
+//			case 'Solární elektrárna': return static::SOLAR_POWER_PLANT;
+//			case 'Fúzní reaktor': return static::FUSION_REACTOR;
+//			case 'Sklad kovu': return static::METAL_STORAGE;
+//			case 'Sklad krystalu': return static::CRYSTAL_STORAGE;
+//			case 'Nádrž na deuterium': return static::DEUTERIUM_TANK;
+//			case 'Továrna na roboty': return static::ROBOTIC_FACTORY;
+//			case 'Hangár': return static::SHIPYARD;
+//			case 'Výzkumná laboratoř': return static::RESEARCH_LAB;
+//			case 'Alianční sklad': return static::ALLIANCE_DEPOT;
+//			case 'Raketové silo': return static::MISSILE_SILO;
+//			case 'Továrna s nanoboty': return static::NANITE_FACTORY;
+//			case 'Terraformer': return static::TERRAFORMER;
+		}
+	}
+
 	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {

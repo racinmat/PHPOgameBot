@@ -6,6 +6,9 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- bugfix: when storage is currently being build, calculate capacity with the new level of currently upgrading storage.
+	- now the preprocessor adds the storages to the queue twice. The second and incorrect insert is after building the first inserted storage. Or maybe setting storage building bool in command to false will suffice.
+- bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, vurrently being processed upgrade and thus it calculates lower price per upgrade. 
 - resolve problem with galaxy scanning and non disappearing load circle
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)

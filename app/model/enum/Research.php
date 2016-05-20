@@ -37,6 +37,28 @@ class Research extends Upgradable
 		GRAVITON_TECHNOLOGY = 'graviton technology'
 	;
 
+	public static function getFromTranslatedName(string $name) : string
+	{
+		switch ($name) {
+			case 'Špionážní technologie': return static::ESPIONAGE_TECHNOLOGY;
+			case 'Počítačová technologie': return static::COMPUTER_TECHNOLOGY;
+			case 'Zbraňové systémy': return static::WEAPON_TECHNOLOGY;
+			case 'Technologie štítů': return static::SHIELDING_TECHNOLOGY;
+			case 'Pancéřování': return static::ARMOUR_TECHNOLOGY;
+			case 'Energetická technologie': return static::ENERGY_TECHNOLOGY;
+			case 'Hyperprostorová technologie': return static::HYPERSPACE_TECHNOLOGY;
+			case 'Spalovací pohon': return static::COMBUSTION_DRIVE;
+			case 'Impulzní pohon': return static::IMPULSE_DRIVE;
+			case 'Hyperprostorový pohon': return static::HYPERSPACE_DRIVE;
+			case 'Laserová technologie': return static::LASER_TECHNOLOGY;
+			case 'Iontová technologie': return static::ION_TECHNOLOGY;
+			case 'Plasmová technologie': return static::PLASMA_TECHNOLOGY;
+			case 'Intergalaktická výzkumná síť': return static::INTERGALACTIC_RESEARCH_NETWORK;
+			case 'Astrofyzika': return static::ASTROPHYSICS;
+			case 'Gravitonová technologie': return static::GRAVITON_TECHNOLOGY;
+		}
+	}
+
 	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
