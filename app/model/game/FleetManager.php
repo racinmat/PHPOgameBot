@@ -54,6 +54,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
+		//todo: later add checking for amount of ships in planet from command
 		$I = $this->I;
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		usleep(Random::microseconds(1.5, 2.5));
@@ -75,6 +76,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 	public function isProcessingAvailable(SendFleetCommand $command) : bool
 	{
+		//todo: later add checking for amount of ships in planet from command
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('.fleft .tooltop');
 		list($occupied, $total) = OgameParser::parseOgameFleets($fleets);

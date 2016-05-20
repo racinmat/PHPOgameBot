@@ -48,12 +48,16 @@ class PlayersProber extends Object implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
-		//todo: použít metodu t FleetManageru
-	}
-
-	public function isProcessingAvailable(Planet $planet, IEnhanceCommand $command) : bool
-	{
-		//todo: použít metodu t FleetManageru
+		//just some fake command to get time to free fleet slot
+		$probePlanetCommand = SendFleetCommand::fromArray([
+			'coordinates' => $command->getCoordinates()->toArray(),
+			'data' => [
+				'to' => ['galaxy' => 1, 'system' => 1, 'planet' => 1],
+				'fleet' => [Ships::ESPIONAGE_PROBE => 1],
+				'mission' => FleetMission::ESPIONAGE
+			]
+		]);
+		return $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
 	}
 
 	public function processCommand(ICommand $command) : bool
@@ -64,6 +68,8 @@ class PlayersProber extends Object implements ICommandProcessor
 
 	private function probePlayers(ProbePlayersCommand $command)
 	{
+		//send espionage probes to all players with selected statuses
+
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$planetsToProbe = $this->databaseManager->getPlanetsOfPlayersWithStatuses($command->getStatuses());
 		/** @var Planet $planetToProbe */
@@ -83,5 +89,8 @@ class PlayersProber extends Object implements ICommandProcessor
 			}
 			$this->fleetManager->processCommand($probePlanetCommand);
 		}
+
+		//read all espionage reports
+		//todo: implement
 	}
 }
