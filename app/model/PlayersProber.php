@@ -72,10 +72,15 @@ class PlayersProber extends Object implements ICommandProcessor
 				'coordinates' => $planet->getCoordinates()->toValueObject()->toArray(),
 				'data' => [
 					'to' => $planetToProbe->getCoordinates()->toValueObject()->toArray(),
-					'fleet' => [Ships::ESPIONAGE_PROBE => 1],    //todo: set probes count to command
+					'fleet' => [Ships::ESPIONAGE_PROBE => 1],    //todo: move setting probes count to command
 					'mission' => FleetMission::ESPIONAGE
 				]
 			]);
+
+			while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
+				$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
+				sleep($time->diffInSeconds());
+			}
 			$this->fleetManager->processCommand($probePlanetCommand);
 		}
 	}

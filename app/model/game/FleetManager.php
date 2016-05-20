@@ -13,8 +13,10 @@ use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -52,12 +54,31 @@ class FleetManager extends Object implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
-		//todo: implement
+		$I = $this->I;
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+		usleep(Random::microseconds(1.5, 2.5));
+		$I->click('#js_eventDetailsClosed');
+		$I->waitForText('Události', null, '#eventHeader h2');
+		$fleetRows = $I->getNumberOfElements('#eventContent > tbody > tr');
+		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
+		for ($i = 0; $i < $fleetRows; $i++) {
+			//I want only returning flights
+			if ($I->seeElementExists("#eventContent > tbody > tr:nth-of-type($i)", ['data-return-flight' => 'false'])) {
+				continue;
+			}
+
+			$timeString = $I->grabTextFrom("#eventContent > tbody > tr:nth-of-type($i) > .countDown.friendly");
+			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeString)));
+		}
+		return $minimalTime;
 	}
 
-	public function isProcessingAvailable(Planet $planet, SendFleetCommand $command) : bool
+	public function isProcessingAvailable(SendFleetCommand $command) : bool
 	{
-		//todo: implement
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+		$fleets = $this->I->grabTextFrom('.fleft .tooltop');
+		list($occupied, $total) = OgameParser::parseOgameFleets($fleets);
+		return $occupied < $total;
 	}
 
 	public function processCommand(ICommand $command) : bool
@@ -75,7 +96,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 
-		if (!$this->isProcessingAvailable($planet, $command)) {
+		if (!$this->isProcessingAvailable($command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
