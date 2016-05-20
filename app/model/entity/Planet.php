@@ -144,6 +144,38 @@ class Planet extends Object
 	 */
 	private $deuteriumTankLevel;
 
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $allianceDepotLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $naniteFactoryLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $missileSiloLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $researchLabLevel;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
+	private $terraformerLevel;
+
+
 	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
@@ -156,7 +188,6 @@ class Planet extends Object
 	 */
 	private $debrisCrystal;
 
-	
 	public function __construct(string $name, ValueObject\Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
@@ -181,6 +212,11 @@ class Planet extends Object
 		$this->fusionReactorLevel = 0;
 		$this->debrisMetal = 0;
 		$this->debrisCrystal = 0;
+		$this->allianceDepotLevel = 0;
+		$this->terraformerLevel = 0;
+		$this->researchLabLevel = 0;
+		$this->missileSiloLevel = 0;
+		$this->naniteFactoryLevel = 0;
 	}
 
 	/**
@@ -518,6 +554,86 @@ class Planet extends Object
 	public function getDebrisCrystal()
 	{
 		return $this->debrisCrystal;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAllianceDepotLevel()
+	{
+		return $this->allianceDepotLevel;
+	}
+
+	/**
+	 * @param int $allianceDepotLevel
+	 */
+	public function setAllianceDepotLevel($allianceDepotLevel)
+	{
+		$this->allianceDepotLevel = $allianceDepotLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNaniteFactoryLevel()
+	{
+		return $this->naniteFactoryLevel;
+	}
+
+	/**
+	 * @param int $naniteFactoryLevel
+	 */
+	public function setNaniteFactoryLevel($naniteFactoryLevel)
+	{
+		$this->naniteFactoryLevel = $naniteFactoryLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMissileSiloLevel()
+	{
+		return $this->missileSiloLevel;
+	}
+
+	/**
+	 * @param int $missileSiloLevel
+	 */
+	public function setMissileSiloLevel($missileSiloLevel)
+	{
+		$this->missileSiloLevel = $missileSiloLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResearchLabLevel()
+	{
+		return $this->researchLabLevel;
+	}
+
+	/**
+	 * @param int $researchLabLevel
+	 */
+	public function setResearchLabLevel($researchLabLevel)
+	{
+		$this->researchLabLevel = $researchLabLevel;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTerraformerLevel()
+	{
+		return $this->terraformerLevel;
+	}
+
+	/**
+	 * @param int $terraformerLevel
+	 */
+	public function setTerraformerLevel($terraformerLevel)
+	{
+		$this->terraformerLevel = $terraformerLevel;
 	}
 
 }

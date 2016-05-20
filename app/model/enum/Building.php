@@ -169,15 +169,15 @@ class Building extends Upgradable
 			case static::DEUTERIUM_TANK:
 				return $planet->getDeuteriumTankLevel();
 			case static::RESEARCH_LAB:
-				return $planet->getDeuteriumTankLevel();
+				return $planet->getResearchLabLevel();
 			case static::ALLIANCE_DEPOT:
-				return $planet->getDeuteriumTankLevel();
+				return $planet->getAllianceDepotLevel();
 			case static::MISSILE_SILO:
-				return $planet->getDeuteriumTankLevel();
+				return $planet->getMissileSiloLevel();
 			case static::NANITE_FACTORY:
-				return $planet->getDeuteriumTankLevel();
+				return $planet->getNaniteFactoryLevel();
 			case static::TERRAFORMER:
-				return $planet->getDeuteriumTankLevel();
+				return $planet->getTerraformerLevel();
 		}
 	}
 
@@ -214,6 +214,16 @@ class Building extends Upgradable
 				return $planet->setCrystalStorageLevel($currentLevel);
 			case static::DEUTERIUM_TANK:
 				return $planet->setDeuteriumTankLevel($currentLevel);
+			case static::RESEARCH_LAB:
+				return $planet->setResearchLabLevel($currentLevel);
+			case static::ALLIANCE_DEPOT:
+				return $planet->setAllianceDepotLevel($currentLevel);
+			case static::MISSILE_SILO:
+				return $planet->setMissileSiloLevel($currentLevel);
+			case static::NANITE_FACTORY:
+				return $planet->setNaniteFactoryLevel($currentLevel);
+			case static::TERRAFORMER:
+				return $planet->setTerraformerLevel($currentLevel);
 		}
 	}
 
