@@ -23,11 +23,6 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	/** @var bool */
 	private $buildStoragesIfNeeded;
 	
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
-	{
-		parent::__construct($coordinates, $data, $uuid);
-	}
-
 	public static function getAction() : string
 	{
 		return static::ACTION_BUILD_DEFENSE;
@@ -41,11 +36,6 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 	public function getAmount() : int
 	{
 		return $this->amount;
-	}
-
-	public static function fromArray(array $data) : BuildDefenseCommand
-	{
-		return new BuildDefenseCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
 	}
 
 	public function toArray() : array

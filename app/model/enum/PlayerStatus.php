@@ -13,7 +13,7 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Building
  * @package App\Enum
- * @method static _(string $value) @return PlayerStatus
+ * @method static PlayerStatus _(string $value)
  */
 class PlayerStatus extends Enum
 {

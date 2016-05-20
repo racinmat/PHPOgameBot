@@ -13,7 +13,7 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Building
  * @package App\Enum
- * @method static _(string $value) @return Building
+ * @method static Building _(string $value)
  */
 class Building extends Upgradable
 {

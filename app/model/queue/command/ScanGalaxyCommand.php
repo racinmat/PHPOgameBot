@@ -14,32 +14,22 @@ class ScanGalaxyCommand extends BaseCommand
 {
 
 	/** @var Coordinates */
-	private $middle;
+	private $from;
 
 	/** @var CoordinatesDifference */
-	private $range;
-
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
-	{
-		parent::__construct($coordinates, $data, $uuid);
-	}
+	private $to;
 
 	public static function getAction() : string
 	{
 		return static::ACTION_SCAN_GALAXY;
 	}
 
-	public static function fromArray(array $data) : ScanGalaxyCommand
-	{
-		return new ScanGalaxyCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
-	}
-
 	public function toArray() : array
 	{
 		$data = [
 			'data' => [
-				'middle' => $this->middle->toArray(),
-				'range' => $this->range->toArray()
+				'from' => $this->from->toArray(),
+				'to' => $this->to->toArray()
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -47,33 +37,24 @@ class ScanGalaxyCommand extends BaseCommand
 
 	protected function loadFromArray(array $data)
 	{
-		Debugger::barDump($data, 'array data');
-		$this->middle = Coordinates::fromArray($data['middle']);
-		$this->range = CoordinatesDifference::fromArray($data['range']);
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function isOnlyInactive()
-	{
-		return $this->onlyInactive;
+		$this->from = Coordinates::fromArray($data['from']);
+		$this->to = Coordinates::fromArray($data['to']);
 	}
 
 	/**
 	 * @return Coordinates
 	 */
-	public function getMiddle()
+	public function getFrom()
 	{
-		return $this->middle;
+		return $this->from;
 	}
 
 	/**
 	 * @return Coordinates
 	 */
-	public function getRange()
+	public function getTo()
 	{
-		return $this->range;
+		return $this->to;
 	}
 
 	public function getDependencyType() : string

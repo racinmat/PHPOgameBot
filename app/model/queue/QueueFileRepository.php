@@ -5,6 +5,7 @@ namespace App\Model\Queue;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\ICommand;
+use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
@@ -62,7 +63,8 @@ class QueueFileRepository extends Object
 			UpgradeResearchCommand::class,
 			BuildDefenseCommand::class,
 			BuildShipsCommand::class,
-			ScanGalaxyCommand::class
+			ScanGalaxyCommand::class,
+			ProbePlayersCommand::class
 		];
 	}
 

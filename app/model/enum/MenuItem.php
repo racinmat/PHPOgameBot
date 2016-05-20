@@ -13,7 +13,7 @@ use Nette\Localization\ITranslator;
 /**
  * Class MenuItem
  * @package App\Enum
- * @method static _(string $value) @return MenuItem
+ * @method static MenuItem _(string $value)
  */
 class MenuItem extends Enum
 {

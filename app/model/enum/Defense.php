@@ -12,7 +12,7 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Defense
  * @package App\Enum
- * @method static _(string $value) @return Defense
+ * @method static Defense _(string $value)
  */
 class Defense extends Buildable
 {

@@ -8,6 +8,11 @@
 
 namespace App\Utils;
 
+/**
+ * Class ArrayCollection
+ * @package App\Utils
+ * @method ArrayCollection map(\Closure $func)
+ */
 class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection implements Collection
 {
 

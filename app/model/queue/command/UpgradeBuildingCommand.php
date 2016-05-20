@@ -20,11 +20,6 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	/** @var bool */
 	private $buildStoragesIfNeeded;
 
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
-	{
-		parent::__construct($coordinates, $data, $uuid);
-	}
-
 	public static function getAction() : string
 	{
 		return static::ACTION_UPGRADE_BUILDING;
@@ -33,11 +28,6 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 	public function getUpgradable() : Upgradable
 	{
 		return $this->building;
-	}
-
-	public static function fromArray(array $data) : UpgradeBuildingCommand
-	{
-		return new UpgradeBuildingCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
 	}
 
 	public function toArray() : array

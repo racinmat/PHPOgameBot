@@ -50,8 +50,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::GALAXY));
-		$from = $command->getMiddle()->subtract($command->getRange());
-		$to = $command->getMiddle()->add($command->getRange());
+		$from = $command->getFrom()->subtract($command->getTo());
+		$to = $command->getFrom()->add($command->getTo());
 
 		$this->logger->addInfo("Going to scan galaxy from system {$from->toString()} to system {$to->toString()}.");
 		for ($i = $from; $i->isLesserThanOrEquals($to); $i = $i->nextSystem()) {

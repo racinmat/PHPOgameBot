@@ -12,7 +12,7 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Defense
  * @package App\Enum
- * @method static _(string $value) @return Ships
+ * @method static Ships _(string $value)
  */
 class Ships extends Buildable
 {
@@ -34,24 +34,54 @@ class Ships extends Buildable
 		COLONY_SHIP = 'colony ship'
 	;
 
-	public function getClassSelector() : string
+	private function getNumber() : string
 	{
 		switch ($this->getValue()) {
-			case static::SMALL_CARGO_SHIP: return '.civil202';
-			case static::LARGE_CARGO_SHIP: return '.civil203';
-			case static::LIGHT_FIGHTER: return '.military204';
-			case static::HEAVY_FIGHTER: return '.military205';
-			case static::CRUISER: return '.military206';
-			case static::BATTLESHIP: return '.military207';
-			case static::BATTLECRUISER: return '.military215';
-			case static::DESTROYER: return '.military213';
-			case static::DEATHSTAR: return '.military214';
-			case static::BOMBER: return '.military211';
-			case static::RECYCLER: return '.civil209';
-			case static::ESPIONAGE_PROBE: return '.civil210';
-			case static::SOLAR_SATELLITE: return '.civil212';
-			case static::COLONY_SHIP: return '.civil208';
+			case static::SMALL_CARGO_SHIP: return '202';
+			case static::LARGE_CARGO_SHIP: return '203';
+			case static::LIGHT_FIGHTER: return '204';
+			case static::HEAVY_FIGHTER: return '205';
+			case static::CRUISER: return '206';
+			case static::BATTLESHIP: return '207';
+			case static::BATTLECRUISER: return '215';
+			case static::DESTROYER: return '213';
+			case static::DEATHSTAR: return '214';
+			case static::BOMBER: return '211';
+			case static::RECYCLER: return '209';
+			case static::ESPIONAGE_PROBE: return '210';
+			case static::SOLAR_SATELLITE: return '212';
+			case static::COLONY_SHIP: return '208';
 		}
+	}
+
+	public function getClassSelector() : string
+	{
+		return '.' . $this->getType() . $this->getNumber();
+	}
+	
+	public function getType() : string
+	{
+		switch ($this->getValue()) {
+			case static::SMALL_CARGO_SHIP: return 'civil';
+			case static::LARGE_CARGO_SHIP: return 'civil';
+			case static::LIGHT_FIGHTER: return 'military';
+			case static::HEAVY_FIGHTER: return 'military';
+			case static::CRUISER: return 'military';
+			case static::BATTLESHIP: return 'military';
+			case static::BATTLECRUISER: return 'military';
+			case static::DESTROYER: return 'military';
+			case static::DEATHSTAR: return 'military';
+			case static::BOMBER: return 'military';
+			case static::RECYCLER: return 'civil';
+			case static::ESPIONAGE_PROBE: return 'civil';
+			case static::SOLAR_SATELLITE: return 'civil';
+			case static::COLONY_SHIP: return 'civil';
+		}
+	}
+	
+	public function getFleetInputSelector() : string
+	{
+		return '#ship_' . $this->getNumber();
 	}
 
 	/**

@@ -21,11 +21,6 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	/** @var bool */
 	private $buildStoragesIfNeeded;
 
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
-	{
-		parent::__construct($coordinates, $data, $uuid);
-	}
-
 	public static function getAction() : string
 	{
 		return static::ACTION_UPGRADE_RESEARCH;
@@ -34,11 +29,6 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 	public function getUpgradable() : Upgradable
 	{
 		return $this->research;
-	}
-
-	public static function fromArray(array $data) : UpgradeResearchCommand
-	{
-		return new UpgradeResearchCommand(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
 	}
 
 	public function toArray() : array

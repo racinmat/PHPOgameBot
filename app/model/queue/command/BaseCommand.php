@@ -43,6 +43,11 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 		];
 	}
 
+	public static function fromArray(array $data)
+	{
+		return new static(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
+	}
+
 	public function __toString() : string
 	{
 		return $this->toString();

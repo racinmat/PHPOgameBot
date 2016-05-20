@@ -86,10 +86,20 @@ class Queue implements IteratorAggregate {
 //var_dump(array_merge([1,2], [3], [4,5]));
 //var_dump((new \App\Utils\ArrayCollection([1,2,4,5]))->addBefore(3, 2)->toArray());
 
-var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)modules(\\\|\\/)[a-z]+Module~'));
-var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)~'));
-var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)modules(\\\|\\/)~'));
+//var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)modules(\\\|\\/)[a-z]+Module~'));
+//var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)~'));
+//var_dump(\Nette\Utils\Strings::replace('C:\xampp\htdocs\bookStore\app\modules\frontModule\presenters', '~(\\\|\\/)modules(\\\|\\/)~'));
 
 ///** @var \App\Model\Queue\QueueConsumer $consumer */
 //$consumer = $container->getByType(\App\Model\Queue\QueueConsumer::class);
 //$consumer->processQueue();
+
+class A {
+	public static function create()
+	{
+		return new static;
+	}
+}
+//class B extends A {}
+//
+//var_dump(B::create());

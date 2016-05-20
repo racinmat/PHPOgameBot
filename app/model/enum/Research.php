@@ -13,7 +13,7 @@ use App\Model\ValueObject\Resources;
 /**
  * Class Research
  * @package App\Enum
- * @method static _(string $value) @return Research
+ * @method static Research _(string $value)
  */
 class Research extends Upgradable
 {

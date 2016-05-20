@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Enum\PlayerStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Forms\FormFactory;
@@ -12,6 +13,7 @@ use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\IEnhanceCommand;
+use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
@@ -142,16 +144,16 @@ class AddCommandPresenter extends BasePresenter
 		$general->add($form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
 			->setDefaultValue($this->planet));
 
-		$middle = $form->addContainer('middle');
-		$middleGroup = $form->addGroup('Middle of scanning', false);
+		$middle = $form->addContainer('from');
+		$middleGroup = $form->addGroup('Scanning from system', false);
 
 		$middleGroup->add($middle->addText('galaxy', 'Galaxy:')
 			->setType('number'));
 		$middleGroup->add($middle->addText('system', 'System:')
 			->setType('number'));
 
-		$rangeGroup = $form->addGroup('Range of scanning', false);
-		$range = $form->addContainer('range');
+		$rangeGroup = $form->addGroup('Scanning to system', false);
+		$range = $form->addContainer('to');
 		$rangeGroup->add($range->addText('galaxy', 'Galaxy:')
 			->setType('number'));
 		$rangeGroup->add($range->addText('system', 'System:')
@@ -166,16 +168,46 @@ class AddCommandPresenter extends BasePresenter
 			$command = ScanGalaxyCommand::fromArray([
 				'coordinates' => $coordinates, 
 				'data' => [
-					'middle' => [
-						'galaxy' => $values['middle']['galaxy'],
-						'system' => $values['middle']['system'],
+					'from' => [
+						'galaxy' => $values['from']['galaxy'],
+						'system' => $values['from']['system'],
 						'planet' => Coordinates::$minPlanet
 					],
-					'range' => [
-						'galaxy' => $values['range']['galaxy'],
-						'system' => $values['range']['system'],
+					'to' => [
+						'galaxy' => $values['to']['galaxy'],
+						'system' => $values['to']['system'],
 						'planet' => Coordinates::$maxPlanet,
 					]
+				]
+			]);
+			$this->queueManager->addToQueue($command);
+			$this->flashMessage('Command added', 'success');
+			$this->redirect('this');
+		};
+
+		return $form;
+	}
+
+	public function createComponentAddProbePlayersCommandForm()
+	{
+		$form = $this->formFactory->create();
+
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
+			->setDefaultValue($this->planet);
+
+		$form->addMultiSelect('statuses', 'Only players with statuses', PlayerStatus::getSelectBoxValues())
+			->getControlPrototype()->addAttributes(['size' => count(PlayerStatus::getSelectBoxValues())]);
+
+		$form->addSubmit('send', 'Add command');
+
+		$form->onSuccess[] = function (Form $form, array $values) {
+			$this->planet = $values['planet'];
+
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$command = ProbePlayersCommand::fromArray([
+				'coordinates' => $coordinates,
+				'data' => [
+					'statuses' => $values['statuses']
 				]
 			]);
 			$this->queueManager->addToQueue($command);

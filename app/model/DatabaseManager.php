@@ -1,23 +1,15 @@
 <?php
 
 namespace App\Model;
- 
-use App\Enum\Building;
-use App\Enum\Enhanceable;
-use App\Enum\MenuItem;
-use App\Enum\Research;
+
 use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
-use App\Utils\OgameParser;
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Utils\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
-use Nette\Utils\Strings;
 
 class DatabaseManager extends Object
 {
@@ -108,5 +100,10 @@ class DatabaseManager extends Object
 	public function getMe() : Player
 	{
 		return $this->playerRepository->findOneBy(['me' => true]);
+	}
+
+	public function getPlanetsOfPlayersWithStatuses(ArrayCollection $statuses)
+	{
+		return $this->planetRepository->findBy(['player.status' => $statuses->toArray()]);
 	}
 }

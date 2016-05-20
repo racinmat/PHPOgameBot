@@ -42,6 +42,8 @@ services:
 	- {implement: App\Components\IDisplayCommandFactory}
 	- App\Model\DatabaseManager
 	- App\Model\UpgradeStoragesPreProcessor
+	- App\Model\Game\FleetManager
+	- App\Model\Game\PlayersProber
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
