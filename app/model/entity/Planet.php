@@ -156,6 +156,7 @@ class Planet extends Object
 	 */
 	private $debrisCrystal;
 
+	
 	public function __construct(string $name, ValueObject\Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;

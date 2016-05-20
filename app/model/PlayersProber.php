@@ -68,6 +68,7 @@ class PlayersProber extends Object implements ICommandProcessor
 
 	private function probePlayers(ProbePlayersCommand $command)
 	{
+		$probingStart = Carbon::now();
 		//send espionage probes to all players with selected statuses
 
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());

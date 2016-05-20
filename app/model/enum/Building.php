@@ -28,13 +28,39 @@ class Building extends Upgradable
 		FUSION_REACTOR = 'fusion reactor',
 		METAL_STORAGE = 'metal storage',
 		CRYSTAL_STORAGE = 'crystal storage',
-		DEUTERIUM_TANK = 'deuterium tank'
+		DEUTERIUM_TANK = 'deuterium tank',
+		RESEARCH_LAB = 'research lab',
+		ALLIANCE_DEPOT = 'alliance depot',
+		MISSILE_SILO = 'missile silo',
+		NANITE_FACTORY = 'nanite factory',
+		TERRAFORMER = 'terraformer'
 	;
 
 	public function getClassSelector() : string
 	{
 		switch ($this->getValue()) {
 			case static::METAL_MINE: return '.supply1';
+			case static::CRYSTAL_MINE: return '.supply2';
+			case static::DEUTERIUM_MINE: return '.supply3';
+			case static::SOLAR_POWER_PLANT: return '.supply4';
+			case static::ROBOTIC_FACTORY: return '.station14';
+			case static::SHIPYARD: return '.station21';
+			case static::FUSION_REACTOR: return '.supply12';
+			case static::METAL_STORAGE: return '.supply22';
+			case static::CRYSTAL_STORAGE: return '.supply23';
+			case static::DEUTERIUM_TANK: return '.supply24';
+			case static::RESEARCH_LAB: return '.station31';
+			case static::ALLIANCE_DEPOT: return '.station34';
+			case static::MISSILE_SILO: return '.station44';
+			case static::NANITE_FACTORY: return '.station15';
+			case static::TERRAFORMER: return '.station33';
+		}
+	}
+
+	public function getFromTranslatedName(string $name) : string
+	{
+		switch ($name) {
+			case 'Důl na Kov': return '.supply1';
 			case static::CRYSTAL_MINE: return '.supply2';
 			case static::DEUTERIUM_MINE: return '.supply3';
 			case static::SOLAR_POWER_PLANT: return '.supply4';
@@ -63,6 +89,11 @@ class Building extends Upgradable
 			case static::METAL_STORAGE: return MenuItem::_(MenuItem::RESOURCES);
 			case static::CRYSTAL_STORAGE: return MenuItem::_(MenuItem::RESOURCES);
 			case static::DEUTERIUM_TANK: return MenuItem::_(MenuItem::RESOURCES);
+			case static::RESEARCH_LAB: return MenuItem::_(MenuItem::STATION);
+			case static::ALLIANCE_DEPOT: return MenuItem::_(MenuItem::STATION);
+			case static::MISSILE_SILO: return MenuItem::_(MenuItem::STATION);
+			case static::NANITE_FACTORY: return MenuItem::_(MenuItem::STATION);
+			case static::TERRAFORMER: return MenuItem::_(MenuItem::STATION);
 		}
 	}
 
@@ -101,6 +132,16 @@ class Building extends Upgradable
 				return new Resources(1000, 500, 0);
 			case static::DEUTERIUM_TANK:
 				return new Resources(1000, 1000, 0);
+			case static::RESEARCH_LAB:
+				return new Resources(200, 400, 200);
+			case static::ALLIANCE_DEPOT:
+				return new Resources(20000, 40000, 0);
+			case static::MISSILE_SILO:
+				return new Resources(20000, 20000, 1000);
+			case static::NANITE_FACTORY:
+				return new Resources(1000000, 500000, 100000);
+			case static::TERRAFORMER:
+				return new Resources(0, 50000, 100000);
 		}
 	}
 
@@ -126,6 +167,16 @@ class Building extends Upgradable
 			case static::CRYSTAL_STORAGE:
 				return $planet->getCrystalStorageLevel();
 			case static::DEUTERIUM_TANK:
+				return $planet->getDeuteriumTankLevel();
+			case static::RESEARCH_LAB:
+				return $planet->getDeuteriumTankLevel();
+			case static::ALLIANCE_DEPOT:
+				return $planet->getDeuteriumTankLevel();
+			case static::MISSILE_SILO:
+				return $planet->getDeuteriumTankLevel();
+			case static::NANITE_FACTORY:
+				return $planet->getDeuteriumTankLevel();
+			case static::TERRAFORMER:
 				return $planet->getDeuteriumTankLevel();
 		}
 	}

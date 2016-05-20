@@ -62,7 +62,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->waitForText('Události', null, '#eventHeader h2');
 		$fleetRows = $I->getNumberOfElements('#eventContent > tbody > tr');
 		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
-		for ($i = 0; $i < $fleetRows; $i++) {
+		for ($i = 1; $i <= $fleetRows; $i++) {
 			//I want only returning flights
 			if ($I->seeElementExists("#eventContent > tbody > tr:nth-of-type($i)", ['data-return-flight' => 'false'])) {
 				continue;
@@ -79,7 +79,7 @@ class FleetManager extends Object implements ICommandProcessor
 		//todo: later add checking for amount of ships in planet from command
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('.fleft .tooltop');
-		list($occupied, $total) = OgameParser::parseOgameFleets($fleets);
+		list($occupied, $total) = OgameParser::parseSlash($fleets);
 		return $occupied < $total;
 	}
 

@@ -29,12 +29,12 @@ class OgameParser
 	}
 
 	/**
-	 * @param string $fleets
+	 * @param string $string
 	 * @return int[]
 	 */
-	public static function parseOgameFleets(string $fleets) : array
+	public static function parseSlash(string $string) : array
 	{
-		$params = Strings::match($fleets, '~(?<occupied>\d+)/(?<total>\d+)~');
-		return [(int) $params['occupied'], (int) $params['total']];
+		$params = Strings::match($string, '~(?<first>\d+)/(?<second>\d+)~');
+		return [(int) $params['first'], (int) $params['second']];
 	}
 }
