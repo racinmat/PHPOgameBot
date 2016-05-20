@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Enum\Enum;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ArraySerializable;
 use App\Model\Queue\Command\ICommand;
@@ -89,6 +90,13 @@ class Functions extends Object
 	{
 		return function (ICommand $command) use ($uuid) {
 			return $command->getUuid()->equals($uuid);
+		};
+	}
+
+	public static function enumToValue() : callable
+	{
+		return function (Enum $enum) : string {
+			return $enum->getValue();
 		};
 	}
 }

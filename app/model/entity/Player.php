@@ -2,6 +2,7 @@
  
 namespace App\Model\Entity;
 
+use App\Enum\PlayerStatus;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
@@ -12,19 +13,6 @@ use Nette\Object;
  */
 class Player extends Object
 {
-
-	const
-		STATUS_INACTIVE = 'inactive',
-		STATUS_LONG_INACTIVE = 'long inactive',
-		STATUS_NOOB = 'noob',
-		STATUS_HONORABLE_TARGET = 'honorable target',
-		STATUS_ACTIVE = 'active',
-		STATUS_VACATION = 'vacation',
-		STATUS_STRONG = 'strong',
-		STATUS_ADMIN = 'admin',
-		STATUS_OUTLAW = 'outlaw',
-		STATUS_BANNED = 'banned'
-	;
 
 	/**
 	 * @ORM\Id
@@ -53,8 +41,8 @@ class Player extends Object
 	private $me;
 
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="playerstatus")
+	 * @var PlayerStatus
 	 */
 	private $status;
 
@@ -170,7 +158,7 @@ class Player extends Object
 	{
 		$this->name = $name;
 		$this->me = $me;
-		$this->status = Player::STATUS_ACTIVE;
+		$this->status = PlayerStatus::_(PlayerStatus::STATUS_ACTIVE);
 		$this->alliance = null;
 		$this->lastVisited = Carbon::now();
 		$this->espionageTechnologyLevel = 0;
@@ -503,10 +491,7 @@ class Player extends Object
 		$this->gravitonTechnologyLevel = $gravitonTechnologyLevel;
 	}
 
-	/**
-	 * @param string $status
-	 */
-	public function setStatus($status)
+	public function setStatus(PlayerStatus $status)
 	{
 		$this->status = $status;
 	}

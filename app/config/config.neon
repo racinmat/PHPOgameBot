@@ -67,3 +67,4 @@ console:
 doctrine:
     types:
         carbondatetime:         App\Model\Mapping\CarbonDateTimeType
+        playerstatus:			App\Model\Type\PlayerStatusType

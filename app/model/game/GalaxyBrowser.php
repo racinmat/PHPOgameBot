@@ -3,6 +3,7 @@
 namespace App\Model\Game;
  
 use App\Enum\MenuItem;
+use App\Enum\PlayerStatus;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Player;
 use App\Model\Queue\Command\ICommand;
@@ -67,20 +68,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$currentGalaxy = (int) $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
 		$currentSystem = (int) $I->grabValueFrom('#system_input', $coordinates->getSystem());
 		$isNextSystem = $currentGalaxy === $coordinates->getGalaxy() && ($currentSystem + 1) === $coordinates->getSystem();
-
-		$classToStatus = [
-			'status_abbr_noob' => Player::STATUS_NOOB,
-			'status_abbr_active' => Player::STATUS_NOOB,
-			'status_abbr_honorableTarget' => Player::STATUS_NOOB,
-			'status_abbr_vacation' => Player::STATUS_VACATION,
-			'status_abbr_inactive' => Player::STATUS_INACTIVE,
-			'status_abbr_strong' => Player::STATUS_STRONG,
-			'status_abbr_longinactive' => Player::STATUS_LONG_INACTIVE,
-			'status_abbr_admin' => Player::STATUS_ADMIN,
-			'status_abbr_outlaw' => Player::STATUS_OUTLAW,
-			'status_abbr_banned' => Player::STATUS_BANNED
-		];
-
+		
 		if ($isNextSystem) {
 			$this->goToNextSystem();
 		} else {
@@ -111,7 +99,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			$hasDebris = ! $I->seeElementExists("tbody tr:nth-of-type($i) .debris.js_no_action");
 			$hasMoon = ! $I->seeElementExists("tbody tr:nth-of-type($i) .moon.js_no_action");
 
-			$playerStatus = $classToStatus[$playerStatusClass];
+			$playerStatus = PlayerStatus::fromClass($playerStatusClass);
 			if ($hasDebris) {
 				$I->moveMouseOver("tbody tr:nth-of-type($i) .debris");
 				usleep(Random::microseconds(0.5, 1));

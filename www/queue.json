@@ -2,19 +2,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "c38688d2-d6af-48d0-9ebe-e774002b2307"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal mine",
             "buildStoragesIfNeeded": true
         },
@@ -37,84 +24,6 @@
             "planet": 6
         },
         "uuid": "26580d4c-f340-4b77-a6c9-ec628d97187b"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "b1344177-43eb-421d-ac68-e0b539eaeafe"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "fe56b106-f2c5-4df0-bab6-22f61b1da2a0"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "1891ffac-47ec-4b2a-aed6-482222c1c894"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "deuterium mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 6
-        },
-        "uuid": "9825e5af-c2ed-42f7-a2af-35fffbf2daca"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "4964c0de-f74f-4b5a-963b-1e908e2853b2"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "6ae690c6-ad8a-4f57-be23-5993a1aa8152"
     },
     {
         "action": "upgrade building",
@@ -236,7 +145,7 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "metal mine",
+            "building": "solar power plant",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -244,20 +153,7 @@
             "system": 357,
             "planet": 7
         },
-        "uuid": "cef2e9f5-5e24-4ab6-9d34-17faaecc5fe2"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 7
-        },
-        "uuid": "c543a59e-d98a-4670-94b5-0397599373c9"
+        "uuid": "0d4e7205-7489-4b74-935f-24be2edcb8e2"
     },
     {
         "action": "upgrade building",
@@ -270,6 +166,19 @@
             "system": 357,
             "planet": 7
         },
-        "uuid": "c3b61459-202b-489e-9042-f7ef4e422815"
+        "uuid": "82eaf898-8f97-472c-8399-3192f8bce396"
+    },
+    {
+        "action": "upgrade building",
+        "data": {
+            "building": "deuterium mine",
+            "buildStoragesIfNeeded": true
+        },
+        "coordinates": {
+            "galaxy": 1,
+            "system": 357,
+            "planet": 7
+        },
+        "uuid": "59dd4970-ffe2-4811-bf39-11243b6ce934"
     }
 ]

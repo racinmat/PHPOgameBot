@@ -13,7 +13,8 @@ interface ICommand extends ArraySerializable
 		ACTION_UPGRADE_RESEARCH = 'upgrade research',
 		ACTION_BUILD_DEFENSE = 'build defense',
 		ACTION_BUILD_SHIPS = 'build ships',
-		ACTION_SCAN_GALAXY = 'scan galaxy'
+		ACTION_SCAN_GALAXY = 'scan galaxy',
+		ACTION_PROBE_PLAYERS = 'probe players'
 	;
 
 	public static function getAction() : string;
