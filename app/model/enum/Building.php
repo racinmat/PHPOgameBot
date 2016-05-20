@@ -57,19 +57,24 @@ class Building extends Upgradable
 		}
 	}
 
-	public function getFromTranslatedName(string $name) : string
+	public static function getFromTranslatedName(string $name) : string
 	{
 		switch ($name) {
-			case 'Důl na Kov': return '.supply1';
-			case static::CRYSTAL_MINE: return '.supply2';
-			case static::DEUTERIUM_MINE: return '.supply3';
-			case static::SOLAR_POWER_PLANT: return '.supply4';
-			case static::ROBOTIC_FACTORY: return '.station14';
-			case static::SHIPYARD: return '.station21';
-			case static::FUSION_REACTOR: return '.supply12';
-			case static::METAL_STORAGE: return '.supply22';
-			case static::CRYSTAL_STORAGE: return '.supply23';
-			case static::DEUTERIUM_TANK: return '.supply24';
+			case 'Důl na Kov': return static::METAL_MINE;
+			case 'Důl na krystaly': return static::CRYSTAL_MINE;
+			case 'Syntetizér deuteria': return static::DEUTERIUM_MINE;
+			case 'Solární elektrárna': return static::SOLAR_POWER_PLANT;
+			case 'Fúzní reaktor': return static::FUSION_REACTOR;
+			case 'Sklad kovu': return static::METAL_STORAGE;
+			case 'Sklad krystalu': return static::CRYSTAL_STORAGE;
+			case 'Nádrž na deuterium': return static::DEUTERIUM_TANK;
+			case 'Továrna na roboty': return static::ROBOTIC_FACTORY;
+			case 'Hangár': return static::SHIPYARD;
+			case 'Výzkumná laboratoř': return static::RESEARCH_LAB;
+			case 'Alianční sklad': return static::ALLIANCE_DEPOT;
+			case 'Raketové silo': return static::MISSILE_SILO;
+			case 'Továrna s nanoboty': return static::NANITE_FACTORY;
+			case 'Terraformer': return static::TERRAFORMER;
 		}
 	}
 

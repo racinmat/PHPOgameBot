@@ -3,6 +3,7 @@
 namespace App\Model\Game;
  
 use App\Enum\Buildable;
+use App\Enum\Building;
 use App\Enum\MenuItem;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
@@ -87,10 +88,10 @@ class ReportReader extends Object
 		$buildingsSelector = $this->reportPopupSelector . ' div.mCSB_container > ul:nth-of-type(4)';
 		$researchSelector = $this->reportPopupSelector . ' div.mCSB_container > ul:nth-of-type(5)';
 
-		$metal = $I->grabTextFrom($researchSelector . ' > li:nth-of-type(1) > .res_value');
-		$crystal = $I->grabTextFrom($researchSelector . ' > li:nth-of-typ(2) > .res_value');
-		$deuterium = $I->grabTextFrom($researchSelector . ' > li:nth-of-typ(3) > .res_value');
-		$energy = $I->grabTextFrom($researchSelector . ' > li:nth-of-typ(4) > .res_value');
+		$metal = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(1) > .res_value');
+		$crystal = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(2) > .res_value');
+		$deuterium = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(3) > .res_value');
+		$energy = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(4) > .res_value');
 
 		$planet->setMetal($metal);
 		$planet->setCrystal($crystal);
@@ -104,8 +105,11 @@ class ReportReader extends Object
 			$name = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt");
 			$level = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.fright");
 
-//			$building =
+			$building = Building::_(Building::getFromTranslatedName($name));
+			$building->setCurrentLevel($planet, $level);
 		}
+
+		$this->databaseManager->flush();
 		//todo: dodělat parsování zbytku reportů
 	}
 }
