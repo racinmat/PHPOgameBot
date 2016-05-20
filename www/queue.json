@@ -28,7 +28,7 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "deuterium mine",
+            "building": "metal storage",
             "buildStoragesIfNeeded": true
         },
         "coordinates": {
@@ -36,7 +36,7 @@
             "system": 357,
             "planet": 9
         },
-        "uuid": "ee125370-cda9-48f9-87fe-f1c1ae2742eb"
+        "uuid": "5408ad9e-3882-4589-b8cd-bd836d285c47"
     },
     {
         "action": "upgrade building",
@@ -67,19 +67,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "deuterium mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "ec366ba4-0651-438a-b433-d37cfa186a06"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "crystal mine",
             "buildStoragesIfNeeded": true
         },
@@ -93,19 +80,6 @@
     {
         "action": "upgrade building",
         "data": {
-            "building": "solar power plant",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "6c8cdd3e-e530-4ef1-9ac8-b126ecee67ae"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
             "building": "metal mine",
             "buildStoragesIfNeeded": true
         },
@@ -115,32 +89,6 @@
             "planet": 9
         },
         "uuid": "69a35c29-5b47-4e05-9612-42ceb8d9cadb"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "crystal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "53a2b1cc-e2fd-4822-b31c-1741cc054d44"
-    },
-    {
-        "action": "upgrade building",
-        "data": {
-            "building": "metal mine",
-            "buildStoragesIfNeeded": true
-        },
-        "coordinates": {
-            "galaxy": 1,
-            "system": 357,
-            "planet": 9
-        },
-        "uuid": "6cd60e63-aba3-4eb8-958c-d4f539e6a22b"
     },
     {
         "action": "upgrade building",
