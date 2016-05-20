@@ -184,7 +184,7 @@ class PlanetManager extends Object
 			$me = $this->databaseManager->getMe();
 			$planet = $this->getPlanet($coordinates);
 			if ($planet === null) {
-				$this->databaseManager->addPlanet($coordinates, $me);
+				$planet = $this->databaseManager->addPlanet($coordinates, $me);
 			}
 			return $planet;
 		});
