@@ -24,7 +24,8 @@ abstract class CodeceptionUsingCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', 'running');
+		$wwwDir = $this->container->getParameters()['wwwDir'];
+		file_put_contents("$wwwDir/running.txt", 'running');
 		try {
 			$this->executeDelegated($input, $output);
 		} catch(\Throwable $e) {
@@ -34,10 +35,10 @@ abstract class CodeceptionUsingCommand extends Command {
 			$logger = $this->container->getByType(Logger::class);
 			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
 			$logger->addCritical('Exception thrown: ' . $e->getMessage());
-			file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', '');
+			file_put_contents("$wwwDir/running.txt", '');
 			throw $e;
 		}
-		file_put_contents('C:\xampp\htdocs\ogameBot\www\running.txt', '');
+		file_put_contents("$wwwDir/running.txt", '');
 		return 0; // zero return code means everything is ok
 	}
 

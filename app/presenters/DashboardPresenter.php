@@ -31,7 +31,7 @@ class DashboardPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);
-		$nextRunTime = $cronTime ? Carbon::instance(new \DateTime()) : 'Time for next run is not set. Please, run the bot manually.';
+		$nextRunTime = !ctype_space($cronTime) ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
 		$this->template->queue = $this->queueRepository->loadQueue();
 		$this->template->nextRunTime = $nextRunTime;
 	}
