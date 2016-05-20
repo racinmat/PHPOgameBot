@@ -7,3 +7,6 @@ vendor/*
 app/config/config.local.neon
 
 tests/_output/*
+www/queue.json
+www/cron.txt
+www/running.txt
