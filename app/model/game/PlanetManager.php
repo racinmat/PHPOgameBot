@@ -146,9 +146,12 @@ class PlanetManager extends Object
 	{
 		$I = $this->I;
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
+		$this->logger->addDebug("Finding countdown text for $enhanceable.");
 		if ($I->seeElementExists($enhanceable->getEnhanceCountdownSelector())) {
 			$interval = $I->grabTextFrom($enhanceable->getEnhanceCountdownSelector());
-			return Carbon::now()->add(OgameParser::parseOgameTimeInterval($interval));
+			$finished = Carbon::now()->add(OgameParser::parseOgameTimeInterval($interval));
+			$this->logger->addDebug("Countdown text found, enhance will be finished in $finished.");
+			return $finished;
 		}
 		$this->logger->addCritical("Countdown text for {$enhanceable->getValue()} not found. Can not find when to run queue next time.");
 		return Carbon::now();

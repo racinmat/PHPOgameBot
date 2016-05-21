@@ -3,10 +3,9 @@
 namespace App\Presenters;
 
 use App\Components\IDisplayCommandFactory;
-use App\Utils\Functions;
+use App\Model\Queue\QueueFileRepository;
 use Carbon\Carbon;
-use Nette;
-use App\Model;
+use Nette\Utils\Strings;
 use Tracy\Debugger;
 
 
@@ -17,7 +16,7 @@ class DashboardPresenter extends BasePresenter
 	private $cronFile;
 
 	/**
-	 * @var Model\Queue\QueueFileRepository
+	 * @var QueueFileRepository
 	 * @inject
 	 */
 	public $queueRepository;
@@ -31,7 +30,8 @@ class DashboardPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);
-		$nextRunTime = !ctype_space($cronTime) ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
+		$isEmpty = ctype_space($cronTime) || Strings::length($cronTime) === 0;
+		$nextRunTime = !$isEmpty ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
 		$this->template->queue = $this->queueRepository->loadQueue();
 		$this->template->nextRunTime = $nextRunTime;
 	}

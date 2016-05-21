@@ -8,7 +8,8 @@ TODO
 -----
 - bugfix: when storage is currently being build, calculate capacity with the new level of currently upgrading storage.
 	- now the preprocessor adds the storages to the queue twice. The second and incorrect insert is after building the first inserted storage. Or maybe setting storage building bool in command to false will suffice.
-- bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, vurrently being processed upgrade and thus it calculates lower price per upgrade. 
+- bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, currently being processed upgrade and thus it calculates lower price per upgrade. 
+- bugfix: when upgrading hangar, fleet and defense should not be built. When upgrading research lab, researches should not be upgraded. Now it does not matter.
 - resolve problem with galaxy scanning and non disappearing load circle
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)
@@ -19,7 +20,7 @@ TODO
 - think about routines implementation (repetitious commands)
 - repetitious fleet checking for attacks
 - commands for sending fleet
-- automatically buy new probes when probes are destroyed when gathering data and buy new sattelites when destroyed (Maintain quantity in Ogame Automizer)
+- automatically buy new probes when probes are destroyed when gathering data and buy new satellites when destroyed (Maintain quantity in Ogame Automizer)
 - log attacks, full storages and other important messages to some android app via monolog
 - repetitious tasks
 	- set repeating frequency
