@@ -33,12 +33,20 @@ class PlayersProber extends Object implements ICommandProcessor
 	/** @var FleetManager */
 	private $fleetManager;
 
-	public function __construct(PlanetManager $planetManager, Logger $logger, DatabaseManager $databaseManager, FleetManager $fleetManager)
+	/** @var ReportReader */
+	private $reportReader;
+
+	/** @var \AcceptanceTester */
+	private $I;
+
+	public function __construct(PlanetManager $planetManager, Logger $logger, DatabaseManager $databaseManager, FleetManager $fleetManager, ReportReader $reportReader, \AcceptanceTester $I)
 	{
 		$this->planetManager = $planetManager;
 		$this->logger = $logger;
 		$this->databaseManager = $databaseManager;
 		$this->fleetManager = $fleetManager;
+		$this->reportReader = $reportReader;
+		$this->I = $I;
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -68,11 +76,13 @@ class PlayersProber extends Object implements ICommandProcessor
 
 	private function probePlayers(ProbePlayersCommand $command)
 	{
+		$this->logger->addInfo("Going to probe players by command {$command->toString()}.");
 		$probingStart = Carbon::now();
 		//send espionage probes to all players with selected statuses
 
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$planetsToProbe = $this->databaseManager->getPlanetsOfPlayersWithStatuses($command->getStatuses());
+		$this->logger->addInfo(count($planetsToProbe) . ' planets to probe.');
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
 			$probePlanetCommand = SendFleetCommand::fromArray([
@@ -87,11 +97,12 @@ class PlayersProber extends Object implements ICommandProcessor
 			while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
 				$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
 				sleep($time->diffInSeconds());
+				$this->I->reloadPage();
 			}
 			$this->fleetManager->processCommand($probePlanetCommand);
 		}
 
-		//read all espionage reports
-		//todo: implement
+		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
+		$this->reportReader->readEspionageReportsFrom($probingStart);
 	}
 }

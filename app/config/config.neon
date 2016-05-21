@@ -44,6 +44,7 @@ services:
 	- App\Model\UpgradeStoragesPreProcessor
 	- App\Model\Game\FleetManager
 	- App\Model\Game\PlayersProber
+	- App\Model\Game\ReportReader
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

@@ -3,6 +3,7 @@
 namespace App\Model\Queue;
  
 use App\Model\Game\FleetManager;
+use App\Model\Game\PlayersProber;
 use App\Model\UpgradeStoragesPreProcessor;
 use App\Model\CronManager;
 use App\Model\Game\BuildManager;
@@ -41,7 +42,7 @@ class QueueConsumer extends Object
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser, UpgradeStoragesPreProcessor $buildStoragesPreProcessor, FleetManager $fleetManager)
+	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser, UpgradeStoragesPreProcessor $buildStoragesPreProcessor, FleetManager $fleetManager, PlayersProber $playersProber)
 	{
 		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
@@ -51,7 +52,8 @@ class QueueConsumer extends Object
 			$upgradeManager,
 			$buildManager,
 			$galaxyBrowser,
-			$fleetManager
+			$fleetManager,
+			$playersProber
 		];
 		$this->logger = $logger;
 		$this->preprocessors = [

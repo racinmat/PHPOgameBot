@@ -58,7 +58,9 @@ class FleetManager extends Object implements ICommandProcessor
 		$I = $this->I;
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		usleep(Random::microseconds(1.5, 2.5));
-		$I->click('#js_eventDetailsClosed');
+		if ($I->seeElementExists('#js_eventDetailsClosed')) {   //element can be seen only when nobody clicked on it, then it disappears
+			$I->click('#js_eventDetailsClosed');
+		}
 		$I->waitForText('Události', null, '#eventHeader h2');
 		$fleetRows = $I->getNumberOfElements('#eventContent > tbody > tr');
 		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
@@ -78,7 +80,7 @@ class FleetManager extends Object implements ICommandProcessor
 	{
 		//todo: later add checking for amount of ships in planet from command
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
-		$fleets = $this->I->grabTextFrom('.fleft .tooltop');
+		$fleets = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(1) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($fleets);
 		return $occupied < $total;
 	}
@@ -86,10 +88,10 @@ class FleetManager extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var SendFleetCommand $command */
-		$this->sendFleet($command);
+		return $this->sendFleet($command);
 	}
 
-	private function sendFleet(SendFleetCommand $command)
+	private function sendFleet(SendFleetCommand $command) : bool
 	{
 		$I = $this->I;
 
@@ -123,6 +125,5 @@ class FleetManager extends Object implements ICommandProcessor
 		usleep(Random::microseconds(1.5, 2.5));
 
 		return true;
-
 	}
 }
