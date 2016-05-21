@@ -144,12 +144,20 @@ class Coordinates extends Object
 
 	public function isLesserThanOrEquals(Coordinates $coordinates) : bool
 	{
-		if ($this->galaxy <= $coordinates->galaxy) {
+		if ($this->galaxy < $coordinates->galaxy) {
 			return true;
 		}
-		if ($this->system <= $coordinates->system) {
+		if ($this->galaxy > $coordinates->galaxy) {
+			return false;
+		}
+		//same galaxy
+		if ($this->system < $coordinates->system) {
 			return true;
 		}
+		if ($this->system > $coordinates->system) {
+			return false;
+		}
+		//same galaxy and system
 		if ($this->planet <= $coordinates->planet) {
 			return true;
 		}
