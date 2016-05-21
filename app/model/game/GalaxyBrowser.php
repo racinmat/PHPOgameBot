@@ -5,6 +5,7 @@ namespace App\Model\Game;
 use App\Enum\MenuItem;
 use App\Enum\PlayerStatus;
 use App\Model\DatabaseManager;
+use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
@@ -13,6 +14,7 @@ use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Facebook\WebDriver\WebDriverKeys;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
@@ -36,13 +38,17 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(\AcceptanceTester $I, Menu $menu, PlanetManager $planetManager, DatabaseManager $databaseManager, Logger $logger)
+	/** @var SignManager */
+	private $signManager;
+
+	public function __construct(\AcceptanceTester $I, Menu $menu, PlanetManager $planetManager, DatabaseManager $databaseManager, Logger $logger, SignManager $signManager)
 	{
 		$this->I = $I;
 		$this->menu = $menu;
 		$this->planetManager = $planetManager;
 		$this->databaseManager = $databaseManager;
 		$this->logger = $logger;
+		$this->signManager = $signManager;
 	}
 
 	protected function scanGalaxy(ScanGalaxyCommand $command)
@@ -50,16 +56,16 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::GALAXY));
-		$from = $command->getFrom()->subtract($command->getTo());
-		$to = $command->getFrom()->add($command->getTo());
+		$from = $command->getFrom();
+		$to = $command->getTo();
 
 		$this->logger->addInfo("Going to scan galaxy from system {$from->toString()} to system {$to->toString()}.");
 		for ($i = $from; $i->isLesserThanOrEquals($to); $i = $i->nextSystem()) {
-			$this->scanSystem($i);
+			$this->scanSystem($i, $planet);
 		}
 	}
 
-	protected function scanSystem(Coordinates $coordinates)
+	protected function scanSystem(Coordinates $coordinates, Planet $planet)
 	{
 		$myPlanetsCoordinates = $this->databaseManager->getAllMyPlanetsCoordinates();
 		
@@ -68,11 +74,22 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$currentGalaxy = (int) $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
 		$currentSystem = (int) $I->grabValueFrom('#system_input', $coordinates->getSystem());
 		$isNextSystem = $currentGalaxy === $coordinates->getGalaxy() && ($currentSystem + 1) === $coordinates->getSystem();
-		
-		if ($isNextSystem) {
-			$this->goToNextSystem();
-		} else {
-			$this->goToSystem($coordinates);
+
+		//sometimes it just logs me out afte ~100 systems scanned
+		try {
+			if ($isNextSystem) {
+				$this->goToNextSystem();
+			} else {
+				$this->goToSystem($coordinates);
+			}
+		} catch(TimeOutException $e) {
+			$I->reloadPage();
+			if ( ! $I->seeInCurrentUrlExists(MenuItem::_(MenuItem::GALAXY)->getUrlIdentifier())) {
+				$this->signManager->signIn();
+				$this->menu->goToPlanet($planet);
+				$this->menu->goToPage(MenuItem::_(MenuItem::GALAXY));
+				$this->goToSystem($coordinates);
+			}
 		}
 
 		$planetCount = Coordinates::$maxPlanet;
@@ -140,7 +157,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$I = $this->I;
 		$I->pressKey('body', WebDriverKeys::ARROW_RIGHT);
 		usleep(Random::microseconds(2.5, 3.5));
-		$I->waitForElementNotVisible('#galaxyLoading');
+		$I->waitForElementNotVisible('#galaxyLoading', 15);
 	}
 
 	protected function goToSystem(Coordinates $coordinates)
@@ -151,9 +168,9 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$I->fillField('#system_input', $coordinates->getSystem());
 		$I->click('#galaxyHeader > form > div:nth-child(9)');
 		usleep(Random::microseconds(2.5, 3.5));
-		$I->waitForElementNotVisible('#galaxyLoading');
+		$I->waitForElementNotVisible('#galaxyLoading', 15);
 	}
-	
+
 	public function canProcessCommand(ICommand $command) : bool
 	{
 		return $command instanceof ScanGalaxyCommand;
