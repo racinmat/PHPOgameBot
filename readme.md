@@ -10,7 +10,7 @@ TODO
 	- now the preprocessor adds the storages to the queue twice. The second and incorrect insert is after building the first inserted storage. Or maybe setting storage building bool in command to false will suffice.
 - bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, currently being processed upgrade and thus it calculates lower price per upgrade. 
 - bugfix: when upgrading hangar, fleet and defense should not be built. When upgrading research lab, researches should not be upgraded. Now it does not matter.
-- resolve problem with galaxy scanning and non disappearing load circle
+- during the galaxy scanning, delete abandoned planets which were there, but they are not anymore
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)
 - add checking whether command was really done (reding build/upgrade status, checking fleet status...)

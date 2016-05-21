@@ -109,19 +109,21 @@ class FleetManager extends Object implements ICommandProcessor
 		foreach ($command->getFleet() as $ship => $count) {
 			$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
 		}
-		$I->click('#continue');
+		$I->click('#continue.on');
 		usleep(Random::microseconds(1.5, 2.5));
 
-		$I->fillField('#galaxy', $to->getGalaxy());
-		$I->fillField('#system', $to->getSystem());
-		$I->fillField('#position', $to->getPlanet());
-		$I->click('#continue');
+		$I->fillField('input#galaxy', $to->getGalaxy());
+		$I->fillField('input#system', $to->getSystem());
+		$I->fillField('input#position', $to->getPlanet());
+		usleep(Random::microseconds(0.5, 1));
+		$I->click('#continue.on');
 		usleep(Random::microseconds(1.5, 2.5));
 
 		$I->click($command->getMission()->getMissionSelector());
-		usleep(Random::microseconds(1.5, 2.5));
+		usleep(Random::microseconds(1, 2));
 
-		$I->click('#start');
+		//todo: zkontrolovat, že je tlačítko zelené
+		$I->click('#start.on');
 		usleep(Random::microseconds(1.5, 2.5));
 
 		return true;
