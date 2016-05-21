@@ -100,6 +100,10 @@ class A {
 		return new static;
 	}
 }
-//class B extends A {}
+class B extends A {}
 //
 //var_dump(B::create());
+
+$time = '20.05.2016 21:54:26';
+$carbon = \Carbon\Carbon::instance(new DateTime($time));
+echo $carbon;

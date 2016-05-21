@@ -71,6 +71,13 @@ class ReportReader extends Object
 			}
 		}
 		for ($i = 1; $i < $reportsCount; $i++) {
+			//check report time
+			$reportTimeString = $I->grabTextFrom($this->reportPopupSelector . ' .msg_date.fright');
+			$reportTime = Carbon::instance(new \DateTime($reportTimeString));
+			if ($reportTime->lt($from)) {
+				break;
+			}
+
 			$this->readCurrentEspionageReport();
 			$I->click($this->reportPopupSelector . ' .pagination > li:nth-of-type(4) a');
 			usleep(Random::microseconds(1, 1.5));
@@ -126,7 +133,7 @@ class ReportReader extends Object
 			$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
 			$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
 
-			$defense = Defense::_(Defense::getFromTranslatedName($name));
+//			$defense = Defense::_(Defense::getFromTranslatedName($name));
 //			$building->setCurrentLevel($planet, $level);
 		}
 
@@ -135,7 +142,7 @@ class ReportReader extends Object
 			$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
 			$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
 
-			$ships = Ships::_(Ships::getFromTranslatedName($name));
+//			$ships = Ships::_(Ships::getFromTranslatedName($name));
 //			$ships->setCurrentLevel($planet, $level);
 		}
 
