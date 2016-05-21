@@ -83,8 +83,10 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				$this->goToSystem($coordinates);
 			}
 		} catch(TimeOutException $e) {
+			$this->logger->addDebug('Stucked on loading. Forcing page refresh.');
 			$I->reloadPage();
 			if ( ! $I->seeInCurrentUrlExists(MenuItem::_(MenuItem::GALAXY)->getUrlIdentifier())) {
+				$this->logger->addDebug('Signed out automatically. Signing in and continuing in scanning.');
 				$this->signManager->signIn();
 				$this->menu->goToPlanet($planet);
 				$this->menu->goToPage(MenuItem::_(MenuItem::GALAXY));

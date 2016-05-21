@@ -33,7 +33,9 @@ class SignManager extends Nette\Object
 		$this->logger->addDebug('Going to sign in.');
 		$I = $this->I;
 		$I->amOnPage('/');
-		$I->click('#loginBtn');
+		if (! $I->seeElementExists('#loginBtn.open')) { //class="open" is when login window is already opened
+			$I->click('#loginBtn');
+		}
 		$I->selectOption('#serverLogin', 's124-cz.ogame.gameforge.com');
 		$I->fillField('#usernameLogin', $this->user);
 		$I->fillField('#passwordLogin', $this->password);
