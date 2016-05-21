@@ -128,7 +128,7 @@ class Building extends Upgradable
 			case static::ROBOTIC_FACTORY:
 				return new Resources(400, 120, 200);
 			case static::SHIPYARD:
-				return new Resources(200, 400, 200);
+				return new Resources(400, 200, 100);
 			case static::FUSION_REACTOR:
 				return new Resources(900, 360, 180);
 			case static::METAL_STORAGE:

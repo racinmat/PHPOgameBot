@@ -6,6 +6,12 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- add continuous command for sending resources from one planet to another when they reach some user-defined treshold and have some user-defined ratio
+- inactive player probing
+	- save to db how many probes was sent to espionage player and how many information it retrieved. Next time, send more probes to retrieve all information
+		- add checkbox to command to decide whether to use fixed amount of probes or use counted value from database
+		- maybe add heuristics how big increment to make, to reach optimal count faster than by incrementing by one
+	- when sending fleet to nonexisting planet in PlayersProber, catch the non-existing planet exception and delete that planet. Probably add parameter to method whether throw exceptions or just return false (failed command). 
 - bugfix: when storage is currently being build, calculate capacity with the new level of currently upgrading storage.
 	- now the preprocessor adds the storages to the queue twice. The second and incorrect insert is after building the first inserted storage. Or maybe setting storage building bool in command to false will suffice.
 - bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, currently being processed upgrade and thus it calculates lower price per upgrade. 
