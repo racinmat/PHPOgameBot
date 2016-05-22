@@ -18,9 +18,6 @@ TODO
 		- maybe add heuristics how big increment to make, to reach optimal count faster than by incrementing by one
 		- modify that value when espionage technology is upgraded because then less probes is needed?
 	- when sending fleet to nonexisting planet in PlayersProber, catch the non-existing planet exception and delete that planet. Probably add parameter to method whether throw exceptions or just return false (failed command). 
-- bugfix: when storage is currently being build, calculate capacity with the new level of currently upgrading storage.
-	- now the preprocessor adds the storages to the queue twice. The second and incorrect insert is after building the first inserted storage. Or maybe setting storage building bool in command to false will suffice.
-- bugfix: when there are two upgrades of the same building, the second upgrade does not now about the first, currently being processed upgrade and thus it calculates lower price per upgrade. 
 - bugfix: when upgrading hangar, fleet and defense should not be built. When upgrading research lab, researches should not be upgraded. Now it does not matter.
 - during the galaxy scanning, delete abandoned planets which were there, but they are not anymore
 - add storages full of resources checking

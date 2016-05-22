@@ -2,6 +2,8 @@
 
 namespace App\Model\Game;
  
+use App\Enum\Upgradable;
+use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
@@ -16,12 +18,21 @@ use Kdyby\Monolog\Logger;
 class UpgradeManager extends EnhanceManager implements ICommandProcessor
 {
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
+	/** @var DatabaseManager */
+	protected $databaseManager;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger, DatabaseManager $databaseManager)
 	{
 		parent::__construct($I, $planetManager, $resourcesCalculator, $menu, $logger);
+		$this->databaseManager = $databaseManager;
 	}
 
 	protected function fillAdditionalInfo(IEnhanceCommand $command) {
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		/** @var Upgradable $upgradable */
+		$upgradable = $command->getEnhanceable();
+		$upgradable->setCurrentLevel($planet, $upgradable->getCurrentLevel($planet) + 1);
+		$this->databaseManager->flush();
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
