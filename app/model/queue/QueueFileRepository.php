@@ -7,6 +7,7 @@ use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
+use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
@@ -64,7 +65,8 @@ class QueueFileRepository extends Object
 			BuildDefenseCommand::class,
 			BuildShipsCommand::class,
 			ScanGalaxyCommand::class,
-			ProbePlayersCommand::class
+			ProbePlayersCommand::class,
+			SendFleetCommand::class
 		];
 	}
 

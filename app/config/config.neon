@@ -45,7 +45,9 @@ services:
 	- App\Model\Game\FleetManager
 	- App\Model\Game\PlayersProber
 	- App\Model\Game\ReportReader
-
+	nette.latteFactory:
+		setup:
+			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
 	events: Kdyby\Events\DI\EventsExtension

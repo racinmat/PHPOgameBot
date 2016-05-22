@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App\Enum\Building;
 use App\Enum\Defense;
+use App\Enum\FleetMission;
 use App\Enum\PlayerStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
@@ -15,12 +16,14 @@ use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
+use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Model\Queue\QueueManager;
 use App\Model\ValueObject\Coordinates;
 use Nette\Application\UI\Form;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Utils\Strings;
 use Tracy\Debugger;
 
 class AddCommandPresenter extends BasePresenter
@@ -139,25 +142,24 @@ class AddCommandPresenter extends BasePresenter
 	{
 		$form = $this->formFactory->create();
 
-		$general = $form->addGroup('General', false);
+		$form->addGroup('General');
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
+			->setDefaultValue($this->planet);
 
-		$general->add($form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
-			->setDefaultValue($this->planet));
+		$form->addGroup('Scanning from system');
+		$from = $form->addContainer('from');
 
-		$middle = $form->addContainer('from');
-		$middleGroup = $form->addGroup('Scanning from system', false);
+		$from->addText('galaxy', 'Galaxy:')
+			->setType('number');
+		$from->addText('system', 'System:')
+			->setType('number');
 
-		$middleGroup->add($middle->addText('galaxy', 'Galaxy:')
-			->setType('number'));
-		$middleGroup->add($middle->addText('system', 'System:')
-			->setType('number'));
-
-		$rangeGroup = $form->addGroup('Scanning to system', false);
-		$range = $form->addContainer('to');
-		$rangeGroup->add($range->addText('galaxy', 'Galaxy:')
-			->setType('number'));
-		$rangeGroup->add($range->addText('system', 'System:')
-			->setType('number'));
+		$form->addGroup('Scanning to system');
+		$to = $form->addContainer('to');
+		$to->addText('galaxy', 'Galaxy:')
+			->setType('number');
+		$to->addText('system', 'System:')
+			->setType('number');
 
 		$form->addSubmit('send', 'Add command');
 
@@ -176,7 +178,7 @@ class AddCommandPresenter extends BasePresenter
 					'to' => [
 						'galaxy' => $values['to']['galaxy'],
 						'system' => $values['to']['system'],
-						'planet' => Coordinates::$maxPlanet,
+						'planet' => Coordinates::$maxPlanet
 					]
 				]
 			]);
@@ -208,6 +210,67 @@ class AddCommandPresenter extends BasePresenter
 				'coordinates' => $coordinates,
 				'data' => [
 					'statuses' => $values['statuses']
+				]
+			]);
+			$this->queueManager->addToQueue($command);
+			$this->flashMessage('Command added', 'success');
+			$this->redirect('this');
+		};
+
+		return $form;
+	}
+
+	public function createComponentAddSendFleetCommandForm()
+	{
+		$form = $this->formFactory->create();
+
+		$form->addGroup('');
+
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
+			->setDefaultValue($this->planet);
+
+		$form->addSelect('mission', 'Mission: ', FleetMission::getSelectBoxValues());
+
+
+		$form->addGroup('Ships');
+		$fleet = $form->addContainer('fleet');
+		foreach (Ships::getEnumValues() as $index => $ship) {
+			$fleet->addText($index, $ship)
+				->setType('number')
+				->setDefaultValue(0);
+		}
+
+		$form->addGroup('Send to planet');
+		$to = $form->addContainer('to');
+
+		$to->addText('galaxy', 'Galaxy:')
+			->setType('number');
+		$to->addText('system', 'System:')
+			->setType('number');
+		$to->addText('planet', 'Planet:')
+			->setType('number');
+
+		$form->addSubmit('send', 'Add command');
+
+		$form->onSuccess[] = function (Form $form, array $values) {
+			$this->planet = $values['planet'];
+
+			$fleet = [];
+			foreach (Ships::getEnumValues() as $index => $ship) {
+				$fleet[$ship] = $values['fleet'][$index];
+			}
+
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$command = SendFleetCommand::fromArray([
+				'coordinates' => $coordinates,
+				'data' => [
+					'to' => [
+						'galaxy' => $values['to']['galaxy'],
+						'system' => $values['to']['system'],
+						'planet' =>$values['to']['planet']
+					],
+					'fleet' => $fleet,
+					'mission' => $values['mission']
 				]
 			]);
 			$this->queueManager->addToQueue($command);

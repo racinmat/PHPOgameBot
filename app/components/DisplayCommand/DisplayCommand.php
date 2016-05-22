@@ -7,6 +7,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IUpgradeCommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
+use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\QueueManager;
 use Latte\Runtime\CachingIterator;
 use Nette;
@@ -32,7 +33,8 @@ class DisplayCommand extends UI\Control
 			IUpgradeCommand::class => 'upgrade.latte',
 			IBuildCommand::class => 'build.latte',
 			ScanGalaxyCommand::class => 'scanGalaxy.latte',
-			ProbePlayersCommand::class => 'probePlayers.latte'
+			ProbePlayersCommand::class => 'probePlayers.latte',
+			SendFleetCommand::class => 'sendFleet.latte'
 		];
 
 		$controlTemplate = '';

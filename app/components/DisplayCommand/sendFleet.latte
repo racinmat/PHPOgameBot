@@ -1,0 +1,4 @@
+{layout 'layout.latte'}
+{block content}
+To: {$command->getTo()}<br/>
+Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}

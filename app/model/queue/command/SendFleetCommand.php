@@ -71,4 +71,15 @@ class SendFleetCommand extends BaseCommand
 		return $this->mission;
 	}
 
+	public function getNonZeroFleet()
+	{
+		$nonZeroFleet = [];
+		foreach ($this->fleet as $key => $value) {
+			if ($value > 0) {
+				$nonZeroFleet[$key] = $value;
+			}
+		}
+		return $nonZeroFleet;
+	}
+
 }
