@@ -7,6 +7,9 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - refactor coordinates to be embeddable, not entity
+- add reading my planets temperature when temperature is not set (min = max = 0)
+- add 'important' option for enhancing. All important enhancements will be privileged and resources will be send to them from other planets.
+- when some planet does not have any enhancement in queue, it will send automatically resources to another planet which has enhancement in queue, even if it is not privileged. It will send to first non-processed enhancement in queue.
 - add continuous command for sending resources from one planet to another when they reach some user-defined treshold and have some user-defined ratio
 - inactive player probing
 	- save to db how many probes was sent to espionage player and how many information it retrieved. Next time, send more probes to retrieve all information
