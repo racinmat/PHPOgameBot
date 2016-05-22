@@ -112,7 +112,6 @@ class PlanetManager extends Object
 		foreach (Research::getEnums() as $research) {
 			$this->menu->goToPage($research->getMenuLocation());
 			$level = $this->I->grabTextFrom($research->getClassSelector() . ' .level');
-			usleep(Random::microseconds(0.5, 1));
 			$research->setCurrentLevel($me->getPlanets()[0], $level);
 		}
 
