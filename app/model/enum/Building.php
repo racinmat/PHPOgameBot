@@ -38,23 +38,49 @@ class Building extends Upgradable
 
 	public function getClassSelector() : string
 	{
-		switch ($this->getValue()) {
-			case static::METAL_MINE: return '.supply1';
-			case static::CRYSTAL_MINE: return '.supply2';
-			case static::DEUTERIUM_MINE: return '.supply3';
-			case static::SOLAR_POWER_PLANT: return '.supply4';
-			case static::ROBOTIC_FACTORY: return '.station14';
-			case static::SHIPYARD: return '.station21';
-			case static::FUSION_REACTOR: return '.supply12';
-			case static::METAL_STORAGE: return '.supply22';
-			case static::CRYSTAL_STORAGE: return '.supply23';
-			case static::DEUTERIUM_TANK: return '.supply24';
-			case static::RESEARCH_LAB: return '.station31';
-			case static::ALLIANCE_DEPOT: return '.station34';
-			case static::MISSILE_SILO: return '.station44';
-			case static::NANITE_FACTORY: return '.station15';
-			case static::TERRAFORMER: return '.station33';
+		switch ($this->getCategory()) {
+			case MenuItem::RESOURCES: $class = '.supply'; break;
+			case MenuItem::STATION: $class = '.station'; break;
+			default: throw new \Exception('A wild unnown category appeared.');
 		}
+		return $class . $this->getNumber();
+	}
+
+
+	/**
+	 * @return static[]
+	 */
+	public static function getEnumsSortedByCategory()
+	{
+		$enums = static::getEnums();
+		usort($enums, function(Building $a, Building $b) {return $a->getCategory() != $b->getCategory();});
+		return $enums;
+	}
+
+	private function getNumber() : string
+	{
+		switch ($this->getValue()) {
+			case static::METAL_MINE: return '1';
+			case static::CRYSTAL_MINE: return '2';
+			case static::DEUTERIUM_MINE: return '3';
+			case static::SOLAR_POWER_PLANT: return '4';
+			case static::ROBOTIC_FACTORY: return '14';
+			case static::SHIPYARD: return '21';
+			case static::FUSION_REACTOR: return '12';
+			case static::METAL_STORAGE: return '22';
+			case static::CRYSTAL_STORAGE: return '23';
+			case static::DEUTERIUM_TANK: return '24';
+			case static::RESEARCH_LAB: return '31';
+			case static::ALLIANCE_DEPOT: return '34';
+			case static::MISSILE_SILO: return '44';
+			case static::NANITE_FACTORY: return '15';
+			case static::TERRAFORMER: return '33';
+		}
+	} 
+	
+	private function getCategory() : string
+	{
+		return $this->getMenuLocation()->getValue();
 	}
 
 	public static function getFromTranslatedName(string $name) : string

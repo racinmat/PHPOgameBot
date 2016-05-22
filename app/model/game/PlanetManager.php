@@ -130,7 +130,7 @@ class PlanetManager extends Object
 		
 		$this->refreshResourcesData($planet);
 		//buildings level
-		foreach (Building::getEnums() as $building) {
+		foreach (Building::getEnumsSortedByCategory() as $building) {
 			$this->menu->goToPage($building->getMenuLocation());
 			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
 			usleep(Random::microseconds(0.5, 1));
