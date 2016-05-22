@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- add resources transferring to sending fleet command
 - refactor coordinates to be embeddable, not entity
 - add reading my planets temperature when temperature is not set (min = max = 0)
 - add 'important' option for enhancing. All important enhancements will be privileged and resources will be send to them from other planets.

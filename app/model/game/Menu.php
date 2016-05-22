@@ -50,15 +50,15 @@ class Menu extends Object
 			return;
 		}
 		$this->logger->addDebug("Clicking to go to requested planet.");
-		$I->click($planet->getCoordinates()->toValueObject()->__toString());
+		$I->click($planet->getCoordinates()->toValueObject()->__toString(), '#planetList');
 		usleep(Random::microseconds(1, 2));
 	}
 
 	private function getCurrentPlanetCoordinates() : Coordinates
 	{
 		$I = $this->I;
-		$I->waitForElementVisible('.planetlink.active span.planet-koords');
-		$text = $I->grabTextFrom('.planetlink.active span.planet-koords');
+		$I->waitForElementVisible('#planetList .planetlink.active span.planet-koords');
+		$text = $I->grabTextFrom('#planetList .planetlink.active span.planet-koords');
 		return OgameParser::parseOgameCoordinates($text);
 	}
 	
