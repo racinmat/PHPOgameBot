@@ -18,4 +18,6 @@ interface IEnhanceCommand extends ICommand
 
 	public function getEnhanceable() : Enhanceable;
 
+	public function getInfo(Planet $planet) : string;
+	
 }

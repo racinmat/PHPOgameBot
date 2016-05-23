@@ -77,4 +77,9 @@ class BuildShipsCommand extends BaseCommand implements IBuildCommand
 		return $this->getBuildable();
 	}
 
+	public function getInfo(Planet $planet) : string
+	{
+		return "Build ships, $this->amount of $this->ships.";
+	}
+
 }

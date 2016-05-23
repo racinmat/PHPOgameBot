@@ -69,4 +69,9 @@ class UpgradeBuildingCommand extends BaseCommand implements IUpgradeCommand
 		return $this->getUpgradable();
 	}
 
+	public function getInfo(Planet $planet) : string
+	{
+		return "Upgrade building $this->building from current level {$this->building->getCurrentLevel($planet)}.";
+	}
+	
 }

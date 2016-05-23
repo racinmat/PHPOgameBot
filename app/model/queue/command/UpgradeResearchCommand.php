@@ -70,4 +70,9 @@ class UpgradeResearchCommand extends BaseCommand implements IUpgradeCommand
 		return $this->getUpgradable();
 	}
 
+	public function getInfo(Planet $planet) : string
+	{
+		return "Upgrade research $this->research from current level {$this->research->getCurrentLevel($planet)}.";
+	}
+
 }

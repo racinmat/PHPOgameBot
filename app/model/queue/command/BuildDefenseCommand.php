@@ -77,4 +77,9 @@ class BuildDefenseCommand extends BaseCommand implements IBuildCommand
 		return $this->getBuildable();
 	}
 
+	public function getInfo(Planet $planet) : string
+	{
+		return "Build defense, $this->amount of $this->defense.";
+	}
+
 }
