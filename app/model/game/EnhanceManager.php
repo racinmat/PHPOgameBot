@@ -63,7 +63,7 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Processing available, starting to process the command.');
 		$this->openMenu($enhanceable);
 		if ( ! $this->I->seeElementExists($enhanceable->getBuildButtonSelector())) {
-			$this->logger->addWarning('Processing is available, but enhance button can not be clicked. Failing to process command.');
+			$this->logger->addWarning('Processing is available, but enhance button can not be clicked. Failing to process the command.');
 			return false;
 		}
 		$this->fillAdditionalInfo($command);

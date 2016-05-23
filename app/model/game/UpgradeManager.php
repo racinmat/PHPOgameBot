@@ -33,6 +33,7 @@ class UpgradeManager extends EnhanceManager implements ICommandProcessor
 		$upgradable = $command->getEnhanceable();
 		$upgradable->setCurrentLevel($planet, $upgradable->getCurrentLevel($planet) + 1);
 		$this->databaseManager->flush();
+		$this->logger->addDebug('Flushed to database.');
 	}
 
 	public function canProcessCommand(ICommand $command) : bool

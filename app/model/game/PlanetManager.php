@@ -107,12 +107,20 @@ class PlanetManager extends Object
 
 	protected function refreshResearchData()
 	{
+		$I = $this->I;
+		
 		$me = $this->databaseManager->getMe();
 		//research level
 		foreach (Research::getEnums() as $research) {
 			$this->menu->goToPage($research->getMenuLocation());
-			$this->I->waitForElementVisible($research->getClassSelector() . ' .level');
-			$level = $this->I->grabTextFrom($research->getClassSelector() . ' .level');
+			$I->waitForElementVisible($research->getClassSelector() . ' .level');
+			if ($I->seeElementExists($research->getClassSelector() . ' .eckeoben .undermark')) {
+				//if research is being currently upgraded
+				$level = $I->grabTextFrom($research->getClassSelector() . ' .eckeoben .undermark');
+			} else {
+				//if research is not being currently upgraded
+				$level = $I->grabTextFrom($research->getClassSelector() . ' .level');
+			}
 			$research->setCurrentLevel($me->getPlanets()[0], $level);
 		}
 
@@ -132,7 +140,13 @@ class PlanetManager extends Object
 		//buildings level
 		foreach (Building::getEnumsSortedByCategory() as $building) {
 			$this->menu->goToPage($building->getMenuLocation());
-			$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
+			if ($I->seeElementExists($building->getClassSelector() . ' .eckeoben .undermark')) {
+				//if research is being currently upgraded
+				$level = $I->grabTextFrom($building->getClassSelector() . ' .eckeoben .undermark');
+			} else {
+				//if research is not being currently upgraded
+				$level = $I->grabTextFrom($building->getClassSelector() . ' .level');
+			}
 			$building->setCurrentLevel($planet, $level);
 		}
 

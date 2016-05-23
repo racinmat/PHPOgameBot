@@ -12,6 +12,7 @@ namespace App\Model\Logging;
 use Doctrine\DBAL\Logging\SQLLogger;
 use Monolog\Logger;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class DoctrineMonologAdapter implements SQLLogger
 {

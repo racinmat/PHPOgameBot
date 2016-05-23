@@ -48,7 +48,7 @@ services:
 	nette.latteFactory:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
-	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::INSERT])
+	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::UPDATE])
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
