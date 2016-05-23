@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- log doctrine queries, because the new level does not seem to be saved
 - add resources transferring to sending fleet command
 - refactor coordinates to be embeddable, not entity
 - add reading my planets temperature when temperature is not set (min = max = 0)
