@@ -82,7 +82,7 @@ class QueueConsumer extends Object
 				$command = $queue->first();
 				foreach ($this->preprocessors as $preprocessor) {
 					if ($preprocessor->canPreProcessCommand($command)) {
-						$this->logger->addInfo("Going to preProcess the command {$command->toString()}.");
+						$this->logger->addInfo("Going to preProcess the command $command.");
 						$preprocessor->preProcessCommand($command, $queue);
 						$command = $queue->first();
 						break;
@@ -91,7 +91,7 @@ class QueueConsumer extends Object
 
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($command)) {
-						$this->logger->addInfo("Going to process the command {$command->toString()}.");
+						$this->logger->addInfo("Going to process the command $command.");
 						$success = $processor->processCommand($command);
 						$this->planetManager->refreshResourcesDataOnCoordinates($command->getCoordinates());
 						break;
@@ -116,9 +116,9 @@ class QueueConsumer extends Object
 			foreach ($failedCommands as $failedCommand) {
 				foreach ($this->processors as $processor) {
 					if ($processor->canProcessCommand($failedCommand)) {
-						$this->logger->addInfo("Going to find the next run of command {$failedCommand->__toString()}.");
+						$this->logger->addInfo("Going to find the next run of command $failedCommand.");
 						$datetime = $processor->getTimeToProcessingAvailable($failedCommand);
-						$this->logger->addInfo("Next run of command {$failedCommand->__toString()} is {$datetime->__toString()}.");
+						$this->logger->addInfo("Next run of command $failedCommand is $datetime.");
 						$nextStarts[] = $datetime;
 						break;
 					}
