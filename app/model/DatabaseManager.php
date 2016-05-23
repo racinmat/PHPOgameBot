@@ -10,6 +10,7 @@ use App\Utils\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
+use Tracy\Debugger;
 
 class DatabaseManager extends Object
 {
@@ -62,7 +63,8 @@ class DatabaseManager extends Object
 
 	public function getAllMyPlanets()
 	{
-		return $this->planetRepository->findAssoc(['player.me' => true], 'id');
+		$planets = $this->planetRepository->findAssoc(['player.me' => true], 'id');
+		return $planets;
 	}
 
 	/**

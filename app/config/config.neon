@@ -48,6 +48,8 @@ services:
 	nette.latteFactory:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
+	- App\Model\Logging\DoctrineMonologAdapter
+
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
 	events: Kdyby\Events\DI\EventsExtension

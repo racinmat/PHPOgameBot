@@ -28,5 +28,11 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 $container = $configurator->createContainer();
 
+//registering monolog as doctrine logger
+/** @var \Kdyby\Doctrine\EntityManager $entityManager */
+$entityManager = $container->getByType(\Kdyby\Doctrine\EntityManager::class);
+/** @var \Doctrine\DBAL\Logging\LoggerChain $logger */
+$logger = $entityManager->getConnection()->getConfiguration()->getSQLLogger();
+$logger->addLogger($container->getByType(\App\Model\Logging\DoctrineMonologAdapter::class));
 return $container;
 
