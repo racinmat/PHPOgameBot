@@ -8,6 +8,7 @@ use App\Enum\Enhanceable;
 use App\Enum\FleetMission;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
+use App\Model\ValueObject\Fleet;
 use App\Model\ValueObject\Resources;
 use Nette\Utils\Arrays;
 use Ramsey\Uuid\Uuid;
@@ -18,12 +19,18 @@ class SendFleetCommand extends BaseCommand
 	/** @var Coordinates */
 	private $to;
 
-	/** @var array string => int */
+	/** @var Fleet */
 	private $fleet;
 
 	/** @var FleetMission */
 	private $mission;
 	
+	/** @var Resources */
+	private $resources;
+
+	/** @var bool */
+	private $waitForResources;
+
 	public static function getAction() : string
 	{
 		return static::ACTION_SEND_FLEET;
@@ -34,8 +41,10 @@ class SendFleetCommand extends BaseCommand
 		$data = [
 			'data' => [
 				'to' => $this->to->toArray(),
-				'fleet' => $this->fleet,
-				'mission' => $this->mission->getValue()
+				'fleet' => $this->fleet->toArray(),
+				'mission' => $this->mission->getValue(),
+				'resources' => $this->resources->toArray(),
+				'waitForResources' => $this->waitForResources
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -44,8 +53,10 @@ class SendFleetCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->to = Coordinates::fromArray($data['to']);
-		$this->fleet = $data['fleet'];
+		$this->fleet = Fleet::fromArray($data['fleet']);
 		$this->mission = FleetMission::_($data['mission']);
+		$this->resources = isset($data['resources']) ? Resources::fromArray($data['resources']) : new Resources(0, 0, 0);
+		$this->waitForResources = $data['waitForResources'] ?? false;
 	}
 
 	public function getDependencyType() : string
@@ -80,6 +91,16 @@ class SendFleetCommand extends BaseCommand
 			}
 		}
 		return $nonZeroFleet;
+	}
+
+	public function getResources() : Resources
+	{
+		return $this->resources;
+	}
+
+	public function waitForResources() : bool
+	{
+		return $this->waitForResources;
 	}
 
 }

@@ -162,4 +162,38 @@ class Ships extends Buildable
 		return '#shipAllCountdown7';
 	}
 
+	public function getCapacity() : int
+	{
+		switch ($this->getValue()) {
+			case static::SMALL_CARGO_SHIP:
+				return 5000;
+			case static::LARGE_CARGO_SHIP:
+				return 25000;
+			case static::LIGHT_FIGHTER:
+				return 50;
+			case static::HEAVY_FIGHTER:
+				return 100;
+			case static::CRUISER:
+				return 800;
+			case static::BATTLESHIP:
+				return 1500;
+			case static::BATTLECRUISER:
+				return 750;
+			case static::DESTROYER:
+				return 2000;
+			case static::DEATHSTAR:
+				return 1000000;
+			case static::BOMBER:
+				return 500;
+			case static::RECYCLER:
+				return 20000;
+			case static::ESPIONAGE_PROBE:
+				return 5;
+			case static::SOLAR_SATELLITE:
+				return 0;
+			case static::COLONY_SHIP:
+				return 7500;
+		}
+	}
+
 }

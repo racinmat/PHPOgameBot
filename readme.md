@@ -6,7 +6,15 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
-- log doctrine queries, because the new level does not seem to be saved
+- add plasma technology bonus to resources production calculation
+- fix creating new profiles in selenium webdriver (it takes too much space in disc)
+- maybe bugfix: when parsing time to complete upgrade, the real time is few seconds later than parsed time
+- maybe add feature to upgrade building (except of research lab) and research at the same time
+	- maybe save to planet what is currently being enhanced so it will not have to be read more times during the queue processing (must be invalidated, maybe use cache for that. Service will save it, not entity)
+- add expedition sending to periodical commands
+- add package buying to periodical commands
+- refactor the game namespace. Use pageobjects to interact with pages and segregate logic of webdriver manipulation and game logic.
+- add transport and deployment reading of incoming resources when calculating resources for enhancement
 - add resources transferring to sending fleet command
 - refactor coordinates to be embeddable, not entity
 - add reading my planets temperature when temperature is not set (min = max = 0)

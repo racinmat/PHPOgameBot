@@ -38,13 +38,17 @@ class FleetManager extends Object implements ICommandProcessor
 	/** @var DatabaseManager */
 	private $databaseManager;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager)
+	/** @var ResourcesCalculator */
+	private $resourcesCalculator;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->menu = $menu;
 		$this->logger = $logger;
 		$this->databaseManager = $databaseManager;
+		$this->resourcesCalculator = $resourcesCalculator;
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -54,6 +58,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
+		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
 		$I = $this->I;
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
@@ -73,6 +78,13 @@ class FleetManager extends Object implements ICommandProcessor
 			$timeString = $I->grabTextFrom("#eventContent > tbody > tr:nth-of-type($i) > .countDown.friendly");
 			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeString)));
 		}
+
+		if ($command->waitForResources()) {
+			$planet = $this->planetManager->getPlanet($command->getCoordinates());
+			$timeToResources = $this->resourcesCalculator->getTimeToEnoughResources($planet, $command->getResources());
+			$minimalTime = $minimalTime->max($timeToResources);
+		}
+
 		return $minimalTime;
 	}
 
@@ -82,7 +94,14 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(1) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($fleets);
-		return $occupied < $total;
+		$freeSlots = $occupied < $total;
+
+		$enoughResources = true;
+		if ($command->waitForResources()) {
+			$planet = $this->planetManager->getPlanet($command->getCoordinates());
+			$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
+		}
+		return $freeSlots && $enoughResources;
 	}
 
 	public function processCommand(ICommand $command) : bool
@@ -122,7 +141,10 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->click($command->getMission()->getMissionSelector());
 		usleep(Random::microseconds(1, 2));
 
-		//todo: zkontrolovat, že je tlačítko zelené
+		$I->fillField('input#metal', $command->getResources()->getMetal());
+		$I->fillField('input#crystal', $command->getResources()->getCrystal());
+		$I->fillField('input#deuterium', $command->getResources()->getDeuterium());
+
 		$I->click('#start.on');
 		usleep(Random::microseconds(1.5, 2.5));
 

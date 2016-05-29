@@ -94,7 +94,7 @@ class Resources extends Nette\Object
 		});
 	}
 
-	public function map(callable $function)
+	public function map(callable $function) : array 
 	{
 		$result = [];
 		foreach ($this->toArray() as $key => $element) {
@@ -130,6 +130,11 @@ class Resources extends Nette\Object
 			'crystal' => $this->crystal,
 			'deuterium' => $this->deuterium
 		];
+	}
+
+	public static function fromArray(array $data) : Resources
+	{
+		return new Resources($data['metal'], $data['crystal'], $data['deuterium']);
 	}
 
 	public function __toString()

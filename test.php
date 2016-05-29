@@ -104,6 +104,11 @@ class B extends A {}
 //
 //var_dump(B::create());
 
-$time = '20.05.2016 21:54:26';
-$carbon = \Carbon\Carbon::instance(new DateTime($time));
-echo $carbon;
+//$time = '20.05.2016 21:54:26';
+//$carbon = \Carbon\Carbon::instance(new DateTime($time));
+//echo $carbon;
+
+$ratio = new \App\Model\ValueObject\Resources(3, 2, 1);
+$sum = 0;
+$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
+echo $sum;

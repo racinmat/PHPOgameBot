@@ -30,6 +30,18 @@ class ResourcesCalculator extends Nette\Object
 		$this->logger = $logger;
 	}
 
+	public function isEnoughResources(Planet $planet, Resources $expected) : bool
+	{
+		$missing = $this->getMissingResources($planet, $expected);
+		return $missing->isZero();
+	}
+
+	public function getTimeToEnoughResources(Planet $planet, Resources $expected) : Carbon
+	{
+		$missingResources = $this->getMissingResources($planet, $expected);
+		return $this->getTimeToResources($planet, $missingResources);
+	}
+
 	public function isEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : bool
 	{
 		$missing = $this->getMissingResources($planet, $command->getPrice($planet));
@@ -46,8 +58,7 @@ class ResourcesCalculator extends Nette\Object
 
 	public function getTimeToEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : Carbon
 	{
-		$missingResources = $this->getMissingResources($planet, $command->getPrice($planet));
-		return $this->getTimeToResources($planet, $missingResources);
+		return $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
 	}
 
 	private function getMissingResources(Planet $planet, Resources $expected) : Resources
