@@ -6,6 +6,7 @@ parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
 	queueFile: %wwwDir%/queue.json
+	periodicRun: '30 minutes'
 
 php:
 	date.timezone: Europe/Prague
@@ -71,7 +72,7 @@ monolog:
 console:
 	commands:
 		- App\Commands\TestCommand
-		- App\Commands\ProcessQueueCommand
+		- App\Commands\ProcessQueueCommand(periodicRun: %periodicRun%)
 
 doctrine:
     types:

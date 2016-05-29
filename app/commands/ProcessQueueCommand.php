@@ -3,8 +3,10 @@
 namespace App\Commands;
 
 use App\Model\AttackChecker;
+use App\Model\CronManager;
 use App\Model\Game\SignManager;
 use App\Model\Queue\QueueConsumer;
+use Carbon\Carbon;
 use Nette\DI\Container;
 use Nette\Utils\Validators;
 use Symfony\Component\Console\Command\Command;
@@ -25,9 +27,13 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 	/** @var AttackChecker */
 	private $attackChecker;
 
-	public function __construct(Container $container)
+	/** @var string */
+	private $periodicRun;
+
+	public function __construct(Container $container, string $periodicRun)
 	{
 		parent::__construct($container);
+		$this->periodicRun = $periodicRun;
 	}
 
 	protected function configure()
@@ -61,6 +67,8 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		$signManager = $this->container->getByType(SignManager::class);
 		$this->queueConsumer = $this->container->getByType(QueueConsumer::class);
 		$this->attackChecker = $this->container->getByType(AttackChecker::class);
+		/** @var CronManager $cronManager */
+		$cronManager = $this->container->getByType(CronManager::class);
 		$signManager->signIn();
 
 		if ($minutesInterval > 0) {
@@ -73,6 +81,8 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		}
 
 		$signManager->signOut();
+		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun)));
+
 		return 0; // zero return code means everything is ok
 	}
 

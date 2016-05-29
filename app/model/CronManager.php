@@ -19,5 +19,10 @@ class CronManager extends Nette\Object
 	{
 		file_put_contents($this->file, $datetime->__toString());
 	}
-	
+
+	public function addNextStart(Carbon $datetime)
+	{
+		$nextStart = Carbon::instance(new \DateTime(file_get_contents($this->file)));
+		$this->setNextStart($nextStart->min($datetime));
+	}
 }
