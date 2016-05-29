@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Model\AttackChecker;
 use App\Model\Game\SignManager;
 use App\Model\Queue\QueueConsumer;
 use Nette\DI\Container;
@@ -20,6 +21,9 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 	/** @var QueueConsumer */
 	private $queueConsumer;
+
+	/** @var AttackChecker */
+	private $attackChecker;
 
 	public function __construct(Container $container)
 	{
@@ -56,6 +60,7 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 		$signManager = $this->container->getByType(SignManager::class);
 		$this->queueConsumer = $this->container->getByType(QueueConsumer::class);
+		$this->attackChecker = $this->container->getByType(AttackChecker::class);
 		$signManager->signIn();
 
 		if ($minutesInterval > 0) {
@@ -75,7 +80,7 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 	{
 		$this->queueConsumer->processQueue();
 		$output->writeln('Queue processed');
-		
+		$this->attackChecker->checkIncomingAttacks();
 		$output->writeln('Attacks checked');
 	}
 

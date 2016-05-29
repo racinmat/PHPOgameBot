@@ -24,6 +24,9 @@ class FleetInfo extends Object
 	/** @var Menu */
 	private $menu;
 
+	/** @var string */
+	private $fleetRow = '#eventContent > tbody > tr';
+
 	public function __construct(\AcceptanceTester $I, Menu $menu)
 	{
 		$this->I = $I;
@@ -46,19 +49,7 @@ class FleetInfo extends Object
 	 */
 	public function getMyFleetsReturnTimes() : array
 	{
-		$I = $this->I;
-		$this->openFleetInfo();
-		$fleetRows = $this->getNumberOfFleets();
-		$timeStrings = [];
-		for ($i = 1; $i <= $fleetRows; $i++) {
-			//I want only returning flights
-			if ( ! $I->seeElementExists($this->nthFleet($i, self::TYPE_MINE), ['data-return-flight' => 'true'])) {
-				continue;
-			}
-
-			$timeStrings[] = $this->getNthFleetArrivalTime($i, self::TYPE_MINE);
-		}
-		return $timeStrings;
+		return $this->getArrivalTimes(self::TYPE_MINE, true);
 	}
 
 	public function isAnyAttackOnMe() : bool
@@ -67,39 +58,55 @@ class FleetInfo extends Object
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFleets();
 		for ($i = 1; $i <= $fleetRows; $i++) {
-			if ($I->seeElementExists($this->nthFleet($i, self::TYPE_ENEMY), ['data-return-flight' => 'false'])) {
+			if ($I->seeElementExists($this->nthFleet($i, self::TYPE_ENEMY, false))) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public function getAttackArrivalTimes() : string
+	/**
+	 * @return string[]
+	 */
+	public function getAttackArrivalTimes() : array
+	{
+		return $this->getArrivalTimes(self::TYPE_ENEMY, false);
+	}
+
+	private function getArrivalTimes(string $type, bool $returning) : array
 	{
 		$I = $this->I;
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFleets();
+		$timeStrings = [];
 		for ($i = 1; $i <= $fleetRows; $i++) {
-			if ($I->seeElementExists($this->nthFleet($i, self::TYPE_ENEMY), ['data-return-flight' => 'false'])) {
-				return true;
+			if ( ! $I->seeElementExists($this->nthFleet($i, $type, $returning))) {
+				continue;
 			}
+
+			$timeStrings[] = $this->getNthFleetArrivalTime($i, $type);
 		}
-		return false;
+		return $timeStrings;
 	}
 
 	private function getNumberOfFleets() : int
 	{
-		return $this->I->getNumberOfElements('#eventContent > tbody > tr');
+		return $this->I->getNumberOfElements($this->fleetRow);
 	}
 
-	private function nthFleet(int $nth, string $type) : string
+	private function nthFleet(int $nth, string $type, bool $returning = null) : string
 	{
-		return "#eventContent > tbody > tr:nth-of-type($nth) > td$type";
+		$returnSelector = '';
+		if ($returning !== null) {
+			$return = $returning ? 'true' : 'false';
+			$returnSelector = "[data-return-flight => $return]";
+		}
+		return "$this->fleetRow:nth-of-type($nth)$returnSelector > td$type";
 	}
 
-	private function getNthFleetArrivalTime(int $nth, string $type) : string
+	private function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string
 	{
-		return $this->I->grabTextFrom($this->nthFleet($nth, $type) . ".countDown");
+		return $this->I->grabTextFrom("{$this->nthFleet($nth, $type, $returning)}.countDown");
 	}
 
 }

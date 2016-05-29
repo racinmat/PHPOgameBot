@@ -124,3 +124,20 @@ class B extends A {}
 //$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
 //$logger->addDebug('debug message');
 //$logger->addAlert('alert message');
+
+function nthFleet(int $nth, string $type, bool $returning = null) : string
+{
+	$returnSelector = '';
+	if ($returning !== null) {
+		$returning = $returning ? 'true' : 'false';
+		$returnSelector = "[data-return-flight => $returning]";
+	}
+	return "#eventContent > tbody > tr:nth-of-type($nth)$returnSelector > td$type";
+}
+
+function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string
+{
+	return nthFleet($nth, $type, $returning) . ".countDown";
+}
+
+echo getNthFleetArrivalTime(1, \App\Model\PageObject\FleetInfo::TYPE_ENEMY);
