@@ -113,9 +113,14 @@ class B extends A {}
 //$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
 //echo $sum;
 
-/** @var \App\Model\DatabaseManager $databaseManager */
-$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
-/** @var \App\Model\ResourcesCalculator $resourcesCalculator */
-$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
-$planet = array_shift($databaseManager->getAllMyPlanets());
-var_dump($resourcesCalculator->getProductionPerHour($planet));
+///** @var \App\Model\DatabaseManager $databaseManager */
+//$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
+///** @var \App\Model\ResourcesCalculator $resourcesCalculator */
+//$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
+//$planet = array_shift($databaseManager->getAllMyPlanets());
+//var_dump($resourcesCalculator->getProductionPerHour($planet));
+
+///** @var \Kdyby\Monolog\Logger $logger */
+//$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
+//$logger->addDebug('debug message');
+//$logger->addAlert('alert message');
