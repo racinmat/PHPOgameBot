@@ -99,7 +99,7 @@ class FleetInfo extends Object
 		$returnSelector = '';
 		if ($returning !== null) {
 			$return = $returning ? 'true' : 'false';
-			$returnSelector = "[data-return-flight => $return]";
+			$returnSelector = "[data-return-flight=$return]";
 		}
 		return "$this->fleetRow:nth-of-type($nth)$returnSelector > td$type";
 	}
