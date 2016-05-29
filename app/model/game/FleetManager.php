@@ -6,6 +6,7 @@ use App\Enum\MenuItem;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
+use App\Model\PageObject\FleetInfo;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
@@ -41,7 +42,10 @@ class FleetManager extends Object implements ICommandProcessor
 	/** @var ResourcesCalculator */
 	private $resourcesCalculator;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator)
+	/** @var FleetInfo */
+	private $fleetInfo;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
@@ -49,6 +53,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger = $logger;
 		$this->databaseManager = $databaseManager;
 		$this->resourcesCalculator = $resourcesCalculator;
+		$this->fleetInfo = $fleetInfo;
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -60,24 +65,7 @@ class FleetManager extends Object implements ICommandProcessor
 	{
 		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
-		$I = $this->I;
-		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
-		usleep(Random::microseconds(1.5, 2.5));
-		if ($I->seeElementExists('#js_eventDetailsClosed')) {   //element can be seen only when nobody clicked on it, then it disappears
-			$I->click('#js_eventDetailsClosed');
-		}
-		$I->waitForText('Události', null, '#eventHeader h2');
-		$fleetRows = $I->getNumberOfElements('#eventContent > tbody > tr');
-		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
-		for ($i = 1; $i <= $fleetRows; $i++) {
-			//I want only returning flights
-			if ($I->seeElementExists("#eventContent > tbody > tr:nth-of-type($i)", ['data-return-flight' => 'false'])) {
-				continue;
-			}
-
-			$timeString = $I->grabTextFrom("#eventContent > tbody > tr:nth-of-type($i) > .countDown.friendly");
-			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeString)));
-		}
+		$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyFleetsReturnTimes());
 
 		if ($command->waitForResources()) {
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());

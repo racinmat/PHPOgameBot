@@ -61,7 +61,7 @@ class DatabaseManager extends Object
 		return $planet;
 	}
 
-	public function getAllMyPlanets()
+	public function getAllMyPlanets() : array 
 	{
 		$planets = $this->planetRepository->findAssoc(['player.me' => true], 'id');
 		return $planets;

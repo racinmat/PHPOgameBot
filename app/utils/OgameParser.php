@@ -10,6 +10,7 @@ namespace App\Utils;
 
 
 use App\Model\ValueObject\Coordinates;
+use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Nette\Utils\Strings;
 
@@ -37,4 +38,14 @@ class OgameParser
 		$params = Strings::match($string, '~(?<first>\d+)/(?<second>\d+)~');
 		return [(int) $params['first'], (int) $params['second']];
 	}
+
+	public static function getNearestTime(array $timeIntervals) : Carbon
+	{
+		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
+		foreach ($timeIntervals as $timeInterval) {
+			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeInterval)));
+		}
+		return $minimalTime;
+	}
+	
 }

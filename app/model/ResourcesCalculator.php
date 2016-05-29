@@ -85,27 +85,27 @@ class ResourcesCalculator extends Nette\Object
 		return $resourcesAvailable;
 	}
 
-	private function getMetalProductionPerHour(int $mineLevel) : int
+	private function getMetalProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel) : int
 	{
-		return $this->acceleration * 30 + round($this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel));
+		return ($this->acceleration * 30 + round($this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel))) * (1 + $plasmaTechnologyLevel * 0.01);
 	}
 
-	private function getCrystalProductionPerHour(int $mineLevel) : int
+	private function getCrystalProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel) : int
 	{
-		return $this->acceleration * 15 + round($this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel));
+		return ($this->acceleration * 15 + round($this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel))) * (1 + $plasmaTechnologyLevel * 0.0066);
 	}
 
-	private function getDeuteriumProductionPerHour(int $mineLevel, int $averageTemperature) : int
+	private function getDeuteriumProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel, int $averageTemperature) : int
 	{
-		return round($this->acceleration * 10 * $mineLevel * pow(1.1, $mineLevel) * (1.36 - 0.004 * $averageTemperature));
+		return round($this->acceleration * 10 * $mineLevel * pow(1.1, $mineLevel) * (1.36 - 0.004 * $averageTemperature)) * (1 + $plasmaTechnologyLevel * 0.0033);
 	}
 
 	public function getProductionPerHour(Planet $planet) : Resources
 	{
 		return new Resources(
-			$this->getMetalProductionPerHour($planet->getMetalMineLevel()),
-			$this->getCrystalProductionPerHour($planet->getCrystalMineLevel()),
-			$this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getAverageTemperature())
+			$this->getMetalProductionPerHour($planet->getMetalMineLevel(), $planet->getPlayer()->getPlasmaTechnologyLevel()),
+			$this->getCrystalProductionPerHour($planet->getCrystalMineLevel(), $planet->getPlayer()->getPlasmaTechnologyLevel()),
+			$this->getDeuteriumProductionPerHour($planet->getDeuteriumMineLevel(), $planet->getPlayer()->getPlasmaTechnologyLevel(), $planet->getAverageTemperature())
 		);
 	}
 

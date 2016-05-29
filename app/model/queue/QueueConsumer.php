@@ -105,9 +105,9 @@ class QueueConsumer extends Object
 
 		//repetitive commands
 		$repetitiveCommands = [];
-		//todo: refactor and make web GUI for that
-		$myPlanets = $this->planetManager->getAllMyPlanets();
-		$ratio = new Resources(3, 2, 1);
+		/** @var Planet[] $myPlanets */
+		$myPlanets = $this->planetManager->getAllMyPlanets()->toArray();
+		$ratio = new Resources(65, 39, 10);
 		$sum = $ratio->getTotal();
 		/** @var Planet $home */
 		$home = array_shift($myPlanets);    //do not send from home planet

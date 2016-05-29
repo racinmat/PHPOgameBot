@@ -108,7 +108,14 @@ class B extends A {}
 //$carbon = \Carbon\Carbon::instance(new DateTime($time));
 //echo $carbon;
 
-$ratio = new \App\Model\ValueObject\Resources(3, 2, 1);
-$sum = 0;
-$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
-echo $sum;
+//$ratio = new \App\Model\ValueObject\Resources(3, 2, 1);
+//$sum = 0;
+//$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
+//echo $sum;
+
+/** @var \App\Model\DatabaseManager $databaseManager */
+$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
+/** @var \App\Model\ResourcesCalculator $resourcesCalculator */
+$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
+$planet = array_shift($databaseManager->getAllMyPlanets());
+var_dump($resourcesCalculator->getProductionPerHour($planet));

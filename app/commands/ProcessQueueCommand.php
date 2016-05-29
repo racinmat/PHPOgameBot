@@ -18,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ProcessQueueCommand extends CodeceptionUsingCommand {
 
+	/** @var QueueConsumer */
+	private $queueConsumer;
+
 	public function __construct(Container $container)
 	{
 		parent::__construct($container);
@@ -52,23 +55,28 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 
 		$signManager = $this->container->getByType(SignManager::class);
-		$queueConsumer = $this->container->getByType(QueueConsumer::class);
+		$this->queueConsumer = $this->container->getByType(QueueConsumer::class);
 		$signManager->signIn();
 
 		if ($minutesInterval > 0) {
 			while (true) {
-				$queueConsumer->processQueue();
-				$output->writeln('Queue processed');
+				$this->process($output);
 				sleep(60 * $minutesInterval);
 			}
 		} else {
-			$queueConsumer->processQueue();
-			$output->writeln('Queue processed');
+			$this->process($output);
 		}
 
 		$signManager->signOut();
 		return 0; // zero return code means everything is ok
 	}
 
+	private function process(OutputInterface $output)
+	{
+		$this->queueConsumer->processQueue();
+		$output->writeln('Queue processed');
+		
+		$output->writeln('Attacks checked');
+	}
 
 } 

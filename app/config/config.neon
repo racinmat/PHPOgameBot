@@ -29,7 +29,6 @@ services:
 	- App\Model\Game\SignManager(user: %user%, password: %password%)
 	- App\Model\Game\UpgradeManager
 	- App\Model\Game\BuildManager
-	- App\Model\PageObject\Menu
 	- App\Model\Queue\QueueConsumer
 	- App\Model\ResourcesCalculator(acceleration: %acceleration%)
 	- App\Model\Game\PlanetManager
@@ -45,6 +44,8 @@ services:
 	- App\Model\Game\FleetManager
 	- App\Model\Game\PlayersProber
 	- App\Model\Game\ReportReader
+	- App\Model\AttackChecker
+	- App\Model\PageObject\FleetInfo
 	nette.latteFactory:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
