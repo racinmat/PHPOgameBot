@@ -41,6 +41,10 @@ class OgameParser
 
 	public static function getNearestTime(array $timeIntervals) : Carbon
 	{
+		if (count($timeIntervals) === 0) {
+			return Carbon::now();
+		}
+
 		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
 		foreach ($timeIntervals as $timeInterval) {
 			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeInterval)));

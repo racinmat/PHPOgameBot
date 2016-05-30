@@ -113,31 +113,32 @@ class B extends A {}
 //$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
 //echo $sum;
 
-///** @var \App\Model\DatabaseManager $databaseManager */
-//$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
+/** @var \App\Model\DatabaseManager $databaseManager */
+$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
 ///** @var \App\Model\ResourcesCalculator $resourcesCalculator */
 //$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
 //$planet = array_shift($databaseManager->getAllMyPlanets());
 //var_dump($resourcesCalculator->getProductionPerHour($planet));
+$databaseManager->getPlanet(new \App\Model\ValueObject\Coordinates(1, 357, 6));
 
 ///** @var \Kdyby\Monolog\Logger $logger */
 //$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
 //$logger->addDebug('debug message');
 //$logger->addAlert('alert message');
 
-function nthFleet(int $nth, string $type, bool $returning = null) : string
-{
-	$returnSelector = '';
-	if ($returning !== null) {
-		$returning = $returning ? 'true' : 'false';
-		$returnSelector = "[data-return-flight => $returning]";
-	}
-	return "#eventContent > tbody > tr:nth-of-type($nth)$returnSelector > td$type";
-}
-
-function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string
-{
-	return nthFleet($nth, $type, $returning) . ".countDown";
-}
-
-echo getNthFleetArrivalTime(1, \App\Model\PageObject\FleetInfo::TYPE_ENEMY);
+//function nthFleet(int $nth, string $type, bool $returning = null) : string
+//{
+//	$returnSelector = '';
+//	if ($returning !== null) {
+//		$returning = $returning ? 'true' : 'false';
+//		$returnSelector = "[data-return-flight => $returning]";
+//	}
+//	return "#eventContent > tbody > tr:nth-of-type($nth)$returnSelector > td$type";
+//}
+//
+//function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string
+//{
+//	return nthFleet($nth, $type, $returning) . ".countDown";
+//}
+//
+//echo getNthFleetArrivalTime(1, \App\Model\PageObject\FleetInfo::TYPE_ENEMY);

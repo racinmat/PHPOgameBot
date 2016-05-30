@@ -37,11 +37,12 @@ class DatabaseManager extends Object
 	 */
 	public function getPlanet(Coordinates $coordinates)
 	{
-		return $this->planetRepository->findOneBy([
-			'coordinates.galaxy' => $coordinates->getGalaxy(),
-			'coordinates.system' => $coordinates->getSystem(),
-			'coordinates.planet' => $coordinates->getPlanet()
-		]);
+		return $this->planetRepository->createQueryBuilder()
+			->andWhere('coordinates.galaxy = :galaxy')
+			->andWhere('coordinates.system = :system')
+			->andWhere('coordinates.planet = :planet')
+			->setParameters($coordinates->toArray())
+			->getQuery()->getSingleResult();
 	}
 
 	/**

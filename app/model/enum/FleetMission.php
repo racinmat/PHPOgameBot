@@ -31,15 +31,26 @@ class FleetMission extends Enum
 
 	public function getMissionSelector() : string 
 	{
+		return $this->getId() . $this->getNumber();
+	}
+
+	private function getId() : string
+	{
+		return '#missionButton';
+	}
+
+	public function getNumber() : string
+	{
 		switch ($this->getValue()) {
-			case static::EXPEDITION: return '#missionButton15';
-			case static::COLONIZATION: return '#missionButton7';
-			case static::HARVESTING: return '#missionButton8';
-			case static::TRANSPORT: return '#missionButton3';
-			case static::DEPLOYMENT: return '#missionButton4';
-			case static::ESPIONAGE: return '#missionButton6';
-			case static::ATTACKING: return '#missionButton1';
-			case static::DESTROY: return '#missionButton9';
+			case static::EXPEDITION: return '15';
+			case static::COLONIZATION: return '7';
+			case static::HARVESTING: return '8';
+			case static::TRANSPORT: return '3';
+			case static::DEPLOYMENT: return '4';
+			case static::ESPIONAGE: return '6';
+			case static::ATTACKING: return '1';
+			case static::DESTROY: return '9';
 		}
 	}
+	
 }

@@ -2,6 +2,7 @@
 
 namespace App\Model\PageObject;
  
+use App\Enum\FleetMission;
 use App\Enum\MenuItem;
 use App\Model\Game\Menu;
 use App\Utils\OgameParser;
@@ -52,6 +53,14 @@ class FleetInfo extends Object
 		return $this->getArrivalTimes(self::TYPE_MINE, true);
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getMyExpeditionsReturnTimes() : array
+	{
+		return $this->getArrivalTimes(self::TYPE_MINE, true, FleetMission::_(FleetMission::EXPEDITION));
+	}
+
 	public function isAnyAttackOnMe() : bool
 	{
 		if ($this->isNoFleetCurrentlyActive()) {
@@ -77,7 +86,7 @@ class FleetInfo extends Object
 		return $this->getArrivalTimes(self::TYPE_ENEMY, false);
 	}
 
-	private function getArrivalTimes(string $type, bool $returning) : array
+	private function getArrivalTimes(string $type, bool $returning, FleetMission $fleetMission = null) : array
 	{
 		if ($this->isNoFleetCurrentlyActive()) {
 			return [];
@@ -88,7 +97,7 @@ class FleetInfo extends Object
 		$fleetRows = $this->getNumberOfFleets();
 		$timeStrings = [];
 		for ($i = 1; $i <= $fleetRows; $i++) {
-			if ( ! $I->seeElementExists($this->nthFleet($i, $type, $returning))) {
+			if ( ! $I->seeElementExists($this->nthFleet($i, $type, $returning, $fleetMission))) {
 				continue;
 			}
 
@@ -102,14 +111,18 @@ class FleetInfo extends Object
 		return $this->I->getNumberOfElements($this->fleetRow);
 	}
 
-	private function nthFleet(int $nth, string $type, bool $returning = null) : string
+	private function nthFleet(int $nth, string $type, bool $returning = null, FleetMission $fleetMission = null) : string
 	{
 		$returnSelector = '';
+		$missionSelector = '';
 		if ($returning !== null) {
 			$return = $returning ? 'true' : 'false';
 			$returnSelector = "[data-return-flight=$return]";
 		}
-		return "$this->fleetRow:nth-of-type($nth)$returnSelector > td$type";
+		if ($fleetMission !== null) {
+			$missionSelector = "[data-mission-type={$fleetMission->getNumber()}]";
+		}
+		return "$this->fleetRow:nth-of-type($nth){$returnSelector}{$missionSelector} > td$type";
 	}
 
 	private function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string

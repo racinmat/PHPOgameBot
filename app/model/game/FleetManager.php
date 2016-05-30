@@ -2,6 +2,7 @@
 
 namespace App\Model\Game;
 
+use App\Enum\FleetMission;
 use App\Enum\MenuItem;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
@@ -65,7 +66,12 @@ class FleetManager extends Object implements ICommandProcessor
 	{
 		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
-		$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyFleetsReturnTimes());
+
+		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
+			$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyExpeditionsReturnTimes());
+		} else {
+			$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyFleetsReturnTimes());
+		}
 
 		if ($command->waitForResources()) {
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
@@ -76,20 +82,38 @@ class FleetManager extends Object implements ICommandProcessor
 		return $minimalTime;
 	}
 
-	public function isProcessingAvailable(SendFleetCommand $command) : bool
+	private function areFreeFleets() : bool
 	{
-		//todo: later add checking for amount of ships in planet from command
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(1) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($fleets);
-		$freeSlots = $occupied < $total;
+		return $occupied < $total;
+	}
+
+	private function areFreeExpeditions() : bool
+	{
+		$expeditions = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(2) > span.tooltip');
+		list($occupied, $total) = OgameParser::parseSlash($expeditions);
+		return $occupied < $total;
+
+	}
+
+	public function isProcessingAvailable(SendFleetCommand $command) : bool
+	{
+		//todo: later add checking for amount of ships in planet from command
+		$freeFleets = $this->areFreeFleets();
+		$freeExpeditions = $this->areFreeExpeditions();
+
+		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
+			$freeFleets = $freeFleets && $freeExpeditions;
+		}
 
 		$enoughResources = true;
 		if ($command->waitForResources()) {
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
 			$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
 		}
-		return $freeSlots && $enoughResources;
+		return $freeFleets && $enoughResources;
 	}
 
 	public function processCommand(ICommand $command) : bool
@@ -121,7 +145,11 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$I->fillField('input#galaxy', $to->getGalaxy());
 		$I->fillField('input#system', $to->getSystem());
-		$I->fillField('input#position', $to->getPlanet());
+		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
+			$I->fillField('input#position', 16);
+		} else {
+			$I->fillField('input#position', $to->getPlanet());
+		}
 		usleep(Random::microseconds(0.5, 1));
 		$I->click('#continue.on');
 
