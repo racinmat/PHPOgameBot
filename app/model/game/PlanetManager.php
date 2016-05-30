@@ -64,9 +64,9 @@ class PlanetManager extends Object
 		$crystal = $I->grabTextFrom('#resources_crystal');
 		$deuterium = $I->grabTextFrom('#resources_deuterium');
 
-		$metal = Strings::replace($metal, '~\.~');
-		$crystal = Strings::replace($crystal, '~\.~');
-		$deuterium = Strings::replace($deuterium, '~\.~');
+		$metal = OgameParser::parseResources($metal);
+		$crystal = OgameParser::parseResources($crystal);
+		$deuterium = OgameParser::parseResources($deuterium);
 
 		//v budoucnu předělat na nastavení jedním DTO, které bude mít suroviny a čas
 		$planet->setMetal($metal);

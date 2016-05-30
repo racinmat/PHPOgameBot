@@ -113,6 +113,11 @@ class ReportReader extends Object
 		$deuterium = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(3) > .res_value');
 		$energy = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(4) > .res_value');
 
+		$metal = OgameParser::parseResources($metal);
+		$crystal = OgameParser::parseResources($crystal);
+		$deuterium = OgameParser::parseResources($deuterium);
+		$energy = OgameParser::parseResources($energy);
+
 		$planet->setMetal($metal);
 		$planet->setCrystal($crystal);
 		$planet->setDeuterium($deuterium);

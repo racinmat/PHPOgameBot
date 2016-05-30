@@ -12,6 +12,7 @@ use App\Model\Queue\Command\ScanGalaxyCommand;
 use app\model\queue\ICommandProcessor;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
+use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Facebook\WebDriver\Exception\TimeOutException;
@@ -125,8 +126,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				usleep(Random::microseconds(0.5, 1));
 				$debrisMetalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(1)");
 				$debrisCrystalString = $I->grabTextFrom("#debris$i .ListLinks li:nth-of-type(2)");
-				$debrisMetal = Strings::replace(Strings::split($debrisMetalString, '~:~')[1], '~\.~');
-				$debrisCrystal = Strings::replace(Strings::split($debrisCrystalString, '~:~')[1], '~\.~');
+				$debrisMetal = OgameParser::parseResources(Strings::split($debrisMetalString, '~:~')[1]);
+				$debrisCrystal = OgameParser::parseResources(Strings::split($debrisCrystalString, '~:~')[1]);
 			} else {
 				$debrisMetal = 0;
 				$debrisCrystal = 0;

@@ -51,5 +51,10 @@ class OgameParser
 		}
 		return $minimalTime;
 	}
+
+	public static function parseResources(string $resource) : string
+	{
+		return Strings::replace($resource, '~\.~');
+	}
 	
 }
