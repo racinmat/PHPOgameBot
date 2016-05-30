@@ -6,6 +6,7 @@ use App\Model\AttackChecker;
 use App\Model\CronManager;
 use App\Model\Game\SignManager;
 use App\Model\Queue\QueueConsumer;
+use App\Utils\Random;
 use Carbon\Carbon;
 use Nette\DI\Container;
 use Nette\Utils\Validators;
@@ -80,7 +81,7 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		}
 
 		$signManager->signOut();
-		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun)));
+		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun))->addMinutes(random_int(0, 4))->addSeconds(random_int(0, 59)));
 
 		return 0; // zero return code means everything is ok
 	}

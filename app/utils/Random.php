@@ -9,7 +9,7 @@
 namespace App\Utils;
 
 
-class Random
+class Random extends \Nette\Utils\Random
 {
 
 	public static function microseconds(float $secondsFrom, float $secondsTo)
