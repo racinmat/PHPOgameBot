@@ -3,9 +3,9 @@
 	To: {$command->getTo()}<br/>
 	Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}<br/>
 	Mission: {$command->getMission()}<br/>
-	Wait for resource: {$command->waitForResorces() ? 'yes' : 'no'}
+	Wait for resources: {$command->waitForResources() ? 'yes' : 'no'}
 {/block}
 
 {block edit}
-	<a class="btn btn-info" href="{plink ManageCommands:scanGalaxy, uuid => $command->getUuid()->toString()}">Edit</a>
+	<a class="btn btn-info" href="{plink ManageCommands:sendFleet, uuid => $command->getUuid()->toString()}">Edit</a>
 {/block}

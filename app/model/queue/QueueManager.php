@@ -76,7 +76,7 @@ class QueueManager extends Object
 	/**
 	 * @return ICommand[]|ArrayCollection
 	 */
-	public function getQueue()
+	public function getQueue() : ArrayCollection
 	{
 		return $this->queueRepository->loadQueue();
 	}
@@ -92,7 +92,7 @@ class QueueManager extends Object
 	public function getCommand(Uuid $uuid) : ICommand
 	{
 		$commands = $this->queueRepository->loadQueue()->merge($this->queueRepository->loadRepetitiveCommands());
-		$commands->filter(Functions::hasCommandUuid($uuid))->first();
+		return $commands->filter(Functions::hasCommandUuid($uuid))->first();
 	}
 
 	public function saveCommand(ICommand $command)

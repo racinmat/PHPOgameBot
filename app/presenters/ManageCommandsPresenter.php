@@ -138,11 +138,9 @@ class ManageCommandsPresenter extends BasePresenter
 			$command->setCoordinates($coordinates);
 			$command->setMission(FleetMission::_($values['mission']));
 			$command->setTo(Coordinates::fromArray([
-				'to' => [
-					'galaxy' => $values['to']['galaxy'],
-					'system' => $values['to']['system'],
-					'planet' => Coordinates::$maxPlanet
-				]
+				'galaxy' => $values['to']['galaxy'],
+				'system' => $values['to']['system'],
+				'planet' => Coordinates::$maxPlanet
 			]));
 			$fleet = new Fleet();
 			foreach (Ships::getEnumValues() as $index => $ship) {
@@ -150,6 +148,7 @@ class ManageCommandsPresenter extends BasePresenter
 			}
 			$command->setFleet($fleet);
 			$command->setResources(Resources::fromArray($values['resources']));
+			$command->setWaitForResources($values['waitForResources']);
 			$this->queueManager->saveCommand($command);
 			$this->flashMessage('Command updates', 'success');
 			$this->redirect('this');
