@@ -80,7 +80,7 @@ class QueueConsumer extends Object
 			}
 			$dependencyTypes[$dependencyType]->add($command);
 		}
-		$failedCommands = [];
+		$failedCommands = new ArrayCollection();
 		foreach ($dependencyTypes as $planetCoordinates => $queue) {
 			/** @var ICommand $command */
 			while(!$queue->isEmpty()) {
@@ -97,7 +97,7 @@ class QueueConsumer extends Object
 					$queue->remove(0);
 				} else {
 					$this->logger->addInfo("Command failed to process.");
-					$failedCommands[] = $command;
+					$failedCommands->add($command);
 					break;
 				}
 			}
@@ -109,7 +109,7 @@ class QueueConsumer extends Object
 			$this->processCommand($repetitiveCommand);
 		}
 
-		$this->resolveTimeOfNextRun(array_merge($failedCommands, $repetitiveCommands));
+		$this->resolveTimeOfNextRun($failedCommands->merge($repetitiveCommands));
 	}
 
 	private function resolveTimeOfNextRun(array $commands)
