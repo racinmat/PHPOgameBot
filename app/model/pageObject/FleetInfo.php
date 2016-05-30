@@ -54,6 +54,10 @@ class FleetInfo extends Object
 
 	public function isAnyAttackOnMe() : bool
 	{
+		if ($this->isNoFleetCurrentlyActive()) {
+			return false;
+		}
+
 		$I = $this->I;
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFleets();
@@ -75,6 +79,10 @@ class FleetInfo extends Object
 
 	private function getArrivalTimes(string $type, bool $returning) : array
 	{
+		if ($this->isNoFleetCurrentlyActive()) {
+			return [];
+		}
+
 		$I = $this->I;
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFleets();
@@ -109,4 +117,9 @@ class FleetInfo extends Object
 		return $this->I->grabTextFrom("{$this->nthFleet($nth, $type, $returning)}.countDown");
 	}
 
+	private function isNoFleetCurrentlyActive() : bool
+	{
+		return $this->I->seeElementExists('#eventboxBlank');
+	}
+	
 }
