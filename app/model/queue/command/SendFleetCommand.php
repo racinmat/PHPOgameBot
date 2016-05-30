@@ -30,14 +30,6 @@ class SendFleetCommand extends BaseCommand
 
 	/** @var bool */
 	private $waitForResources;
-	
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
-	{
-		parent::__construct($coordinates, $data, $uuid);
-		if ($this->fleet->isEmpty()) {
-			throw new \InvalidArgumentException("SendFleetCommand can not have empy fleet.");
-		}
-	}
 
 	public static function getAction() : string
 	{
@@ -65,6 +57,11 @@ class SendFleetCommand extends BaseCommand
 		$this->mission = FleetMission::_($data['mission']);
 		$this->resources = isset($data['resources']) ? Resources::fromArray($data['resources']) : new Resources(0, 0, 0);
 		$this->waitForResources = $data['waitForResources'] ?? false;
+
+		if (count($this->fleet->getNonZeroShips()) === 0) {
+			throw new \InvalidArgumentException("SendFleetCommand can not have empty fleet.");
+		}
+
 	}
 
 	public function getDependencyType() : string

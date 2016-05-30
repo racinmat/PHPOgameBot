@@ -99,10 +99,16 @@ class PlayersProber extends Object implements ICommandProcessor
 				sleep($time->diffInSeconds());
 				$this->I->reloadPage();
 			}
-			$this->fleetManager->processCommand($probePlanetCommand);
+			try {
+				$this->fleetManager->processCommand($probePlanetCommand);
+			} catch(NonExistingPlanetException $e) {
+				$this->databaseManager->removePlanet($command->getCoordinates());
+			}
+
 		}
 
 		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
 		$this->reportReader->readEspionageReportsFrom($probingStart);
 	}
+
 }

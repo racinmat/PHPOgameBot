@@ -124,8 +124,11 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->fillField('input#position', $to->getPlanet());
 		usleep(Random::microseconds(0.5, 1));
 		$I->click('#continue.on');
+
+		if ($I->seeElementExists('#fadeBox span.failed')) {
+			throw new NonExistingPlanetException();
+		}
 		
-		//todo: check non-existing planet
 		usleep(Random::microseconds(1.5, 2.5));
 
 		$I->click($command->getMission()->getMissionSelector());

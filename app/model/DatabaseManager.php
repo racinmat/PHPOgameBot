@@ -108,4 +108,11 @@ class DatabaseManager extends Object
 	{
 		return $this->planetRepository->findBy(['player.status' => $statuses->toArray()]);
 	}
+
+	public function removePlanet(Coordinates $coordinates)
+	{
+		$planet = $this->getPlanet($coordinates);
+		$this->entityManager->remove($planet);
+		$this->entityManager->flush();
+	}
 }
