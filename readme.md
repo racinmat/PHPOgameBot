@@ -16,7 +16,6 @@ TODO
 - add package buying to periodical commands
 - refactor the game namespace. Use pageobjects to interact with pages and segregate logic of webdriver manipulation and game logic.
 - add transport and deployment reading of incoming resources when calculating resources for enhancement
-- add reading my planets temperature when temperature is not set (min = max = 0)
 - add 'important' option for enhancing. All important enhancements will be privileged and resources will be send to them from other planets.
 - when some planet does not have any enhancement in queue, it will send automatically resources to another planet which has enhancement in queue, even if it is not privileged. It will send to first non-processed enhancement in queue.
 - add continuous command for sending resources from one planet to another when they reach some user-defined treshold and have some user-defined ratio
@@ -30,20 +29,15 @@ TODO
 - during the galaxy scanning, delete abandoned planets which were there, but they are not anymore
 - add storages full of resources checking
 - maybe think about setting values and last visited and make it more transaction-like and domain-driven (last visited will be set automatically in setter, one setter for all resources....)
-- add checking whether command was really done (reding build/upgrade status, checking fleet status...)
+- add checking whether command was really done (reading build/upgrade status, checking fleet status...)
 - read mines percentage settings
 - calculate production based on percentage settings and lack of energy
-- maybe export/import command lists and routines
+- maybe export/import queue and repetitious commands
 - think about routines implementation (repetitious commands)
-- repetitious fleet checking for attacks
-- commands for sending fleet
 - automatically buy new probes when probes are destroyed when gathering data and buy new satellites when destroyed (Maintain quantity in Ogame Automizer)
 - log attacks, full storages and other important messages to some android app via monolog
 - repetitious tasks
 	- set repeating frequency
-	- checking if someone attacks me
-	- galaxy scanning
-	- probing scanned, inactive players
 	- farming scanned players 
 		- save planet status (from Ogame Automizer - Attack Status)
 		- set how many minimal resources to gather
@@ -65,7 +59,6 @@ TODO
 	- building transporters when too many resources is on the planet
 	- sending transporters from other planets to save rsources when it is time
 	- set time to leave before attack
-- sorting and deleting commands in GUI
 - maybe try to integrate Ogame Automizer constuctor for mines on planet optimization
 - maybe try to implement generating construction list from Ogame Automizer
 - randomize intervals, set how slow or big should be waiting betewwn actions (slider more bot - more human)

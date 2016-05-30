@@ -212,6 +212,11 @@ class PlanetManager extends Object
 	private function loadTemperatureData(Planet $planet)
 	{
 		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
+		$temperature = $this->I->grabTextFrom('#temperatureContentField');
+		list($from, $to) = OgameParser::parseTemperature($temperature);
+		$planet->setMinimalTemperature($from);
+		$planet->setMaximalTemperature($to);
+		$this->databaseManager->flush();
 	}
 	
 }

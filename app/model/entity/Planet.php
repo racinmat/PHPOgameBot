@@ -682,4 +682,15 @@ class Planet extends Object
 	{
 		return $this->minimalTemperature != 0 || $this->maximalTemperature != 0;
 	}
+
+	public function setMinimalTemperature(int $minimalTemperature)
+	{
+		$this->minimalTemperature = $minimalTemperature;
+	}
+
+	public function setMaximalTemperature(int $maximalTemperature)
+	{
+		$this->maximalTemperature = $maximalTemperature;
+	}
+
 }

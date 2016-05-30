@@ -56,5 +56,15 @@ class OgameParser
 	{
 		return Strings::replace($resource, '~\.~');
 	}
-	
+
+	/**
+	 * @param string $temperatures
+	 * @return int[]
+	 */
+	public static function parseTemperature(string $temperatures) : array
+	{
+		$params = Strings::match($temperatures, '~(?<from>\d+)°C až (?<to>\d+)°C~');
+		return [(int) $params['from'], (int) $params['to']];
+	}
+
 }
