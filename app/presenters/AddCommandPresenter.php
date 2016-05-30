@@ -98,7 +98,7 @@ class AddCommandPresenter extends BasePresenter
 			$this->planet = $values['planet'];
 			
 			$commands = [];
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
 			if ($values['building'] !== null) {
 				$commands[] = UpgradeBuildingCommand::fromArray([
 					'coordinates' => $coordinates, 
@@ -169,7 +169,7 @@ class AddCommandPresenter extends BasePresenter
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
 
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
 			$command = ScanGalaxyCommand::fromArray([
 				'coordinates' => $coordinates, 
 				'data' => [
@@ -214,7 +214,7 @@ class AddCommandPresenter extends BasePresenter
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
 
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
 			$command = ProbePlayersCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
@@ -249,7 +249,7 @@ class AddCommandPresenter extends BasePresenter
 				$fleet[$ship] = $values['fleet'][$index];
 			}
 
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject()->toArray();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
 			$command = SendFleetCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [

@@ -3,7 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Building;
-use App\Model\ValueObject;
+use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Resources;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,17 +31,10 @@ class Planet extends Object
 	private $name;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Coordinates", cascade={"persist", "remove"})
-	 * @ORM\JoinColumn(name="coordinates_id", referencedColumnName="id")
+	 * @ORM\Embedded(class="\App\Model\ValueObject\Coordinates")
 	 * @var Coordinates
 	 */
-	public $coordinatesDeprecated;
-
-	/**
-	 * @ORM\Embedded(class="\App\Model\ValueObject\Coordinates")
-	 * @var ValueObject\Coordinates
-	 */
-	public $coordinates;
+	private $coordinates;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Player", inversedBy="planets")
@@ -195,7 +188,7 @@ class Planet extends Object
 	 */
 	private $debrisCrystal;
 
-	public function __construct(string $name, ValueObject\Coordinates $coordinates, Player $player)
+	public function __construct(string $name, Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
 		$this->coordinates = new Coordinates($coordinates->getGalaxy(), $coordinates->getSystem(), $coordinates->getPlanet());
@@ -508,7 +501,7 @@ class Planet extends Object
 		$this->deuteriumTankLevel = $deuteriumTankLevel;
 	}
 
-	public function isOnCoordinates(ValueObject\Coordinates $coordinates) : bool
+	public function isOnCoordinates(Coordinates $coordinates) : bool
 	{
 		return $this->coordinates->isSame($coordinates);
 	}

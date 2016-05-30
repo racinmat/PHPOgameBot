@@ -65,7 +65,7 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		$crystalStorageLevel = $neededStoragesLevels->getCrystal();
 		$deuteriumTankLevel = $neededStoragesLevels->getDeuterium();
 
-		$coordinates = $planet->getCoordinates()->toValueObject()->toArray();
+		$coordinates = $planet->getCoordinates()->toArray();
 		$commands = [];
 		for ($i = $planet->getMetalStorageLevel(); $i < $metalStorageLevel; $i++) {
 			$commands[] = UpgradeBuildingCommand::fromArray([

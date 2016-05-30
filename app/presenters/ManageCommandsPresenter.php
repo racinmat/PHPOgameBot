@@ -89,7 +89,7 @@ class ManageCommandsPresenter extends BasePresenter
 		$form->onSuccess[] = function (Form $form, array $values) use ($command) {
 			$this->planet = $values['planet'];
 
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates();
 			$command->setCoordinates($coordinates);
 			$command->setFrom(Coordinates::fromArray([
 				'from' => [
@@ -134,7 +134,7 @@ class ManageCommandsPresenter extends BasePresenter
 				$fleet[$ship] = $values['fleet'][$index];
 			}
 
-			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject();
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates();
 			$command->setCoordinates($coordinates);
 			$command->setMission(FleetMission::_($values['mission']));
 			$command->setTo(Coordinates::fromArray($values['to']));

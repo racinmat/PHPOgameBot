@@ -61,16 +61,4 @@ class DashboardPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
-	public function actionMigrate()
-	{
-		/** @var EntityManager $entityManager */
-		$entityManager = $this->context->getByType(EntityManager::class);
-		$planetManager = $entityManager->getRepository(Planet::class);
-		/** @var Planet $planet */
-		foreach ($planetManager->findAll() as $planet) {
-			$planet->coordinates = $planet->coordinatesDeprecated->toValueObject();
-		}
-		$entityManager->flush();
-		$this->redirect('default');
-	}
 }

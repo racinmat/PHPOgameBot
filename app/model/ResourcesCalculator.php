@@ -46,7 +46,7 @@ class ResourcesCalculator extends Nette\Object
 	{
 		$missing = $this->getMissingResources($planet, $command->getPrice($planet));
 		$enough = $missing->isZero();
-		$this->logger->addDebug("Checking resources to process command {$command->toString()} in planet {$planet->getCoordinates()->toValueObject()->toString()} which needs {$command->getPrice($planet)->toString()} resources.");
+		$this->logger->addDebug("Checking resources to process command {$command->toString()} in planet {$planet->getCoordinates()->toString()} which needs {$command->getPrice($planet)->toString()} resources.");
 		$this->logger->addDebug("Command information: {$command->getInfo($planet)}");
 		if ($enough) {
 			$this->logger->addDebug("Enough resources.");

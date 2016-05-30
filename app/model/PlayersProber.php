@@ -86,9 +86,9 @@ class PlayersProber extends Object implements ICommandProcessor
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
 			$probePlanetCommand = SendFleetCommand::fromArray([
-				'coordinates' => $planet->getCoordinates()->toValueObject()->toArray(),
+				'coordinates' => $planet->getCoordinates()->toArray(),
 				'data' => [
-					'to' => $planetToProbe->getCoordinates()->toValueObject()->toArray(),
+					'to' => $planetToProbe->getCoordinates()->toArray(),
 					'fleet' => [Ships::ESPIONAGE_PROBE => 1],    //todo: move setting probes count to command
 					'mission' => FleetMission::ESPIONAGE
 				]

@@ -44,13 +44,13 @@ class Menu extends Object
 	{
 		$I = $this->I;
 		$currentCoordinates = $this->getCurrentPlanetCoordinates();
-		$this->logger->addDebug("Going to planet {$planet->getCoordinates()->toValueObject()->toString()}.");
+		$this->logger->addDebug("Going to planet {$planet->getCoordinates()->toString()}.");
 		if ($planet->isOnCoordinates($currentCoordinates)) {
 			$this->logger->addDebug("I already am on requested coordinates.");
 			return;
 		}
 		$this->logger->addDebug("Clicking to go to requested planet.");
-		$I->click($planet->getCoordinates()->toValueObject()->__toString(), '#planetList');
+		$I->click($planet->getCoordinates()->toString(), '#planetList');
 		usleep(Random::microseconds(1, 2));
 	}
 

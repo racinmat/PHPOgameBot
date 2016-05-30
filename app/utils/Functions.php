@@ -46,14 +46,14 @@ class Functions extends Object
 	public static function valueObjectCoordinatesToText() : callable
 	{
 		return function (Coordinates $coordinates) : string {
-			return $coordinates->__toString();
+			return $coordinates->toString();
 		};
 	}
 
 	public static function planetToNameAndTextCoordinates()
 	{
 		return function (Planet $planet) : string {
-			return $planet->getName() . ' ' . $planet->getCoordinates()->toValueObject()->__toString();
+			return $planet->getName() . ' ' . $planet->getCoordinates()->toString();
 		};
 	}
 
@@ -61,7 +61,7 @@ class Functions extends Object
 	public static function planetToCoordinates()
 	{
 		return function (Planet $planet) : Coordinates {
-			return $planet->getCoordinates()->toValueObject();
+			return $planet->getCoordinates();
 		};
 	}
 
