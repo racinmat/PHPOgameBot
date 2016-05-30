@@ -678,4 +678,8 @@ class Planet extends Object
 		$this->gotAllInformationFromLastEspionage = $gotAllInformationFromLastEspionage;
 	}
 
+	public function hasLoadedTemperature() : bool
+	{
+		return $this->minimalTemperature != 0 || $this->maximalTemperature != 0;
+	}
 }

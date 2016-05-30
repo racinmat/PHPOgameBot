@@ -9,17 +9,13 @@ TODO
 - add ships and defense to planet entity. Maybe as embeddable
 - fleetsave on main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
-- refactor repetitive resources sending and make web GUI for it
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)
 - maybe bugfix: when parsing time to complete upgrade, the real time is few seconds later than parsed time
 - maybe add feature to upgrade building (except of research lab) and research at the same time
-	- maybe save to planet what is currently being enhanced so it will not have to be read more times during the queue processing (must be invalidated, maybe use cache for that. Service will save it, not entity)
-- add expedition sending to periodical commands
+	- maybe save to planet (not to planet, but to service with cache) what is currently being enhanced so it will not have to be read more times during the queue processing (must be invalidated, maybe use cache for that. Service will save it, not entity)
 - add package buying to periodical commands
 - refactor the game namespace. Use pageobjects to interact with pages and segregate logic of webdriver manipulation and game logic.
 - add transport and deployment reading of incoming resources when calculating resources for enhancement
-- add resources transferring to sending fleet command
-- refactor coordinates to be embeddable, not entity, maybe merge embeddable and valueObject?
 - add reading my planets temperature when temperature is not set (min = max = 0)
 - add 'important' option for enhancing. All important enhancements will be privileged and resources will be send to them from other planets.
 - when some planet does not have any enhancement in queue, it will send automatically resources to another planet which has enhancement in queue, even if it is not privileged. It will send to first non-processed enhancement in queue.

@@ -87,12 +87,16 @@ class ResourcesCalculator extends Nette\Object
 
 	private function getMetalProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel) : int
 	{
-		return ($this->acceleration * 30 + round($this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel))) * (1 + $plasmaTechnologyLevel * 0.01);
+		$base = $this->acceleration * 30;
+		$mine = round($this->acceleration * 30 * $mineLevel * pow(1.1, $mineLevel));
+		return $base + $mine * (1 + $plasmaTechnologyLevel * 0.01);
 	}
 
 	private function getCrystalProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel) : int
 	{
-		return ($this->acceleration * 15 + round($this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel))) * (1 + $plasmaTechnologyLevel * 0.0066);
+		$base = $this->acceleration * 15;
+		$mine = round($this->acceleration * 20 * $mineLevel * pow(1.1, $mineLevel));
+		return $base + $mine * (1 + $plasmaTechnologyLevel * 0.0066);
 	}
 
 	private function getDeuteriumProductionPerHour(int $mineLevel, int $plasmaTechnologyLevel, int $averageTemperature) : int

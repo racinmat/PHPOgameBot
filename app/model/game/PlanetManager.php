@@ -99,6 +99,9 @@ class PlanetManager extends Object
 		$this->logger->addInfo('Going to refresh all data.');
 		$this->refreshResearchData();
 		$this->getAllMyPlanets()->forAll(function ($key, Planet $planet) {
+			if ( ! $planet->hasLoadedTemperature()) {
+				$this->loadTemperatureData($planet);
+			}
 			$this->refreshPlanetData($planet);
 			return true;
 		});
@@ -206,4 +209,9 @@ class PlanetManager extends Object
 		});
 	}
 
+	private function loadTemperatureData(Planet $planet)
+	{
+		$this->menu->goToPage(MenuItem::_(MenuItem::OVERVIEW));
+	}
+	
 }

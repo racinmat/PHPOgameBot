@@ -115,11 +115,14 @@ class B extends A {}
 
 /** @var \App\Model\DatabaseManager $databaseManager */
 $databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
-///** @var \App\Model\ResourcesCalculator $resourcesCalculator */
-//$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
-//$planet = array_shift($databaseManager->getAllMyPlanets());
+/** @var \App\Model\ResourcesCalculator $resourcesCalculator */
+$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
+$planets = $databaseManager->getAllMyPlanets();
+foreach ($planets as $i => $planet) {
+	var_dump($resourcesCalculator->getProductionPerHour($planet));
+}
 //var_dump($resourcesCalculator->getProductionPerHour($planet));
-$databaseManager->getPlanet(new \App\Model\ValueObject\Coordinates(1, 357, 6));
+//$planet = $databaseManager->getPlanet(new \App\Model\ValueObject\Coordinates(1, 357, 6));
 
 ///** @var \Kdyby\Monolog\Logger $logger */
 //$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
