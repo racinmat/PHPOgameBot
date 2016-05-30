@@ -503,7 +503,7 @@ class Planet extends Object
 
 	public function isOnCoordinates(Coordinates $coordinates) : bool
 	{
-		return $this->coordinates->isSame($coordinates);
+		return $this->coordinates->equals($coordinates);
 	}
 
 	public function getCoordinates() : Coordinates

@@ -37,10 +37,10 @@ class DatabaseManager extends Object
 	 */
 	public function getPlanet(Coordinates $coordinates)
 	{
-		return $this->planetRepository->createQueryBuilder()
-			->andWhere('coordinates.galaxy = :galaxy')
-			->andWhere('coordinates.system = :system')
-			->andWhere('coordinates.planet = :planet')
+		return $this->planetRepository->createQueryBuilder('planet')
+			->andWhere('planet.coordinates.galaxy = :galaxy')
+			->andWhere('planet.coordinates.system = :system')
+			->andWhere('planet.coordinates.planet = :planet')
 			->setParameters($coordinates->toArray())
 			->getQuery()->getSingleResult();
 	}
