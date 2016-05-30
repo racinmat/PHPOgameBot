@@ -124,6 +124,8 @@ class FleetManager extends Object implements ICommandProcessor
 
 	private function sendFleet(SendFleetCommand $command) : bool
 	{
+		$this->logger->addInfo("Going to send fleet {$command}.");
+
 		$I = $this->I;
 
 		$to = $command->getTo();
@@ -150,8 +152,11 @@ class FleetManager extends Object implements ICommandProcessor
 		} else {
 			$I->fillField('input#position', $to->getPlanet());
 		}
+		$this->logger->addDebug('Filled coordinates.');
 		usleep(Random::microseconds(0.5, 1));
 		$I->click('#continue.on');
+
+		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
 		if ($I->seeElementExists('#fadeBox span.failed')) {
 			throw new NonExistingPlanetException();
@@ -159,14 +164,20 @@ class FleetManager extends Object implements ICommandProcessor
 		
 		usleep(Random::microseconds(1.5, 2.5));
 
-		$I->click($command->getMission()->getMissionSelector());
-		usleep(Random::microseconds(1, 2));
+		do {
+			$I->click($command->getMission()->getMissionSelector());
+			$this->logger->addDebug('Selected mission.');
+			usleep(Random::microseconds(1, 2));
+		} while ( ! $I->seeElementExists('#start.on'));
 
-		$I->fillField('input#metal', $command->getResources()->getMetal());
-		$I->fillField('input#crystal', $command->getResources()->getCrystal());
-		$I->fillField('input#deuterium', $command->getResources()->getDeuterium());
+		if ( ! $command->getResources()->isZero()) {
+			$I->fillField('input#metal', $command->getResources()->getMetal());
+			$I->fillField('input#crystal', $command->getResources()->getCrystal());
+			$I->fillField('input#deuterium', $command->getResources()->getDeuterium());
+		}
 
 		$I->click('#start.on');
+		$this->logger->addDebug('Fleet sent.');
 		usleep(Random::microseconds(1.5, 2.5));
 
 		return true;

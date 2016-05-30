@@ -63,6 +63,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		for ($i = $from; $i->isLesserThanOrEquals($to); $i = $i->nextSystem()) {
 			$this->scanSystem($i, $planet);
 		}
+
 	}
 
 	protected function scanSystem(Coordinates $coordinates, Planet $planet)
@@ -180,6 +181,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 	{
 		/** @var ScanGalaxyCommand $command */
 		$this->scanGalaxy($command);
+		return true;
 	}
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
