@@ -11,7 +11,7 @@ use Kdyby\Doctrine\Entities;
 use Nette\Object;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Planet extends Object
 {
@@ -32,9 +32,16 @@ class Planet extends Object
 
 	/**
 	 * @ORM\OneToOne(targetEntity="Coordinates", cascade={"persist", "remove"})
+	 * @ORM\JoinColumn(name="coordinates_id", referencedColumnName="id")
 	 * @var Coordinates
 	 */
-	private $coordinates;
+	public $coordinatesDeprecated;
+
+	/**
+	 * @ORM\Embedded(class="\App\Model\ValueObject\Coordinates")
+	 * @var ValueObject\Coordinates
+	 */
+	public $coordinates;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Player", inversedBy="planets")

@@ -7,6 +7,9 @@ use Kdyby\Doctrine\Entities;
 use Nette\Object;
 use Tracy\Debugger;
 
+/**
+ * @ORM\Embeddable()
+ */
 class Coordinates extends Object
 {
 
@@ -19,15 +22,19 @@ class Coordinates extends Object
 	public static $maxPlanet = 15;
 
 	/**
+	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
 	private $galaxy;
 
 	/**
+	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
 	private $system;
+
 	/**
+	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */
 	private $planet;

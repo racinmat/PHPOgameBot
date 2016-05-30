@@ -4,9 +4,11 @@ namespace App\Presenters;
 
 use App\Components\IDisplayCommandFactory;
 use App\Model\DatabaseManager;
+use App\Model\Entity\Planet;
 use App\Model\Queue\QueueFileRepository;
 use App\Model\ValueObject\Coordinates;
 use Carbon\Carbon;
+use Kdyby\Doctrine\EntityManager;
 use Nette\Utils\Strings;
 use Tracy\Debugger;
 
@@ -59,4 +61,16 @@ class DashboardPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
+	public function actionMigrate()
+	{
+		/** @var EntityManager $entityManager */
+		$entityManager = $this->context->getByType(EntityManager::class);
+		$planetManager = $entityManager->getRepository(Planet::class);
+		/** @var Planet $planet */
+		foreach ($planetManager->findAll() as $planet) {
+			$planet->coordinates = $planet->coordinatesDeprecated->toValueObject();
+		}
+		$entityManager->flush();
+		$this->redirect('default');
+	}
 }
