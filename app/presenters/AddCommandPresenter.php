@@ -9,6 +9,8 @@ use App\Enum\PlayerStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Forms\FormFactory;
+use App\Forms\ScanGalaxyCommandFormFactory;
+use App\Forms\SendFleetCommandFormFactory;
 use App\Model\DatabaseManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
@@ -34,6 +36,18 @@ class AddCommandPresenter extends BasePresenter
 	 * @inject
 	 */
 	public $formFactory;
+
+	/**
+	 * @var ScanGalaxyCommandFormFactory
+	 * @inject
+	 */
+	public $scanGalaxyCommandFormFactory;
+
+	/**
+	 * @var SendFleetCommandFormFactory
+	 * @inject
+	 */
+	public $sendFleetCommandFormFactory;
 
 	/**
 	 * @var QueueManager
@@ -77,6 +91,8 @@ class AddCommandPresenter extends BasePresenter
 		$form->addText('defenseAmount', 'Defense amount: ')->setType('number');
 
 		$form->addSubmit('send', 'Add commands');
+
+		$form->addCheckbox('repetitive', 'Repetitive command');
 
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
@@ -122,7 +138,11 @@ class AddCommandPresenter extends BasePresenter
 				]);
 			}
 			foreach ($commands as $command) {
-				$this->queueManager->addToQueue($command);
+				if ($values['repetitive']) {
+					$this->queueManager->addToRepetitiveCommands($command);
+				} else {
+					$this->queueManager->addToQueue($command);
+				}
 			}
 			if (count($commands) == 0) {
 				$message = 'No command added';
@@ -140,28 +160,11 @@ class AddCommandPresenter extends BasePresenter
 
 	public function createComponentAddScanGalaxyCommandForm()
 	{
-		$form = $this->formFactory->create();
+		$form = $this->scanGalaxyCommandFormFactory->create();
 
-		$form->addGroup('General');
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
-			->setDefaultValue($this->planet);
+		$form->addCheckbox('repetitive', 'Repetitive command');
 
-		$form->addGroup('Scanning from system');
-		$from = $form->addContainer('from');
-
-		$from->addText('galaxy', 'Galaxy:')
-			->setType('number');
-		$from->addText('system', 'System:')
-			->setType('number');
-
-		$form->addGroup('Scanning to system');
-		$to = $form->addContainer('to');
-		$to->addText('galaxy', 'Galaxy:')
-			->setType('number');
-		$to->addText('system', 'System:')
-			->setType('number');
-
-		$form->addSubmit('send', 'Add command');
+		$form->setDefaults(['planet' => $this->planet]);
 
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
@@ -182,7 +185,11 @@ class AddCommandPresenter extends BasePresenter
 					]
 				]
 			]);
-			$this->queueManager->addToQueue($command);
+			if ($values['repetitive']) {
+				$this->queueManager->addToRepetitiveCommands($command);
+			} else {
+				$this->queueManager->addToQueue($command);
+			}
 			$this->flashMessage('Command added', 'success');
 			$this->redirect('this');
 		};
@@ -202,6 +209,8 @@ class AddCommandPresenter extends BasePresenter
 
 		$form->addSubmit('send', 'Add command');
 
+		$form->addCheckbox('repetitive', 'Repetitive command');
+
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
 
@@ -212,7 +221,11 @@ class AddCommandPresenter extends BasePresenter
 					'statuses' => $values['statuses']
 				]
 			]);
-			$this->queueManager->addToQueue($command);
+			if ($values['repetitive']) {
+				$this->queueManager->addToRepetitiveCommands($command);
+			} else {
+				$this->queueManager->addToQueue($command);
+			}
 			$this->flashMessage('Command added', 'success');
 			$this->redirect('this');
 		};
@@ -222,35 +235,11 @@ class AddCommandPresenter extends BasePresenter
 
 	public function createComponentAddSendFleetCommandForm()
 	{
-		$form = $this->formFactory->create();
+		$form = $this->sendFleetCommandFormFactory->create();
 
-		$form->addGroup('');
+		$form->setDefaults(['planet' => $this->planet]);
 
-		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
-			->setDefaultValue($this->planet);
-
-		$form->addSelect('mission', 'Mission: ', FleetMission::getSelectBoxValues());
-
-
-		$form->addGroup('Ships');
-		$fleet = $form->addContainer('fleet');
-		foreach (Ships::getEnumValues() as $index => $ship) {
-			$fleet->addText($index, $ship)
-				->setType('number')
-				->setDefaultValue(0);
-		}
-
-		$form->addGroup('Send to planet');
-		$to = $form->addContainer('to');
-
-		$to->addText('galaxy', 'Galaxy:')
-			->setType('number');
-		$to->addText('system', 'System:')
-			->setType('number');
-		$to->addText('planet', 'Planet:')
-			->setType('number');
-
-		$form->addSubmit('send', 'Add command');
+		$form->addCheckbox('repetitive', 'Repetitive command');
 
 		$form->onSuccess[] = function (Form $form, array $values) {
 			$this->planet = $values['planet'];
@@ -270,10 +259,16 @@ class AddCommandPresenter extends BasePresenter
 						'planet' =>$values['to']['planet']
 					],
 					'fleet' => $fleet,
-					'mission' => $values['mission']
+					'mission' => $values['mission'],
+					'waitForResources' => $values['waitForResources'],
+					'resources' => $values['resources']
 				]
 			]);
-			$this->queueManager->addToQueue($command);
+			if ($values['repetitive']) {
+				$this->queueManager->addToRepetitiveCommands($command);
+			} else {
+				$this->queueManager->addToQueue($command);
+			}
 			$this->flashMessage('Command added', 'success');
 			$this->redirect('this');
 		};

@@ -30,4 +30,9 @@ class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection imple
 		return $this;
 	}
 
+	public function merge(ArrayCollection $another) : ArrayCollection
+	{
+		$this->elements = array_merge($this->elements, $another->toArray());
+		return $this;
+	}
 }

@@ -1,4 +1,11 @@
 {layout 'layout.latte'}
 {block content}
-To: {$command->getTo()}<br/>
-Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}
+	To: {$command->getTo()}<br/>
+	Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}<br/>
+	Mission: {$command->getMission()}<br/>
+	Wait for resource: {$command->waitForResorces() ? 'yes' : 'no'}
+{/block}
+
+{block edit}
+	<a class="btn btn-info" href="{plink ManageCommands:scanGalaxy, uuid => $command->getUuid()->toString()}">Edit</a>
+{/block}

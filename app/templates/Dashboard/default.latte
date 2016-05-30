@@ -22,4 +22,12 @@
 			{control displayCommand, $iterator, $command}
 		</div>
 	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			Repetitive commands
+		</div>
+		<div class="panel-body dashboard-queue" n:inner-foreach="$repetitiveCommands as $command">
+			{control displayCommand, $iterator, $command}
+		</div>
+	</div>
 {/block}

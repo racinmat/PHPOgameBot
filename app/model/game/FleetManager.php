@@ -100,7 +100,6 @@ class FleetManager extends Object implements ICommandProcessor
 
 	private function sendFleet(SendFleetCommand $command) : bool
 	{
-		//todo: check whether command has any fleet in itself. 
 		$I = $this->I;
 
 		$to = $command->getTo();
@@ -125,6 +124,8 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->fillField('input#position', $to->getPlanet());
 		usleep(Random::microseconds(0.5, 1));
 		$I->click('#continue.on');
+		
+		//todo: check non-existing planet
 		usleep(Random::microseconds(1.5, 2.5));
 
 		$I->click($command->getMission()->getMissionSelector());
@@ -140,3 +141,5 @@ class FleetManager extends Object implements ICommandProcessor
 		return true;
 	}
 }
+
+class NonExistingPlanetException extends \Exception {}

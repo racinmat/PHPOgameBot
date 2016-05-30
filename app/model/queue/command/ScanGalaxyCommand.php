@@ -16,7 +16,7 @@ class ScanGalaxyCommand extends BaseCommand
 	/** @var Coordinates */
 	private $from;
 
-	/** @var CoordinatesDifference */
+	/** @var Coordinates */
 	private $to;
 
 	public static function getAction() : string
@@ -39,6 +39,16 @@ class ScanGalaxyCommand extends BaseCommand
 	{
 		$this->from = Coordinates::fromArray($data['from']);
 		$this->to = Coordinates::fromArray($data['to']);
+	}
+
+	public function setFrom(Coordinates $from)
+	{
+		$this->from = $from;
+	}
+
+	public function setTo(Coordinates $to)
+	{
+		$this->to = $to;
 	}
 
 	/**

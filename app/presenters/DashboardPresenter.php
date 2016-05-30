@@ -35,6 +35,7 @@ class DashboardPresenter extends BasePresenter
 		$isEmpty = ctype_space($cronTime) || Strings::length($cronTime) === 0;
 		$nextRunTime = !$isEmpty ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
 		$this->template->queue = $this->queueRepository->loadQueue();
+		$this->template->repetitiveCommands = $this->queueRepository->loadRepetitiveCommands();
 		$this->template->nextRunTime = $nextRunTime;
 	}
 
@@ -44,14 +45,6 @@ class DashboardPresenter extends BasePresenter
 	public function setCronFile($cronFile)
 	{
 		$this->cronFile = $cronFile;
-	}
-
-	/**
-	 * @param string $queueFile
-	 */
-	public function setQueueFile($queueFile)
-	{
-		$this->queueFile = $queueFile;
 	}
 
 	public function createComponentDisplayCommand()

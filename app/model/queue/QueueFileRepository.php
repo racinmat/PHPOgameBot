@@ -22,9 +22,13 @@ class QueueFileRepository extends Object
 	/** @var string */
 	private $queueFile;
 
-	public function __construct(string $queueFile)
+	/** @var string */
+	private $repetitiveCommandsFile;
+
+	public function __construct(string $queueFile, string $repetitiveCommandsFile)
 	{
 		$this->queueFile = $queueFile;
+		$this->repetitiveCommandsFile = $repetitiveCommandsFile;
 	}
 
 	/**
@@ -74,6 +78,22 @@ class QueueFileRepository extends Object
 	{
 		$array = $queue->map(Functions::toArray())->getValues();
 		file_put_contents($this->queueFile, Json::encode($array, Json::PRETTY));
+	}
+
+	/**
+	 * @return ICommand[]|ArrayCollection
+	 * @throws \Nette\Utils\JsonException
+	 */
+	public function loadRepetitiveCommands() : ArrayCollection
+	{
+		$queueCollection = new ArrayCollection(Json::decode(file_get_contents($this->repetitiveCommandsFile), Json::FORCE_ARRAY));
+		return $queueCollection->map($this->arrayToCommandCallback());
+	}
+
+	public function saveRepetitiveCommands(ArrayCollection $queue)
+	{
+		$array = $queue->map(Functions::toArray())->getValues();
+		file_put_contents($this->repetitiveCommandsFile, Json::encode($array, Json::PRETTY));
 	}
 
 }

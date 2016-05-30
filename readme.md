@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- fleetsave on main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
 - refactor repetitive resources sending and make web GUI for it
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)

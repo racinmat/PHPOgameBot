@@ -2,4 +2,8 @@
 {block content}
 	From: {$command->getFrom()}<br/>
 	To: {$command->getTo()}
+{/block}
 
+{block edit}
+<a class="btn btn-info" href="{plink ManageCommands:scanGalaxy, uuid => $command->getUuid()->toString()}">Edit</a>
+{/block}

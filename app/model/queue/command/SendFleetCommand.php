@@ -30,6 +30,14 @@ class SendFleetCommand extends BaseCommand
 
 	/** @var bool */
 	private $waitForResources;
+	
+	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
+	{
+		parent::__construct($coordinates, $data, $uuid);
+		if ($this->fleet->isEmpty()) {
+			throw new \InvalidArgumentException("SendFleetCommand can not have empy fleet.");
+		}
+	}
 
 	public static function getAction() : string
 	{
@@ -101,6 +109,31 @@ class SendFleetCommand extends BaseCommand
 	public function waitForResources() : bool
 	{
 		return $this->waitForResources;
+	}
+
+	public function setTo(Coordinates $to)
+	{
+		$this->to = $to;
+	}
+
+	public function setFleet(Fleet $fleet)
+	{
+		$this->fleet = $fleet;
+	}
+
+	public function setMission(FleetMission $mission)
+	{
+		$this->mission = $mission;
+	}
+
+	public function setResources(Resources $resources)
+	{
+		$this->resources = $resources;
+	}
+
+	public function setWaitForResources(bool $waitForResources)
+	{
+		$this->waitForResources = $waitForResources;
 	}
 
 }

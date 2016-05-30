@@ -40,12 +40,17 @@ class Fleet extends Object
 		return $this->fleet;
 	}
 
-	public static function fromArray(array $data)
+	public static function fromArray(array $data) : Fleet
 	{
 		$fleet = new Fleet();
 		foreach ($data as $ship => $count) {
 			$fleet->addShips(Ships::_($ship), $count);
 		}
 		return $fleet;
+	}
+
+	public function isEmpty() : bool
+	{
+		return count($this->fleet) === 0;
 	}
 }

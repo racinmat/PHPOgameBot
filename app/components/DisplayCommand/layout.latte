@@ -2,7 +2,7 @@
 	<span class="col-md-1">
 		{$iterator->getCounter()}.
 	</span>
-	<span class="col-md-2">
+	<span class="col-md-1">
 		{$command->getCoordinates()}
 	</span>
 	<span class="col-md-2">
@@ -12,10 +12,14 @@
 		{block content}
 		{/block}
 	</span>
-	<span class="col-md-2">
-		<a class="btn btn-danger" n:href="remove!, uuid => $command->getUuid()->toString()">Smazat</a>
+	<span class="col-md-1">
+		<a class="btn btn-danger" n:href="remove!, uuid => $command->getUuid()->toString()">Delete</a>
 	</span>
-	<span class="col-md-2">
+	<span class="col-md-1">
+		{block edit}
+		{/block}
+	</span>
+	<span class="col-md-1">
 		{if !$iterator->isFirst()}
 			<a n:href="moveUp!, uuid => $command->getUuid()->toString()">
 				<span class="glyphicon glyphicon-chevron-up"></span>
@@ -27,5 +31,4 @@
 			</a>
 		{/if}
 	</span>
-
 </div>

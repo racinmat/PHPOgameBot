@@ -29,6 +29,13 @@ class QueueManager extends Object
 		$this->queueRepository->saveQueue($queue);
 	}
 
+	public function addToRepetitiveCommands(ICommand $command)
+	{
+		$queue = $this->queueRepository->loadRepetitiveCommands();
+		$queue->add($command);
+		$this->queueRepository->saveRepetitiveCommands($queue);
+	}
+
 	public function removeFromQueue(Uuid $uuid)
 	{
 		$queue = $this->queueRepository->loadQueue();
@@ -81,4 +88,43 @@ class QueueManager extends Object
 		$queue->addBefore($command, $key);
 		$this->queueRepository->saveQueue($queue);
 	}
+
+	public function getCommand(Uuid $uuid) : ICommand
+	{
+		$commands = $this->queueRepository->loadQueue()->merge($this->queueRepository->loadRepetitiveCommands());
+		$commands->filter(Functions::hasCommandUuid($uuid))->first();
+	}
+
+	public function saveCommand(ICommand $command)
+	{
+		if ($this->isCommandInQueue($command->getUuid())) {
+			$queue = $this->queueRepository->loadQueue();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($command->getUuid())) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
+	}
+
+	private function isCommandInQueue(Uuid $uuid) : bool
+	{
+		return ! $this->queueRepository->loadQueue()->filter(Functions::hasCommandUuid($uuid))->isEmpty();
+	}
+
+	private function isCommandInRepetitive(Uuid $uuid) : bool
+	{
+		return ! $this->queueRepository->loadRepetitiveCommands()->filter(Functions::hasCommandUuid($uuid))->isEmpty();
+	}
+
+	private function updateCommand(ArrayCollection $commands, ICommand $newCommand)
+	{
+		$key = $commands->indexOf($commands->filter(Functions::hasCommandUuid($newCommand->getUuid()))->first());
+		$commands->set($key, $newCommand);
+	}
+	
 }

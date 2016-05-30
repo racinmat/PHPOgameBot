@@ -34,6 +34,11 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 		$this->loadFromArray($data);
 	}
 
+	public function setCoordinates(Coordinates $coordinates)
+	{
+		$this->coordinates = $coordinates;
+	}
+
 	public function toArray() : array
 	{
 		return [

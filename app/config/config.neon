@@ -6,7 +6,8 @@ parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
 	queueFile: %wwwDir%/queue.json
-	periodicRun: '30 minutes'
+	repetitiveCommandsFile:  %wwwDir%/repetitive.json
+	periodicRun: '60 minutes'
 
 php:
 	date.timezone: Europe/Prague
@@ -35,7 +36,7 @@ services:
 	- App\Model\Game\PlanetManager
 	- App\Model\CronManager(%cronFile%)
 	- App\Model\Queue\QueueManager
-	- App\Model\Queue\QueueFileRepository(queueFile: %queueFile%)
+	- App\Model\Queue\QueueFileRepository(queueFile: %queueFile%, repetitiveCommandsFile: %repetitiveCommandsFile%)
 	- App\Forms\FormFactory
 	- App\Model\Game\Menu
 	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
@@ -51,6 +52,8 @@ services:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
 	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::UPDATE])
+	- App\Forms\SendFleetCommandFormFactory
+	- App\Forms\ScanGalaxyCommandFormFactory
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
