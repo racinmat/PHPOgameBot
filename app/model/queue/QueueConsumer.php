@@ -112,28 +112,29 @@ class QueueConsumer extends Object
 		$this->resolveTimeOfNextRun($failedCommands->merge($repetitiveCommands));
 	}
 
-	private function resolveTimeOfNextRun(array $commands)
+	private function resolveTimeOfNextRun(ArrayCollection $commands)
 	{
+		if ($commands->isEmpty()) {
+			return;
+		}
 
-		if (count($commands) > 0) {
-			$nextStarts = [];
-			/** @var ICommand $command */
-			foreach ($commands as $command) {
-				foreach ($this->processors as $processor) {
-					if ($processor->canProcessCommand($command)) {
-						$this->logger->addInfo("Going to find the next run of command $command.");
-						$datetime = $processor->getTimeToProcessingAvailable($command);
-						$this->logger->addInfo("Next run of command $command is $datetime.");
-						$nextStarts[] = $datetime;
-						break;
-					}
+		$nextStarts = [];
+		/** @var ICommand $command */
+		foreach ($commands as $command) {
+			foreach ($this->processors as $processor) {
+				if ($processor->canProcessCommand($command)) {
+					$this->logger->addInfo("Going to find the next run of command $command.");
+					$datetime = $processor->getTimeToProcessingAvailable($command);
+					$this->logger->addInfo("Next run of command $command is $datetime.");
+					$nextStarts[] = $datetime;
+					break;
 				}
 			}
-
-			usort($nextStarts, Functions::compareCarbonDateTimes());
-			$this->logger->addDebug("Nearest next run is {$nextStarts[0]->__toString()}.");
-			$this->cronManager->setNextStart($nextStarts[0]);
 		}
+
+		usort($nextStarts, Functions::compareCarbonDateTimes());
+		$this->logger->addDebug("Nearest next run is {$nextStarts[0]->__toString()}.");
+		$this->cronManager->setNextStart($nextStarts[0]);
 	}
 
 	private function preProcessCommand(ICommand $command, ArrayCollection $queue)
