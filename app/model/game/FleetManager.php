@@ -110,8 +110,10 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$enoughResources = true;
 		if ($command->waitForResources()) {
+			$this->logger->addDebug("This fleet wants to wait for resources: {$command->getResources()}.");
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
 			$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
+			$this->logger->addDebug($enoughResources ? 'Enough resources, processing available.' : "Not enough resources, processing unavailable.");
 		}
 		return $freeFleets && $enoughResources;
 	}

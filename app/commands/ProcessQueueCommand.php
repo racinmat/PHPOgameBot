@@ -94,4 +94,4 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		$output->writeln('Attacks checked');
 	}
 
-} 
+}

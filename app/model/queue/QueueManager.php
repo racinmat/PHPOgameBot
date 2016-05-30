@@ -47,7 +47,38 @@ class QueueManager extends Object
 
 	public function moveCommandUp(Uuid $uuid)
 	{
-		$queue = $this->queueRepository->loadQueue();
+		if ($this->isCommandInQueue($uuid)) {
+			$queue = $this->queueRepository->loadQueue();
+			$this->moveUp($queue, $uuid);
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($uuid)) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$this->moveUp($queue, $uuid);
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
+	}
+
+	public function moveCommandDown(Uuid $uuid)
+	{
+		if ($this->isCommandInQueue($uuid)) {
+			$queue = $this->queueRepository->loadQueue();
+			$this->moveDown($queue, $uuid);
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($uuid)) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$this->moveDown($queue, $uuid);
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
+	}
+
+	private function moveUp(ArrayCollection $queue, Uuid $uuid)
+	{
 		foreach ($queue as $key => $item) {
 			if ($item->getUuid()->equals($uuid) && $key !== 0) {
 				$temp = $queue[$key];
@@ -56,12 +87,10 @@ class QueueManager extends Object
 				break;
 			}
 		}
-		$this->queueRepository->saveQueue($queue);
 	}
 
-	public function moveCommandDown(Uuid $uuid)
+	private function moveDown(ArrayCollection $queue, Uuid $uuid)
 	{
-		$queue = $this->queueRepository->loadQueue();
 		foreach ($queue as $key => $item) {
 			if ($item->getUuid()->equals($uuid) && $key !== count($queue) - 1) {
 				$temp = $queue[$key];
@@ -70,7 +99,6 @@ class QueueManager extends Object
 				break;
 			}
 		}
-		$this->queueRepository->saveQueue($queue);
 	}
 
 	/**
