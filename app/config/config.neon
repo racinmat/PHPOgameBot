@@ -7,11 +7,10 @@ parameters:
 	cronFile: %wwwDir%/cron.txt
 	queueFile: %wwwDir%/queue.json
 	repetitiveCommandsFile:  %wwwDir%/repetitive.json
-	periodicRun: '60 minutes'
+	periodicRun: '30 minutes'
 
 php:
 	date.timezone: Europe/Prague
-
 
 application:
 	errorPresenter: Error
@@ -21,7 +20,6 @@ application:
 
 session:
 	expiration: 14 days
-
 
 services:
 	router: App\RouterFactory::createRouter

@@ -53,4 +53,15 @@ class Fleet extends Object
 	{
 		return count($this->fleet) === 0;
 	}
+
+	public function getNonZeroShips() : array
+	{
+		$nonZeroFleet = [];
+		foreach ($this->fleet as $ship => $count) {
+			if ($count > 0) {
+				$nonZeroFleet[$ship] = $count;
+			}
+		}
+		return $nonZeroFleet;
+	}
 }

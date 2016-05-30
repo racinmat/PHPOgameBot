@@ -1,9 +1,8 @@
 {layout 'layout.latte'}
 {block content}
-	To: {$command->getTo()}<br/>
-	Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}<br/>
-	Mission: {$command->getMission()}<br/>
-	Wait for resources: {$command->waitForResources() ? 'yes' : 'no'}
+	To: {$command->getTo()}, Mission: {$command->getMission()}<br/>
+	Wait for resources: {$command->waitForResources() ? 'yes' : 'no'}<br/>
+	Fleet: {$command->getNonZeroFleet()|implodeAssoc:',',':'}
 {/block}
 
 {block edit}

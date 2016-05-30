@@ -104,29 +104,7 @@ class QueueConsumer extends Object
 		}
 
 		//repetitive commands
-		$repetitiveCommands = [];
-		/** @var Planet[] $myPlanets */
-		$myPlanets = $this->planetManager->getAllMyPlanets()->toArray();
-		$ratio = new Resources(65, 39, 10);
-		$sum = $ratio->getTotal();
-		/** @var Planet $home */
-		$home = array_shift($myPlanets);    //do not send from home planet
-		foreach ($myPlanets as $myPlanet) {
-			$fleet = new Fleet();
-			$fleet->addShips(Ships::_(Ships::LARGE_CARGO_SHIP), 4);
-			$capacity = $fleet->getCapacity();
-			$resources = $ratio->multiplyByScalar($capacity)->divideByScalar($sum);
-			$repetitiveCommands[] = SendFleetCommand::fromArray([
-				'coordinates' => $myPlanet->getCoordinates()->toValueObject()->toArray(),
-				'data' => [
-					'to' => $home->getCoordinates()->toValueObject()->toArray(),
-					'fleet' => $fleet->toArray(),
-					'mission' => FleetMission::TRANSPORT,
-					'resources' => $resources->toArray(),
-					'waitForResources' => true
-				]
-			]);
-		}
+		$repetitiveCommands = $this->queueManager->getRepetitiveCommands();
 		foreach ($repetitiveCommands as $repetitiveCommand) {
 			$this->processCommand($repetitiveCommand);
 		}

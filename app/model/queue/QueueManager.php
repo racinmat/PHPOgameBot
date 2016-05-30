@@ -81,6 +81,14 @@ class QueueManager extends Object
 		return $this->queueRepository->loadQueue();
 	}
 
+	/**
+	 * @return ICommand[]|ArrayCollection
+	 */
+	public function getRepetitiveCommands() : ArrayCollection
+	{
+		return $this->queueRepository->loadRepetitiveCommands();
+	}
+
 	public function addBefore(ICommand $command, Uuid $uuid)
 	{
 		$queue = $this->queueRepository->loadQueue();

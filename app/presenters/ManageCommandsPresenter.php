@@ -137,11 +137,7 @@ class ManageCommandsPresenter extends BasePresenter
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toValueObject();
 			$command->setCoordinates($coordinates);
 			$command->setMission(FleetMission::_($values['mission']));
-			$command->setTo(Coordinates::fromArray([
-				'galaxy' => $values['to']['galaxy'],
-				'system' => $values['to']['system'],
-				'planet' => Coordinates::$maxPlanet
-			]));
+			$command->setTo(Coordinates::fromArray($values['to']));
 			$fleet = new Fleet();
 			foreach (Ships::getEnumValues() as $index => $ship) {
 				$fleet->addShips(Ships::_($ship), $values['fleet'][$index]);
