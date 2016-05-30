@@ -100,6 +100,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 	private function sendFleet(SendFleetCommand $command) : bool
 	{
+		//todo: check whether command has any fleet in itself. 
 		$I = $this->I;
 
 		$to = $command->getTo();
@@ -113,7 +114,7 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 		$this->logger->addDebug('Processing available, starting to process the command.');
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
-		foreach ($command->getFleet() as $ship => $count) {
+		foreach ($command->getFleet()->toArray() as $ship => $count) {
 			$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
 		}
 		$I->click('#continue.on');

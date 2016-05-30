@@ -70,7 +70,7 @@ class SendFleetCommand extends BaseCommand
 	}
 
 	/**
-	 * @return array
+	 * @return Fleet
 	 */
 	public function getFleet()
 	{

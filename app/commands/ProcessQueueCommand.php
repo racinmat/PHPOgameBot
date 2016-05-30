@@ -9,7 +9,6 @@ use App\Model\Queue\QueueConsumer;
 use Carbon\Carbon;
 use Nette\DI\Container;
 use Nette\Utils\Validators;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
