@@ -42,7 +42,7 @@ class DatabaseManager extends Object
 			->andWhere('planet.coordinates.system = :system')
 			->andWhere('planet.coordinates.planet = :planet')
 			->setParameters($coordinates->toArray())
-			->getQuery()->getSingleResult();
+			->getQuery()->getOneOrNullResult();
 	}
 
 	/**

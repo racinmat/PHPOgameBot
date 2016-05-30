@@ -92,22 +92,18 @@ class ManageCommandsPresenter extends BasePresenter
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates();
 			$command->setCoordinates($coordinates);
 			$command->setFrom(Coordinates::fromArray([
-				'from' => [
-					'galaxy' => $values['from']['galaxy'],
-					'system' => $values['from']['system'],
-					'planet' => Coordinates::$minPlanet
-				]
+				'galaxy' => $values['from']['galaxy'],
+				'system' => $values['from']['system'],
+				'planet' => Coordinates::$minPlanet
 			]));
 			$command->setTo(Coordinates::fromArray([
-				'to' => [
-					'galaxy' => $values['to']['galaxy'],
-					'system' => $values['to']['system'],
-					'planet' => Coordinates::$maxPlanet
-				]
+				'galaxy' => $values['to']['galaxy'],
+				'system' => $values['to']['system'],
+				'planet' => Coordinates::$maxPlanet
 			]));
 			$this->queueManager->saveCommand($command);
 			$this->flashMessage('Command updated', 'success');
-			$this->redirect('this', ['uuid' => $command->getUuid()]);
+			$this->redirect('this');
 		};
 
 		return $form;
