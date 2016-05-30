@@ -71,17 +71,14 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		$cronManager = $this->container->getByType(CronManager::class);
 		$signManager->signIn();
 
-		$reportReader = $this->container->getByType(ReportReader::class);
-		$reportReader->readEspionageReportsFrom(Carbon::today()->addHours(21));
-
-//		if ($minutesInterval > 0) {
-//			while (true) {
-//				$this->process($output);
-//				sleep(60 * $minutesInterval);
-//			}
-//		} else {
-//			$this->process($output);
-//		}
+		if ($minutesInterval > 0) {
+			while (true) {
+				$this->process($output);
+				sleep(60 * $minutesInterval);
+			}
+		} else {
+			$this->process($output);
+		}
 
 		$signManager->signOut();
 		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun))->addMinutes(random_int(0, 4))->addSeconds(random_int(0, 59)));
