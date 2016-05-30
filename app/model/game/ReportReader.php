@@ -56,13 +56,15 @@ class ReportReader extends Object
 		$I->click('a.comm_menu.messages');
 		usleep(Random::microseconds(1, 2));
 
-		$I->click('Podrobnosti', 'li.msg a.fright.txt_link.msg_action_link.overlay');
+		$firstReportDetailsSelector = 'ul.tab_inner li:nth-of-type(1).msg a.fright.txt_link.msg_action_link.overlay';
+		$I->waitForElementVisible($firstReportDetailsSelector);
+		$I->click($firstReportDetailsSelector);
 		usleep(Random::microseconds(1.5, 2.5));
 		$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
-		$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
+		$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
 		list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
 		if ($currentReport != 1) {
-			$I->click($this->reportPopupSelector . ' .pagination > li:nth-of-type(1)');    //go to first report
+			$I->click("$this->reportPopupSelector .pagination > li:nth-of-type(1)");    //go to first report
 			usleep(Random::microseconds(1.5, 2.5));
 			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
 			list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
@@ -70,18 +72,24 @@ class ReportReader extends Object
 				$this->logger->addWarning('Not at the first espionage report.');
 			}
 		}
+		$this->logger->addInfo("Going to read max $reportsCount logs to date $from.");
 		for ($i = 1; $i < $reportsCount; $i++) {
 			//check report time
-			$reportTimeString = $I->grabTextFrom($this->reportPopupSelector . ' .msg_date.fright');
+			$reportTimeString = $I->grabTextFrom("$this->reportPopupSelector .msg_date.fright");
 			$reportTime = Carbon::instance(new \DateTime($reportTimeString));
 			if ($reportTime->lt($from)) {
 				break;
 			}
 
 			$this->readCurrentEspionageReport();
-			$I->click($this->reportPopupSelector . ' .pagination > li:nth-of-type(4) a');
+			$I->click("$this->reportPopupSelector .pagination > li:nth-of-type(4) a");
 			usleep(Random::microseconds(1, 1.5));
 		}
+
+		$this->logger->addInfo("Done reading reports.");
+
+		//close the last opened report
+		$I->click("$this->reportPopupSelector button.ui-dialog-titlebar-close");
 	}
 
 	private function readCurrentEspionageReport()
@@ -101,9 +109,9 @@ class ReportReader extends Object
 		$researchSelector = $this->reportPopupSelector . ' div.mCSB_container > ul:nth-of-type(5)';
 
 		$metal = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(1) > .res_value');
-		$crystal = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(2) > .res_value');
-		$deuterium = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(3) > .res_value');
-		$energy = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-typ(4) > .res_value');
+		$crystal = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(2) > .res_value');
+		$deuterium = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(3) > .res_value');
+		$energy = $I->grabTextFrom($resourcesSelector . ' > li:nth-of-type(4) > .res_value');
 
 		$planet->setMetal($metal);
 		$planet->setCrystal($crystal);

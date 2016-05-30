@@ -5,12 +5,14 @@ namespace App\Commands;
 use App\Enum\Building;
 use App\Model\DatabaseManager;
 use App\Model\Game\PlanetManager;
+use App\Model\Game\ReportReader;
 use App\Model\Game\SignManager;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\QueueConsumer;
 use App\Model\Queue\QueueManager;
 use App\Model\ResourcesCalculator;
 use App\Model\ValueObject\Coordinates;
+use Carbon\Carbon;
 use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,6 +38,9 @@ class TestCommand extends CodeceptionUsingCommand {
 
 	protected function executeDelegated(InputInterface $input, OutputInterface $output)
 	{
+		/** @var ReportReader $reportReader */
+		$reportReader = $this->container->getByType(ReportReader::class);
+		$reportReader->readEspionageReportsFrom(Carbon::today()->addHours(21));
 //		$signManager = $this->container->getByType(SignManager::class);
 //		$signManager->signIn();
 //		/** @var QueueConsumer $queueConsumer */
@@ -43,19 +48,19 @@ class TestCommand extends CodeceptionUsingCommand {
 //		$queueConsumer->processQueue();
 //		/** @var ResourcesCalculator $resourcesCalculator */
 //		$resourcesCalculator = $this->container->getByType(ResourcesCalculator::class);
-		/** @var DatabaseManager $databaseManager */
-		$databaseManager = $this->container->getByType(DatabaseManager::class);
+//		/** @var DatabaseManager $databaseManager */
+//		$databaseManager = $this->container->getByType(DatabaseManager::class);
 //		$planet = array_values($databasePlanetManager->getAllMyPlanets())[0];
 //		$production = $resourcesCalculator->getProductionPerHour($planet);
 //		var_dump($production);
-		$coordinates = [
-			'galaxy' => 1,
-			'system' => 358,
-			'planet' => 8
-		];
-		$planet = $databaseManager->getPlanet(Coordinates::fromArray($coordinates));
-		$planet->setNaniteFactoryLevel(0);
-		$databaseManager->flush();
+//		$coordinates = [
+//			'galaxy' => 1,
+//			'system' => 358,
+//			'planet' => 8
+//		];
+//		$planet = $databaseManager->getPlanet(Coordinates::fromArray($coordinates));
+//		$planet->setNaniteFactoryLevel(0);
+//		$databaseManager->flush();
 
 		//metal/crystal/deu/power
 		$c = [];

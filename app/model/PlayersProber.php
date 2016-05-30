@@ -89,6 +89,7 @@ class PlayersProber extends Object implements ICommandProcessor
 			if ( ! $planetToProbe->gotAllInformationFromLastEspionage()) {
 				$probesAmount++;
 				$planetToProbe->setProbesToLastEspionage($probesAmount);
+				$this->databaseManager->flush();
 			}
 			$probePlanetCommand = SendFleetCommand::fromArray([
 				'coordinates' => $planet->getCoordinates()->toArray(),

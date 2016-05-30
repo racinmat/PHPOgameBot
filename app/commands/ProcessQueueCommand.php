@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Model\AttackChecker;
 use App\Model\CronManager;
+use App\Model\Game\ReportReader;
 use App\Model\Game\SignManager;
 use App\Model\Queue\QueueConsumer;
 use App\Utils\Random;
@@ -63,7 +64,6 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 		$minutesInterval = $input->getOption('repeat');
 
-
 		$signManager = $this->container->getByType(SignManager::class);
 		$this->queueConsumer = $this->container->getByType(QueueConsumer::class);
 		$this->attackChecker = $this->container->getByType(AttackChecker::class);
@@ -71,14 +71,17 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		$cronManager = $this->container->getByType(CronManager::class);
 		$signManager->signIn();
 
-		if ($minutesInterval > 0) {
-			while (true) {
-				$this->process($output);
-				sleep(60 * $minutesInterval);
-			}
-		} else {
-			$this->process($output);
-		}
+		$reportReader = $this->container->getByType(ReportReader::class);
+		$reportReader->readEspionageReportsFrom(Carbon::today()->addHours(21));
+
+//		if ($minutesInterval > 0) {
+//			while (true) {
+//				$this->process($output);
+//				sleep(60 * $minutesInterval);
+//			}
+//		} else {
+//			$this->process($output);
+//		}
 
 		$signManager->signOut();
 		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun))->addMinutes(random_int(0, 4))->addSeconds(random_int(0, 59)));
