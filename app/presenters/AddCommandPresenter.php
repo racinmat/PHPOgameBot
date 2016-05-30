@@ -253,11 +253,7 @@ class AddCommandPresenter extends BasePresenter
 			$command = SendFleetCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
-					'to' => [
-						'galaxy' => $values['to']['galaxy'],
-						'system' => $values['to']['system'],
-						'planet' =>$values['to']['planet']
-					],
+					'to' => $values['to'],
 					'fleet' => $fleet,
 					'mission' => $values['mission'],
 					'waitForResources' => $values['waitForResources'],

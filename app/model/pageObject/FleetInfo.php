@@ -120,7 +120,7 @@ class FleetInfo extends Object
 			$returnSelector = "[data-return-flight=$return]";
 		}
 		if ($fleetMission !== null) {
-			$missionSelector = "[data-mission-type={$fleetMission->getNumber()}]";
+			$missionSelector = "[data-mission-type=\"{$fleetMission->getNumber()}\"]";
 		}
 		return "$this->fleetRow:nth-of-type($nth){$returnSelector}{$missionSelector} > td$type";
 	}

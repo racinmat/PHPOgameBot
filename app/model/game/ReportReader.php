@@ -86,6 +86,8 @@ class ReportReader extends Object
 
 	private function readCurrentEspionageReport()
 	{
+		$enoughInformation = true;
+
 		$I = $this->I;
 		$coordinatesText = $I->grabTextFrom($this->reportPopupSelector . ' .msg_title a.txt_link');
 		$coordinates = OgameParser::parseOgameCoordinates($coordinatesText);
@@ -110,41 +112,51 @@ class ReportReader extends Object
 
 		//todo: přidat do entity planeta informace o letce a obraně
 
-		$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
-		for ($i = 1; $i <= $buildingsCount; $i++) {
-			$name = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt");
-			$level = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.fright");
+		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
+			$enoughInformation = false;
+		} else {
+			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
+			for ($i = 1; $i <= $buildingsCount; $i++) {
+				$name = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt");
+				$level = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.fright");
 
-			$building = Building::_(Building::getFromTranslatedName($name));
-			$building->setCurrentLevel($planet, $level);
+				$building = Building::_(Building::getFromTranslatedName($name));
+				$building->setCurrentLevel($planet, $level);
+			}
 		}
 
-		$researchCount = $I->getNumberOfElements($researchSelector . ' li');
-		for ($i = 1; $i <= $researchCount; $i++) {
-			$name = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.detail_list_txt");
-			$level = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.fright");
+		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
+			$enoughInformation = false;
+		} else {
+			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
+			for ($i = 1; $i <= $researchCount; $i++) {
+				$name = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.detail_list_txt");
+				$level = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.fright");
 
-			$research = Research::_(Research::getFromTranslatedName($name));
-			$research->setCurrentLevel($planet, $level);
+				$research = Research::_(Research::getFromTranslatedName($name));
+				$research->setCurrentLevel($planet, $level);
+			}
 		}
 
-		$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
-		for ($i = 1; $i <= $defenseCount; $i++) {
-			$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
-			$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
-
+//		$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
+//		for ($i = 1; $i <= $defenseCount; $i++) {
+//			$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
+//			$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
+//
 //			$defense = Defense::_(Defense::getFromTranslatedName($name));
-//			$building->setCurrentLevel($planet, $level);
-		}
-
-		$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
-		for ($i = 1; $i <= $fleetCount; $i++) {
-			$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
-			$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
-
+//			$defense->setAmount($planet, $level);
+//		}
+//
+//		$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
+//		for ($i = 1; $i <= $fleetCount; $i++) {
+//			$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
+//			$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
+//
 //			$ships = Ships::_(Ships::getFromTranslatedName($name));
-//			$ships->setCurrentLevel($planet, $level);
-		}
+//			$ships->setAmount($planet, $level);
+//		}
+
+		$planet->setGotAllInformationFromLastEspionage($enoughInformation);
 
 		$this->databaseManager->flush();
 	}

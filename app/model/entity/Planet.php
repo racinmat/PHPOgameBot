@@ -188,6 +188,18 @@ class Planet extends Object
 	 */
 	private $debrisCrystal;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var int
+	 */
+	private $probesToLastEspionage;
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
+	private $gotAllInformationFromLastEspionage;
+
 	public function __construct(string $name, Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
@@ -217,6 +229,8 @@ class Planet extends Object
 		$this->researchLabLevel = 0;
 		$this->missileSiloLevel = 0;
 		$this->naniteFactoryLevel = 0;
+		$this->probesToLastEspionage = 0;
+		$this->gotAllInformationFromLastEspionage = false;
 	}
 
 	/**
@@ -642,6 +656,26 @@ class Planet extends Object
 	public function setTerraformerLevel($terraformerLevel)
 	{
 		$this->terraformerLevel = $terraformerLevel;
+	}
+
+	public function getProbesToLastEspionage() : int
+	{
+		return $this->probesToLastEspionage;
+	}
+
+	public function setProbesToLastEspionage(int $probesToLastEspionage)
+	{
+		$this->probesToLastEspionage = $probesToLastEspionage;
+	}
+
+	public function gotAllInformationFromLastEspionage() : bool
+	{
+		return $this->gotAllInformationFromLastEspionage;
+	}
+
+	public function setGotAllInformationFromLastEspionage(bool $gotAllInformationFromLastEspionage)
+	{
+		$this->gotAllInformationFromLastEspionage = $gotAllInformationFromLastEspionage;
 	}
 
 }
