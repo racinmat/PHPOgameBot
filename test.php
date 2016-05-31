@@ -113,14 +113,14 @@ class B extends A {}
 //$ratio->forAll(function($e) use (&$sum) {$sum += $e; return true;});
 //echo $sum;
 
-/** @var \App\Model\DatabaseManager $databaseManager */
-$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
-/** @var \App\Model\ResourcesCalculator $resourcesCalculator */
-$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
-$planets = $databaseManager->getAllMyPlanets();
-foreach ($planets as $i => $planet) {
-	var_dump($resourcesCalculator->getProductionPerHour($planet));
-}
+///** @var \App\Model\DatabaseManager $databaseManager */
+//$databaseManager = $container->getByType(\App\Model\DatabaseManager::class);
+///** @var \App\Model\ResourcesCalculator $resourcesCalculator */
+//$resourcesCalculator = $container->getByType(\App\Model\ResourcesCalculator::class);
+//$planets = $databaseManager->getAllMyPlanets();
+//foreach ($planets as $i => $planet) {
+//	var_dump($resourcesCalculator->getProductionPerHour($planet));
+//}
 //var_dump($resourcesCalculator->getProductionPerHour($planet));
 //$planet = $databaseManager->getPlanet(new \App\Model\ValueObject\Coordinates(1, 357, 6));
 
@@ -145,3 +145,7 @@ foreach ($planets as $i => $planet) {
 //}
 //
 //echo getNthFleetArrivalTime(1, \App\Model\PageObject\FleetInfo::TYPE_ENEMY);
+$fleet = \App\Model\ValueObject\Fleet::fromArray([\App\Enum\Ships::BATTLESHIP => 5, \App\Enum\Ships::DESTROYER => 0]);
+$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::ESPIONAGE_PROBE), 2);
+$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::DEATHSTAR), 0);
+var_dump($fleet->getNonZeroShips());

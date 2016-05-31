@@ -3,22 +3,23 @@
 namespace App\Model\ValueObject;
 
 use App\Enum\Ships;
+use App\Utils\ArrayCollection;
 use Nette\Object;
 
 class Fleet extends Object
 {
 
-	/** @var array Ships => int */
+	/** @var ArrayCollection string => int */
 	private $fleet;
 
 	public function __construct()
 	{
-		$this->fleet = [];
+		$this->fleet = new ArrayCollection();
 	}
 
 	public function addShips(Ships $ships, int $count)
 	{
-		if (isset($this->fleet[$ships->getValue()])) {
+		if ($this->fleet->containsKey($ships->getValue())) {
 			$this->fleet[$ships->getValue()] += $count;
 		} else {
 			$this->fleet[$ships->getValue()] = $count;
@@ -37,7 +38,7 @@ class Fleet extends Object
 
 	public function toArray() : array
 	{
-		return $this->fleet;
+		return $this->fleet->toArray();
 	}
 
 	public static function fromArray(array $data) : Fleet
@@ -56,12 +57,7 @@ class Fleet extends Object
 
 	public function getNonZeroShips() : array
 	{
-		$nonZeroFleet = [];
-		foreach ($this->fleet as $ship => $count) {
-			if ($count > 0) {
-				$nonZeroFleet[$ship] = $count;
-			}
-		}
-		return $nonZeroFleet;
+		return $this->fleet->filter(function ($count) {return $count > 0;})->toArray();
 	}
+
 }
