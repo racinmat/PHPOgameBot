@@ -85,12 +85,12 @@ class PlayersProber extends Object implements ICommandProcessor
 		$this->logger->addInfo(count($planetsToProbe) . ' planets to probe.');
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
-			$probesAmount = $planetToProbe->getProbesToLastEspionage();
+			$probesAmount = max($planetToProbe->getProbesToLastEspionage(), 1); //always send at least 1 probe
 			if ( ! $planetToProbe->gotAllInformationFromLastEspionage()) {
 				$probesAmount++;
-				$planetToProbe->setProbesToLastEspionage($probesAmount);
-				$this->databaseManager->flush();
 			}
+			$planetToProbe->setProbesToLastEspionage($probesAmount);
+			$this->databaseManager->flush();
 			$probePlanetCommand = SendFleetCommand::fromArray([
 				'coordinates' => $planet->getCoordinates()->toArray(),
 				'data' => [
