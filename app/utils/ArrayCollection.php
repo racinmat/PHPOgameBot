@@ -13,16 +13,16 @@ namespace App\Utils;
  * @package App\Utils
  * @method ArrayCollection map(\Closure $func)
  */
-class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection implements Collection
+class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection
 {
 
-	public function prepend(array $array) : Collection
+	public function prepend(array $array) : ArrayCollection
 	{
 		$this->elements = array_merge($array, $this->elements);
 		return $this;
 	}
 
-	public function addBefore($element, $key) : Collection
+	public function addBefore($element, $key) : ArrayCollection
 	{
 		$before = $this->slice(0, $key);
 		$after = $this->slice($key, $this->count() - $key);

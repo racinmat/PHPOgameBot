@@ -9,13 +9,13 @@
 namespace App\Model\Queue;
 
 use App\Model\Queue\Command\ICommand;
-use App\Utils\Collection;
+use App\Utils\ArrayCollection;
 
 interface ICommandPreProcessor
 {
 
 	public function canPreProcessCommand(ICommand $command) : bool;
 
-	public function preProcessCommand(ICommand $command, Collection $queue) : bool;
+	public function preProcessCommand(ICommand $command, ArrayCollection $queue) : bool;
 
 }

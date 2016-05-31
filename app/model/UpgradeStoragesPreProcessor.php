@@ -10,9 +10,8 @@ use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\ICommandPreProcessor;
 use App\Model\Queue\QueueManager;
-use App\Utils\Collection;
+use App\Utils\ArrayCollection;
 use App\Utils\Functions;
-use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -48,7 +47,7 @@ class UpgradeStoragesPreProcessor extends Object implements ICommandPreProcessor
 		return $command instanceof IEnhanceCommand;
 	}
 
-	public function preProcessCommand(ICommand $command, Collection $queue) : bool
+	public function preProcessCommand(ICommand $command, ArrayCollection $queue) : bool
 	{
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		/** @var IEnhanceCommand $command */
