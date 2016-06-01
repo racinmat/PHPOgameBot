@@ -7,7 +7,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
-- add ships and defense to planet entity. Maybe as embeddable
+- refactor buildings, ships and defense in to embeddable. And refactor researches too.
 - fleetsave on main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)

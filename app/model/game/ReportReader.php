@@ -151,23 +151,31 @@ class ReportReader extends Object
 			}
 		}
 
-//		$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
-//		for ($i = 1; $i <= $defenseCount; $i++) {
-//			$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
-//			$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
-//
-//			$defense = Defense::_(Defense::getFromTranslatedName($name));
-//			$defense->setAmount($planet, $level);
-//		}
-//
-//		$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
-//		for ($i = 1; $i <= $fleetCount; $i++) {
-//			$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
-//			$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
-//
-//			$ships = Ships::_(Ships::getFromTranslatedName($name));
-//			$ships->setAmount($planet, $level);
-//		}
+		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
+			$enoughInformation = false;
+		} else {
+			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
+			for ($i = 1; $i <= $defenseCount; $i++) {
+				$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
+				$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
+
+				$defense = Defense::_(Defense::getFromTranslatedName($name));
+				$defense->setAmount($planet, $level);
+			}
+		}
+
+		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
+			$enoughInformation = false;
+		} else {
+			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
+			for ($i = 1; $i <= $fleetCount; $i++) {
+				$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
+				$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
+
+				$ships = Ships::_(Ships::getFromTranslatedName($name));
+				$ships->setAmount($planet, $level);
+			}
+		}
 
 		$planet->setGotAllInformationFromLastEspionage($enoughInformation);
 

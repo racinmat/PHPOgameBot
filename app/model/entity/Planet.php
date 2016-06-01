@@ -174,8 +174,7 @@ class Planet extends Object
 	 * @var integer
 	 */
 	private $terraformerLevel;
-
-
+	
 	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
@@ -188,6 +187,151 @@ class Planet extends Object
 	 */
 	private $debrisCrystal;
 
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $rocketLauncherAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $lightLaserAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $heavyLaserAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $ionCannonAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $gaussCannonAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $plasmaTurretAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $smallShieldDomeAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $largeShieldDomeAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $antiBallisticMissileAmount;
+
+	/** 
+	 * @ORM\Column(type="integer") 
+	 * @var int 
+	 */ 
+	private $interplanetaryMissileAmount;
+	
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $smallCargoShipAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $largeCargoShipAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $lightFighterAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $heavyFighterAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $cruiserAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $battleshipAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $battlecruiserAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $destroyerAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $deathstarAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $bomberAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $recyclerAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $espionageProbeAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $solarSatelliteAmount;
+	
+	/** 
+ 	 * @ORM\Column(type="integer") 
+ 	 * @var int  
+	 */ 
+	private $colonyShipAmount;
+	
 	/**
 	 * @ORM\Column(type="integer")
 	 * @var int
@@ -229,6 +373,30 @@ class Planet extends Object
 		$this->researchLabLevel = 0;
 		$this->missileSiloLevel = 0;
 		$this->naniteFactoryLevel = 0;
+		$this->rocketLauncherAmount = 0;
+		$this->lightLaserAmount = 0;
+		$this->heavyLaserAmount = 0;
+		$this->ionCannonAmount = 0;
+		$this->gaussCannonAmount = 0;
+		$this->plasmaTurretAmount = 0;
+		$this->smallShieldDomeAmount = 0;
+		$this->largeShieldDomeAmount = 0;
+		$this->antiBallisticMissileAmount = 0;
+		$this->interplanetaryMissileAmount = 0;
+		$this->smallCargoShipAmount = 0;
+		$this->largeCargoShipAmount = 0;
+		$this->lightFighterAmount = 0;
+		$this->heavyFighterAmount = 0;
+		$this->cruiserAmount = 0;
+		$this->battleshipAmount = 0;
+		$this->battlecruiserAmount = 0;
+		$this->destroyerAmount = 0;
+		$this->deathstarAmount = 0;
+		$this->bomberAmount = 0;
+		$this->recyclerAmount = 0;
+		$this->espionageProbeAmount = 0;
+		$this->solarSatelliteAmount = 0;
+		$this->colonyShipAmount = 0;
 		$this->probesToLastEspionage = 0;
 		$this->gotAllInformationFromLastEspionage = false;
 	}
