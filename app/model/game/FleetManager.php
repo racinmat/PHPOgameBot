@@ -19,6 +19,7 @@ use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -165,11 +166,13 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
-		if ($I->seeInCurrentUrlExists($currentUrl)) {   //if url is still the same, the planet does not exist. Detecting error with popup fails sometimes and thus is not reliable
+		try {
+			$I->waitForText('Odeslání letky III', 4, '#planet > h2');
+		} catch(TimeOutException $e) {
 			$this->logger->addDebug('Url is still same. Can not proceed to next phase of fleet sending. Throwing exception.');
 			throw new NonExistingPlanetException();
 		}
-		
+
 		usleep(Random::microseconds(1.5, 2.5));
 
 		do {
