@@ -72,6 +72,7 @@ class PlayersProber extends Object implements ICommandProcessor
 	{
 		/** @var ProbePlayersCommand $command */
 		$this->probePlayers($command);
+		return true;
 	}
 
 	private function probePlayers(ProbePlayersCommand $command)

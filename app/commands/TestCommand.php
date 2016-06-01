@@ -259,10 +259,6 @@ class TestCommand extends CodeceptionUsingCommand {
 		]);
 		$c[] = UpgradeBuildingCommand::fromArray([
 			'coordinates' => $coordinates,
-			'data' => ['building' => Building::METAL_STORAGE]
-		]);
-		$c[] = UpgradeBuildingCommand::fromArray([
-			'coordinates' => $coordinates,
 			'data' => ['building' => Building::SOLAR_POWER_PLANT]
 		]);
 		$c[] = UpgradeBuildingCommand::fromArray([

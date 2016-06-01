@@ -92,8 +92,8 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				$this->signManager->signIn();
 				$this->menu->goToPlanet($planet);
 				$this->menu->goToPage(MenuItem::_(MenuItem::GALAXY));
-				$this->goToSystem($coordinates);
 			}
+			$this->goToSystem($coordinates);    //sometimes refresh after getting stuck does not log me out. In that case, I only go to desired system without login
 		}
 
 		$planetCount = Coordinates::$maxPlanet;
@@ -104,7 +104,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				continue;
 			}
 
-			//checking my planet, do not wate time with it. Status of my planets is missing
+			//checking my planet, do not waste time with it. Status of my planets is missing
 			if ($myPlanetsCoordinates->exists(Functions::equalCoordinates($coordinates))) {
 				continue;
 			}
