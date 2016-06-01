@@ -86,7 +86,7 @@ class PlayersProber extends Object implements ICommandProcessor
 		$this->logger->addInfo(count($planetsToProbe) . ' planets to probe.');
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
-			$probesAmount = max($planetToProbe->getProbesToLastEspionage(), 1); //always send at least 1 probe
+			$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
 			if ( ! $planetToProbe->gotAllInformationFromLastEspionage()) {
 				$probesAmount++;
 			}

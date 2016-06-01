@@ -46,4 +46,4 @@ abstract class CodeceptionUsingCommand extends Command {
 
 	abstract protected function executeDelegated(InputInterface $input, OutputInterface $output);
 
-} 
+}
