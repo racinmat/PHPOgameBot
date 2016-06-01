@@ -33,8 +33,9 @@ abstract class CodeceptionUsingCommand extends Command {
 			$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
 			/** @var Logger $logger */
 			$logger = $this->container->getByType(Logger::class);
-			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
 			$logger->addCritical('Exception thrown: ' . $e->getMessage());
+			$logger->addCritical('Exception stacktrace: ' . $e->getTraceAsString());
+			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
 			file_put_contents("$wwwDir/running.txt", '');
 			throw $e;
 		}
