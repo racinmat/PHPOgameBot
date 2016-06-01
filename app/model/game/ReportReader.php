@@ -6,6 +6,7 @@ use App\Enum\Buildable;
 use App\Enum\Building;
 use App\Enum\Defense;
 use App\Enum\MenuItem;
+use App\Enum\ProbingStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
@@ -94,7 +95,7 @@ class ReportReader extends Object
 
 	private function readCurrentEspionageReport()
 	{
-		$enoughInformation = true;
+		$probingStatus = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION);
 
 		$I = $this->I;
 		$coordinatesText = $I->grabTextFrom($this->reportPopupSelector . ' .msg_title a.txt_link');
@@ -126,7 +127,7 @@ class ReportReader extends Object
 		//todo: přidat do entity planeta informace o letce a obraně
 
 		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
-			$enoughInformation = false;
+			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
 			for ($i = 1; $i <= $buildingsCount; $i++) {
@@ -139,7 +140,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
-			$enoughInformation = false;
+			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
 			for ($i = 1; $i <= $researchCount; $i++) {
@@ -152,7 +153,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($defenseSelector . ' li.detail_list_fail')) {
-			$enoughInformation = false;
+			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
 			for ($i = 1; $i <= $defenseCount; $i++) {
@@ -165,7 +166,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($fleetSelector . ' li.detail_list_fail')) {
-			$enoughInformation = false;
+			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
 			for ($i = 1; $i <= $fleetCount; $i++) {
@@ -177,8 +178,9 @@ class ReportReader extends Object
 			}
 		}
 
-		$planet->setGotAllInformationFromLastEspionage($enoughInformation);
+		$planet->setProbingStatus($probingStatus);
 
 		$this->databaseManager->flush();
 	}
+
 }

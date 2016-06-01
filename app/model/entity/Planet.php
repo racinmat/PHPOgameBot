@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Building;
+use App\Enum\ProbingStatus;
 use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Resources;
 use Carbon\Carbon;
@@ -339,10 +340,10 @@ class Planet extends Object
 	private $probesToLastEspionage;
 
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(type="probingstatus")
+	 * @var ProbingStatus
 	 */
-	private $gotAllInformationFromLastEspionage;
+	private $probingStatus;
 
 	public function __construct(string $name, Coordinates $coordinates, Player $player)
 	{
@@ -398,7 +399,7 @@ class Planet extends Object
 		$this->solarSatelliteAmount = 0;
 		$this->colonyShipAmount = 0;
 		$this->probesToLastEspionage = 0;
-		$this->gotAllInformationFromLastEspionage = false;
+		$this->probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 	}
 
 	/**
@@ -836,15 +837,16 @@ class Planet extends Object
 		$this->probesToLastEspionage = $probesToLastEspionage;
 	}
 
-	public function gotAllInformationFromLastEspionage() : bool
+	public function getProbingStatus() : ProbingStatus
 	{
-		return $this->gotAllInformationFromLastEspionage;
+		return $this->probingStatus;
 	}
 
-	public function setGotAllInformationFromLastEspionage(bool $gotAllInformationFromLastEspionage)
+	public function setProbingStatus(ProbingStatus $probingStatus)
 	{
-		$this->gotAllInformationFromLastEspionage = $gotAllInformationFromLastEspionage;
+		$this->probingStatus = $probingStatus;
 	}
+
 
 	public function hasLoadedTemperature() : bool
 	{

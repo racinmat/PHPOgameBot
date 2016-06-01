@@ -159,12 +159,14 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 		$this->logger->addDebug('Filled coordinates.');
 		usleep(Random::microseconds(0.5, 1));
+
+		$currentUrl = $I->grabFromCurrentUrl();
 		$I->click('#continue.on');
 
-		usleep(0.1 * 1000 * 1000);  //just wait 0.1 second before checking whether popup appears or not
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
-		if ($I->seeElementExists('#fadeBox span.failed')) {
+		if ($I->seeInCurrentUrlExists($currentUrl)) {   //if url is still the same, the planet does not exist. Detecting error with popup fails sometimes and thus is not reliable
+			$this->logger->addDebug('Url is still same. Can not proceed to next phase of fleet sending. Throwing exception.');
 			throw new NonExistingPlanetException();
 		}
 		

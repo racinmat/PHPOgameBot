@@ -3,6 +3,7 @@
 namespace App\Model\Game;
 
 use App\Enum\FleetMission;
+use App\Enum\ProbingStatus;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
@@ -87,9 +88,10 @@ class PlayersProber extends Object implements ICommandProcessor
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
 			$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
-			if ( ! $planetToProbe->gotAllInformationFromLastEspionage()) {
+			if ($planetToProbe->getProbingStatus() === ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION)) {
 				$probesAmount++;
 			}
+			$planetToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
 			$planetToProbe->setProbesToLastEspionage($probesAmount);
 			$this->databaseManager->flush();
 			$probePlanetCommand = SendFleetCommand::fromArray([
