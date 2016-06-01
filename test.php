@@ -149,5 +149,6 @@ class B extends A {}
 //$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::ESPIONAGE_PROBE), 2);
 //$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::DEATHSTAR), 0);
 //var_dump($fleet->getNonZeroShips());
-var_dump($_SERVER);
-var_dump($_ENV);
+//var_dump($_SERVER);
+//var_dump($_ENV);
+var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet2") !== false);

@@ -66,7 +66,7 @@ class Acceptance extends \Codeception\Module
 	{
 		/** @var WebDriver $webDriver */
 		$webDriver = $this->getModule('WebDriver');
-		return strpos($webDriver->_getCurrentUri(), $uri);
+		return strpos($webDriver->_getCurrentUri(), $uri) !== false;
 	}
 
 	public function closeBrowser()
