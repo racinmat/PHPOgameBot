@@ -145,7 +145,9 @@ class B extends A {}
 //}
 //
 //echo getNthFleetArrivalTime(1, \App\Model\PageObject\FleetInfo::TYPE_ENEMY);
-$fleet = \App\Model\ValueObject\Fleet::fromArray([\App\Enum\Ships::BATTLESHIP => 5, \App\Enum\Ships::DESTROYER => 0]);
-$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::ESPIONAGE_PROBE), 2);
-$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::DEATHSTAR), 0);
-var_dump($fleet->getNonZeroShips());
+//$fleet = \App\Model\ValueObject\Fleet::fromArray([\App\Enum\Ships::BATTLESHIP => 5, \App\Enum\Ships::DESTROYER => 0]);
+//$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::ESPIONAGE_PROBE), 2);
+//$fleet->addShips(\App\Enum\Ships::_(\App\Enum\Ships::DEATHSTAR), 0);
+//var_dump($fleet->getNonZeroShips());
+var_dump($_SERVER);
+var_dump($_ENV);
