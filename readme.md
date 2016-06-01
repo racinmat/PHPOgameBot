@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
 - add ships and defense to planet entity. Maybe as embeddable
 - fleetsave on main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
@@ -35,18 +36,13 @@ TODO
 - maybe export/import queue and repetitious commands
 - think about routines implementation (repetitious commands)
 - automatically buy new probes when probes are destroyed when gathering data and buy new satellites when destroyed (Maintain quantity in Ogame Automizer)
-- log attacks, full storages and other important messages to some android app via monolog
 - repetitious tasks
 	- set repeating frequency
 	- farming scanned players 
 		- save planet status (from Ogame Automizer - Attack Status)
 		- set how many minimal resources to gather
-		- set from which planet to scan
-		- set espionage probe count to send
-			- "OGame Options > General > Spy Probes" in ogame menu
 		- set maximum deuterium consumption
 		- set expected resourced ratio
-		- set scanning range constraints
 		- predict resources on planet
 		- maybe implement "výhodnost (attack priority)" from Ogame Automizer Hunter 
 		- set how many fleet slots to use for farming and debris recycling (or how many slots to be reserved and let free)

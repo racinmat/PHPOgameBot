@@ -19,7 +19,7 @@ class OgameParser
 
 	public static function parseOgameCoordinates(string $coordinates) : Coordinates
 	{
-		$params = Strings::match($coordinates, '~\[(?<galaxy>\d{1}):(?<system>\d{3}):(?<planet>\d{1,2})\]~');
+		$params = Strings::match($coordinates, '~\[(?<galaxy>\d+):(?<system>\d+):(?<planet>\d+)\]~');
 		return new Coordinates($params['galaxy'], $params['system'], $params['planet']);
 	}
 
@@ -63,7 +63,7 @@ class OgameParser
 	 */
 	public static function parseTemperature(string $temperatures) : array
 	{
-		$params = Strings::match($temperatures, '~(?<from>\d+)°C až (?<to>\d+)°C~');
+		$params = Strings::match($temperatures, '~(?<from>-?\d+)°C až (?<to>-?\d+)°C~');
 		return [(int) $params['from'], (int) $params['to']];
 	}
 
