@@ -142,6 +142,9 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Processing available, starting to process the command.');
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		foreach ($command->getFleet()->getNonZeroShips() as $ship => $count) {
+			if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
+				return false;
+			}
 			$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
 		}
 		$I->click('#continue.on');

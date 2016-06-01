@@ -8,7 +8,6 @@ TODO
 -----
 - add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
-- do not send fleet when not enough ships is available. Return false, command failed to proceeded.
 - fleetsave on main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)
