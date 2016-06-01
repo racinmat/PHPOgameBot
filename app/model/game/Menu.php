@@ -35,6 +35,9 @@ class Menu extends Object
 			return;
 		}
 		$this->logger->addDebug("Clicking to go to requested page.");
+		if ($I->seeElementExists('#errorPageContainer > #errorTitle > #errorTitleText')) {  //firefox error page with message "Secure Connection Failed"
+			$I->reloadPage();
+		}
 		$I->click($menuItem->getSelector());
 		$I->waitForElementVisible('body');
 		usleep(Random::microseconds(1.5, 2));
