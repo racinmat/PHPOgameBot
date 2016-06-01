@@ -151,4 +151,4 @@ class B extends A {}
 //var_dump($fleet->getNonZeroShips());
 //var_dump($_SERVER);
 //var_dump($_ENV);
-var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet2") !== false);
+var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet3") !== false);

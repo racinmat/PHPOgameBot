@@ -159,14 +159,12 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 		$this->logger->addDebug('Filled coordinates.');
 		usleep(Random::microseconds(0.5, 1));
-		$currentUrl = $I->grabFromCurrentUrl();
 		$I->click('#continue.on');
 
-		usleep(0.1 * 1000 * 1000);
+		usleep(0.1 * 1000 * 1000);  //just wait 0.1 second before checking whether popup appears or not
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
-		var_dump($currentUrl);
-		if ($I->seeElementExists('#fadeBox span.failed') || $I->seeInCurrentUrlExists($currentUrl)) {       //when bot stays on the same page, it means it could not proceed to the next page
+		if ($I->seeElementExists('#fadeBox span.failed')) {
 			throw new NonExistingPlanetException();
 		}
 		

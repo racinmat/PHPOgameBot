@@ -109,6 +109,7 @@ class PlayersProber extends Object implements ICommandProcessor
 			try {
 				$this->fleetManager->processCommand($probePlanetCommand);
 			} catch(NonExistingPlanetException $e) {
+				$this->logger->addInfo("Removing non existing planet from coordinates {$probePlanetCommand->getTo()->toString()}");
 				$this->databaseManager->removePlanet($command->getCoordinates());
 			}
 
