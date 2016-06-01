@@ -151,7 +151,7 @@ class ReportReader extends Object
 			}
 		}
 
-		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
+		if ($I->seeElementExists($defenseSelector . ' li.detail_list_fail')) {
 			$enoughInformation = false;
 		} else {
 			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
@@ -164,7 +164,7 @@ class ReportReader extends Object
 			}
 		}
 
-		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
+		if ($I->seeElementExists($fleetSelector . ' li.detail_list_fail')) {
 			$enoughInformation = false;
 		} else {
 			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');

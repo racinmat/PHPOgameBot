@@ -861,4 +861,388 @@ class Planet extends Object
 		$this->maximalTemperature = $maximalTemperature;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getRocketLauncherAmount()
+	{
+		return $this->rocketLauncherAmount;
+	}
+
+	/**
+	 * @param int $rocketLauncherAmount
+	 */
+	public function setRocketLauncherAmount($rocketLauncherAmount)
+	{
+		$this->rocketLauncherAmount = $rocketLauncherAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLightLaserAmount()
+	{
+		return $this->lightLaserAmount;
+	}
+
+	/**
+	 * @param int $lightLaserAmount
+	 */
+	public function setLightLaserAmount($lightLaserAmount)
+	{
+		$this->lightLaserAmount = $lightLaserAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHeavyLaserAmount()
+	{
+		return $this->heavyLaserAmount;
+	}
+
+	/**
+	 * @param int $heavyLaserAmount
+	 */
+	public function setHeavyLaserAmount($heavyLaserAmount)
+	{
+		$this->heavyLaserAmount = $heavyLaserAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIonCannonAmount()
+	{
+		return $this->ionCannonAmount;
+	}
+
+	/**
+	 * @param int $ionCannonAmount
+	 */
+	public function setIonCannonAmount($ionCannonAmount)
+	{
+		$this->ionCannonAmount = $ionCannonAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getGaussCannonAmount()
+	{
+		return $this->gaussCannonAmount;
+	}
+
+	/**
+	 * @param int $gaussCannonAmount
+	 */
+	public function setGaussCannonAmount($gaussCannonAmount)
+	{
+		$this->gaussCannonAmount = $gaussCannonAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPlasmaTurretAmount()
+	{
+		return $this->plasmaTurretAmount;
+	}
+
+	/**
+	 * @param int $plasmaTurretAmount
+	 */
+	public function setPlasmaTurretAmount($plasmaTurretAmount)
+	{
+		$this->plasmaTurretAmount = $plasmaTurretAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSmallShieldDomeAmount()
+	{
+		return $this->smallShieldDomeAmount;
+	}
+
+	/**
+	 * @param int $smallShieldDomeAmount
+	 */
+	public function setSmallShieldDomeAmount($smallShieldDomeAmount)
+	{
+		$this->smallShieldDomeAmount = $smallShieldDomeAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLargeShieldDomeAmount()
+	{
+		return $this->largeShieldDomeAmount;
+	}
+
+	/**
+	 * @param int $largeShieldDomeAmount
+	 */
+	public function setLargeShieldDomeAmount($largeShieldDomeAmount)
+	{
+		$this->largeShieldDomeAmount = $largeShieldDomeAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAntiBallisticMissileAmount()
+	{
+		return $this->antiBallisticMissileAmount;
+	}
+
+	/**
+	 * @param int $antiBallisticMissileAmount
+	 */
+	public function setAntiBallisticMissileAmount($antiBallisticMissileAmount)
+	{
+		$this->antiBallisticMissileAmount = $antiBallisticMissileAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getInterplanetaryMissileAmount()
+	{
+		return $this->interplanetaryMissileAmount;
+	}
+
+	/**
+	 * @param int $interplanetaryMissileAmount
+	 */
+	public function setInterplanetaryMissileAmount($interplanetaryMissileAmount)
+	{
+		$this->interplanetaryMissileAmount = $interplanetaryMissileAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSmallCargoShipAmount()
+	{
+		return $this->smallCargoShipAmount;
+	}
+
+	/**
+	 * @param int $smallCargoShipAmount
+	 */
+	public function setSmallCargoShipAmount($smallCargoShipAmount)
+	{
+		$this->smallCargoShipAmount = $smallCargoShipAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLargeCargoShipAmount()
+	{
+		return $this->largeCargoShipAmount;
+	}
+
+	/**
+	 * @param int $largeCargoShipAmount
+	 */
+	public function setLargeCargoShipAmount($largeCargoShipAmount)
+	{
+		$this->largeCargoShipAmount = $largeCargoShipAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLightFighterAmount()
+	{
+		return $this->lightFighterAmount;
+	}
+
+	/**
+	 * @param int $lightFighterAmount
+	 */
+	public function setLightFighterAmount($lightFighterAmount)
+	{
+		$this->lightFighterAmount = $lightFighterAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHeavyFighterAmount()
+	{
+		return $this->heavyFighterAmount;
+	}
+
+	/**
+	 * @param int $heavyFighterAmount
+	 */
+	public function setHeavyFighterAmount($heavyFighterAmount)
+	{
+		$this->heavyFighterAmount = $heavyFighterAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCruiserAmount()
+	{
+		return $this->cruiserAmount;
+	}
+
+	/**
+	 * @param int $cruiserAmount
+	 */
+	public function setCruiserAmount($cruiserAmount)
+	{
+		$this->cruiserAmount = $cruiserAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBattleshipAmount()
+	{
+		return $this->battleshipAmount;
+	}
+
+	/**
+	 * @param int $battleshipAmount
+	 */
+	public function setBattleshipAmount($battleshipAmount)
+	{
+		$this->battleshipAmount = $battleshipAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBattlecruiserAmount()
+	{
+		return $this->battlecruiserAmount;
+	}
+
+	/**
+	 * @param int $battlecruiserAmount
+	 */
+	public function setBattlecruiserAmount($battlecruiserAmount)
+	{
+		$this->battlecruiserAmount = $battlecruiserAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDestroyerAmount()
+	{
+		return $this->destroyerAmount;
+	}
+
+	/**
+	 * @param int $destroyerAmount
+	 */
+	public function setDestroyerAmount($destroyerAmount)
+	{
+		$this->destroyerAmount = $destroyerAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDeathstarAmount()
+	{
+		return $this->deathstarAmount;
+	}
+
+	/**
+	 * @param int $deathstarAmount
+	 */
+	public function setDeathstarAmount($deathstarAmount)
+	{
+		$this->deathstarAmount = $deathstarAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBomberAmount()
+	{
+		return $this->bomberAmount;
+	}
+
+	/**
+	 * @param int $bomberAmount
+	 */
+	public function setBomberAmount($bomberAmount)
+	{
+		$this->bomberAmount = $bomberAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRecyclerAmount()
+	{
+		return $this->recyclerAmount;
+	}
+
+	/**
+	 * @param int $recyclerAmount
+	 */
+	public function setRecyclerAmount($recyclerAmount)
+	{
+		$this->recyclerAmount = $recyclerAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getEspionageProbeAmount()
+	{
+		return $this->espionageProbeAmount;
+	}
+
+	/**
+	 * @param int $espionageProbeAmount
+	 */
+	public function setEspionageProbeAmount($espionageProbeAmount)
+	{
+		$this->espionageProbeAmount = $espionageProbeAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSolarSatelliteAmount()
+	{
+		return $this->solarSatelliteAmount;
+	}
+
+	/**
+	 * @param int $solarSatelliteAmount
+	 */
+	public function setSolarSatelliteAmount($solarSatelliteAmount)
+	{
+		$this->solarSatelliteAmount = $solarSatelliteAmount;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getColonyShipAmount()
+	{
+		return $this->colonyShipAmount;
+	}
+
+	/**
+	 * @param int $colonyShipAmount
+	 */
+	public function setColonyShipAmount($colonyShipAmount)
+	{
+		$this->colonyShipAmount = $colonyShipAmount;
+	}
+
 }

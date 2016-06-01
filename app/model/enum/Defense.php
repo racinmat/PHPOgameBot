@@ -7,6 +7,7 @@
  */
 
 namespace App\Enum;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 
 /**
@@ -33,21 +34,42 @@ class Defense extends Buildable
 	public static function getFromTranslatedName(string $name) : string
 	{
 		switch ($name) {
-//			case 'Důl na Kov': return static::METAL_MINE;
-//			case 'Důl na krystaly': return static::CRYSTAL_MINE;
-//			case 'Syntetizér deuteria': return static::DEUTERIUM_MINE;
-//			case 'Solární elektrárna': return static::SOLAR_POWER_PLANT;
-//			case 'Fúzní reaktor': return static::FUSION_REACTOR;
-//			case 'Sklad kovu': return static::METAL_STORAGE;
-//			case 'Sklad krystalu': return static::CRYSTAL_STORAGE;
-//			case 'Nádrž na deuterium': return static::DEUTERIUM_TANK;
-//			case 'Továrna na roboty': return static::ROBOTIC_FACTORY;
-//			case 'Hangár': return static::SHIPYARD;
-//			case 'Výzkumná laboratoř': return static::RESEARCH_LAB;
-//			case 'Alianční sklad': return static::ALLIANCE_DEPOT;
-//			case 'Raketové silo': return static::MISSILE_SILO;
-//			case 'Továrna s nanoboty': return static::NANITE_FACTORY;
-//			case 'Terraformer': return static::TERRAFORMER;
+			case 'Raketomet': return static::ROCKET_LAUNCHER;
+			case 'Lehký laser': return static::LIGHT_LASER;
+			case 'Těžký laser': return static::HEAVY_LASER;
+			case 'Iontový kanón': return static::ION_CANNON;
+			case 'Gaussův kanón': return static::GAUSS_CANNON;
+			case 'Plasmová věž': return static::PLASMA_TURRET;
+			case 'Malý planetární štít': return static::SMALL_SHIELD_DOME;
+			case 'Velký planetární štít': return static::LARGE_SHIELD_DOME;
+			case 'Antibalistické rakety': return static::ANTI_BALLISTIC_MISSILE;
+			case 'Meziplanetární rakety': return static::INTERPLANETARY_MISSILE;
+		}
+	}
+
+	public function setAmount(Planet $planet, int $amount)
+	{
+		switch ($this->getValue()) {
+			case static::ROCKET_LAUNCHER:
+				return $planet->setRocketLauncherAmount($amount);
+			case static::LIGHT_LASER:
+				return $planet->setLightLaserAmount($amount);
+			case static::HEAVY_LASER:
+				return $planet->setHeavyLaserAmount($amount);
+			case static::ION_CANNON:
+				return $planet->setIonCannonAmount($amount);
+			case static::GAUSS_CANNON:
+				return $planet->setGaussCannonAmount($amount);
+			case static::PLASMA_TURRET:
+				return $planet->setPlasmaTurretAmount($amount);
+			case static::SMALL_SHIELD_DOME:
+				return $planet->setSmallShieldDomeAmount($amount);
+			case static::LARGE_SHIELD_DOME:
+				return $planet->setLargeShieldDomeAmount($amount);
+			case static::ANTI_BALLISTIC_MISSILE:
+				return $planet->setAntiBallisticMissileAmount($amount);
+			case static::INTERPLANETARY_MISSILE:
+				return $planet->setInterplanetaryMissileAmount($amount);
 		}
 	}
 

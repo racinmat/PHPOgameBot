@@ -7,6 +7,7 @@
  */
 
 namespace App\Enum;
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 
 /**
@@ -37,21 +38,54 @@ class Ships extends Buildable
 	public static function getFromTranslatedName(string $name) : string
 	{
 		switch ($name) {
-//			case 'Důl na Kov': return static::METAL_MINE;
-//			case 'Důl na krystaly': return static::CRYSTAL_MINE;
-//			case 'Syntetizér deuteria': return static::DEUTERIUM_MINE;
-//			case 'Solární elektrárna': return static::SOLAR_POWER_PLANT;
-//			case 'Fúzní reaktor': return static::FUSION_REACTOR;
-//			case 'Sklad kovu': return static::METAL_STORAGE;
-//			case 'Sklad krystalu': return static::CRYSTAL_STORAGE;
-//			case 'Nádrž na deuterium': return static::DEUTERIUM_TANK;
-//			case 'Továrna na roboty': return static::ROBOTIC_FACTORY;
-//			case 'Hangár': return static::SHIPYARD;
-//			case 'Výzkumná laboratoř': return static::RESEARCH_LAB;
-//			case 'Alianční sklad': return static::ALLIANCE_DEPOT;
-//			case 'Raketové silo': return static::MISSILE_SILO;
-//			case 'Továrna s nanoboty': return static::NANITE_FACTORY;
-//			case 'Terraformer': return static::TERRAFORMER;
+			case 'Malý transportér': return static::SMALL_CARGO_SHIP;
+			case 'Velký transportér': return static::LARGE_CARGO_SHIP;
+			case 'Lehký stíhač': return static::LIGHT_FIGHTER;
+			case 'Těžký stíhač': return static::HEAVY_FIGHTER;
+			case 'Křižník': return static::CRUISER;
+			case 'Bitevní loď': return static::BATTLESHIP;
+			case 'Bitevní křižník': return static::BATTLECRUISER;
+			case 'Ničitel': return static::DESTROYER;
+			case 'Hvězda smrti': return static::DEATHSTAR;
+			case 'Bombardér': return static::BOMBER;
+			case 'Recyklátor': return static::RECYCLER;
+			case 'Špionážní sonda': return static::ESPIONAGE_PROBE;
+			case 'Solární satelit': return static::SOLAR_SATELLITE;
+			case 'Kolonizační loď': return static::COLONY_SHIP;
+		}
+	}
+
+	public function setAmount(Planet $planet, int $amount)
+	{
+		switch ($this->getValue()) {
+			case static::SMALL_CARGO_SHIP:
+				return $planet->setSmallCargoShipAmount($amount);
+			case static::LARGE_CARGO_SHIP:
+				return $planet->setLargeCargoShipAmount($amount);
+			case static::LIGHT_FIGHTER:
+				return $planet->setLightFighterAmount($amount);
+			case static::HEAVY_FIGHTER:
+				return $planet->setHeavyFighterAmount($amount);
+			case static::CRUISER:
+				return $planet->setCruiserAmount($amount);
+			case static::BATTLESHIP:
+				return $planet->setBattleshipAmount($amount);
+			case static::BATTLECRUISER:
+				return $planet->setBattlecruiserAmount($amount);
+			case static::DESTROYER:
+				return $planet->setDestroyerAmount($amount);
+			case static::DEATHSTAR:
+				return $planet->setDeathstarAmount($amount);
+			case static::BOMBER:
+				return $planet->setBomberAmount($amount);
+			case static::RECYCLER:
+				return $planet->setRecyclerAmount($amount);
+			case static::ESPIONAGE_PROBE:
+				return $planet->setEspionageProbeAmount($amount);
+			case static::SOLAR_SATELLITE:
+				return $planet->setSolarSatelliteAmount($amount);
+			case static::COLONY_SHIP:
+				return $planet->setColonyShipAmount($amount);
 		}
 	}
 
