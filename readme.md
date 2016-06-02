@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- when reading espionage report, update the player status (jest in case the non-active user goes active, so I wont attack him)
 - if set resources to be transported are bigger than the capacity of the fleet, then send the fleet as soon as it will be fully loaded
  	- or maybe add checkbox to fly as soon as the capacity of fleet is full instead of setting the amount of resources
 - maybe add limit to probing players because probing 400 planets at once takes few hours

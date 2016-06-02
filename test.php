@@ -127,7 +127,7 @@ class B extends A {}
 /** @var \Kdyby\Monolog\Logger $logger */
 $logger = $container->getByType(\Kdyby\Monolog\Logger::class);
 //$logger->addDebug('debug message');
-$logger->addAlert('alert message');
+//$logger->addAlert('alert message');
 
 //function nthFleet(int $nth, string $type, bool $returning = null) : string
 //{
@@ -152,3 +152,13 @@ $logger->addAlert('alert message');
 //var_dump($_SERVER);
 //var_dump($_ENV);
 //var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet3") !== false);
+
+
+function add(int $a, int $b) : int {
+	return $a + $b;
+}
+
+var_dump(add(5,6));
+var_dump(add(5000000,6000000));
+var_dump(add(500000000,600000000));
+var_dump(add(5000000000,6000000000));

@@ -54,7 +54,8 @@ class Menu extends Object
 		}
 		$this->logger->addDebug("Clicking to go to requested planet.");
 		$I->click($planet->getCoordinates()->toString(), '#planetList');
-		usleep(Random::microseconds(1, 2));
+		$I->waitForText($planet->getCoordinates()->toString(), '.planetlink.active span.planet-koords');    //waiting for the requested coordnates to be on active planet
+		usleep(Random::microseconds(0.5, 1));
 	}
 
 	private function getCurrentPlanetCoordinates() : Coordinates
