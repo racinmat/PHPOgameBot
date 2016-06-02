@@ -124,10 +124,10 @@ class B extends A {}
 //var_dump($resourcesCalculator->getProductionPerHour($planet));
 //$planet = $databaseManager->getPlanet(new \App\Model\ValueObject\Coordinates(1, 357, 6));
 
-///** @var \Kdyby\Monolog\Logger $logger */
-//$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
+/** @var \Kdyby\Monolog\Logger $logger */
+$logger = $container->getByType(\Kdyby\Monolog\Logger::class);
 //$logger->addDebug('debug message');
-//$logger->addAlert('alert message');
+$logger->addAlert('alert message');
 
 //function nthFleet(int $nth, string $type, bool $returning = null) : string
 //{
@@ -151,4 +151,4 @@ class B extends A {}
 //var_dump($fleet->getNonZeroShips());
 //var_dump($_SERVER);
 //var_dump($_ENV);
-var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet3") !== false);
+//var_dump(strpos("/game/index.php?page=fleet2","/game/index.php?page=fleet3") !== false);

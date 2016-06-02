@@ -149,7 +149,7 @@ class FleetManager extends Object implements ICommandProcessor
 			$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
 		}
 		$I->click('#continue.on');
-		usleep(Random::microseconds(1.5, 2.5));
+		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
 
 		$I->fillField('input#galaxy', $to->getGalaxy());
 		$I->fillField('input#system', $to->getSystem());
@@ -161,7 +161,6 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Filled coordinates.');
 		usleep(Random::microseconds(0.5, 1));
 
-		$currentUrl = $I->grabFromCurrentUrl();
 		$I->click('#continue.on');
 
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
@@ -173,7 +172,7 @@ class FleetManager extends Object implements ICommandProcessor
 			throw new NonExistingPlanetException();
 		}
 
-		usleep(Random::microseconds(1.5, 2.5));
+		usleep(Random::microseconds(0.1, 1));
 
 		do {
 			$I->click($command->getMission()->getMissionSelector());

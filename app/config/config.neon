@@ -49,7 +49,7 @@ services:
 	nette.latteFactory:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
-	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::UPDATE])
+	- App\Model\Logging\DoctrineMonologAdapter(types: [])
 	- App\Forms\SendFleetCommandFormFactory
 	- App\Forms\ScanGalaxyCommandFormFactory
 
@@ -66,7 +66,7 @@ monolog:
 	handlers:                                                                   #aby správně fungovaly handlery a braly pouze své události, musí být registrovány od nejnižšího po nejvyšší
 		- Monolog\Handler\SlackHandler(%slackApiToken%, %slackChannel%, ogameBot, true, null, Monolog\Logger::ALERT, true)
 		- Monolog\Handler\FingersCrossedHandler(
-			Monolog\Handler\StreamHandler(%appDir%/../log/bot.log, Monolog\Logger::DEBUG),
+			Monolog\Handler\RotatingFileHandler(%appDir%/../log/bot.log, 30, Monolog\Logger::DEBUG),
 			Monolog\Logger::DEBUG
 		)
 
