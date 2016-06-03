@@ -82,6 +82,6 @@ class CommandDispatcher extends Object
 
 	private function getProcessor(ICommand $command) : ICommandProcessor
 	{
-		return $this->preprocessors->filter(function (ICommandProcessor $processor) use ($command) {return $processor->canProcessCommand($command);})->first();
+		return $this->processors->filter(function (ICommandProcessor $processor) use ($command) {return $processor->canProcessCommand($command);})->first();
 	}
 }

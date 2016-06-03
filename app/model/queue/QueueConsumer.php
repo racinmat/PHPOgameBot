@@ -1,22 +1,13 @@
 <?php
 
 namespace App\Model\Queue;
- 
-use App\Enum\FleetMission;
-use App\Enum\Ships;
-use App\Model\Entity\Planet;
-use App\Model\Game\FleetManager;
-use App\Model\Game\PlayersProber;
-use App\Model\UpgradeStoragesPreProcessor;
+
 use App\Model\CronManager;
-use App\Model\Game\BuildManager;
-use App\Model\Game\GalaxyBrowser;
-use App\Model\Game\UpgradeManager;
 use App\Model\Game\PlanetManager;
 use App\Model\Queue\Command\ICommand;
-use App\Model\ResourcesCalculator;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
+use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -95,15 +86,16 @@ class QueueConsumer extends Object
 		if ($commands->isEmpty()) {
 			return;
 		}
-
+		/** @var Carbon[] $nextStarts */
 		$nextStarts = [];
 		/** @var ICommand $command */
 		foreach ($commands as $command) {
 			$nextStarts[] = $this->commandDispatcher->getTimeToProcessingAvailable($command);
 		}
 		usort($nextStarts, Functions::compareCarbonDateTimes());
-		$this->logger->addDebug("Nearest next run is {$nextStarts[0]->toString()}.");
-		$this->cronManager->setNextStart($nextStarts[0]);
+		$nextStart = $nextStarts[0];
+		$this->logger->addDebug("Nearest next run is {$nextStart->__toString()}.");
+		$this->cronManager->setNextStart($nextStart);
 	}
 
 }
