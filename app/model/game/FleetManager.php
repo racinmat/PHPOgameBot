@@ -79,6 +79,7 @@ class FleetManager extends Object implements ICommandProcessor
 			if ($this->isCapacitySufficient($command)) {
 				$timeToResources = $this->resourcesCalculator->getTimeToEnoughResources($planet, $command->getResources());
 			} else {        //send all the resources that fleet can carry instead of resources in command
+				$this->logger->addDebug("Calculating time for not sufficient capacity, calculating only total of resources.");
 				$timeToResources = $this->resourcesCalculator->getTimeToEnoughResourcesTotal($planet, $command->getFleet()->getCapacity());
 			}
 			$minimalTime = $minimalTime->max($timeToResources);
@@ -119,8 +120,10 @@ class FleetManager extends Object implements ICommandProcessor
 			$this->logger->addDebug("This fleet wants to wait for resources: {$command->getResources()}.");
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
 			if ($this->isCapacitySufficient($command)) {
+				$this->logger->addDebug('Checking enough resources for sufficient capacity');
 				$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
 			} else {        //send all the resources that fleet can carry instead of resources in command
+				$this->logger->addDebug('Checking enough resources for insufficient capacity');
 				$enoughResources = $planet->getResources()->getTotal() >= $command->getFleet()->getCapacity();
 			}
 			$this->logger->addDebug($enoughResources ? 'Enough resources, processing available.' : "Not enough resources, processing unavailable.");

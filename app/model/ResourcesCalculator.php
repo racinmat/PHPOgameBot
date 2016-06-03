@@ -74,7 +74,8 @@ class ResourcesCalculator extends Nette\Object
 
 	private function getMissingResourcesTotal(Planet $planet, int $expected) : int
 	{
-		return $expected - $planet->getResources()->getTotal();
+		$missing = $expected - $planet->getResources()->getTotal();
+		return $missing > 0 ? $missing : 0;
 	}
 
 	private function getTimeToResources(Planet $planet, Resources $missing) : Carbon
