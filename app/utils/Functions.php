@@ -9,6 +9,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Coordinates;
 use Carbon\Carbon;
+use Nette\DI\Container;
 use Nette\Object;
 use Ramsey\Uuid\Uuid;
 
@@ -97,6 +98,13 @@ class Functions extends Object
 	{
 		return function (Enum $enum) : string {
 			return $enum->getValue();
+		};
+	}
+
+	public static function getService(Container $container) : callable
+	{
+		return function (string $serviceName) use ($container) : Object {
+			return $container->getService($serviceName);
 		};
 	}
 }

@@ -52,6 +52,7 @@ services:
 	- App\Model\Logging\DoctrineMonologAdapter(types: [])
 	- App\Forms\SendFleetCommandFormFactory
 	- App\Forms\ScanGalaxyCommandFormFactory
+	- App\Model\Queue\CommandDispatcher
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

@@ -6,7 +6,7 @@
  * Time: 16:48
  */
 
-namespace app\model\queue;
+namespace App\Model\Queue;
 
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\ICommand;

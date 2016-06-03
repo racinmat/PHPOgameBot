@@ -5,6 +5,7 @@ namespace App\Presenters;
 use App\Components\IDisplayCommandFactory;
 use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
+use App\Model\Queue\CommandDispatcher;
 use App\Model\Queue\QueueFileRepository;
 use App\Model\ValueObject\Coordinates;
 use Carbon\Carbon;
@@ -30,7 +31,13 @@ class DashboardPresenter extends BasePresenter
 	 * @inject
 	 */
 	public $displayCommandFactory;
-	
+
+	/**
+	 * @var CommandDispatcher
+	 * @inject
+	 */
+	public $sth;
+
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);

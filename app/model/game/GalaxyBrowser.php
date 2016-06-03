@@ -9,7 +9,7 @@ use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
-use app\model\queue\ICommandProcessor;
+use App\Model\Queue\ICommandProcessor;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\OgameParser;

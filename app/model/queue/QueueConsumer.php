@@ -26,17 +26,8 @@ class QueueConsumer extends Object
 	/** @var PlanetManager */
 	private $planetManager;
 
-	/** @var ResourcesCalculator */
-	private $resourcesCalculator;
-
 	/** @var CronManager */
 	private $cronManager;
-
-	/** @var ICommandProcessor[] */
-	private $processors;
-
-	/** @var ICommandPreProcessor[] */
-	private $preprocessors;
 
 	/** @var QueueManager */
 	private $queueManager;
@@ -44,23 +35,16 @@ class QueueConsumer extends Object
 	/** @var Logger */
 	private $logger;
 
-	public function __construct(QueueManager $queueManager, UpgradeManager $upgradeManager, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, CronManager $cronManager, BuildManager $buildManager, Logger $logger, GalaxyBrowser $galaxyBrowser, UpgradeStoragesPreProcessor $buildStoragesPreProcessor, FleetManager $fleetManager, PlayersProber $playersProber)
+	/** @var CommandDispatcher */
+	private $commandDispatcher;
+
+	public function __construct(QueueManager $queueManager, PlanetManager $planetManager, CronManager $cronManager, Logger $logger, CommandDispatcher $commandDispatcher)
 	{
 		$this->queueManager = $queueManager;
 		$this->planetManager = $planetManager;
-		$this->resourcesCalculator = $resourcesCalculator;
 		$this->cronManager = $cronManager;
-		$this->processors = [
-			$upgradeManager,
-			$buildManager,
-			$galaxyBrowser,
-			$fleetManager,
-			$playersProber
-		];
 		$this->logger = $logger;
-		$this->preprocessors = [
-			$buildStoragesPreProcessor
-		];
+		$this->commandDispatcher = $commandDispatcher;
 	}
 
 	public function processQueue()
@@ -81,11 +65,9 @@ class QueueConsumer extends Object
 			/** @var ICommand $command */
 			while(!$queue->isEmpty()) {
 				$command = $queue->first();
-
-				$this->preProcessCommand($command, $queue);
+				$this->commandDispatcher->preProcessCommand($command, $queue);
 				$command = $queue->first();     //because preprocessor modifies the queue
-
-				$success = $this->processCommand($command);
+				$success = $this->commandDispatcher->processCommand($command);
 
 				if ($success) {
 					$this->logger->addInfo("Command processed successfully. Removing command from queue.");
@@ -102,7 +84,7 @@ class QueueConsumer extends Object
 		//repetitive commands
 		$repetitiveCommands = $this->queueManager->getRepetitiveCommands();
 		foreach ($repetitiveCommands as $repetitiveCommand) {
-			$this->processCommand($repetitiveCommand);
+			$this->commandDispatcher->processCommand($repetitiveCommand);
 		}
 
 		$this->resolveTimeOfNextRun($failedCommands->merge($repetitiveCommands));
@@ -117,47 +99,11 @@ class QueueConsumer extends Object
 		$nextStarts = [];
 		/** @var ICommand $command */
 		foreach ($commands as $command) {
-			foreach ($this->processors as $processor) {
-				if ($processor->canProcessCommand($command)) {
-					$this->logger->addInfo("Going to find the next run of command $command.");
-					$datetime = $processor->getTimeToProcessingAvailable($command);
-					$this->logger->addInfo("Next run of command $command is $datetime.");
-					$nextStarts[] = $datetime;
-					break;
-				}
-			}
+			$nextStarts[] = $this->commandDispatcher->getTimeToProcessingAvailable($command);
 		}
-
 		usort($nextStarts, Functions::compareCarbonDateTimes());
-		$this->logger->addDebug("Nearest next run is {$nextStarts[0]->__toString()}.");
+		$this->logger->addDebug("Nearest next run is {$nextStarts[0]->toString()}.");
 		$this->cronManager->setNextStart($nextStarts[0]);
-	}
-
-	private function preProcessCommand(ICommand $command, ArrayCollection $queue)
-	{
-		foreach ($this->preprocessors as $preprocessor) {
-			if ($preprocessor->canPreProcessCommand($command)) {
-				$this->logger->addInfo("Going to preProcess the command $command.");
-				$preprocessor->preProcessCommand($command, $queue);
-				break;
-			}
-		}
-	}
-
-	private function processCommand(ICommand $command) : bool
-	{
-		$success = false;
-
-		foreach ($this->processors as $processor) {
-			if ($processor->canProcessCommand($command)) {
-				$this->logger->addInfo("Going to process the command $command.");
-				$success = $processor->processCommand($command);
-				$this->planetManager->refreshResourcesDataOnCoordinates($command->getCoordinates());
-				break;
-			}
-		}
-
-		return $success;
 	}
 
 }

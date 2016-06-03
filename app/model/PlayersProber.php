@@ -12,7 +12,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
-use app\model\queue\ICommandProcessor;
+use App\Model\Queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
 use App\Utils\Random;
 use Carbon\Carbon;
