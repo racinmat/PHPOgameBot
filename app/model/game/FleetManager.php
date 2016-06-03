@@ -114,7 +114,11 @@ class FleetManager extends Object implements ICommandProcessor
 		if ($command->waitForResources()) {
 			$this->logger->addDebug("This fleet wants to wait for resources: {$command->getResources()}.");
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
-			$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
+			if ($this->isCapacitySufficient($command)) {
+				$enoughResources = $this->resourcesCalculator->isEnoughResources($planet, $command->getResources());
+			} else {        //send all the resources that fleet can carry instead of resources in command
+				$enoughResources = $planet->getResources()->getTotal() >= $command->getFleet()->getCapacity();
+			}
 			$this->logger->addDebug($enoughResources ? 'Enough resources, processing available.' : "Not enough resources, processing unavailable.");
 		}
 		return $freeFleets && $enoughResources;
@@ -193,6 +197,12 @@ class FleetManager extends Object implements ICommandProcessor
 
 		return true;
 	}
+
+	private function isCapacitySufficient(SendFleetCommand $command) : bool
+	{
+		return $command->getFleet()->getCapacity() >= $command->getResources()->getTotal();
+	}
+
 }
 
 class NonExistingPlanetException extends \Exception {}
