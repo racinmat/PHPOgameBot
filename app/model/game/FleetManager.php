@@ -76,7 +76,11 @@ class FleetManager extends Object implements ICommandProcessor
 
 		if ($command->waitForResources()) {
 			$planet = $this->planetManager->getPlanet($command->getCoordinates());
-			$timeToResources = $this->resourcesCalculator->getTimeToEnoughResources($planet, $command->getResources());
+			if ($this->isCapacitySufficient($command)) {
+				$timeToResources = $this->resourcesCalculator->getTimeToEnoughResources($planet, $command->getResources());
+			} else {        //send all the resources that fleet can carry instead of resources in command
+				$timeToResources = $this->resourcesCalculator->getTimeToEnoughResourcesTotal($planet, $command->getFleet()->getCapacity());
+			}
 			$minimalTime = $minimalTime->max($timeToResources);
 		}
 

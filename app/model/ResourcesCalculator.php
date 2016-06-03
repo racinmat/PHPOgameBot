@@ -42,6 +42,12 @@ class ResourcesCalculator extends Nette\Object
 		return $this->getTimeToResources($planet, $missingResources);
 	}
 
+	public function getTimeToEnoughResourcesTotal(Planet $planet, int $expected) : Carbon
+	{
+		$missing = $this->getMissingResourcesTotal($planet, $expected);
+		return $this->getTimeToResourcesTotal($planet, $missing);
+	}
+
 	public function isEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : bool
 	{
 		$missing = $this->getMissingResources($planet, $command->getPrice($planet));
@@ -66,13 +72,27 @@ class ResourcesCalculator extends Nette\Object
 		return $expected->subtract($planet->getResources());
 	}
 
+	private function getMissingResourcesTotal(Planet $planet, int $expected) : int
+	{
+		return $expected - $planet->getResources()->getTotal();
+	}
+
 	private function getTimeToResources(Planet $planet, Resources $missing) : Carbon
 	{
-		$time = $planet->getLastVisited();
-
 		$productionPerHour = $this->getProductionPerHour($planet);
-
 		$hours = max($missing->divide($productionPerHour));
+		return $this->addHours($planet->getLastVisited(), $hours);
+	}
+
+	private function getTimeToResourcesTotal(Planet $planet, int $missing) : Carbon
+	{
+		$productionPerHour = $this->getProductionPerHour($planet);
+		$hours = $missing / $productionPerHour->getTotal();
+		return $this->addHours($planet->getLastVisited(), $hours);
+	}
+
+	private function addHours(Carbon $time, float $hours) : Carbon
+	{
 		if ($hours <= 0) {
 			$this->logger->addDebug("No missing resources, now is enough resources.");
 			return Carbon::now();
