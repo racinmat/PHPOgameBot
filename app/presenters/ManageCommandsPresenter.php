@@ -142,7 +142,7 @@ class ManageCommandsPresenter extends BasePresenter
 			$command->setResources(Resources::fromArray($values['resources']));
 			$command->setWaitForResources($values['waitForResources']);
 			$this->queueManager->saveCommand($command);
-			$this->flashMessage('Command updates', 'success');
+			$this->flashMessage('Command updated', 'success');
 			$this->redirect('this');
 		};
 
