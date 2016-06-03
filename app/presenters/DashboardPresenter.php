@@ -32,12 +32,6 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public $displayCommandFactory;
 
-	/**
-	 * @var CommandDispatcher
-	 * @inject
-	 */
-	public $sth;
-
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);

@@ -21,4 +21,5 @@ interface ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon;
 
+	public function isProcessingAvailable(ICommand $command) : bool;
 }

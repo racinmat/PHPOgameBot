@@ -99,8 +99,9 @@ class FleetManager extends Object implements ICommandProcessor
 
 	}
 
-	public function isProcessingAvailable(SendFleetCommand $command) : bool
+	public function isProcessingAvailable(ICommand $command) : bool
 	{
+		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
 		$freeFleets = $this->areFreeFleets();
 		$freeExpeditions = $this->areFreeExpeditions();

@@ -187,6 +187,12 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
-		// TODO: Implement getTimeToProcessingAvailable() method.
+		return Carbon::now();
 	}
+
+	public function isProcessingAvailable(ICommand $command) : bool
+	{
+		return true;
+	}
+	
 }

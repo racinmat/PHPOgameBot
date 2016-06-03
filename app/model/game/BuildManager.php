@@ -43,8 +43,9 @@ class BuildManager extends EnhanceManager implements ICommandProcessor
 		return $datetime1;
 	}
 
-	public function isProcessingAvailable(Planet $planet, IEnhanceCommand $command) : bool
+	public function isProcessingAvailable(ICommand $command) : bool
 	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		//building ships and defense is stackable. No need to check if something is being built right now.
 		/** @var IBuildCommand $command */
 		return $this->resourcesCalculator->isEnoughResourcesToEnhance($planet, $command);

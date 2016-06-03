@@ -35,30 +35,30 @@ class AcceptanceTesterFactory extends Nette\Object
 
 	private function initialize()
 	{
-//		$userOptions = [
-//			'xml' => false,
-//			'html' => false,
-//			'json' => false,
-//			'tap' => false,
-//			'coverage' => false,
-//			'coverage-xml' => false,
-//			'coverage-html' => false,
-//			'verbosity' => 0,
-//			'interactive' => true,
-//			'filter' => NULL,
-//		];
-//		$suite = 'acceptance';
-//		$test = 'basicTestCept';
-//		$codecept = new \Codeception\Codecept($userOptions);
-//
-//		try {
-//			$codecept->run($suite, $test);
-//		} catch(\ActorException $e) {
-//			$actor = $e->actor;
-//			$this->acceptanceTester = $actor;
-//		}
+		$userOptions = [
+			'xml' => false,
+			'html' => false,
+			'json' => false,
+			'tap' => false,
+			'coverage' => false,
+			'coverage-xml' => false,
+			'coverage-html' => false,
+			'verbosity' => 0,
+			'interactive' => true,
+			'filter' => NULL,
+		];
+		$suite = 'acceptance';
+		$test = 'basicTestCept';
+		$codecept = new \Codeception\Codecept($userOptions);
 
-		//fake tester
-		$this->acceptanceTester = new \AcceptanceTester(new Scenario(new Unit()));
+		try {
+			$codecept->run($suite, $test);
+		} catch(\ActorException $e) {
+			$actor = $e->actor;
+			$this->acceptanceTester = $actor;
+		}
+
+//		//fake tester
+//		$this->acceptanceTester = new \AcceptanceTester(new Scenario(new Unit()));
 	}
 }

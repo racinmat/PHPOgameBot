@@ -49,9 +49,11 @@ class UpgradeManager extends EnhanceManager implements ICommandProcessor
 		return $datetime1->max($datetime2);
 	}
 
-	public function isProcessingAvailable(Planet $planet, IEnhanceCommand $command) : bool
+	public function isProcessingAvailable(ICommand $command) : bool
 	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
+		/** @var IUpgradeCommand $command */
 		$currentlyProcessing = $this->planetManager->currentlyProcessing($command->getEnhanceable());
 		$enoughResources = $this->resourcesCalculator->isEnoughResourcesToEnhance($planet, $command);
 		return $enoughResources && ! $currentlyProcessing;

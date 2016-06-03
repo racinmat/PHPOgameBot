@@ -53,7 +53,7 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 
-		if (!$this->isProcessingAvailable($planet, $command)) {
+		if (!$this->isProcessingAvailable($command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
@@ -71,7 +71,7 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 
 	abstract protected function fillAdditionalInfo(IEnhanceCommand $command);
 
-	abstract public function isProcessingAvailable(Planet $planet, IEnhanceCommand $command) : bool;
+	abstract public function isProcessingAvailable(ICommand $command) : bool;
 
 	protected function openMenu(Enhanceable $enhanceable)
 	{

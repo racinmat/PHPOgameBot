@@ -121,4 +121,8 @@ class PlayersProber extends Object implements ICommandProcessor
 		$this->reportReader->readEspionageReportsFrom($probingStart);
 	}
 
+	public function isProcessingAvailable(ICommand $command) : bool
+	{
+		return true;
+	}
 }
