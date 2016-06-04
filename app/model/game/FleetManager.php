@@ -246,7 +246,7 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		foreach (Ships::getEnums() as $ship) {
-			$currentAmount = $I->grabTextFrom($ship)->getCurrentAmountSelector();
+			$currentAmount = $I->grabTextFrom($ship->getCurrentAmountSelector());
 			$fleet->addShips($ship->getValue(), $currentAmount);
 		}
 
