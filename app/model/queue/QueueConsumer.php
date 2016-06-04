@@ -62,7 +62,7 @@ class QueueConsumer extends Object
 
 				if ($success) {
 					$this->logger->addInfo("Command processed successfully. Removing command from queue.");
-					$this->queueManager->removeFromQueue($command->getUuid());
+					$this->queueManager->removeCommand($command->getUuid());
 					$queue->remove(0);
 				} else {
 					$this->logger->addInfo("Command failed to process.");

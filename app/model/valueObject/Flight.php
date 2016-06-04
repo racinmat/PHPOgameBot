@@ -98,4 +98,16 @@ class Flight extends Nette\Object
 		return $this->status;
 	}
 
+	public function toArray() : array
+	{
+		return [
+			'from' => $this->from->toArray(),
+			'to' => $this->to->toArray(),
+			'arrivalTime' => $this->arrivalTime->__toString(),
+			'returning' => $this->isReturning(),
+			'mission' => $this->mission->__toString(),
+			'status' => $this->status->__toString()
+		];
+	}
+	
 }

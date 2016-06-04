@@ -36,13 +36,24 @@ class QueueManager extends Object
 		$this->queueRepository->saveRepetitiveCommands($queue);
 	}
 
-	public function removeFromQueue(Uuid $uuid)
+	public function removeCommand(Uuid $uuid)
 	{
-		$queue = $this->queueRepository->loadQueue();
-		$queue = $queue->filter(function (ICommand $c) use ($uuid) {
-			return ! $c->getUuid()->equals($uuid);
-		});
-		$this->queueRepository->saveQueue($queue);
+		if ($this->isCommandInQueue($uuid)) {
+			$queue = $this->queueRepository->loadQueue();
+			$queue = $queue->filter(function (ICommand $c) use ($uuid) {
+				return ! $c->getUuid()->equals($uuid);
+			});
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($uuid)) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$queue = $queue->filter(function (ICommand $c) use ($uuid) {
+				return ! $c->getUuid()->equals($uuid);
+			});
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
 	}
 
 	public function moveCommandUp(Uuid $uuid)

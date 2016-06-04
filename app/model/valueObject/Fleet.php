@@ -38,7 +38,7 @@ class Fleet extends Object
 
 	public function toArray() : array
 	{
-		return $this->fleet->toArray();
+		return $this->getNonZeroShips();
 	}
 
 	public static function fromArray(array $data) : Fleet

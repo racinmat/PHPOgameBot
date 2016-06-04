@@ -13,7 +13,9 @@ use App\Utils\ArrayCollection;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 
 class FleetInfo extends Object
@@ -40,10 +42,14 @@ class FleetInfo extends Object
 	/** @var Carbon */
 	private $flightsLoadTime;
 
-	public function __construct(\AcceptanceTester $I, Menu $menu)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(\AcceptanceTester $I, Menu $menu, Logger $logger)
 	{
 		$this->I = $I;
 		$this->menu = $menu;
+		$this->logger = $logger;
 		$this->flights = null;
 		$this->flightsLoadTime = Carbon::minValue();
 	}
@@ -104,7 +110,9 @@ class FleetInfo extends Object
 				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
 				$fleet->addShips(Ships::getFromTranslatedName($shipName), $amount);
 			}
-			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive)), $returning, FlightStatus::_($status));
+			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
+			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::_($status));
+			$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
 			$this->flights->add($flight);
 		}
 		$this->flightsLoadTime = Carbon::now();

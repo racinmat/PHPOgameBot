@@ -53,7 +53,7 @@ class DisplayCommand extends UI\Control
 
 	public function handleRemove(string $uuid)
 	{
-		$this->queueManager->removeFromQueue(Uuid::fromString($uuid));
+		$this->queueManager->removeCommand(Uuid::fromString($uuid));
 		$this->presenter->redirect('default');
 	}
 
