@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Model\PageObject\FleetInfo;
+use App\Model\Queue\CommandDispatcher;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
 use Kdyby\Monolog\Logger;
@@ -17,10 +18,14 @@ class AttackChecker extends Object
 	/** @var FleetInfo */
 	private $fleetInfo;
 
-	public function __construct(FleetInfo $fleetInfo, Logger $logger)
+	/** @var CommandDispatcher */
+	private $commandDispatcher;
+
+	public function __construct(FleetInfo $fleetInfo, Logger $logger, CommandDispatcher $commandDispatcher)
 	{
 		$this->fleetInfo = $fleetInfo;
 		$this->logger = $logger;
+		$this->commandDispatcher = $commandDispatcher;
 	}
 
 	public function checkIncomingAttacks()

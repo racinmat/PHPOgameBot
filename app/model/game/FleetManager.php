@@ -15,6 +15,7 @@ use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Fleet;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
@@ -81,7 +82,7 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		if ( ! $this->isFleetPresent($command)) {
-			$missingShips = $command->getFleet()->subtract($this->getPresentFleet($command));
+			$missingShips = $command->getFleet()->subtract($this->getPresentFleet($command->getCoordinates()));
 			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet);
 			$minimalTime = $minimalTime->max($timeToFleet);
 		}
@@ -230,12 +231,12 @@ class FleetManager extends Object implements ICommandProcessor
 
 	private function isFleetPresent(SendFleetCommand $command) : bool
 	{
-		return $this->getPresentFleet($command)->contains($command->getFleet());
+		return $this->getPresentFleet($command->getCoordinates())->contains($command->getFleet());
 	}
 
-	private function getPresentFleet(SendFleetCommand $command) : Fleet
+	public function getPresentFleet(Coordinates $coordinates) : Fleet
 	{
-		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$planet = $this->planetManager->getPlanet($coordinates);
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
@@ -245,9 +246,9 @@ class FleetManager extends Object implements ICommandProcessor
 			return $fleet;
 		}
 
-		foreach (Ships::getEnums() as $ship) {
+		foreach (Ships::getMovingShips() as $ship) {
 			$currentAmount = $I->grabTextFrom($ship->getCurrentAmountSelector());
-			$fleet->addShips($ship->getValue(), $currentAmount);
+			$fleet->addShips($ship, $currentAmount);
 		}
 
 		return $fleet;

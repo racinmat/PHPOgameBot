@@ -139,9 +139,9 @@ class Ships extends Buildable
 		return '#ship_' . $this->getNumber();
 	}
 
-	public function getCurrentAmountSelector() : string 
+	public function getCurrentAmountSelector() : string
 	{
-		return '#button' . $this->getNumber() . 'a.tooltip > .ecke > .level';
+		return '#button' . $this->getNumber() . ' a.tooltip > .ecke > .level';
 	}
 
 	/**
@@ -235,4 +235,47 @@ class Ships extends Buildable
 		}
 	}
 
+	public function getBaseSpeed() : int
+	{
+		switch ($this->getValue()) {
+			case static::SMALL_CARGO_SHIP:
+				return 5000;
+			case static::LARGE_CARGO_SHIP:
+				return 7000;
+			case static::LIGHT_FIGHTER:
+				return 12500;
+			case static::HEAVY_FIGHTER:
+				return 10000;
+			case static::CRUISER:
+				return 15000;
+			case static::BATTLESHIP:
+				return 10000;
+			case static::BATTLECRUISER:
+				return 10000;
+			case static::DESTROYER:
+				return 5000;
+			case static::DEATHSTAR:
+				return 100;
+			case static::BOMBER:
+				return 4000;
+			case static::RECYCLER:
+				return 2000;
+			case static::ESPIONAGE_PROBE:
+				return 100000000;
+			case static::SOLAR_SATELLITE:
+				return 0;
+			case static::COLONY_SHIP:
+				return 2500;
+		}
+	}
+
+	/**
+	 * @return Ships[]
+	 */
+	public static function getMovingShips() : array
+	{
+		return array_filter(static::getEnums(), function(Ships $ship) {
+			return $ship->getBaseSpeed() > 0;
+		});
+	}
 }
