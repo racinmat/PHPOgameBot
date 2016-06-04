@@ -122,9 +122,9 @@ class FleetInfo extends Object
 	}
 
 	/**
-	 * @return string[]
+	 * @return string[]|ArrayCollection
 	 */
-	public function getMyFleetsReturnTimes() : array
+	public function getMyFleetsReturnTimes() : ArrayCollection
 	{
 		return $this->getFlights()->filter(function (Flight $f) {
 			return $f->getStatus() === FlightStatus::MINE && $f->isReturning();
@@ -132,9 +132,9 @@ class FleetInfo extends Object
 	}
 
 	/**
-	 * @return string[]
+	 * @return string[]|ArrayCollection
 	 */
-	public function getMyExpeditionsReturnTimes() : array
+	public function getMyExpeditionsReturnTimes() : ArrayCollection
 	{
 		return $this->getFlights()->filter(function (Flight $f) {
 			return $f->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning() && $f->getMission()->getValue() === FleetMission::EXPEDITION;

@@ -39,7 +39,7 @@ class OgameParser
 		return [(int) $params['first'], (int) $params['second']];
 	}
 
-	public static function getNearestTime(array $timeIntervals) : Carbon
+	public static function getNearestTime(ArrayCollection $timeIntervals) : Carbon
 	{
 		if (count($timeIntervals) === 0) {
 			return Carbon::now();
