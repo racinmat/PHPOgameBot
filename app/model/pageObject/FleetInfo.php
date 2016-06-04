@@ -86,22 +86,22 @@ class FleetInfo extends Object
 			$fleetPopup = '.htmlTooltip > .fleetinfo';
 			$rows = $I->getNumberOfElements("$fleetPopup > tr");
 			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($i) > th")) {
+				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($j) > th")) {
 					break;
 				}
 			}
 			$fleetFrom = $j + 1;
 			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeElementExists("$fleetPopup > tr:nth-of-type($i) > td[colspan=\"2\"]")) {
+				if ($I->seeElementExists("$fleetPopup > tr:nth-of-type($j) > td[colspan=\"2\"]")) {
 					break;
 				}
 			}
 			$fleetTo = $j - 1;
 
 			$fleet = new Fleet();
-			for ($i = $fleetFrom; $i <= $fleetTo; $i++) {
-				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($i) > td:nth-of-type(1)");
-				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($i) > td:nth-of-type(1)");
+			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
+				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
+				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
 				$fleet->addShips(Ships::getFromTranslatedName($shipName), $amount);
 			}
 			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive)), $returning, FlightStatus::_($status));
