@@ -69,8 +69,6 @@ class FleetManager extends Object implements ICommandProcessor
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
 		/** @var SendFleetCommand $command */
-		//todo: later add checking for amount of ships in planet from command
-
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
@@ -113,7 +111,6 @@ class FleetManager extends Object implements ICommandProcessor
 		$expeditions = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(2) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($expeditions);
 		return $occupied < $total;
-
 	}
 
 	public function isProcessingAvailable(ICommand $command) : bool

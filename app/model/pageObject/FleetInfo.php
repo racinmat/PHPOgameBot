@@ -184,9 +184,9 @@ class FleetInfo extends Object
 		return $this->I->seeElementExists('#eventboxBlank');
 	}
 
-	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet)
+	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
 	{
-		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
+		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime())->first() ?: Carbon::maxValue();
 	}
 
 }
