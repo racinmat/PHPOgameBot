@@ -58,7 +58,7 @@ class SendFleetCommand extends BaseCommand
 		$this->resources = isset($data['resources']) ? Resources::fromArray($data['resources']) : new Resources(0, 0, 0);
 		$this->waitForResources = $data['waitForResources'] ?? false;
 
-		if (count($this->fleet->getNonZeroShips()) === 0) {
+		if ($this->fleet->isEmpty()) {
 			throw new \InvalidArgumentException("SendFleetCommand can not have empty fleet.");
 		}
 
@@ -85,11 +85,6 @@ class SendFleetCommand extends BaseCommand
 	public function getMission() : FleetMission
 	{
 		return $this->mission;
-	}
-
-	public function getNonZeroFleet()
-	{
-		return $this->fleet->getNonZeroShips();
 	}
 
 	public function getResources() : Resources

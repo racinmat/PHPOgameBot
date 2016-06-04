@@ -15,6 +15,7 @@ use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
@@ -73,9 +74,9 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
 		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
-			$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyExpeditionsReturnTimes());
+			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first();
 		} else {
-			$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyFleetsReturnTimes());
+			$minimalTime = $this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first();
 		}
 
 		if ($command->waitForResources()) {
@@ -164,7 +165,7 @@ class FleetManager extends Object implements ICommandProcessor
 			return false;
 		}
 		$this->logger->addDebug('Processing available, starting to process the command.');
-		foreach ($command->getFleet()->getNonZeroShips() as $ship => $count) {
+		foreach ($command->getFleet() as $ship => $count) {
 			if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
 				return false;
 			}

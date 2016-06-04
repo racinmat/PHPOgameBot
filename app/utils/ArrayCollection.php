@@ -36,4 +36,11 @@ class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection
 		$this->elements = array_merge($this->elements, $another->toArray());
 		return $this;
 	}
+
+	public function sort(callable $comparator) : ArrayCollection
+	{
+		usort($this->elements, $comparator);
+		return $this;
+	}
+
 }

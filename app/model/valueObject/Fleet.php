@@ -5,8 +5,9 @@ namespace App\Model\ValueObject;
 use App\Enum\Ships;
 use App\Utils\ArrayCollection;
 use Nette\Object;
+use Traversable;
 
-class Fleet extends Object
+class Fleet extends Object implements \IteratorAggregate
 {
 
 	/** @var ArrayCollection string => int */
@@ -19,6 +20,9 @@ class Fleet extends Object
 
 	public function addShips(Ships $ships, int $count)
 	{
+		if ($count === 0) {
+			return;
+		}
 		if ($this->fleet->containsKey($ships->getValue())) {
 			$this->fleet[$ships->getValue()] += $count;
 		} else {
@@ -38,7 +42,7 @@ class Fleet extends Object
 
 	public function toArray() : array
 	{
-		return $this->getNonZeroShips();
+		return $this->fleet->toArray();
 	}
 
 	public static function fromArray(array $data) : Fleet
@@ -55,9 +59,8 @@ class Fleet extends Object
 		return count($this->fleet) === 0;
 	}
 
-	public function getNonZeroShips() : array
+	public function getIterator()
 	{
-		return $this->fleet->filter(function ($count) {return $count > 0;})->toArray();
+		return new \ArrayIterator($this->toArray());
 	}
-
 }

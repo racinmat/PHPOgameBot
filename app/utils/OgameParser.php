@@ -39,19 +39,6 @@ class OgameParser
 		return [(int) $params['first'], (int) $params['second']];
 	}
 
-	public static function getNearestTime(ArrayCollection $timeIntervals) : Carbon
-	{
-		if (count($timeIntervals) === 0) {
-			return Carbon::now();
-		}
-
-		$minimalTime = Carbon::now()->addYears(666);    //just some big date in the future
-		foreach ($timeIntervals as $timeInterval) {
-			$minimalTime = $minimalTime->min(Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeInterval)));
-		}
-		return $minimalTime;
-	}
-
 	public static function parseResources(string $resource) : string
 	{
 		return Strings::replace($resource, '~\.~');

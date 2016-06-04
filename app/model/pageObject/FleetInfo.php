@@ -10,6 +10,7 @@ use App\Model\Game\Menu;
 use App\Model\ValueObject\Fleet;
 use App\Model\ValueObject\Flight;
 use App\Utils\ArrayCollection;
+use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
@@ -110,6 +111,7 @@ class FleetInfo extends Object
 				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
 				$fleet->addShips(Ships::getFromTranslatedName($shipName), $amount);
 			}
+			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
 			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::_($status));
 			$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
@@ -134,9 +136,7 @@ class FleetInfo extends Object
 	 */
 	public function getMyFleetsReturnTimes() : ArrayCollection
 	{
-		return $this->getFlights()->filter(function (Flight $f) {
-			return $f->getStatus() === FlightStatus::MINE && $f->isReturning();
-		})->map($this->flightToArrivalTime());
+		return $this->getFlights()->filter(Flight::myReturning())->map($this->flightToArrivalTime());
 	}
 
 	/**
@@ -144,9 +144,7 @@ class FleetInfo extends Object
 	 */
 	public function getMyExpeditionsReturnTimes() : ArrayCollection
 	{
-		return $this->getFlights()->filter(function (Flight $f) {
-			return $f->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning() && $f->getMission()->getValue() === FleetMission::EXPEDITION;
-		})->map($this->flightToArrivalTime());
+		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withMission(FleetMission::_(FleetMission::EXPEDITION)))->map($this->flightToArrivalTime());
 	}
 
 	private function flightToArrivalTime() : callable
@@ -158,19 +156,12 @@ class FleetInfo extends Object
 
 	public function isAnyAttackOnMe() : bool
 	{
-		return ! $this->getFlights()->filter(function (Flight $f) {
-			return $f->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
-		})->isEmpty();
+		return ! $this->getFlights()->filter(Flight::incomingAttacks())->isEmpty();
 	}
 
-	/**
-	 * @return string[]
-	 */
-	public function getAttackArrivalTimes() : array
+	public function getNearestAttackTime() : Carbon
 	{
-		return ! $this->getFlights()->filter(function (Flight $f) {
-			return $f->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
-		})->map($this->flightToArrivalTime());
+		return $this->getFlights()->filter(Flight::incomingAttacks())->map($this->flightToArrivalTime())->sort(Functions::compareCarbonDateTimes())->first();
 	}
 
 	private function getRowSelector(int $nth) : string
@@ -187,5 +178,9 @@ class FleetInfo extends Object
 	{
 		return $this->I->seeElementExists('#eventboxBlank');
 	}
-	
+
+	public function getTimeOfFleetReturn(Fleet $fleet)
+	{
+		
+	}
 }

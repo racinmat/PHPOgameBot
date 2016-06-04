@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Model\PageObject\FleetInfo;
+use App\Utils\Functions;
 use App\Utils\OgameParser;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
@@ -26,7 +27,7 @@ class AttackChecker extends Object
 	{
 		$this->logger->addDebug('checking attacks');
 		if ($this->fleetInfo->isAnyAttackOnMe()) {
-			$nearestAttack = OgameParser::getNearestTime($this->fleetInfo->getAttackArrivalTimes());
+			$nearestAttack = $this->fleetInfo->getNearestAttackTime();
 			$this->logger->addAlert("Attack on some of my planets! Nearest attack in $nearestAttack.");
 			$this->logger->addDebug('attack detected and logged');
 		} else {
