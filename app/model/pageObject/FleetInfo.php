@@ -15,6 +15,7 @@ use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Doctrine\ORM\Query\Expr\Func;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Json;
@@ -158,6 +159,14 @@ class FleetInfo extends Object
 	public function getNearestAttackTime() : Carbon
 	{
 		return $this->getFlights()->filter(Flight::incomingAttacks())->map(Flight::toArrivalTime())->sort(Functions::compareCarbonDateTimes())->first();
+	}
+
+	public function getNearestAttackFlight() : Flight
+	{
+		$compare = Functions::compareCarbonDateTimes();
+		return $this->getFlights()->filter(Flight::incomingAttacks())->sort(function(Flight $a, Flight $b) use ($compare) {
+			return $compare($a->getArrivalTime(), $b->getArrivalTime());
+		})->first();
 	}
 
 	private function getRowSelector(int $nth) : string
