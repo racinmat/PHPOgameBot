@@ -3,12 +3,18 @@
 namespace App\Model\PageObject;
  
 use App\Enum\FleetMission;
+use App\Enum\FlightStatus;
 use App\Enum\MenuItem;
+use App\Enum\Ships;
 use App\Model\Game\Menu;
+use App\Model\ValueObject\Fleet;
+use App\Model\ValueObject\Flight;
+use App\Utils\ArrayCollection;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
 use Nette\Object;
+use Nette\Utils\Strings;
 
 class FleetInfo extends Object
 {
@@ -28,10 +34,18 @@ class FleetInfo extends Object
 	/** @var string */
 	private $fleetRow = '#eventContent > tbody > tr';
 
+	/** @var ArrayCollection */
+	private $flights;
+
+	/** @var Carbon */
+	private $flightsLoadTime;
+
 	public function __construct(\AcceptanceTester $I, Menu $menu)
 	{
 		$this->I = $I;
 		$this->menu = $menu;
+		$this->flights = null;
+		$this->flightsLoadTime = Carbon::minValue();
 	}
 
 	private function openFleetInfo()
@@ -45,12 +59,76 @@ class FleetInfo extends Object
 		$I->waitForText('Události', null, '#eventHeader h2');
 	}
 
+	private function initialize()
+	{
+		$this->flights = new ArrayCollection();
+		if ($this->isNoFleetCurrentlyActive()) {
+			return;
+		}
+
+		$I = $this->I;
+		$this->openFleetInfo();
+		$fleetRows = $this->getNumberOfFlights();
+		for ($i = 1; $i <= $fleetRows; $i++) {
+			$row = $this->getRowSelector($i);
+
+			$timeToArrive = $I->grabTextFrom("$row > td.countDown");
+			$returningString = $I->grabAttributeFrom($row, 'data-return-flight');
+			$status = $I->grabAttributeFrom("$row > td.countDown", 'class');
+			$from = $I->grabTextFrom("$row > td.coordsOrigin");
+			$to = $I->grabTextFrom("$row > td.destCoords");
+			$missionNumber = $I->grabAttributeFrom($row, 'data-mission-type');
+
+			$returning = $returningString === 'true' ? true : false;
+			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
+
+			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
+			$fleetPopup = '.htmlTooltip > .fleetinfo';
+			$rows = $I->getNumberOfElements("$fleetPopup > tr");
+			for ($j = 1; $j <= $rows; $j++) {
+				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($i) > th")) {
+					break;
+				}
+			}
+			$fleetFrom = $j + 1;
+			for ($j = 1; $j <= $rows; $j++) {
+				if ($I->seeElementExists("$fleetPopup > tr:nth-of-type($i) > td[colspan=\"2\"]")) {
+					break;
+				}
+			}
+			$fleetTo = $j - 1;
+
+			$fleet = new Fleet();
+			for ($i = $fleetFrom; $i <= $fleetTo; $i++) {
+				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($i) > td:nth-of-type(1)");
+				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($i) > td:nth-of-type(1)");
+				$fleet->addShips(Ships::getFromTranslatedName($shipName), $amount);
+			}
+			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive)), $returning, FlightStatus::_($status));
+			$this->flights->add($flight);
+		}
+		$this->flightsLoadTime = Carbon::now();
+	}
+
+	private function getFlights() : ArrayCollection
+	{
+		if (Carbon::now()->subMinutes(3)->gt($this->flightsLoadTime)) { //after 3 minutes the flights will be reloaded
+			$this->flights = null;
+		}
+		if ($this->flights === null) {
+			$this->initialize();
+		}
+		return $this->flights;
+	}
+
 	/**
 	 * @return string[]
 	 */
 	public function getMyFleetsReturnTimes() : array
 	{
-		return $this->getArrivalTimes(self::TYPE_MINE, true);
+		return $this->getFlights()->filter(function (Flight $f) {
+			return $f->getStatus() === FlightStatus::MINE && $f->isReturning();
+		})->map($this->flightToArrivalTime());
 	}
 
 	/**
@@ -58,24 +136,23 @@ class FleetInfo extends Object
 	 */
 	public function getMyExpeditionsReturnTimes() : array
 	{
-		return $this->getArrivalTimes(self::TYPE_MINE, true, FleetMission::_(FleetMission::EXPEDITION));
+		return $this->getFlights()->filter(function (Flight $f) {
+			return $f->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning() && $f->getMission()->getValue() === FleetMission::EXPEDITION;
+		})->map($this->flightToArrivalTime());
+	}
+
+	private function flightToArrivalTime() : callable
+	{
+		return function (Flight $f) {
+			return $f->getArrivalTime();
+		};
 	}
 
 	public function isAnyAttackOnMe() : bool
 	{
-		if ($this->isNoFleetCurrentlyActive()) {
-			return false;
-		}
-
-		$I = $this->I;
-		$this->openFleetInfo();
-		$fleetRows = $this->getNumberOfFleets();
-		for ($i = 1; $i <= $fleetRows; $i++) {
-			if ($I->seeElementExists($this->nthFleet($i, self::TYPE_ENEMY, false))) {
-				return true;
-			}
-		}
-		return false;
+		return ! $this->getFlights()->filter(function (Flight $f) {
+			return $f->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
+		})->isEmpty();
 	}
 
 	/**
@@ -83,51 +160,19 @@ class FleetInfo extends Object
 	 */
 	public function getAttackArrivalTimes() : array
 	{
-		return $this->getArrivalTimes(self::TYPE_ENEMY, false);
+		return ! $this->getFlights()->filter(function (Flight $f) {
+			return $f->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
+		})->map($this->flightToArrivalTime());
 	}
 
-	private function getArrivalTimes(string $type, bool $returning, FleetMission $fleetMission = null) : array
+	private function getRowSelector(int $nth) : string
 	{
-		if ($this->isNoFleetCurrentlyActive()) {
-			return [];
-		}
-
-		$I = $this->I;
-		$this->openFleetInfo();
-		$fleetRows = $this->getNumberOfFleets();
-		$timeStrings = [];
-		for ($i = 1; $i <= $fleetRows; $i++) {
-			if ( ! $I->seeElementExists($this->nthFleet($i, $type, $returning, $fleetMission))) {
-				continue;
-			}
-
-			$timeStrings[] = $this->getNthFleetArrivalTime($i, $type);
-		}
-		return $timeStrings;
+		return "$this->fleetRow:nth-of-type($nth)";
 	}
 
-	private function getNumberOfFleets() : int
+	private function getNumberOfFlights() : int
 	{
 		return $this->I->getNumberOfElements($this->fleetRow);
-	}
-
-	private function nthFleet(int $nth, string $type, bool $returning = null, FleetMission $fleetMission = null) : string
-	{
-		$returnSelector = '';
-		$missionSelector = '';
-		if ($returning !== null) {
-			$return = $returning ? 'true' : 'false';
-			$returnSelector = "[data-return-flight=$return]";
-		}
-		if ($fleetMission !== null) {
-			$missionSelector = "[data-mission-type=\"{$fleetMission->getNumber()}\"]";
-		}
-		return "$this->fleetRow:nth-of-type($nth){$returnSelector}{$missionSelector} > td$type";
-	}
-
-	private function getNthFleetArrivalTime(int $nth, string $type, bool $returning = null) : string
-	{
-		return $this->I->grabTextFrom("{$this->nthFleet($nth, $type, $returning)}.countDown");
 	}
 
 	private function isNoFleetCurrentlyActive() : bool

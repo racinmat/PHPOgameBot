@@ -52,5 +52,19 @@ class FleetMission extends Enum
 			case static::DESTROY: return '9';
 		}
 	}
-	
+
+	public static function fromNumber(string $number) : FleetMission
+	{
+		switch ($number) {
+			case '15': return static::_(static::EXPEDITION);
+			case '7': return static::_(static::COLONIZATION);
+			case '8': return static::_(static::HARVESTING);
+			case '3': return static::_(static::TRANSPORT);
+			case '4': return static::_(static::DEPLOYMENT);
+			case '6': return static::_(static::ESPIONAGE);
+			case '1': return static::_(static::ATTACKING);
+			case '9': return static::_(static::DESTROY);
+		}
+
+	}
 }
