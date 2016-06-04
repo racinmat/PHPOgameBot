@@ -90,7 +90,6 @@ class FleetManager extends Object implements ICommandProcessor
 
 	private function areFreeFleets() : bool
 	{
-		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(1) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($fleets);
 		return $occupied < $total;
@@ -106,6 +105,10 @@ class FleetManager extends Object implements ICommandProcessor
 
 	public function isProcessingAvailable(ICommand $command) : bool
 	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($planet);
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+
 		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
 		$freeFleets = $this->areFreeFleets();
@@ -115,6 +118,9 @@ class FleetManager extends Object implements ICommandProcessor
 			$freeFleets = $freeFleets && $freeExpeditions;
 		}
 
+		if ($this->I->seeExists('Na této planetě nejsou žádné lodě.', '#warning')) {
+			return false;
+		}
 		$enoughResources = true;
 		if ($command->waitForResources()) {
 			$this->logger->addDebug("This fleet wants to wait for resources: {$command->getResources()}.");
@@ -147,13 +153,13 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
 		if (!$this->isProcessingAvailable($command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
 		$this->logger->addDebug('Processing available, starting to process the command.');
-		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		foreach ($command->getFleet()->getNonZeroShips() as $ship => $count) {
 			if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
 				return false;

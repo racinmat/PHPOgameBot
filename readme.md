@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- maybe check correct amount of ships before sending fleet. Time to processing could be calculated from return of fleet which would provide enough ships to send fleet in command.
 - when reading espionage report, update the player status (jest in case the non-active user goes active, so I wont attack him)
 - maybe add limit to probing players because probing 400 planets at once takes few hours
 - refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
