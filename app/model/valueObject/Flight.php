@@ -4,6 +4,7 @@ namespace App\Model\ValueObject;
  
 use App\Enum\FleetMission;
 use App\Enum\FlightStatus;
+use App\Model\Entity\Planet;
 use Carbon\Carbon;
 use Nette;
  
@@ -112,22 +113,51 @@ class Flight extends Nette\Object
 
 	public static function incomingAttacks() : callable
 	{
-		return function (Flight $f) {
-			return $f->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
+		return function (Flight $flight) {
+			return $flight->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
 		};
 	}
 
 	public static function myReturning() : callable
 	{
-		return function (Flight $f) {
-			return $f->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning();
+		return function (Flight $flight) {
+			return $flight->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning();
 		};
 	}
 
 	public static function withMission(FleetMission $mission)
 	{
-		return function (Flight $f) use ($mission) {
-			return $f->getMission() === $mission;
+		return function (Flight $flight) use ($mission) {
+			return $flight->getMission() === $mission;
 		};
 	}
+
+	public static function toArrivalTime() : callable
+	{
+		return function (Flight $flight) {
+			return $flight->getArrivalTime();
+		};
+	}
+
+	public static function withFleet(Fleet $fleet)
+	{
+		return function (Flight $flight) use ($fleet) {
+			return $flight->getFleet()->contains($fleet);
+		};
+	}
+
+	public static function fromPlanet(Planet $planet) : callable
+	{
+		return function (Flight $flight) use ($planet) {
+			return $flight->from === $planet->getCoordinates();
+		};
+	}
+
+	public static function toPlanet(Planet $planet) : callable
+	{
+		return function (Flight $flight) use ($planet) {
+			return $flight->to === $planet->getCoordinates();
+		};
+	}
+
 }

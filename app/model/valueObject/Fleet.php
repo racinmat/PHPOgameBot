@@ -20,7 +20,7 @@ class Fleet extends Object implements \IteratorAggregate
 
 	public function addShips(Ships $ships, int $count)
 	{
-		if ($count === 0) {
+		if ($count <= 0) {
 			return;
 		}
 		if ($this->fleet->containsKey($ships->getValue())) {
@@ -62,5 +62,21 @@ class Fleet extends Object implements \IteratorAggregate
 	public function getIterator()
 	{
 		return new \ArrayIterator($this->toArray());
+	}
+
+	public function contains(Fleet $fleet) : bool
+	{
+		return $fleet->fleet->forAll(function (string $shipName, int $amount) {
+			return isset($this->fleet[$shipName]) && $this->fleet[$shipName] >= $amount;
+		});
+	}
+
+	public function subtract(Fleet $fleet) : Fleet
+	{
+		$difference = new Fleet();
+		foreach ($this as $shipName => $amount) {
+			$difference->addShips(Ships::_($shipName), $amount - $fleet[$shipName] ?? 0);
+		}
+		return $difference;
 	}
 }

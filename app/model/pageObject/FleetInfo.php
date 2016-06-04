@@ -6,6 +6,7 @@ use App\Enum\FleetMission;
 use App\Enum\FlightStatus;
 use App\Enum\MenuItem;
 use App\Enum\Ships;
+use App\Model\Entity\Planet;
 use App\Model\Game\Menu;
 use App\Model\ValueObject\Fleet;
 use App\Model\ValueObject\Flight;
@@ -136,7 +137,7 @@ class FleetInfo extends Object
 	 */
 	public function getMyFleetsReturnTimes() : ArrayCollection
 	{
-		return $this->getFlights()->filter(Flight::myReturning())->map($this->flightToArrivalTime());
+		return $this->getFlights()->filter(Flight::myReturning())->map(Flight::toArrivalTime());
 	}
 
 	/**
@@ -144,15 +145,10 @@ class FleetInfo extends Object
 	 */
 	public function getMyExpeditionsReturnTimes() : ArrayCollection
 	{
-		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withMission(FleetMission::_(FleetMission::EXPEDITION)))->map($this->flightToArrivalTime());
+		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withMission(FleetMission::_(FleetMission::EXPEDITION)))->map(Flight::toArrivalTime());
 	}
 
-	private function flightToArrivalTime() : callable
-	{
-		return function (Flight $f) {
-			return $f->getArrivalTime();
-		};
-	}
+
 
 	public function isAnyAttackOnMe() : bool
 	{
@@ -161,7 +157,7 @@ class FleetInfo extends Object
 
 	public function getNearestAttackTime() : Carbon
 	{
-		return $this->getFlights()->filter(Flight::incomingAttacks())->map($this->flightToArrivalTime())->sort(Functions::compareCarbonDateTimes())->first();
+		return $this->getFlights()->filter(Flight::incomingAttacks())->map(Flight::toArrivalTime())->sort(Functions::compareCarbonDateTimes())->first();
 	}
 
 	private function getRowSelector(int $nth) : string
@@ -179,8 +175,9 @@ class FleetInfo extends Object
 		return $this->I->seeElementExists('#eventboxBlank');
 	}
 
-	public function getTimeOfFleetReturn(Fleet $fleet)
+	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet)
 	{
-		
+		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
 	}
+
 }

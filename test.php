@@ -158,7 +158,13 @@ function add(int $a, int $b) : int {
 	return $a + $b;
 }
 
-var_dump(add(5,6));
-var_dump(add(5000000,6000000));
-var_dump(add(500000000,600000000));
-var_dump(add(5000000000,6000000000));
+//var_dump(add(5,6));
+//var_dump(add(5000000,6000000));
+//var_dump(add(500000000,600000000));
+//var_dump(add(5000000000,6000000000));
+
+$arr = ['one' => 1];
+var_dump($arr['two'] ?? 0);
+var_dump(false ?? 0);
+var_dump(false ?: 0);
+var_dump(null ?? 0);

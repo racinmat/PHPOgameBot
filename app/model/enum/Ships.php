@@ -139,6 +139,11 @@ class Ships extends Buildable
 		return '#ship_' . $this->getNumber();
 	}
 
+	public function getCurrentAmountSelector() : string 
+	{
+		return '#button' . $this->getNumber() . 'a.tooltip > .ecke > .level';
+	}
+
 	/**
 	 * @return MenuItem
 	 */

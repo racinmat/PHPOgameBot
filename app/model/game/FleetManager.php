@@ -15,6 +15,7 @@ use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\ICommandProcessor;
 use App\Model\ResourcesCalculator;
+use App\Model\ValueObject\Fleet;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
@@ -74,9 +75,15 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
 		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
-			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first();
+			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue();
 		} else {
-			$minimalTime = $this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first();
+			$minimalTime = $this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue();
+		}
+
+		if ( ! $this->isFleetPresent($command)) {
+			$missingShips = $command->getFleet()->subtract($this->getPresentFleet($command));
+			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet);
+			$minimalTime = $minimalTime->max($timeToFleet);
 		}
 
 		if ($command->waitForResources()) {
@@ -115,7 +122,6 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
 		/** @var SendFleetCommand $command */
-		//todo: later add checking for amount of ships in planet from command
 		$freeFleets = $this->areFreeFleets();
 		$freeExpeditions = $this->areFreeExpeditions();
 
@@ -123,9 +129,10 @@ class FleetManager extends Object implements ICommandProcessor
 			$freeFleets = $freeFleets && $freeExpeditions;
 		}
 
-		if ($this->I->seeExists('Na této planetě nejsou žádné lodě.', '#warning')) {
+		if ($this->isFleetPresent($command)) {
 			return false;
 		}
+
 		$enoughResources = true;
 		if ($command->waitForResources()) {
 			$this->logger->addDebug("This fleet wants to wait for resources: {$command->getResources()}.");
@@ -219,6 +226,31 @@ class FleetManager extends Object implements ICommandProcessor
 	private function isCapacitySufficient(SendFleetCommand $command) : bool
 	{
 		return $command->getFleet()->getCapacity() >= $command->getResources()->getTotal();
+	}
+
+	private function isFleetPresent(SendFleetCommand $command) : bool
+	{
+		return $this->getPresentFleet($command)->contains($command->getFleet());
+	}
+
+	private function getPresentFleet(SendFleetCommand $command) : Fleet
+	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($planet);
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+
+		$I = $this->I;
+		$fleet = new Fleet();
+		if ($I->seeExists('Na této planetě nejsou žádné lodě.', '#warning')) {
+			return $fleet;
+		}
+
+		foreach (Ships::getEnums() as $ship) {
+			$currentAmount = $I->grabTextFrom($ship)->getCurrentAmountSelector();
+			$fleet->addShips($ship->getValue(), $currentAmount);
+		}
+
+		return $fleet;
 	}
 
 }
