@@ -75,7 +75,7 @@ class Fleet extends Object implements \IteratorAggregate
 	{
 		$difference = new Fleet();
 		foreach ($this as $shipName => $amount) {
-			$difference->addShips(Ships::_($shipName), $amount - $fleet[$shipName] ?? 0);
+			$difference->addShips(Ships::_($shipName), $amount - $fleet->fleet[$shipName] ?? 0);
 		}
 		return $difference;
 	}
