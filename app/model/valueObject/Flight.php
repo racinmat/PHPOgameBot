@@ -114,14 +114,14 @@ class Flight extends Nette\Object
 	public static function incomingAttacks() : callable
 	{
 		return function (Flight $flight) {
-			return $flight->getStatus()->getValue() === FlightStatus::ENEMY && ! $f->isReturning();
+			return $flight->getStatus()->getValue() === FlightStatus::ENEMY && ! $flight->isReturning();
 		};
 	}
 
 	public static function myReturning() : callable
 	{
 		return function (Flight $flight) {
-			return $flight->getStatus()->getValue() === FlightStatus::MINE && $f->isReturning();
+			return $flight->getStatus()->getValue() === FlightStatus::MINE && $flight->isReturning();
 		};
 	}
 

@@ -130,7 +130,7 @@ class FleetManager extends Object implements ICommandProcessor
 			$freeFleets = $freeFleets && $freeExpeditions;
 		}
 
-		if ($this->isFleetPresent($command)) {
+		if ( ! $this->isFleetPresent($command)) {
 			return false;
 		}
 

@@ -47,6 +47,7 @@ class AttackChecker extends Object
 	{
 		$this->logger->addDebug('checking attacks');
 		if ($this->fleetInfo->isAnyAttackOnMe()) {
+			$this->logger->addDebug('attack detected');
 			$this->attackDetected();
 		} else {
 			$this->logger->addDebug('attack not detected');
@@ -59,8 +60,7 @@ class AttackChecker extends Object
 		$currentFleet = $this->fleetManager->getPresentFleet($nearestAttack->getTo());
 		$to = $nearestAttack->getTo();
 
-		$this->logger->addAlert("Attack on some of my planets! Nearest attack in {$nearestAttack->getArrivalTime()}.");
-		$this->logger->addDebug('attack detected and logged. Preparing fleetsave.');
+		$this->logger->addAlert("Attack on some of my planets! Nearest attack in {$nearestAttack->getArrivalTime()}. Preparing fleetsave.");
 
 		/** @var Coordinates $otherPlanet */
 		$otherPlanet = $this->databaseManager->getAllMyPlanetsCoordinates()->filter(function (Coordinates $c) use ($to) {return ! $c->equals($to);})->first();
@@ -71,8 +71,8 @@ class AttackChecker extends Object
 			'resources' => (new Resources(100000000, 100000000, 100000000))->toArray()
 		];
 		$fleetSaveCommand = new SendFleetCommand($to, $data);
-		$this->commandDispatcher->processCommand($fleetSaveCommand);
-		$this->logger->addDebug('Fleetsave done.');
+		$done = $this->commandDispatcher->processCommand($fleetSaveCommand);
+		$this->logger->addAlert($done ? 'Fleetsave done.' : 'Fleetsave failed.');
 	}
 
 }
