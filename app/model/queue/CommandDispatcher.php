@@ -61,6 +61,10 @@ class CommandDispatcher extends Object
 	
 	public function preProcessCommand(ICommand $command, ArrayCollection $queue)
 	{
+		if ( ! $this->hasPreProcessor($command)) {
+			return;
+		}
+
 		$preprocessor = $this->getPreProcessor($command);
 		$this->logger->addInfo("Going to preProcess the command $command.");
 		$preprocessor->preProcessCommand($command, $queue);
@@ -68,6 +72,10 @@ class CommandDispatcher extends Object
 
 	public function processCommand(ICommand $command) : bool
 	{
+		if ( ! $this->hasProcessor($command)) {
+			return false;
+		}
+
 		$processor = $this->getProcessor($command);
 		$this->logger->addInfo("Going to process the command $command.");
 		$success = $processor->processCommand($command);
@@ -84,4 +92,16 @@ class CommandDispatcher extends Object
 	{
 		return $this->processors->filter(function (ICommandProcessor $processor) use ($command) {return $processor->canProcessCommand($command);})->first();
 	}
+
+
+	private function hasPreProcessor(ICommand $command) : bool
+	{
+		return ! $this->preprocessors->filter(function (ICommandPreProcessor $preProcessor) use ($command) {return $preProcessor->canPreProcessCommand($command);})->isEmpty();
+	}
+
+	private function hasProcessor(ICommand $command) : bool
+	{
+		return ! $this->processors->filter(function (ICommandProcessor $processor) use ($command) {return $processor->canProcessCommand($command);})->isEmpty();
+	}
+
 }
