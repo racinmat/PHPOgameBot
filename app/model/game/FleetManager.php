@@ -68,6 +68,10 @@ class FleetManager extends Object implements ICommandProcessor
 		/** @var SendFleetCommand $command */
 		//todo: later add checking for amount of ships in planet from command
 
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($planet);
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+
 		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
 			$minimalTime = OgameParser::getNearestTime($this->fleetInfo->getMyExpeditionsReturnTimes());
 		} else {
