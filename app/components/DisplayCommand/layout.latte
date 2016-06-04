@@ -1,34 +1,42 @@
 <div class="row">
-	<span class="col-md-1">
+	<span class="col-md-1 col-xs-1">
 		{$iterator->getCounter()}.
 	</span>
-	<span class="col-md-1">
+	<span class="col-md-1 col-xs-2">
 		{$command->getCoordinates()}
 	</span>
-	<span class="col-md-2">
+	<span class="col-md-2 col-xs-2">
 		{$command->getAction()}
 	</span>
-	<span class="col-md-3">
+	<span class="col-md-3 col-xs-2">
 		{block content}
 		{/block}
 	</span>
-	<span class="col-md-1">
+	<span class="col-md-1 col-xs-2">
 		<a class="btn btn-danger" n:href="remove!, uuid => $command->getUuid()->toString()">Delete</a>
 	</span>
-	<span class="col-md-1">
+	<span class="col-md-1 col-xs-1">
 		{block edit}
 		{/block}
 	</span>
-	<span class="col-md-1">
+	<span class="col-md-1 col-xs-1 up-down-arrows">
 		{if !$iterator->isFirst()}
-			<a n:href="moveUp!, uuid => $command->getUuid()->toString()">
-				<span class="glyphicon glyphicon-chevron-up"></span>
-			</a>
+			<p>
+				<a n:href="moveUp!, uuid => $command->getUuid()->toString()">
+					<span class="glyphicon glyphicon-chevron-up"></span>
+				</a>
+			</p>
+		{else}
+			<p>
+				&nbsp;
+			</p>
 		{/if}
 		{if !$iterator->isLast()}
-			<a n:href="moveDown!, uuid => $command->getUuid()->toString()">
-				<span class="glyphicon glyphicon-chevron-down" style="top: 15px; {if !$iterator->isFirst()}left: -18px;{/if}"></span>
-			</a>
+			<p>
+				<a n:href="moveDown!, uuid => $command->getUuid()->toString()">
+					<span class="glyphicon glyphicon-chevron-down"></span>
+				</a>
+			</p>
 		{/if}
 	</span>
 </div>

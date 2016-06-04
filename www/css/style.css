@@ -9,3 +9,7 @@ body {
 .dashboard-queue > div:nth-child(even) {
     background: #e0e0e0;
 }
+
+.up-down-arrows > p {
+    margin-bottom: 0;
+}
