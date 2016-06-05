@@ -131,7 +131,7 @@ class FleetInfo extends Object
 
 			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
-			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::_($status), $resources);
+			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::fromClass($status), $resources);
 			$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
 			$this->flights->add($flight);
 		}

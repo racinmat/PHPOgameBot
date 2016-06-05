@@ -29,6 +29,17 @@ class FleetMission extends Enum
 		DESTROY = 'destroy'
 	;
 
+	private static $numberToMission = [
+		'15' => self::EXPEDITION,
+		'7' => self::COLONIZATION,
+		'8' => self::HARVESTING,
+		'3' => self::TRANSPORT,
+		'4' => self::DEPLOYMENT,
+		'6' => self::ESPIONAGE,
+		'1' => self::ATTACKING,
+		'9' => self::DESTROY
+	];
+
 	public function getMissionSelector() : string 
 	{
 		return $this->getId() . $this->getNumber();
@@ -41,30 +52,11 @@ class FleetMission extends Enum
 
 	public function getNumber() : string
 	{
-		switch ($this->getValue()) {
-			case static::EXPEDITION: return '15';
-			case static::COLONIZATION: return '7';
-			case static::HARVESTING: return '8';
-			case static::TRANSPORT: return '3';
-			case static::DEPLOYMENT: return '4';
-			case static::ESPIONAGE: return '6';
-			case static::ATTACKING: return '1';
-			case static::DESTROY: return '9';
-		}
+		return array_flip(static::$numberToMission)[$this->getValue()];
 	}
 
 	public static function fromNumber(string $number) : FleetMission
 	{
-		switch ($number) {
-			case '15': return static::_(static::EXPEDITION);
-			case '7': return static::_(static::COLONIZATION);
-			case '8': return static::_(static::HARVESTING);
-			case '3': return static::_(static::TRANSPORT);
-			case '4': return static::_(static::DEPLOYMENT);
-			case '6': return static::_(static::ESPIONAGE);
-			case '1': return static::_(static::ATTACKING);
-			case '9': return static::_(static::DESTROY);
-		}
-
+		return static::newInstance(static::$numberToMission[$number]);
 	}
 }

@@ -21,17 +21,23 @@ class FlightStatus extends Enum
 	const
 		MINE = 'mine',
 		FRIENDLY = 'friendly',
-		ENEMY = 'hostile'
+		ENEMY = 'enemy'
 	;
 
+	static private $classToStatus = [
+			'friendly' => self::MINE,
+			'neutral' => self::FRIENDLY,
+			'hostile' => self::ENEMY
+	];
 
 	public function getSelector() : string
 	{
-		switch ($this->getValue()) {
-			case static::MINE: return '.friendly';
-			case static::FRIENDLY: return '.neutral';
-			case static::ENEMY: return '.hostile';
-		}
+		return '.' . array_flip(static::$classToStatus)[$this->getValue()];
+	}
+
+	public static function fromClass(string $class) : FlightStatus
+	{
+		return static::newInstance(static::$classToStatus[$class]);
 	}
 
 }
