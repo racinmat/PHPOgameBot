@@ -107,7 +107,8 @@ class Flight extends Nette\Object
 			'arrivalTime' => $this->arrivalTime->__toString(),
 			'returning' => $this->isReturning(),
 			'mission' => $this->mission->__toString(),
-			'status' => $this->status->__toString()
+			'status' => $this->status->__toString(),
+			'fleet' => $this->fleet->toArray()
 		];
 	}
 

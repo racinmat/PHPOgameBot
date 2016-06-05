@@ -134,7 +134,7 @@ class FleetInfo extends Object
 	}
 
 	/**
-	 * @return string[]|ArrayCollection
+	 * @return Carbon[]|ArrayCollection
 	 */
 	public function getMyFleetsReturnTimes() : ArrayCollection
 	{
@@ -142,7 +142,7 @@ class FleetInfo extends Object
 	}
 
 	/**
-	 * @return string[]|ArrayCollection
+	 * @return Carbon[]|ArrayCollection
 	 */
 	public function getMyExpeditionsReturnTimes() : ArrayCollection
 	{
@@ -158,7 +158,7 @@ class FleetInfo extends Object
 
 	public function getNearestAttackTime() : Carbon
 	{
-		return $this->getFlights()->filter(Flight::incomingAttacks())->map(Flight::toArrivalTime())->sort(Functions::compareCarbonDateTimes())->first();
+		return $this->getFlights()->filter(Flight::incomingAttacks())->map(Flight::toArrivalTime())->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue();
 	}
 
 	public function getNearestAttackFlight() : Flight
