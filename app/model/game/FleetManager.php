@@ -75,10 +75,11 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$minimalTime = Carbon::now();
 		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
-			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue();
+			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue(); //when expedition is not returning yet, the getMyFleetsReturnTimes() returns empty collection
 		}
+		
 		if ( ! $this->areFreeFleets()) {
-			$minimalTime = $minimalTime->max($this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue());
+			$minimalTime = $minimalTime->max($this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue()); //when fleet is not returning yet, the getMyFleetsReturnTimes() returns empty collection
 		}
 
 		if ( ! $this->isFleetPresent($command)) {
