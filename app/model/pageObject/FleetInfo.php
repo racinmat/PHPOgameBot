@@ -20,6 +20,7 @@ use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class FleetInfo extends Object
 {
@@ -92,7 +93,8 @@ class FleetInfo extends Object
 			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
 			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-			$fleetPopup = '.htmlTooltip > .fleetinfo';
+			$fleetPopup = '.htmlTooltip > .fleetinfo > tbody';
+			$I->waitForElementVisible($fleetPopup);
 			$rows = $I->getNumberOfElements("$fleetPopup > tr");
 			for ($j = 1; $j <= $rows; $j++) {
 				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($j) > th")) {
@@ -101,17 +103,19 @@ class FleetInfo extends Object
 			}
 			$fleetFrom = $j + 1;
 			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeElementExists("$fleetPopup > tr:nth-of-type($j) > td[colspan=\"2\"]")) {
+				if ($I->seeExists('Dodávka:', "$fleetPopup > tr:nth-of-type($j) > th")) {
 					break;
 				}
 			}
-			$fleetTo = $j - 1;
+			$fleetTo = $j - 2;
 
 			$fleet = new Fleet();
 			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
 				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
-				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
-				$fleet->addShips(Ships::getFromTranslatedName($shipName), $amount);
+				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(2)");
+
+				$shipName = Strings::replace($shipName, '~:~', '');
+				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
 			}
 			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
