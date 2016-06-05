@@ -170,6 +170,24 @@ function add(int $a, int $b) : int {
 //var_dump(false ?: 0);
 //var_dump(null ?? 0);
 
-$comparator = \App\Utils\Functions::compareCarbonDateTimes();
-var_dump($comparator(\Carbon\Carbon::now(), \Carbon\Carbon::minValue()));
+//$comparator = \App\Utils\Functions::compareCarbonDateTimes();
+//var_dump($comparator(\Carbon\Carbon::now(), \Carbon\Carbon::minValue()));
 //var_dump(\App\Utils\Functions::compareCarbonDateTimes()(\Carbon\Carbon::now(), \Carbon\Carbon::minValue()));
+
+$resources = new \App\Utils\ArrayCollection();
+$resources->add(new \App\Model\ValueObject\Resources(10, 20, 30));
+$resources->add(new \App\Model\ValueObject\Resources(100, 200, 300));
+$resources->add(new \App\Model\ValueObject\Resources(4000, 2000, 3000));
+$resources->add(new \App\Model\ValueObject\Resources(1000, 2000, 3000));
+$resources->add(new \App\Model\ValueObject\Resources(0, 0, 0));
+$resources->add(new \App\Model\ValueObject\Resources(100, 200, 100));
+$big = $resources->filter(function (\App\Model\ValueObject\Resources $resources) {return $resources->getTotal() > 500;});
+$bigger = $resources->filter(function (\App\Model\ValueObject\Resources $resources) {return $resources->getTotal() > 5000;});
+$totals = $bigger->map(function (\App\Model\ValueObject\Resources $resources) {return $resources->getTotal();});
+$sorted = $totals->sort(function ($a, $b) {return $a < $b ? -1 : 1;});
+var_dump($big);
+var_dump($bigger);
+var_dump($totals);
+var_dump($sorted);
+var_dump(\Nette\Utils\Json::encode($sorted->toArray()));
+var_dump($sorted->first());

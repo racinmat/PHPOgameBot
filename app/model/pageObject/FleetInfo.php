@@ -162,11 +162,11 @@ class FleetInfo extends Object
 	 */
 	public function getMyExpeditionsReturnTimes() : ArrayCollection
 	{
-		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withMission(FleetMission::_(FleetMission::EXPEDITION)))->map(Flight::toArrivalTime());
+		$arrivalTimes = $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withMission(FleetMission::_(FleetMission::EXPEDITION)))->map(Flight::toArrivalTime());
+		$this->logger->addDebug('Return times of my expeditions are ' . Json::encode($arrivalTimes->toArray()));
+		return $arrivalTimes;
 	}
-
-
-
+	
 	public function isAnyAttackOnMe() : bool
 	{
 		return ! $this->getFlights()->filter(Flight::incomingAttacks())->isEmpty();
@@ -202,7 +202,9 @@ class FleetInfo extends Object
 
 	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
 	{
-		return $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime())->first() ?: Carbon::maxValue();
+		$arrivalTimes = $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());//when fleet is not returning yet, the getTimeOfFleetReturn() returns empty collection
+		$this->logger->addDebug('Return times of ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($arrivalTimes->toArray()));
+		return $arrivalTimes->first() ?: Carbon::maxValue();
 	}
 
 }

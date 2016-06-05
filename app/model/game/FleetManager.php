@@ -75,16 +75,19 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$minimalTime = Carbon::now();
 		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION) && ! $this->areFreeExpeditions()) {
-			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue(); //when expedition is not returning yet, the getMyFleetsReturnTimes() returns empty collection
+			$minimalTime = $this->fleetInfo->getMyExpeditionsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first(); //when expedition is not returning yet, the getMyFleetsReturnTimes() returns empty collection
+			$this->logger->addDebug("Minimal time for expedition is $minimalTime.");
 		}
 		
 		if ( ! $this->areFreeFleets()) {
-			$minimalTime = $minimalTime->max($this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first() ?: Carbon::maxValue()); //when fleet is not returning yet, the getMyFleetsReturnTimes() returns empty collection
+			$minimalFleetTime = $this->fleetInfo->getMyFleetsReturnTimes()->sort(Functions::compareCarbonDateTimes())->first();
+			$this->logger->addDebug("Minimal time for fleet is $minimalFleetTime.");
+			$minimalTime = $minimalTime->max($minimalFleetTime); //when fleet is not returning yet, the getMyFleetsReturnTimes() returns empty collection
 		}
 
 		if ( ! $this->isFleetPresent($command)) {
 			$missingShips = $command->getFleet()->subtract($this->getPresentFleet($command->getCoordinates()));
-			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet) ?: Carbon::maxValue(); //when fleet is not returning yet, the getTimeOfFleetReturn() returns empty collection
+			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet); 
 			$minimalTime = $minimalTime->max($timeToFleet);
 		}
 

@@ -33,14 +33,14 @@ class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection
 
 	public function merge(ArrayCollection $another) : ArrayCollection
 	{
-		$this->elements = array_merge($this->elements, $another->toArray());
-		return $this;
+		return new static(array_merge($this->elements, $another->toArray()));
 	}
 
 	public function sort(callable $comparator) : ArrayCollection
 	{
-		usort($this->elements, $comparator);
-		return $this;
+		$elements = $this->elements;
+		usort($elements, $comparator);
+		return new static($elements);
 	}
 
 }
