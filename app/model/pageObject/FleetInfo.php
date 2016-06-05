@@ -10,6 +10,7 @@ use App\Model\Entity\Planet;
 use App\Model\Game\Menu;
 use App\Model\ValueObject\Fleet;
 use App\Model\ValueObject\Flight;
+use App\Model\ValueObject\Resources;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
@@ -92,34 +93,45 @@ class FleetInfo extends Object
 			$returning = $returningString === 'true' ? true : false;
 			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
-			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-			$fleetPopup = '.htmlTooltip > .fleetinfo > tbody';
-			$I->waitForElementVisible($fleetPopup);
-			$rows = $I->getNumberOfElements("$fleetPopup > tr");
-			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($j) > th")) {
-					break;
-				}
-			}
-			$fleetFrom = $j + 1;
-			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeExists('Dodávka:', "$fleetPopup > tr:nth-of-type($j) > th")) {
-					break;
-				}
-			}
-			$fleetTo = $j - 2;
+//			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
+//			$fleetPopup = 'body .t_Tooltip.t_Tooltip_cloud .htmlTooltip > .fleetinfo > tbody';
+//			$I->waitForElementVisible($fleetPopup);
+//			$rows = $I->getNumberOfElements("$fleetPopup > tr");
+//			for ($j = 1; $j <= $rows; $j++) {
+//				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($j) > th")) {
+//					break;
+//				}
+//			}
+//			$fleetFrom = $j + 1;
+//			for ($j = 1; $j <= $rows; $j++) {
+//				if ($I->seeExists('Dodávka:', "$fleetPopup > tr:nth-of-type($j) > th")) {
+//					break;
+//				}
+//			}
+//			$fleetTo = $j - 2;
+//			$resourcesRow = $j + 1;
 
 			$fleet = new Fleet();
-			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
-				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
-				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(2)");
+//			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
+//				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
+//				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(2)");
+//
+//				$shipName = Strings::replace($shipName, '~:~', '');
+//				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
+//			}
 
-				$shipName = Strings::replace($shipName, '~:~', '');
-				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
-			}
+//			$metal = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
+//			$resourcesRow++;
+//			$crystal = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
+//			$resourcesRow++;
+//			$deuterium = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
+
+//			$resources = new Resources($metal, $crystal, $deuterium);
+			$resources = new Resources(0, 0, 0);
+
 			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
-			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::_($status));
+			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, FlightStatus::_($status), $resources);
 			$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
 			$this->flights->add($flight);
 		}

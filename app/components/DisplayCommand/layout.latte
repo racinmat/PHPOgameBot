@@ -1,25 +1,25 @@
 <div class="row">
-	<span class="col-md-1 col-xs-1">
+	<span class="col-md-2 col-lg-2 col-xs-2">
 		{$iterator->getCounter()}.
+		<span class="navbar-right">
+			{$command->getCoordinates()}
+		</span>
 	</span>
-	<span class="col-md-1 col-xs-2">
-		{$command->getCoordinates()}
-	</span>
-	<span class="col-md-2 col-xs-2">
+	<span class="col-md-2 col-lg-2 col-xs-2">
 		{$command->getAction()}
 	</span>
-	<span class="col-md-3 col-xs-2">
+	<span class="col-md-3 col-lg-3 col-xs-2">
 		{block content}
 		{/block}
 	</span>
-	<span class="col-md-1 col-xs-2">
+	<span class="col-md-1 col-lg-1 col-xs-2">
 		<a class="btn btn-danger" n:href="remove!, uuid => $command->getUuid()->toString()">Delete</a>
 	</span>
-	<span class="col-md-1 col-xs-1">
+	<span class="col-md-1 col-lg-1 col-xs-1">
 		{block edit}
 		{/block}
 	</span>
-	<span class="col-md-1 col-xs-1 up-down-arrows">
+	<span class="col-md-1 col-lg-1 col-xs-1 up-down-arrows">
 		{if !$iterator->isFirst()}
 			<p>
 				<a n:href="moveUp!, uuid => $command->getUuid()->toString()">

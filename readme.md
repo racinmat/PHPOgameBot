@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- fix flight reading. Use Xpath instead of css selector to get the correct box
 - when reading espionage report, update the player status (jest in case the non-active user goes active, so I wont attack him)
 - add percentage of speed to send fleet command
 - add resources reading to flight parsing (to add incoming resources to calculation of time to process some command which needs these resources)

@@ -32,7 +32,10 @@ class Flight extends Nette\Object
 	/** @var FlightStatus */
 	private $status;
 
-	public function __construct(Fleet $fleet, Coordinates $from, Coordinates $to, FleetMission $mission, Carbon $arrivalTime, bool $returning, FlightStatus $status)
+	/** @var Resources */
+	private $resources;
+
+	public function __construct(Fleet $fleet, Coordinates $from, Coordinates $to, FleetMission $mission, Carbon $arrivalTime, bool $returning, FlightStatus $status, Resources $resources)
 	{
 		$this->fleet = $fleet;
 		$this->from = $from;
@@ -41,6 +44,7 @@ class Flight extends Nette\Object
 		$this->arrivalTime = $arrivalTime;
 		$this->returning = $returning;
 		$this->status = $status;
+		$this->resources = $resources;
 	}
 
 	/**
@@ -108,7 +112,8 @@ class Flight extends Nette\Object
 			'returning' => $this->isReturning(),
 			'mission' => $this->mission->__toString(),
 			'status' => $this->status->__toString(),
-			'fleet' => $this->fleet->toArray()
+			'fleet' => $this->fleet->toArray(),
+			'resources' => $this->resources->toArray()
 		];
 	}
 
