@@ -95,7 +95,7 @@ class FleetInfo extends Object
 			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
 			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-			$fleetPopup = "//body//div[@class=\"t_Tooltip t_Tooltip_cloud\"][$i]//div[@class=\"htmlTooltip\"]//table[@class=\"fleetinfo\"]/tbody";
+			$fleetPopup = "//body//div[@class=\"t_Tooltip t_Tooltip_cloud\" and contains(@style, \"z - index: 1000000\")]//div[@class=\"htmlTooltip\"]//table[@class=\"fleetinfo\"]/tbody";
 			$I->waitForElementVisible($fleetPopup);
 			$rows = $I->getNumberOfElements("$fleetPopup/tr");
 			for ($j = 1; $j <= $rows; $j++) {
