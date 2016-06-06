@@ -2,8 +2,8 @@
 
 namespace App\Model\Queue\Command;
  
-use App\Enum\Buildable;
-use App\Enum\Defense;
+
+
 use App\Model\ValueObject\Coordinates;
 use Nette;
 use Ramsey\Uuid\Uuid;

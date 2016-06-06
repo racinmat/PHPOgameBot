@@ -53,6 +53,7 @@ class Ships extends Buildable
 			case 'Solární satelit': return static::SOLAR_SATELLITE;
 			case 'Kolonizační loď': return static::COLONY_SHIP;
 		}
+		throw new \InvalidArgumentException('Unknown translated name, no selector found.');
 	}
 
 	public function setAmount(Planet $planet, int $amount)

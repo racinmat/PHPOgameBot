@@ -13,7 +13,7 @@ use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
 use App\Utils\ArrayCollection;
 use Nette\Object;
-use Nette\Utils\Arrays;
+
 use Nette\Utils\Json;
 
 class QueueFileRepository extends Object
@@ -49,6 +49,7 @@ class QueueFileRepository extends Object
 				return $commandClass::fromArray($data);
 			}
 		}
+		throw new \InvalidArgumentException("No action corresponds with provided data.");
 	}
 
 	private function arrayToCommandCallback() : callable

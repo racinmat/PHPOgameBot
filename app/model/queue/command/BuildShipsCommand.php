@@ -6,10 +6,10 @@ use App\Enum\Buildable;
 use App\Enum\Enhanceable;
 use App\Enum\Ships;
 use App\Model\Entity\Planet;
-use App\Model\ValueObject\Coordinates;
+
 use App\Model\ValueObject\Resources;
 use Nette\Utils\Arrays;
-use Ramsey\Uuid\Uuid;
+
 
 class BuildShipsCommand extends BaseCommand implements IBuildCommand
 {

@@ -10,7 +10,7 @@ use App\Utils\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
-use Tracy\Debugger;
+
 
 class DatabaseManager extends Object
 {

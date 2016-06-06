@@ -3,7 +3,7 @@
 namespace App\Model\ValueObject;
  
 use App\Utils\Functions;
-use Doctrine\Common\Collections\ArrayCollection;
+
 use Nette;
 
 /**

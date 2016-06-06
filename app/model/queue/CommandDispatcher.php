@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\DI\Container;
 use Nette\Object;
-use Tracy\Debugger;
+
 
 class CommandDispatcher extends Object
 {

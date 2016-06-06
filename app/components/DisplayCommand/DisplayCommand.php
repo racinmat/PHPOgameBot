@@ -13,8 +13,13 @@ use Latte\Runtime\CachingIterator;
 use Nette;
 use Nette\Application\UI;
 use Ramsey\Uuid\Uuid;
-use Tracy\Debugger;
 
+
+/**
+ * Class DisplayCommand
+ * @package App\Components
+ * @property Nette\Application\UI\ITemplate|\stdClass $template
+ */
 class DisplayCommand extends UI\Control
 {
 

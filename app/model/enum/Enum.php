@@ -9,7 +9,7 @@
 
 namespace App\Enum;
 
-use Nette\Localization\ITranslator;
+
 use Nette\Object;
 
 

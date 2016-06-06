@@ -5,7 +5,7 @@ namespace App\Model\ValueObject;
 use App\Enum\Ships;
 use App\Utils\ArrayCollection;
 use Nette\Object;
-use Traversable;
+
 
 class Fleet extends Object implements \IteratorAggregate
 {

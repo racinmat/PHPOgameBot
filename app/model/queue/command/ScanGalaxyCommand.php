@@ -2,13 +2,12 @@
 
 namespace App\Model\Queue\Command;
  
-use App\Enum\Buildable;
-use App\Enum\Defense;
+
+
 use App\Model\ValueObject\Coordinates;
-use App\Model\ValueObject\CoordinatesDifference;
+
 use Nette\Utils\Arrays;
-use Ramsey\Uuid\Uuid;
-use Tracy\Debugger;
+
 
 class ScanGalaxyCommand extends BaseCommand
 {

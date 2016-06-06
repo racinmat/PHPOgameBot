@@ -3,8 +3,8 @@
 namespace App\Forms;
 
 use App\Model\DatabaseManager;
-use App\Model\Game\PlanetManager;
-use App\Model\Queue\Command\ICommand;
+
+
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use Nette\Application\UI\Form;
 use Nette\Object;

@@ -5,7 +5,7 @@ namespace App\Forms;
 use App\Enum\FleetMission;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
-use App\Model\Queue\Command\ICommand;
+
 use App\Model\Queue\Command\SendFleetCommand;
 use Nette\Application\UI\Form;
 use Nette\Object;

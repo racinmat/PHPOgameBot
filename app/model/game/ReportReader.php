@@ -2,7 +2,7 @@
 
 namespace App\Model\Game;
  
-use App\Enum\Buildable;
+
 use App\Enum\Building;
 use App\Enum\Defense;
 use App\Enum\MenuItem;

@@ -8,7 +8,8 @@
 
 namespace App\Enum;
 
-use Nette\Localization\ITranslator;
+use Nette\InvalidStateException;
+
 
 /**
  * Class MenuItem
@@ -41,6 +42,7 @@ class MenuItem extends Enum
 			case static::FLEET: return '#menuTable > li:nth-child(8) > a > span';
 			case static::GALAXY: return '#menuTable > li:nth-child(9) > a > span';
 		}
+		throw new InvalidStateException('Unknown value, no selector found.');
 	}
 
 	public function getUrlIdentifier()
@@ -55,6 +57,7 @@ class MenuItem extends Enum
 			case static::FLEET: return 'page=fleet1';
 			case static::GALAXY: return 'page=galaxy';
 		}
+		throw new InvalidStateException('Unknown value, no identifier found.');
 	}
 	
 }

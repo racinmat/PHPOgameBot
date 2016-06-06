@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Model\Game\SignManager;
+
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\DI\Container;

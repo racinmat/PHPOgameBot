@@ -11,15 +11,15 @@ use App\Model\Entity\Planet;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
-use App\Utils\Random;
+
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
+
 use Doctrine\Common\Collections\ArrayCollection;
-use Kdyby\Doctrine\EntityManager;
-use Kdyby\Doctrine\EntityRepository;
+
+
 use Kdyby\Monolog\Logger;
 use Nette\Object;
-use Nette\Utils\Strings;
+
 
 class PlanetManager extends Object
 {

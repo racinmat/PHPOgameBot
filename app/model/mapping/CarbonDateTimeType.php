@@ -8,7 +8,6 @@
 
 namespace App\Model\Mapping;
 
-use App\Utils\CarbonDateTime;
 use Carbon\Carbon;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\DateTimeType;

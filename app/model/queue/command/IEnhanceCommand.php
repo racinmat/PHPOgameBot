@@ -2,7 +2,7 @@
 
 namespace App\Model\Queue\Command;
 
-use App\Enum\Buildable;
+
 use App\Enum\Enhanceable;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;

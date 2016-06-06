@@ -3,11 +3,11 @@
 namespace App\Model\Queue\Command;
  
 use App\Enum\PlayerStatus;
-use App\Model\ValueObject\Coordinates;
+
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Nette\Utils\Arrays;
-use Ramsey\Uuid\Uuid;
+
 
 class ProbePlayersCommand extends BaseCommand
 {

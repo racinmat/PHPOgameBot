@@ -2,8 +2,9 @@
 
 namespace App\Model;
  
-use Codeception\Scenario;
-use Codeception\Test\Unit;
+use Codeception\Codecept;
+
+
 use Nette;
 
 class AcceptanceTesterFactory extends Nette\Object
@@ -49,7 +50,7 @@ class AcceptanceTesterFactory extends Nette\Object
 		];
 		$suite = 'acceptance';
 		$test = 'basicTestCept';
-		$codecept = new \Codeception\Codecept($userOptions);
+		$codecept = new Codecept($userOptions);
 
 		try {
 			$codecept->run($suite, $test);

@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Model\Queue\Command\ICommand;
+
 
 interface IDisplayCommandFactory
 {

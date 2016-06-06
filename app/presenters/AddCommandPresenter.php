@@ -4,7 +4,7 @@ namespace App\Presenters;
 
 use App\Enum\Building;
 use App\Enum\Defense;
-use App\Enum\FleetMission;
+
 use App\Enum\PlayerStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
@@ -12,7 +12,7 @@ use App\Forms\FormFactory;
 use App\Forms\ScanGalaxyCommandFormFactory;
 use App\Forms\SendFleetCommandFormFactory;
 use App\Model\DatabaseManager;
-use App\Model\Game\PlanetManager;
+
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\IEnhanceCommand;
@@ -24,9 +24,7 @@ use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Model\Queue\QueueManager;
 use App\Model\ValueObject\Coordinates;
 use Nette\Application\UI\Form;
-use Nette\Forms\Controls\SubmitButton;
-use Nette\Utils\Strings;
-use Tracy\Debugger;
+
 
 class AddCommandPresenter extends BasePresenter
 {

@@ -5,7 +5,7 @@ namespace App\Model\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
 use Nette\Object;
-use Tracy\Debugger;
+
 
 /**
  * @ORM\Embeddable()
@@ -181,12 +181,12 @@ class Coordinates extends Object
 
 	public function isEndOfGalaxy() : bool
 	{
-		return $this->system === $this->maxSystem;
+		return $this->system === static::$maxSystem;
 	}
 
 	public function isEndOfUniverse() : bool
 	{
-		return $this->galaxy === $this->maxGalaxy;
+		return $this->galaxy === static::$maxGalaxy;
 	}
 
 	public function planet(int $planet) : Coordinates

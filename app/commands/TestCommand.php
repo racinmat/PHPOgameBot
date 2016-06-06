@@ -2,23 +2,19 @@
 
 namespace App\Commands;
 
-use App\Enum\Building;
+
 use App\Enum\FleetMission;
 use App\Enum\Ships;
-use App\Model\DatabaseManager;
+
 use App\Model\Game\FleetManager;
-use App\Model\Game\PlanetManager;
+
 use App\Model\Game\ReportReader;
 use App\Model\Game\SignManager;
 use App\Model\Queue\Command\SendFleetCommand;
-use App\Model\Queue\Command\UpgradeBuildingCommand;
-use App\Model\Queue\QueueConsumer;
-use App\Model\Queue\QueueManager;
-use App\Model\ResourcesCalculator;
-use App\Model\ValueObject\Coordinates;
-use Carbon\Carbon;
+
+
 use Nette\DI\Container;
-use Symfony\Component\Console\Command\Command;
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

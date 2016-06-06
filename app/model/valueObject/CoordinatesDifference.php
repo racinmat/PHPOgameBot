@@ -4,8 +4,7 @@ namespace App\Model\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
-use Nette\Object;
-use Tracy\Debugger;
+
 
 class CoordinatesDifference extends Coordinates
 {

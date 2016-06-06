@@ -9,7 +9,7 @@ use App\Utils\OgameParser;
 use App\Utils\Random;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
-use Nette\Utils\Strings;
+
 
 class Menu extends Object
 {

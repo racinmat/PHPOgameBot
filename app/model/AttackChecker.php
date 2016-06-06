@@ -4,15 +4,15 @@ namespace App\Model;
 
 use App\Enum\FleetMission;
 use App\Model\Game\FleetManager;
-use App\Model\Game\PlanetManager;
+
 use App\Model\PageObject\FleetInfo;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\CommandDispatcher;
 use App\Model\ValueObject\Coordinates;
-use App\Model\ValueObject\Fleet;
+
 use App\Model\ValueObject\Resources;
-use App\Utils\Functions;
-use App\Utils\OgameParser;
+
+
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
