@@ -224,6 +224,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Fleet sent.');
 		usleep(Random::microseconds(1.5, 2.5));
 
+		$this->fleetInfo->reloadFlights();
 		return true;
 	}
 
