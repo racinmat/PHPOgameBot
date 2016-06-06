@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
+use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\ArrayCollection;
@@ -105,9 +106,18 @@ class DatabaseManager extends Object
 		return $this->playerRepository->findOneBy(['me' => true]);
 	}
 
-	public function getPlanetsOfPlayersWithStatuses(ArrayCollection $statuses)
+	/**
+	 * @param ProbePlayersCommand $command
+	 * @return Planet[]
+	 */
+	public function getPlanetsFromCommand(ProbePlayersCommand $command) : array
 	{
-		return $this->planetRepository->findBy(['player.status' => $statuses->toArray()]);
+		$statuses = $command->getStatuses();
+		$orderBy = [];
+		if ($command->isOrderActive()) {
+			$orderBy[$command->getOrderBy()->getValue()] = $command->getOrderType()->getValue();
+		}
+		return $this->planetRepository->findBy(['player.status' => $statuses->toArray()], $orderBy, $command->getLimit());
 	}
 
 	public function removePlanet(Coordinates $coordinates)

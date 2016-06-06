@@ -5,6 +5,8 @@ namespace App\Presenters;
 use App\Enum\Building;
 use App\Enum\Defense;
 
+use App\Enum\OrderPlanetsBy;
+use App\Enum\OrderType;
 use App\Enum\PlayerStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
@@ -205,6 +207,16 @@ class AddCommandPresenter extends BasePresenter
 		$form->addMultiSelect('statuses', 'Only players with statuses', PlayerStatus::getSelectBoxValues())
 			->getControlPrototype()->addAttributes(['size' => count(PlayerStatus::getSelectBoxValues())]);
 
+		$form->addText('limit', 'Limit of scanned planets:')
+			->setRequired('Limit muse be filled (to scan all planets, insert dome really high number).')
+			->setType('number');
+
+		$form->addSelect('orderBy', 'Order planets to probe by: ', OrderPlanetsBy::getSelectBoxValues())
+			->setPrompt('-');
+
+		$form->addSelect('orderType', 'Order type: ', OrderType::getSelectBoxValues())
+			->setPrompt('-');
+		
 		$form->addSubmit('send', 'Add command');
 
 		$form->addCheckbox('repetitive', 'Repetitive command');
@@ -216,7 +228,10 @@ class AddCommandPresenter extends BasePresenter
 			$command = ProbePlayersCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
-					'statuses' => $values['statuses']
+					'statuses' => $values['statuses'],
+					'limit' => $values['limit'],
+					'orderBy' => $values['orderBy'],
+					'orderType' => $values['orderType']
 				]
 			]);
 			if ($values['repetitive']) {

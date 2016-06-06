@@ -83,7 +83,7 @@ class PlayersProber extends Object implements ICommandProcessor
 		//send espionage probes to all players with selected statuses
 
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
-		$planetsToProbe = $this->databaseManager->getPlanetsOfPlayersWithStatuses($command->getStatuses());
+		$planetsToProbe = $this->databaseManager->getPlanetsFromCommand($command);
 		$this->logger->addInfo(count($planetsToProbe) . ' planets to probe.');
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
