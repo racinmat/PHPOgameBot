@@ -79,10 +79,7 @@ class Flight extends Nette\Object
 		return $this->mission;
 	}
 
-	/**
-	 * @return Carbon
-	 */
-	public function getArrivalTime()
+	public function getArrivalTime() : Carbon
 	{
 		return $this->arrivalTime;
 	}
@@ -140,7 +137,7 @@ class Flight extends Nette\Object
 
 	public static function toArrivalTime() : callable
 	{
-		return function (Flight $flight) {
+		return function (Flight $flight) : Carbon {
 			return $flight->getArrivalTime();
 		};
 	}
@@ -155,14 +152,14 @@ class Flight extends Nette\Object
 	public static function fromPlanet(Planet $planet) : callable
 	{
 		return function (Flight $flight) use ($planet) {
-			return $flight->from === $planet->getCoordinates();
+			return $flight->from->equals($planet->getCoordinates());
 		};
 	}
 
 	public static function toPlanet(Planet $planet) : callable
 	{
 		return function (Flight $flight) use ($planet) {
-			return $flight->to === $planet->getCoordinates();
+			return $flight->to->equals($planet->getCoordinates());
 		};
 	}
 

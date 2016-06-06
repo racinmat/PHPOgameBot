@@ -204,11 +204,11 @@ class FleetInfo extends Object
 	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
 	{
 		$myReturning = $this->getFlights()->filter(Flight::myReturning());
-		$this->logger->addDebug('My returning flights are ' . Json::encode($myReturning->map(function (Flight $f) {return $f->toArray();})));
+		$this->logger->addDebug('My returning flights are ' . Json::encode($myReturning->map(function (Flight $f) {return $f->toArray();})->toArray()));
 		$myFleetReturning = $myReturning->filter(Flight::withFleet($fleet));
 		$this->logger->addDebug('Flights with fleet: ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($myFleetReturning->map(function (Flight $f) {return $f->toArray();})->toArray()));
-		$arrivalTimes = $myFleetReturning->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
-		$this->logger->addDebug('Return times of ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($arrivalTimes->toArray()));
+		$arrivalTimes = $myFleetReturning->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime())->sort(Functions::compareCarbonDateTimes());
+		$this->logger->addDebug('Return times of ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($arrivalTimes->map(function (Carbon $c) {return $c->__toString();})->toArray()));
 		return $arrivalTimes->first() ?: Carbon::maxValue();//when fleet is not returning yet, the $arrivalTimes are empty collection
 	}
 
