@@ -87,7 +87,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 		if ( ! $this->isFleetPresent($command)) {
 			$missingShips = $command->getFleet()->subtract($this->getPresentFleet($command->getCoordinates()));
-			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet); 
+			$timeToFleet = $this->fleetInfo->getTimeOfFleetReturn($missingShips, $planet);
 			$minimalTime = $minimalTime->max($timeToFleet);
 		}
 

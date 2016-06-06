@@ -93,41 +93,40 @@ class FleetInfo extends Object
 			$returning = $returningString === 'true' ? true : false;
 			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
-//			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-//			$fleetPopup = 'body .t_Tooltip.t_Tooltip_cloud .htmlTooltip > .fleetinfo > tbody';
-//			$I->waitForElementVisible($fleetPopup);
-//			$rows = $I->getNumberOfElements("$fleetPopup > tr");
-//			for ($j = 1; $j <= $rows; $j++) {
-//				if ($I->seeExists('Lodě:', "$fleetPopup > tr:nth-of-type($j) > th")) {
-//					break;
-//				}
-//			}
-//			$fleetFrom = $j + 1;
-//			for ($j = 1; $j <= $rows; $j++) {
-//				if ($I->seeExists('Dodávka:', "$fleetPopup > tr:nth-of-type($j) > th")) {
-//					break;
-//				}
-//			}
-//			$fleetTo = $j - 2;
-//			$resourcesRow = $j + 1;
+			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
+			$fleetPopup = "//body//div[@class=\"t_Tooltip t_Tooltip_cloud\"][$i]//div[@class=\"htmlTooltip\"]//table[@class=\"fleetinfo\"]/tbody";
+			$I->waitForElementVisible($fleetPopup);
+			$rows = $I->getNumberOfElements("$fleetPopup/tr");
+			for ($j = 1; $j <= $rows; $j++) {
+				if ($I->seeExists('Lodě:', "$fleetPopup/tr[$j]/th")) {
+					break;
+				}
+			}
+			$fleetFrom = $j + 1;
+			for ($j = 1; $j <= $rows; $j++) {
+				if ($I->seeExists('Dodávka:', "$fleetPopup/tr[$j]/th")) {
+					break;
+				}
+			}
+			$fleetTo = $j - 2;
+			$resourcesRow = $j + 1;
 
 			$fleet = new Fleet();
-//			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
-//				$shipName = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(1)");
-//				$amount = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($j) > td:nth-of-type(2)");
-//
-//				$shipName = Strings::replace($shipName, '~:~', '');
-//				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
-//			}
+			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
+				$shipName = $I->grabTextFrom("$fleetPopup/tr[$j]/td[1]");
+				$amount = $I->grabTextFrom("$fleetPopup/tr[$j]/td[2]");
 
-//			$metal = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
-//			$resourcesRow++;
-//			$crystal = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
-//			$resourcesRow++;
-//			$deuterium = $I->grabTextFrom("$fleetPopup > tr:nth-of-type($resourcesRow) > td:nth-of-type(2)");
+				$shipName = Strings::replace($shipName, '~:~', '');
+				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
+			}
 
-//			$resources = new Resources($metal, $crystal, $deuterium);
-			$resources = new Resources(0, 0, 0);
+			$metal = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+			$resourcesRow++;
+			$crystal = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+			$resourcesRow++;
+			$deuterium = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+
+			$resources = new Resources($metal, $crystal, $deuterium);
 
 			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
@@ -166,7 +165,7 @@ class FleetInfo extends Object
 		$this->logger->addDebug('Return times of my expeditions are ' . Json::encode($arrivalTimes->toArray()));
 		return $arrivalTimes;
 	}
-	
+
 	public function isAnyAttackOnMe() : bool
 	{
 		return ! $this->getFlights()->filter(Flight::incomingAttacks())->isEmpty();
@@ -202,9 +201,9 @@ class FleetInfo extends Object
 
 	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
 	{
-		$arrivalTimes = $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());//when fleet is not returning yet, the getTimeOfFleetReturn() returns empty collection
+		$arrivalTimes = $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
 		$this->logger->addDebug('Return times of ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($arrivalTimes->toArray()));
-		return $arrivalTimes->first() ?: Carbon::maxValue();
+		return $arrivalTimes->first() ?: Carbon::maxValue();//when fleet is not returning yet, the $arrivalTimes are empty collection
 	}
 
 }
