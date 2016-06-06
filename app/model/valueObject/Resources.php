@@ -29,7 +29,7 @@ class Resources extends Nette\Object
 	 * @param int $crystal
 	 * @param int $deuterium
 	 */
-	public function __construct($metal, $crystal, $deuterium)
+	public function __construct(int $metal, int $crystal, int $deuterium)
 	{
 		$this->metal = $metal > 0 ? $metal : 0;
 		$this->crystal = $crystal > 0 ? $crystal : 0;

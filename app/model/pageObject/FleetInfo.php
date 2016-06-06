@@ -126,7 +126,7 @@ class FleetInfo extends Object
 			$resourcesRow++;
 			$deuterium = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
 
-			$resources = new Resources($metal, $crystal, $deuterium);
+			$resources = new Resources(OgameParser::parseResources($metal), OgameParser::parseResources($crystal), OgameParser::parseResources($deuterium));
 
 			/** @var Carbon $arrivalTime */
 			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
