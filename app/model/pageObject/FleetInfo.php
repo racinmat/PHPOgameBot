@@ -74,6 +74,7 @@ class FleetInfo extends Object
 	{
 		$this->flights = new ArrayCollection();
 		if ($this->isNoFleetCurrentlyActive()) {
+			$this->logger->addDebug("No fleet is currently active. Flights are empty.");
 			return;
 		}
 
@@ -145,6 +146,7 @@ class FleetInfo extends Object
 		if ($this->flights === null) {
 			$this->initialize();
 		}
+		$this->logger->addDebug("Flights: " . Json::encode($this->flights->map(function (Flight $f) {return $f->toArray();})->toArray()));
 		return $this->flights;
 	}
 
@@ -201,7 +203,11 @@ class FleetInfo extends Object
 
 	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
 	{
-		$arrivalTimes = $this->getFlights()->filter(Flight::myReturning())->filter(Flight::withFleet($fleet))->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
+		$myReturning = $this->getFlights()->filter(Flight::myReturning());
+		$this->logger->addDebug('My returning flights are ' . Json::encode($myReturning->map(function (Flight $f) {return $f->toArray();})));
+		$myFleetReturning = $myReturning->filter(Flight::withFleet($fleet));
+		$this->logger->addDebug('Flights with fleet: ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($myFleetReturning->map(function (Flight $f) {return $f->toArray();})->toArray()));
+		$arrivalTimes = $myFleetReturning->filter(Flight::fromPlanet($planet))->map(Flight::toArrivalTime());
 		$this->logger->addDebug('Return times of ' . Json::encode($fleet->toArray()) . ' are ' . Json::encode($arrivalTimes->toArray()));
 		return $arrivalTimes->first() ?: Carbon::maxValue();//when fleet is not returning yet, the $arrivalTimes are empty collection
 	}

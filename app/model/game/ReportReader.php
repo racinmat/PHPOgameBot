@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Model\Game;
- 
 
 use App\Enum\Building;
 use App\Enum\Defense;

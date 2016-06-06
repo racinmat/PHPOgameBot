@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\DI\Container;

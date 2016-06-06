@@ -126,14 +126,14 @@ class Flight extends Nette\Object
 
 	public static function myReturning() : callable
 	{
-		return function (Flight $flight) {
+		return function (Flight $flight) : bool {
 			return $flight->getStatus()->getValue() === FlightStatus::MINE && $flight->isReturning();
 		};
 	}
 
 	public static function withMission(FleetMission $mission)
 	{
-		return function (Flight $flight) use ($mission) {
+		return function (Flight $flight) use ($mission) : bool {
 			return $flight->getMission() === $mission;
 		};
 	}
