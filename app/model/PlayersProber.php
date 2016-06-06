@@ -87,34 +87,7 @@ class PlayersProber extends Object implements ICommandProcessor
 		$this->logger->addInfo(count($planetsToProbe) . ' planets to probe.');
 		/** @var Planet $planetToProbe */
 		foreach ($planetsToProbe as $planetToProbe) {
-			$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
-			if ($planetToProbe->getProbingStatus() === ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION)) {
-				$probesAmount++;
-			}
-			$planetToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
-			$planetToProbe->setProbesToLastEspionage($probesAmount);
-			$this->databaseManager->flush();
-			$probePlanetCommand = SendFleetCommand::fromArray([
-				'coordinates' => $planet->getCoordinates()->toArray(),
-				'data' => [
-					'to' => $planetToProbe->getCoordinates()->toArray(),
-					'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
-					'mission' => FleetMission::ESPIONAGE
-				]
-			]);
-
-			while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
-				$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
-				sleep($time->diffInSeconds());
-				$this->I->reloadPage();
-			}
-			try {
-				$this->fleetManager->processCommand($probePlanetCommand);
-			} catch(NonExistingPlanetException $e) {
-				$this->logger->addInfo("Removing non existing planet from coordinates {$planetToProbe->getCoordinates()->toString()}");
-				$this->databaseManager->removePlanet($planetToProbe->getCoordinates());
-			}
-
+			$this->probePlanet($planetToProbe, $planet);
 		}
 
 		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
@@ -124,5 +97,37 @@ class PlayersProber extends Object implements ICommandProcessor
 	public function isProcessingAvailable(ICommand $command) : bool
 	{
 		return true;
+	}
+
+	private function probePlanet(Planet $planetToProbe, Planet $from)
+	{
+		$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
+		if ($planetToProbe->getProbingStatus() === ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION)) {
+			$probesAmount++;
+		}
+		$planetToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
+		$planetToProbe->setProbesToLastEspionage($probesAmount);
+		$this->databaseManager->flush();
+		$probePlanetCommand = SendFleetCommand::fromArray([
+			'coordinates' => $from->getCoordinates()->toArray(),
+			'data' => [
+				'to' => $planetToProbe->getCoordinates()->toArray(),
+				'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
+				'mission' => FleetMission::ESPIONAGE
+			]
+		]);
+
+		while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
+			$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
+			sleep($time->diffInSeconds());
+			$this->I->reloadPage();
+		}
+		try {
+			$this->fleetManager->processCommand($probePlanetCommand);
+		} catch(NonExistingPlanetException $e) {
+			$this->logger->addInfo("Removing non existing planet from coordinates {$planetToProbe->getCoordinates()->toString()}");
+			$this->databaseManager->removePlanet($planetToProbe->getCoordinates());
+		}
+
 	}
 }

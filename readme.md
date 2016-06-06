@@ -6,6 +6,22 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- think about filtering and ordering of planets to probe. It must be easily modifyable and as general as possible
+	- filtering and ordering have many common elements, maybe what could be taken advantage of
+	- filter
+		- any of statuses
+			- array of them from enum
+		- lastVisited
+			- from, nullable
+			- to, nullable
+		- got all info or not
+	- order
+		- statuses
+			- array of them from enum
+		- lastVisited
+		- got all info or not
+- before flights parsing,check flights which will arrive before parsing ends and wait, start parsing after these flights arrive (must measure how long the parsing usually take)
+- when sending espionage probe during players probing, check the status, if it has not changed
 - when reading espionage report, update the player status (jest in case the non-active user goes active, so I wont attack him)
 - add percentage of speed to send fleet command
 - add incoming resources to calculation of time to process some command which needs these resources
@@ -13,7 +29,7 @@ TODO
 - refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
 - add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
-- fleetsave on main planet. Fleetsave only in pauses between two enhancements
+- fleetsave from main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)
 - maybe bugfix: when parsing time to complete upgrade, the real time is few seconds later than parsed time

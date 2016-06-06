@@ -36,9 +36,9 @@ class ProbePlayersCommand extends BaseCommand
 		$data = [
 			'data' => [
 				'statuses' => $this->statuses->map(Functions::enumToValue())->toArray(),
-				'orderType' => $this->orderType,
+				'orderType' => $this->orderType->getValue(),
 				'limit' => $this->limit,
-				'orderBy' => $this->orderBy
+				'orderBy' => $this->orderBy->getValue()
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -47,9 +47,9 @@ class ProbePlayersCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->statuses = (new ArrayCollection($data['statuses']))->map(function ($string) {return PlayerStatus::_($string);});
-		$this->orderType = $data['orderType'];
+		$this->orderType = OrderType::_($data['orderType']);
 		$this->limit = $data['limit'];
-		$this->orderBy = $data['orderBy'];
+		$this->orderBy = OrderPlanetsBy::_($data['orderBy']);
 	}
 
 	public function getDependencyType() : string

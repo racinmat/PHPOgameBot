@@ -200,7 +200,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
 		try {
-			$I->waitForText('Odeslání letky III', 4, '#planet > h2');
+			$I->waitForText('Odeslání letky III', 5, '#planet > h2');
 		} catch(TimeOutException $e) {
 			$this->logger->addDebug('Url is still same. Can not proceed to next phase of fleet sending. Throwing exception.');
 			throw new NonExistingPlanetException();
