@@ -141,7 +141,9 @@ class PlayersProber extends Object implements ICommandProcessor
 		$currentResult = $information->getMaximalResult();
 		$desiredResult = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION)->getMinimalResult();
 		$enemyLevel = $this->calculateEnemyLevel($myLevel, $probes, $currentResult);
-		return $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel);
+		$probesToSend = $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel);
+		$this->logger->addDebug("Calculating probes amount for $probes probes and probing status $information with result $currentResult. $probesToSend probes should be send to get all information.");
+		return $probesToSend;
 	}
 
 	private function calculateEnemyLevel(int $myLevel, int $probes, int $result)

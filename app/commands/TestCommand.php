@@ -13,6 +13,7 @@ use App\Model\Game\SignManager;
 use App\Model\Queue\Command\SendFleetCommand;
 
 
+use Carbon\Carbon;
 use Nette\DI\Container;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,30 +41,30 @@ class TestCommand extends CodeceptionUsingCommand {
 	{
 		/** @var ReportReader $reportReader */
 		$reportReader = $this->container->getByType(ReportReader::class);
-//		$reportReader->readEspionageReportsFrom(Carbon::today()->addHours(21));
 		$signManager = $this->container->getByType(SignManager::class);
 		$signManager->signIn();
-		$command = SendFleetCommand::fromArray([
-			'coordinates' => [
-				'galaxy' => 1,
-				'system' => 357,
-				'planet' => 6
-			],
-			'data' => [
-				'to' => [
-					'galaxy' => 1,
-					'system' => 27,
-					'planet' => 10
-//					'system' => 28,
-//					'planet' => 11
-				],
-				'fleet' => [Ships::ESPIONAGE_PROBE => 1],
-				'mission' => FleetMission::ESPIONAGE
-			]
-		]);
-		/** @var FleetManager $fleetManager */
-		$fleetManager = $this->container->getByType(FleetManager::class);
-		$fleetManager->processCommand($command);
+		$reportReader->readEspionageReportsFrom(Carbon::today()->subHours(2));
+//		$command = SendFleetCommand::fromArray([
+//			'coordinates' => [
+//				'galaxy' => 1,
+//				'system' => 357,
+//				'planet' => 6
+//			],
+//			'data' => [
+//				'to' => [
+//					'galaxy' => 1,
+//					'system' => 27,
+//					'planet' => 10
+////					'system' => 28,
+////					'planet' => 11
+//				],
+//				'fleet' => [Ships::ESPIONAGE_PROBE => 1],
+//				'mission' => FleetMission::ESPIONAGE
+//			]
+//		]);
+//		/** @var FleetManager $fleetManager */
+//		$fleetManager = $this->container->getByType(FleetManager::class);
+//		$fleetManager->processCommand($command);
 //		/** @var QueueConsumer $queueConsumer */
 //		$queueConsumer = $this->container->getByType(QueueConsumer::class);
 //		$queueConsumer->processQueue();

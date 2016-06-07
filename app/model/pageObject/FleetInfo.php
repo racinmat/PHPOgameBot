@@ -41,6 +41,9 @@ class FleetInfo extends Object
 	/** @var string */
 	private $fleetRow = '#eventContent > tbody > tr';
 
+	/** @var string */
+	private $fleetPopup = "//body//div[@class=\"t_Tooltip t_Tooltip_cloud\" and contains(@style, \"z-index: 1000000\")]//div[@class=\"htmlTooltip\"]//table[@class=\"fleetinfo\"]/tbody";
+
 	/** @var ArrayCollection */
 	private $flights;
 
@@ -102,11 +105,10 @@ class FleetInfo extends Object
 			$flightStatus = FlightStatus::fromClass($status);
 
 			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-			$fleetPopup = "//body//div[@class=\"t_Tooltip t_Tooltip_cloud\" and contains(@style, \"z-index: 1000000\")]//div[@class=\"htmlTooltip\"]//table[@class=\"fleetinfo\"]/tbody";
-			$I->waitForElementVisible($fleetPopup);
-			$rows = $I->getNumberOfElements("$fleetPopup/tr");
+			$I->waitForElementVisible($this->fleetPopup);
+			$rows = $I->getNumberOfElements("$this->fleetPopup/tr");
 			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeExists('Lodě:', "$fleetPopup/tr[$j]/th")) {
+				if ($I->seeExists('Lodě:', "$this->fleetPopup/tr[$j]/th")) {
 					break;
 				}
 			}
@@ -114,9 +116,8 @@ class FleetInfo extends Object
 
 			//I can see resources only on my flights
 			if ($flightStatus->isMine()) {
-				$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo");
 				for ($j = 1; $j <= $rows; $j++) {
-					if ($I->seeExists('Dodávka:', "$fleetPopup/tr[$j]/th")) {
+					if ($I->seeExists('Dodávka:', "$this->fleetPopup/tr[$j]/th")) {
 						break;
 					}
 				}
@@ -126,23 +127,24 @@ class FleetInfo extends Object
 			} else {
 				$fleetTo = $rows;
 				$resourcesRow = 0;  //I do not use this variable when flight is not mine
+				$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo");
 			}
 
 			$fleet = new Fleet();
 			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
-				$shipName = $I->grabTextFrom("$fleetPopup/tr[$j]/td[1]");
-				$amount = $I->grabTextFrom("$fleetPopup/tr[$j]/td[2]");
+				$shipName = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[1]");
+				$amount = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[2]");
 
 				$shipName = Strings::replace($shipName, '~:~', '');
 				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
 			}
 
 			if ($flightStatus->isMine()) {
-				$metal = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+				$metal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
 				$resourcesRow++;
-				$crystal = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+				$crystal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
 				$resourcesRow++;
-				$deuterium = $I->grabTextFrom("$fleetPopup/tr[$resourcesRow]/td[2]");
+				$deuterium = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
 
 				$resources = new Resources(OgameParser::parseResources($metal), OgameParser::parseResources($crystal), OgameParser::parseResources($deuterium));
 			} else {
