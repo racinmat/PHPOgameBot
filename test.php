@@ -198,3 +198,5 @@ function add(int $a, int $b) : int {
 //var_dump($didNotGetAllInfo1 == $didNotGetAllInfo2);
 var_dump(gmp_sign(-2));
 var_dump(gmp_sign(20));
+$orderBy = \App\Enum\OrderPlanetsBy::_(\App\Enum\OrderPlanetsBy::NULL);
+var_dump($orderBy->isActive());

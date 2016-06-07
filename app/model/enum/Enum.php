@@ -52,6 +52,12 @@ abstract class Enum extends Object {
 		}
 
 		if (in_array($value, static::getConstants())) {
+			foreach (static::getEnumValues() as $enumValue) {
+				if ($enumValue == $value) {
+					$value = $enumValue;
+					break;
+				}
+			}
 			$instance = new static($value);
 			static::addInstance($instance);
 			return $instance;

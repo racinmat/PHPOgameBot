@@ -40,4 +40,8 @@ class FlightStatus extends Enum
 		return static::newInstance(static::$classToStatus[$class]);
 	}
 
+	public function isMine() : bool
+	{
+		return $this->getValue() === static::MINE;
+	}
 }
