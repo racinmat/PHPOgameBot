@@ -10,6 +10,7 @@ use App\Model\Game\FleetManager;
 
 use App\Model\Game\ReportReader;
 use App\Model\Game\SignManager;
+use App\Model\PageObject\FleetInfo;
 use App\Model\Queue\Command\SendFleetCommand;
 
 
@@ -42,8 +43,11 @@ class TestCommand extends CodeceptionUsingCommand {
 		/** @var ReportReader $reportReader */
 		$reportReader = $this->container->getByType(ReportReader::class);
 		$signManager = $this->container->getByType(SignManager::class);
+		/** @var FleetInfo $fleetInfo */
+		$fleetInfo = $this->container->getByType(FleetInfo::class);
 		$signManager->signIn();
-		$reportReader->readEspionageReportsFrom(Carbon::today()->subHours(2));
+		$fleetInfo->isAnyAttackOnMe();
+//		$reportReader->readEspionageReportsFrom(Carbon::today()->subHours(2));
 //		$command = SendFleetCommand::fromArray([
 //			'coordinates' => [
 //				'galaxy' => 1,

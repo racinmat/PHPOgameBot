@@ -196,7 +196,10 @@ function add(int $a, int $b) : int {
 //$didNotGetAllInfo2 = \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 //var_dump($didNotGetAllInfo1 === $didNotGetAllInfo2);
 //var_dump($didNotGetAllInfo1 == $didNotGetAllInfo2);
-var_dump(gmp_sign(-2));
-var_dump(gmp_sign(20));
-$orderBy = \App\Enum\OrderPlanetsBy::_(\App\Enum\OrderPlanetsBy::NULL);
-var_dump($orderBy->isActive());
+//var_dump(gmp_sign(-2));
+//var_dump(gmp_sign(20));
+//$orderBy = \App\Enum\OrderPlanetsBy::_(\App\Enum\OrderPlanetsBy::NULL);
+//var_dump($orderBy->isActive());
+$interval = new \Carbon\CarbonInterval(0, 0, 0, 0, 0, 1, 0);
+$time = \Carbon\Carbon::minValue()->add($interval);
+var_dump($time);

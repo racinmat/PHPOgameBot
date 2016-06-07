@@ -17,6 +17,7 @@ use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
 
+use Carbon\CarbonInterval;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Nette\Utils\Json;
@@ -76,6 +77,27 @@ class FleetInfo extends Object
 			$I->click('#js_eventDetailsClosed');
 		}
 		$I->waitForText('Události', null, '#eventHeader h2');
+	}
+
+	private function waitUntilCloseFlightsArrive()
+	{
+		while (true) {  //still iterating until the soon to arrive collection is empty
+			$I = $this->I;
+			$this->openFleetInfo();
+			//if any interval is below treshold, I will wait for it to arrive and then pase. Now the treshold is 1 minute, this is maximal time to parse.
+			$timesToArrive = new ArrayCollection($I->grabMultiple("$this->fleetRow > td.countDown"));
+			$treshold = new CarbonInterval(0, 0, 0, 0, 0, 1, 0);
+			/** @var Carbon $time */
+			$time = Carbon::now()->add($treshold);
+			$timeIntervals = $timesToArrive->map(function (string $s) {return Carbon::now()->add(OgameParser::parseOgameTimeInterval($s));});
+			$soonToArrive = $timeIntervals->filter(function (Carbon $arrive) use ($time) {return $arrive->lt(($time));})->sort(Functions::compareCarbonDateTimes());
+			if ($soonToArrive->isEmpty()) {
+				return;
+			}
+			/** @var Carbon $lastBelowTreshold */
+			$lastBelowTreshold = $soonToArrive->last();
+			sleep($lastBelowTreshold->diffInSeconds(Carbon::now()));
+		}
 	}
 
 	private function initialize()
@@ -166,6 +188,7 @@ class FleetInfo extends Object
 			$this->flights = null;
 		}
 		if ($this->flights === null) {
+			$this->waitUntilCloseFlightsArrive();
 			$this->initialize();
 		}
 		$this->logger->addDebug("Flights: " . Json::encode($this->flights->map(function (Flight $f) {return $f->toArray();})->toArray()));

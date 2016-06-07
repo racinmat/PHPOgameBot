@@ -123,8 +123,14 @@ class ReportReader extends Object
 		} else {
 			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
 			for ($i = 1; $i <= $buildingsCount; $i++) {
-				$name = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt");
-				$level = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.fright");
+				$nameSelector = $buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt";
+				$levelSelector = $buildingsSelector . " li:nth-of-type($i) > span.fright";
+				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
+				if ($name == '') {
+					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
+					$name = $I->grabTextFrom($nameSelector);
+				}
+				$level = $I->grabTextFrom($levelSelector);
 
 				$this->logger->addDebug("parsing building number $i, name: $name, level: $level");
 				$building = Building::_(Building::getFromTranslatedName($name));
@@ -138,8 +144,14 @@ class ReportReader extends Object
 		} else {
 			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
 			for ($i = 1; $i <= $researchCount; $i++) {
-				$name = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.detail_list_txt");
-				$level = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.fright");
+				$nameSelector = $researchSelector . " li:nth-of-type($i) > span.detail_list_txt";
+				$levelSelector = $researchSelector . " li:nth-of-type($i) > span.fright";
+				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
+				if ($name == '') {
+					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
+					$name = $I->grabTextFrom($nameSelector);
+				}
+				$level = $I->grabTextFrom($levelSelector);
 
 				$this->logger->addDebug("parsing research number $i, name: $name, level: $level");
 				$research = Research::_(Research::getFromTranslatedName($name));
@@ -153,8 +165,14 @@ class ReportReader extends Object
 		} else {
 			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
 			for ($i = 1; $i <= $defenseCount; $i++) {
-				$name = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.detail_list_txt");
-				$level = $I->grabTextFrom($defenseSelector . " li:nth-of-type($i) > span.fright");
+				$nameSelector = $defenseSelector . " li:nth-of-type($i) > span.detail_list_txt";
+				$levelSelector = $defenseSelector . " li:nth-of-type($i) > span.fright";
+				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
+				if ($name == '') {
+					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
+					$name = $I->grabTextFrom($nameSelector);
+				}
+				$level = $I->grabTextFrom($levelSelector);
 
 				$defense = Defense::_(Defense::getFromTranslatedName($name));
 				$defense->setAmount($planet, $level);
@@ -167,8 +185,14 @@ class ReportReader extends Object
 		} else {
 			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
 			for ($i = 1; $i <= $fleetCount; $i++) {
-				$name = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.detail_list_txt");
-				$level = $I->grabTextFrom($fleetSelector . " li:nth-of-type($i) > span.fright");
+				$nameSelector = $fleetSelector . " li:nth-of-type($i) > span.detail_list_txt";
+				$levelSelector = $fleetSelector . " li:nth-of-type($i) > span.fright";
+				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
+				if ($name == '') {
+					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
+					$name = $I->grabTextFrom($nameSelector);
+				}
+				$level = $I->grabTextFrom($levelSelector);
 
 				$ships = Ships::_(Ships::getFromTranslatedName($name));
 				$ships->setAmount($planet, $level);
