@@ -167,7 +167,7 @@ class ReportReader extends Object
 			}
 		}
 
-		$planet->setProbingStatus($probingStatus);
+		$planet->getPlayer()->setProbingStatus($probingStatus);
 
 		$this->databaseManager->flush();
 	}

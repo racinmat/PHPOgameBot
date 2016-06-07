@@ -101,12 +101,15 @@ class PlayersProber extends Object implements ICommandProcessor
 
 	private function probePlanet(Planet $planetToProbe, Planet $from)
 	{
-		$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
-		if ($planetToProbe->getProbingStatus()->missingAnyInformation()) {
-			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $planetToProbe->getProbingStatus());
+		$playerToProbe = $planetToProbe->getPlayer();
+		$probesAmount = $playerToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
+		if ($probesAmount === 0) {
+			$probesAmount = 1;  //for first estimate
+		} else if ($playerToProbe->getProbingStatus()->missingAnyInformation()) {
+			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $playerToProbe->getProbingStatus());
 		}
-		$planetToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
-		$planetToProbe->setProbesToLastEspionage($probesAmount);
+		$playerToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
+		$playerToProbe->setProbesToLastEspionage($probesAmount);
 		$this->databaseManager->flush();
 		$probePlanetCommand = SendFleetCommand::fromArray([
 			'coordinates' => $from->getCoordinates()->toArray(),
