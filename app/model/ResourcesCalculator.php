@@ -169,4 +169,10 @@ class ResourcesCalculator extends Nette\Object
 		return new Resources($metalLevel, $crystalLevel, $deuteriumLevel);
 	}
 
+	public function getResourcesEstimateForTime(Planet $planet, Carbon $time) : Resources
+	{
+		$resources = $planet->getResources();
+		$hours = $planet->getLastVisited()->diffInHours($time);
+		return $this->getProductionPerHour($planet)->multiplyByScalar($hours)->add($resources)->min($this->getStoragesCapacity($planet));
+	}
 }

@@ -6,7 +6,6 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
-- bugfix: report can not be parsed properly when it can not be seen whole (I must scroll somehow)
 - think about filtering and ordering of planets to probe. It must be easily modifyable and as general as possible
 	- filtering and ordering have many common elements, maybe what could be taken advantage of
 	- filter

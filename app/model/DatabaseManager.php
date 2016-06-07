@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Enum\PlanetProbingStatus;
+use App\Enum\PlayerStatus;
+use App\Enum\ProbingStatus;
 use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
 use App\Model\Queue\Command\ProbePlayersCommand;
@@ -158,8 +160,6 @@ class DatabaseManager extends Object
 			'plasmaTurretAmount' => 0,
 			'smallShieldDomeAmount' => 0,
 			'largeShieldDomeAmount' => 0,
-			'antiBallisticMissileAmount' => 0,
-			'interplanetaryMissileAmount' => 0,
 			'smallCargoShipAmount' => 0,
 			'largeCargoShipAmount' => 0,
 			'lightFighterAmount' => 0,
@@ -176,4 +176,13 @@ class DatabaseManager extends Object
 			'colonyShipAmount' => 0
 		]);
 	}
+
+	/**
+	 * @return Planet[]
+	 */
+	public function getInactivePlanets() : array
+	{
+		return $this->planetRepository->findBy(['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]]);
+	}
+
 }

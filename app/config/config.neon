@@ -53,6 +53,7 @@ services:
 	- App\Forms\SendFleetCommandFormFactory
 	- App\Forms\ScanGalaxyCommandFormFactory
 	- App\Model\Queue\CommandDispatcher
+	- App\Model\PlanetCalculator
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

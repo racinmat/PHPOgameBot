@@ -6,8 +6,9 @@
 		<div class="panel-body">
 			Total players scanned: {$players}<br/>
 			Total planets scanned: {$planets}<br/>
-			Planets eith all information espionaged: {$planetsWithAllInformation}<br/>
+			Planets with all information espionaged: {$planetsWithAllInformation}<br/>
 			Planets with no fleet and defense: {$planetsToFarm}<br/>
+			<a n:href="resources" class="btn btn-info">Resources estimate of farmed planets</a>
 		</div>
 	</div>
 	<div class="panel panel-primary">
@@ -16,11 +17,11 @@
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<span class="col-md-3">
+				<span class="col-md-7">
 					{$nextRunTime}
 				</span>
-				<span class="col-md-6">
-					<a n:href="runBot" class="btn btn-warning" style="float: right">Run bot</a>
+				<span class="col-md-5">
+					<a n:href="runBot" class="btn btn-warning">Run bot</a>
 				</span>
 			</div>
 		</div>

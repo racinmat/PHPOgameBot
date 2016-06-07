@@ -157,4 +157,13 @@ class Resources extends Nette\Object
 		return $this->metal + $this->crystal + $this->deuterium;
 	}
 
+	public function min(Resources $resources) : Resources
+	{
+		return new Resources(min($this->metal, $resources->metal), min($this->crystal, $resources->crystal), min($this->deuterium, $resources->deuterium));
+	}
+
+	public function max(Resources $resources) : Resources
+	{
+		return new Resources(max($this->metal, $resources->metal), max($this->crystal, $resources->crystal), max($this->deuterium, $resources->deuterium));
+	}
 }

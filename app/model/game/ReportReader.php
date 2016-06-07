@@ -87,10 +87,14 @@ class ReportReader extends Object
 
 	private function readCurrentEspionageReport()
 	{
+		$I = $this->I;
+		if ( ! $I->seeExists('Špionážní zpráva z planety', '.detail_msg .msg_title.new.blue_txt')) {
+			return;     //when espionage report is not opened, do not try to parse it
+		}
+
 		$probingStatus = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION);
 		$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 
-		$I = $this->I;
 		$coordinatesText = $I->grabTextFrom($this->reportPopupSelector . ' .msg_title a.txt_link');
 		$coordinates = OgameParser::parseOgameCoordinates($coordinatesText);
 
@@ -199,6 +203,7 @@ class ReportReader extends Object
 			}
 		}
 
+		$this->logger->addDebug("Parsing report for planet {$planet->getCoordinates()->toString()}. Probing status is $probingStatus.");
 		$planet->getPlayer()->setProbingStatus($probingStatus);
 		$planet->setProbingStatus($planetProbingStatus);
 

@@ -6,6 +6,7 @@ use App\Components\IDisplayCommandFactory;
 
 
 use App\Model\DatabaseManager;
+use App\Model\PlanetCalculator;
 use App\Model\Queue\QueueFileRepository;
 
 use Carbon\Carbon;
@@ -37,6 +38,12 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public $databaseManager;
 
+	/**
+	 * @var PlanetCalculator
+	 * @inject
+	 */
+	public $planetCalculator;
+
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);
@@ -51,6 +58,11 @@ class DashboardPresenter extends BasePresenter
 		$this->template->planetsToFarm = $this->databaseManager->getPlanetsWithoutFleetAndDefenseCount();
 	}
 
+	public function renderResources()
+	{
+		$this->template->resources = $this->planetCalculator->getResourcesEstimateForInactivePlanets();
+	}
+	
 	/**
 	 * @param string $cronFile
 	 */

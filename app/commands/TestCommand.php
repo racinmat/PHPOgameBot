@@ -46,8 +46,8 @@ class TestCommand extends CodeceptionUsingCommand {
 		/** @var FleetInfo $fleetInfo */
 		$fleetInfo = $this->container->getByType(FleetInfo::class);
 		$signManager->signIn();
-		$fleetInfo->isAnyAttackOnMe();
-//		$reportReader->readEspionageReportsFrom(Carbon::today()->subHours(2));
+//		$fleetInfo->isAnyAttackOnMe();
+		$reportReader->readEspionageReportsFrom(Carbon::today()->subHours(2));
 //		$command = SendFleetCommand::fromArray([
 //			'coordinates' => [
 //				'galaxy' => 1,
