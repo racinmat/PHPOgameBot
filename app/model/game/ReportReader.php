@@ -126,6 +126,7 @@ class ReportReader extends Object
 				$name = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt");
 				$level = $I->grabTextFrom($buildingsSelector . " li:nth-of-type($i) > span.fright");
 
+				$this->logger->addDebug("parsing building number $i, name: $name, level: $level");
 				$building = Building::_(Building::getFromTranslatedName($name));
 				$building->setCurrentLevel($planet, $level);
 			}
@@ -140,6 +141,7 @@ class ReportReader extends Object
 				$name = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.detail_list_txt");
 				$level = $I->grabTextFrom($researchSelector . " li:nth-of-type($i) > span.fright");
 
+				$this->logger->addDebug("parsing research number $i, name: $name, level: $level");
 				$research = Research::_(Research::getFromTranslatedName($name));
 				$research->setCurrentLevel($planet, $level);
 			}
