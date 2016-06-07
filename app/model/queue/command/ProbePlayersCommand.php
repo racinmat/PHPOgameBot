@@ -76,6 +76,11 @@ class ProbePlayersCommand extends BaseCommand
 		return $this->statuses->map(Functions::enumToValue())->toArray();
 	}
 
+	public function getProbingStatusTexts() : array
+	{
+		return $this->probingStatuses->map(Functions::enumToValue())->toArray();
+	}
+
 	public function isOrderActive() : bool
 	{
 		return $this->orderBy->isActive() && $this->orderType->isActive();
