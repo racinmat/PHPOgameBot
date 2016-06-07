@@ -150,7 +150,23 @@ class DatabaseManager extends Object
 
 	public function getPlanetsWithoutFleetAndDefenseCount() : int
 	{
-		return $this->planetRepository->countBy([
+		return $this->planetRepository->countBy($this->getNoFleetAndNoDefenseFilter());
+	}
+
+	/**
+	 * @return Planet[]
+	 */
+	public function getInactiveDefenselessPlanets() : array
+	{
+		return $this->planetRepository->findBy(array_merge(
+			['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]],
+			$this->getNoFleetAndNoDefenseFilter()
+		));
+	}
+
+	private function getNoFleetAndNoDefenseFilter() : array
+	{
+		return [
 			'probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION,
 			'rocketLauncherAmount' => 0,
 			'lightLaserAmount' => 0,
@@ -174,15 +190,7 @@ class DatabaseManager extends Object
 			'espionageProbeAmount' => 0,
 			'solarSatelliteAmount' => 0,
 			'colonyShipAmount' => 0
-		]);
-	}
-
-	/**
-	 * @return Planet[]
-	 */
-	public function getInactivePlanets() : array
-	{
-		return $this->planetRepository->findBy(['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]]);
+		];
 	}
 
 }

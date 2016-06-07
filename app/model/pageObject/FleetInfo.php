@@ -111,78 +111,83 @@ class FleetInfo extends Object
 			return;
 		}
 
-		$I = $this->I;
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFlights();
 		for ($i = 1; $i <= $fleetRows; $i++) {
-			$row = $this->getRowSelector($i);
+			$this->parseFlight($i);
+		}
+		$this->flightsLoadTime = Carbon::now();
+	}
 
-			$timeToArrive = $I->grabTextFrom("$row > td.countDown");
-			$returningString = $I->grabAttributeFrom($row, 'data-return-flight');
-			$status = $I->grabAttributeFrom("$row > td.countDown", 'class');
-			$from = $I->grabTextFrom("$row > td.coordsOrigin");
-			$to = $I->grabTextFrom("$row > td.destCoords");
-			$missionNumber = $I->grabAttributeFrom($row, 'data-mission-type');
+	private function parseFlight(int $i)
+	{
+		$I = $this->I;
+		$row = $this->getRowSelector($i);
 
-			$returning = $returningString === 'true' ? true : false;
-			$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
+		$timeToArrive = $I->grabTextFrom("$row > td.countDown");
+		$returningString = $I->grabAttributeFrom($row, 'data-return-flight');
+		$status = $I->grabAttributeFrom("$row > td.countDown", 'class');
+		$from = $I->grabTextFrom("$row > td.coordsOrigin");
+		$to = $I->grabTextFrom("$row > td.destCoords");
+		$missionNumber = $I->grabAttributeFrom($row, 'data-mission-type');
 
-			$flightStatus = FlightStatus::fromClass($status);
+		$returning = $returningString === 'true' ? true : false;
+		$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
-			$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-			$I->waitForElementVisible($this->fleetPopup);
-			$rows = $I->getNumberOfElements("$this->fleetPopup/tr");
-			for ($j = 1; $j <= $rows; $j++) {
-				if ($I->seeExists('Lodě:', "$this->fleetPopup/tr[$j]/th")) {
+		$flightStatus = FlightStatus::fromClass($status);
+
+		$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
+		$I->waitForElementVisible($this->fleetPopup);
+		$rows = $I->getNumberOfElements("$this->fleetPopup/tr");
+		for ($j = 1; $j <= $rows; $j++) {
+			if ($I->seeExists('Lodě:', "$this->fleetPopup/tr[$j]/th")) {
+				break;
+			}
+		}
+		$fleetFrom = $j + 1;
+
+		//I can see resources only on my flights
+		if ($flightStatus->isMine()) {
+			for ($j = $fleetFrom + 1; $j <= $rows; $j++) {
+				if ($I->seeExists('Dodávka:', "$this->fleetPopup/tr[$j]/th")) {
 					break;
 				}
 			}
-			$fleetFrom = $j + 1;
-
-			//I can see resources only on my flights
-			if ($flightStatus->isMine()) {
-				for ($j = $fleetFrom + 1; $j <= $rows; $j++) {
-					if ($I->seeExists('Dodávka:', "$this->fleetPopup/tr[$j]/th")) {
-						break;
-					}
-				}
-				$fleetTo = $j - 2;
-				$resourcesRow = $j + 1;
-				$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo, resourcesRow: $resourcesRow");
-			} else {
-				$fleetTo = $rows;
-				$resourcesRow = 0;  //I do not use this variable when flight is not mine
-				$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo");
-			}
-
-			$fleet = new Fleet();
-			for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
-				$shipName = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[1]");
-				$amount = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[2]");
-
-				$shipName = Strings::replace($shipName, '~:~', '');
-				$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
-			}
-
-			if ($flightStatus->isMine()) {
-				$metal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
-				$resourcesRow++;
-				$crystal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
-				$resourcesRow++;
-				$deuterium = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
-
-				$resources = new Resources(OgameParser::parseResources($metal), OgameParser::parseResources($crystal), OgameParser::parseResources($deuterium));
-			} else {
-				$resources = new Resources(0, 0, 0);
-			}
-
-			/** @var Carbon $arrivalTime */
-			$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
-			$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, $flightStatus, $resources);
-			$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
-			$this->flights->add($flight);
+			$fleetTo = $j - 2;
+			$resourcesRow = $j + 1;
+			$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo, resourcesRow: $resourcesRow");
+		} else {
+			$fleetTo = $rows;
+			$resourcesRow = 0;  //I do not use this variable when flight is not mine
+			$this->logger->addDebug("Parsing details: fleetFrom: $fleetFrom, fleetTo: $fleetTo");
 		}
-		$this->flightsLoadTime = Carbon::now();
+
+		$fleet = new Fleet();
+		for ($j = $fleetFrom; $j <= $fleetTo; $j++) {
+			$shipName = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[1]");
+			$amount = $I->grabTextFrom("$this->fleetPopup/tr[$j]/td[2]");
+
+			$shipName = Strings::replace($shipName, '~:~', '');
+			$fleet->addShips(Ships::_(Ships::getFromTranslatedName($shipName)), $amount);
+		}
+
+		if ($flightStatus->isMine()) {
+			$metal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
+			$resourcesRow++;
+			$crystal = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
+			$resourcesRow++;
+			$deuterium = $I->grabTextFrom("$this->fleetPopup/tr[$resourcesRow]/td[2]");
+
+			$resources = new Resources(OgameParser::parseResources($metal), OgameParser::parseResources($crystal), OgameParser::parseResources($deuterium));
+		} else {
+			$resources = new Resources(0, 0, 0);
+		}
+
+		/** @var Carbon $arrivalTime */
+		$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
+		$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, $flightStatus, $resources);
+		$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
+		$this->flights->add($flight);
 	}
 
 	private function getFlights() : ArrayCollection

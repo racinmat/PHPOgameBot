@@ -27,7 +27,7 @@ class PlanetCalculator extends Object
 	 */
 	public function getResourcesEstimateForInactivePlanets() : array
 	{
-		$planets = $this->databaseManager->getInactivePlanets();
+		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
 		$resources = [];
 		foreach ($planets as $planet) {
 			$resources[$planet->getCoordinates()->toString()] = $this->resourcesCalculator->getResourcesEstimateForTime($planet, Carbon::now());
