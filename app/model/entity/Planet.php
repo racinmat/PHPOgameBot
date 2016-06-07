@@ -399,7 +399,7 @@ class Planet extends Object
 		$this->solarSatelliteAmount = 0;
 		$this->colonyShipAmount = 0;
 		$this->probesToLastEspionage = 0;
-		$this->probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+		$this->probingStatus = ProbingStatus::_(ProbingStatus::MISSING_FLEET);
 	}
 
 	/**

@@ -115,10 +115,8 @@ class ReportReader extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited(Carbon::now());
 
-		//todo: přidat do entity planeta informace o letce a obraně
-
 		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
-			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
 		} else {
 			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
 			for ($i = 1; $i <= $buildingsCount; $i++) {
@@ -131,7 +129,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
-			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_RESEARCH));
 		} else {
 			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
 			for ($i = 1; $i <= $researchCount; $i++) {
@@ -144,7 +142,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($defenseSelector . ' li.detail_list_fail')) {
-			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
 		} else {
 			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
 			for ($i = 1; $i <= $defenseCount; $i++) {
@@ -157,7 +155,7 @@ class ReportReader extends Object
 		}
 
 		if ($I->seeElementExists($fleetSelector . ' li.detail_list_fail')) {
-			$probingStatus = ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
 		} else {
 			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
 			for ($i = 1; $i <= $fleetCount; $i++) {

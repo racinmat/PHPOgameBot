@@ -102,8 +102,8 @@ class PlayersProber extends Object implements ICommandProcessor
 	private function probePlanet(Planet $planetToProbe, Planet $from)
 	{
 		$probesAmount = $planetToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
-		if ($planetToProbe->getProbingStatus() === ProbingStatus::_(ProbingStatus::DID_NOT_GET_ALL_INFORMATION)) {
-			$probesAmount++;
+		if ($planetToProbe->getProbingStatus()->missingAnyInformation()) {
+			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $planetToProbe->getProbingStatus());
 		}
 		$planetToProbe->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
 		$planetToProbe->setProbesToLastEspionage($probesAmount);
@@ -128,6 +128,21 @@ class PlayersProber extends Object implements ICommandProcessor
 			$this->logger->addInfo("Removing non existing planet from coordinates {$planetToProbe->getCoordinates()->toString()}");
 			$this->databaseManager->removePlanet($planetToProbe->getCoordinates());
 		}
-
 	}
+
+	private function calculateProbesAmountToGetAllInformation(int $probes, ProbingStatus $information) : int
+	{
+		$me = $this->databaseManager->getMe();
+		$myLevel = $me->getEspionageTechnologyLevel();
+		$currentResult = $information->getMaximalResult();
+		$desiredResult = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION)->getMinimalResult();
+		$enemyLevel = $this->calculateEnemyLevel($myLevel, $probes, $currentResult);
+		return $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel);
+	}
+
+	private function calculateEnemyLevel(int $myLevel, int $probes, int $result)
+	{
+		return $myLevel + gmp_sign($probes - $result) + sqrt(abs($probes - $result));
+	}
+
 }

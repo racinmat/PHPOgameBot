@@ -192,7 +192,9 @@ function add(int $a, int $b) : int {
 //var_dump(\Nette\Utils\Json::encode($sorted->toArray()));
 //var_dump($sorted->first());
 
-$didNotGetAllInfo1 = \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-$didNotGetAllInfo2 = \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-var_dump($didNotGetAllInfo1 === $didNotGetAllInfo2);
-var_dump($didNotGetAllInfo1 == $didNotGetAllInfo2);
+//$didNotGetAllInfo1 = \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+//$didNotGetAllInfo2 = \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+//var_dump($didNotGetAllInfo1 === $didNotGetAllInfo2);
+//var_dump($didNotGetAllInfo1 == $didNotGetAllInfo2);
+var_dump(gmp_sign(-2));
+var_dump(gmp_sign(20));
