@@ -8,6 +8,7 @@ use App\Enum\Defense;
 use App\Enum\OrderPlanetsBy;
 use App\Enum\OrderType;
 use App\Enum\PlayerStatus;
+use App\Enum\ProbingStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Forms\FormFactory;
@@ -207,6 +208,9 @@ class AddCommandPresenter extends BasePresenter
 		$form->addMultiSelect('statuses', 'Only players with statuses', PlayerStatus::getSelectBoxValues())
 			->getControlPrototype()->addAttributes(['size' => count(PlayerStatus::getSelectBoxValues())]);
 
+		$form->addMultiSelect('probingStatuses', 'Only players probing statuses', ProbingStatus::getSelectBoxValues())
+			->getControlPrototype()->addAttributes(['size' => count(ProbingStatus::getSelectBoxValues())]);
+
 		$form->addText('limit', 'Limit of scanned planets:')
 			->setRequired('Limit muse be filled (to scan all planets, insert dome really high number).')
 			->setType('number');
@@ -229,6 +233,7 @@ class AddCommandPresenter extends BasePresenter
 				'coordinates' => $coordinates,
 				'data' => [
 					'statuses' => $values['statuses'],
+					'probingStatuses' => $values['probingStatuses'],
 					'limit' => $values['limit'],
 					'orderBy' => $values['orderBy'],
 					'orderType' => $values['orderType']

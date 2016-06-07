@@ -6,6 +6,7 @@ use App\Enum\OrderPlanetsBy;
 use App\Enum\OrderType;
 use App\Enum\PlayerStatus;
 
+use App\Enum\ProbingStatus;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Nette\Utils\Arrays;
@@ -26,6 +27,9 @@ class ProbePlayersCommand extends BaseCommand
 	/** @var OrderPlanetsBy */
 	private $orderBy;
 
+	/** @var ProbingStatus[]|ArrayCollection */
+	private $probingStatuses;
+
 	public static function getAction() : string
 	{
 		return static::ACTION_PROBE_PLAYERS;
@@ -36,6 +40,7 @@ class ProbePlayersCommand extends BaseCommand
 		$data = [
 			'data' => [
 				'statuses' => $this->statuses->map(Functions::enumToValue())->toArray(),
+				'probingStatuses' => $this->probingStatuses->map(Functions::enumToValue())->toArray(),
 				'orderType' => $this->orderType->getValue(),
 				'limit' => $this->limit,
 				'orderBy' => $this->orderBy->getValue()
@@ -47,6 +52,7 @@ class ProbePlayersCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->statuses = (new ArrayCollection($data['statuses']))->map(function ($string) {return PlayerStatus::_($string);});
+		$this->probingStatuses = (new ArrayCollection($data['probingStatuses']))->map(function ($string) {return ProbingStatus::_($string);});
 		$this->orderType = OrderType::_($data['orderType']);
 		$this->limit = $data['limit'];
 		$this->orderBy = OrderPlanetsBy::_($data['orderBy']);
@@ -88,6 +94,14 @@ class ProbePlayersCommand extends BaseCommand
 	public function getOrderBy() : OrderPlanetsBy
 	{
 		return $this->orderBy;
+	}
+
+	/**
+	 * @return \App\Enum\ProbingStatus[]|ArrayCollection
+	 */
+	public function getProbingStatuses() : ArrayCollection
+	{
+		return $this->probingStatuses;
 	}
 
 }

@@ -112,12 +112,15 @@ class DatabaseManager extends Object
 	 */
 	public function getPlanetsFromCommand(ProbePlayersCommand $command) : array
 	{
-		$statuses = $command->getStatuses();
+		$filter = [
+			'player.status' => $command->getStatuses()->toArray(),
+			'player.probingStatus' => $command->getProbingStatuses()->toArray()
+		];
 		$orderBy = [];
 		if ($command->isOrderActive()) {
 			$orderBy[$command->getOrderBy()->getValue()] = $command->getOrderType()->getValue();
 		}
-		return $this->planetRepository->findBy(['player.status' => $statuses->toArray()], $orderBy, $command->getLimit());
+		return $this->planetRepository->findBy($filter, $orderBy, $command->getLimit());
 	}
 
 	public function removePlanet(Coordinates $coordinates)
