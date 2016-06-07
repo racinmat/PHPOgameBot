@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\PlayerStatus;
+use App\Enum\ProbingStatus;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
@@ -154,6 +155,19 @@ class Player extends Object
  	 */
 	private $gravitonTechnologyLevel;
 
+	/**
+	 * Probing result depends only on espionage technology, so this can be stored in Player entity, not the planet. It saves time when probing more planets of same player.
+	 * @ORM\Column(type="integer")
+	 * @var int
+	 */
+	private $probesToLastEspionage;
+
+	/**
+	 * @ORM\Column(type="probingstatus")
+	 * @var ProbingStatus
+	 */
+	private $probingStatus;
+
 	public function __construct(string $name, bool $me = false)
 	{
 		$this->name = $name;
@@ -177,6 +191,8 @@ class Player extends Object
 		$this->intergalacticResearchNetworkLevel = 0;
 		$this->astrophysicsLevel = 0;
 		$this->gravitonTechnologyLevel = 0;
+		$this->probesToLastEspionage = 0;
+		$this->probingStatus = ProbingStatus::_(ProbingStatus::MISSING_FLEET);
 	}
 
 	/**
@@ -502,6 +518,26 @@ class Player extends Object
 	public function setAlliance($alliance)
 	{
 		$this->alliance = $alliance;
+	}
+
+	public function getProbesToLastEspionage() : int
+	{
+		return $this->probesToLastEspionage;
+	}
+
+	public function setProbesToLastEspionage(int $probesToLastEspionage)
+	{
+		$this->probesToLastEspionage = $probesToLastEspionage;
+	}
+
+	public function getProbingStatus() : ProbingStatus
+	{
+		return $this->probingStatus;
+	}
+
+	public function setProbingStatus(ProbingStatus $probingStatus)
+	{
+		$this->probingStatus = $probingStatus;
 	}
 
 }

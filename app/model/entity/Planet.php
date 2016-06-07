@@ -332,18 +332,6 @@ class Planet extends Object
  	 * @var int  
 	 */ 
 	private $colonyShipAmount;
-	
-	/**
-	 * @ORM\Column(type="integer")
-	 * @var int
-	 */
-	private $probesToLastEspionage;
-
-	/**
-	 * @ORM\Column(type="probingstatus")
-	 * @var ProbingStatus
-	 */
-	private $probingStatus;
 
 	public function __construct(string $name, Coordinates $coordinates, Player $player)
 	{
@@ -398,8 +386,6 @@ class Planet extends Object
 		$this->espionageProbeAmount = 0;
 		$this->solarSatelliteAmount = 0;
 		$this->colonyShipAmount = 0;
-		$this->probesToLastEspionage = 0;
-		$this->probingStatus = ProbingStatus::_(ProbingStatus::MISSING_FLEET);
 	}
 
 	/**
@@ -826,27 +812,6 @@ class Planet extends Object
 	{
 		$this->terraformerLevel = $terraformerLevel;
 	}
-
-	public function getProbesToLastEspionage() : int
-	{
-		return $this->probesToLastEspionage;
-	}
-
-	public function setProbesToLastEspionage(int $probesToLastEspionage)
-	{
-		$this->probesToLastEspionage = $probesToLastEspionage;
-	}
-
-	public function getProbingStatus() : ProbingStatus
-	{
-		return $this->probingStatus;
-	}
-
-	public function setProbingStatus(ProbingStatus $probingStatus)
-	{
-		$this->probingStatus = $probingStatus;
-	}
-
 
 	public function hasLoadedTemperature() : bool
 	{
