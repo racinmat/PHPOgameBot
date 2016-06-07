@@ -6,7 +6,7 @@
  * Time: 11:47
  */
 
-namespace App\Model\Mapping;
+namespace App\Model\Type;
 
 use Carbon\Carbon;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

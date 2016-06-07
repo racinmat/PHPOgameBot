@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Building;
+use App\Enum\PlanetProbingStatus;
 use App\Enum\ProbingStatus;
 use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Resources;
@@ -333,6 +334,12 @@ class Planet extends Object
 	 */ 
 	private $colonyShipAmount;
 
+	/**
+	 * @ORM\Column(type="planetprobingstatus")
+	 * @var PlanetProbingStatus
+	 */
+	private $probingStatus;
+	
 	public function __construct(string $name, Coordinates $coordinates, Player $player)
 	{
 		$this->name = $name;
@@ -386,6 +393,7 @@ class Planet extends Object
 		$this->espionageProbeAmount = 0;
 		$this->solarSatelliteAmount = 0;
 		$this->colonyShipAmount = 0;
+		$this->probingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 	}
 
 	/**
@@ -1210,6 +1218,16 @@ class Planet extends Object
 	public function setColonyShipAmount($colonyShipAmount)
 	{
 		$this->colonyShipAmount = $colonyShipAmount;
+	}
+
+	public function getProbingStatus() : PlanetProbingStatus
+	{
+		return $this->probingStatus;
+	}
+
+	public function setProbingStatus(PlanetProbingStatus $probingStatus)
+	{
+		$this->probingStatus = $probingStatus;
 	}
 
 }

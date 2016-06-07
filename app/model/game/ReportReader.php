@@ -5,6 +5,7 @@ namespace App\Model\Game;
 use App\Enum\Building;
 use App\Enum\Defense;
 use App\Enum\MenuItem;
+use App\Enum\PlanetProbingStatus;
 use App\Enum\ProbingStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
@@ -87,6 +88,7 @@ class ReportReader extends Object
 	private function readCurrentEspionageReport()
 	{
 		$probingStatus = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION);
+		$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 
 		$I = $this->I;
 		$coordinatesText = $I->grabTextFrom($this->reportPopupSelector . ' .msg_title a.txt_link');
@@ -117,6 +119,7 @@ class ReportReader extends Object
 
 		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
 			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
 			for ($i = 1; $i <= $buildingsCount; $i++) {
@@ -130,6 +133,7 @@ class ReportReader extends Object
 
 		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
 			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_RESEARCH));
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
 			for ($i = 1; $i <= $researchCount; $i++) {
@@ -143,6 +147,7 @@ class ReportReader extends Object
 
 		if ($I->seeElementExists($defenseSelector . ' li.detail_list_fail')) {
 			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
 			for ($i = 1; $i <= $defenseCount; $i++) {
@@ -156,6 +161,7 @@ class ReportReader extends Object
 
 		if ($I->seeElementExists($fleetSelector . ' li.detail_list_fail')) {
 			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
 			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
 			for ($i = 1; $i <= $fleetCount; $i++) {
@@ -168,6 +174,7 @@ class ReportReader extends Object
 		}
 
 		$planet->getPlayer()->setProbingStatus($probingStatus);
+		$planet->setProbingStatus($planetProbingStatus);
 
 		$this->databaseManager->flush();
 	}

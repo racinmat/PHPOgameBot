@@ -19,7 +19,6 @@ class ProbingStatus extends Enum
 {
 
 	const
-		CURRENTLY_PROBING = 'currently probing',
 		GOT_ALL_INFORMATION = 'got all information',
 		MISSING_RESEARCH = 'missing research',
 		MISSING_BUILDINGS = 'missing buildings',
@@ -43,7 +42,6 @@ class ProbingStatus extends Enum
 	{
 		switch ($this->getValue()) {
 			case static::GOT_ALL_INFORMATION: return false;
-			case static::CURRENTLY_PROBING: return false;
 			default: return true;
 		}
 	}
