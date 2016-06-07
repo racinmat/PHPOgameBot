@@ -100,22 +100,23 @@ class PlayersProber extends Object implements ICommandProcessor
 		return true;
 	}
 
-	private function probePlanet(Planet $planetToProbe, Planet $from)
+	private function probePlanet(Planet $planet, Planet $from)
 	{
-		$playerToProbe = $planetToProbe->getPlayer();
-		$probesAmount = $playerToProbe->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
+		$player = $planet->getPlayer();
+		$probesAmount = $player->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
 		if ($probesAmount === 0) {
 			$probesAmount = 1;  //for first estimate
-		} else if ($playerToProbe->getProbingStatus()->missingAnyInformation() && $planetToProbe->getProbingStatus() !== PlanetProbingStatus::_(PlanetProbingStatus::CURRENTLY_PROBING)) {
-			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $playerToProbe->getProbingStatus());
+		} else if ($player->getProbingStatus()->missingAnyInformation() && $player->getProbingStatus() !== ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING)) {
+			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $player->getProbingStatus());
 		}
-		$planetToProbe->setProbingStatus(PlanetProbingStatus::_(PlanetProbingStatus::CURRENTLY_PROBING));
-		$playerToProbe->setProbesToLastEspionage($probesAmount);
+		$this->logger->addDebug("Going to probe player with name {$player->getName()} and planet with coordinates {$planet->getCoordinates()->toString()}. $probesAmount probes will be sent. Planet probing status is.");
+		$player->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
+		$player->setProbesToLastEspionage($probesAmount);
 		$this->databaseManager->flush();
 		$probePlanetCommand = SendFleetCommand::fromArray([
 			'coordinates' => $from->getCoordinates()->toArray(),
 			'data' => [
-				'to' => $planetToProbe->getCoordinates()->toArray(),
+				'to' => $planet->getCoordinates()->toArray(),
 				'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
 				'mission' => FleetMission::ESPIONAGE
 			]
@@ -123,14 +124,17 @@ class PlayersProber extends Object implements ICommandProcessor
 
 		while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
 			$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
-			sleep($time->diffInSeconds());
+			$seconds = $time->diffInSeconds();
+			$seconds = min($seconds, 60);       //Do not wait for more than 60 seconds.
+			$this->logger->addInfo("Going to wait until sending probes is available, for $seconds seconds.");
+			sleep($seconds);
 			$this->I->reloadPage();
 		}
 		try {
 			$this->fleetManager->processCommand($probePlanetCommand);
 		} catch(NonExistingPlanetException $e) {
-			$this->logger->addInfo("Removing non existing planet from coordinates {$planetToProbe->getCoordinates()->toString()}");
-			$this->databaseManager->removePlanet($planetToProbe->getCoordinates());
+			$this->logger->addInfo("Removing non existing planet from coordinates {$planet->getCoordinates()->toString()}");
+			$this->databaseManager->removePlanet($planet->getCoordinates());
 		}
 	}
 

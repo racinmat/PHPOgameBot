@@ -81,12 +81,12 @@ class FleetInfo extends Object
 
 	private function waitUntilCloseFlightsArrive()
 	{
+		$I = $this->I;
+		$treshold = new CarbonInterval(0, 0, 0, 0, 0, 1, 0);
 		while (true) {  //still iterating until the soon to arrive collection is empty
-			$I = $this->I;
 			$this->openFleetInfo();
 			//if any interval is below treshold, I will wait for it to arrive and then pase. Now the treshold is 1 minute, this is maximal time to parse.
 			$timesToArrive = new ArrayCollection($I->grabMultiple("$this->fleetRow > td.countDown"));
-			$treshold = new CarbonInterval(0, 0, 0, 0, 0, 1, 0);
 			/** @var Carbon $time */
 			$time = Carbon::now()->add($treshold);
 			$timeIntervals = $timesToArrive->map(function (string $s) {return Carbon::now()->add(OgameParser::parseOgameTimeInterval($s));});
@@ -96,7 +96,10 @@ class FleetInfo extends Object
 			}
 			/** @var Carbon $lastBelowTreshold */
 			$lastBelowTreshold = $soonToArrive->last();
-			sleep($lastBelowTreshold->diffInSeconds(Carbon::now()));
+			$secondsToWait = $lastBelowTreshold->diffInSeconds();
+			$this->logger->addInfo("Going to wait for $secondsToWait seconds.");
+			sleep($secondsToWait);
+			$I->reloadPage();
 		}
 	}
 
@@ -138,7 +141,7 @@ class FleetInfo extends Object
 
 			//I can see resources only on my flights
 			if ($flightStatus->isMine()) {
-				for ($j = 1; $j <= $rows; $j++) {
+				for ($j = $fleetFrom + 1; $j <= $rows; $j++) {
 					if ($I->seeExists('Dodávka:', "$this->fleetPopup/tr[$j]/th")) {
 						break;
 					}

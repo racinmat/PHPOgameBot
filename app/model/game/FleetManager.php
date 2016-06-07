@@ -124,6 +124,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+		$this->I->reloadPage(); //because the free fleets update only on page reload
 
 		/** @var SendFleetCommand $command */
 		$freeFleets = $this->areFreeFleets();

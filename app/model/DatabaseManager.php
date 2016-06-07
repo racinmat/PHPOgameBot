@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Enum\PlanetProbingStatus;
 use App\Model\Entity\Planet;
 use App\Model\Entity\Player;
 use App\Model\Queue\Command\ProbePlayersCommand;
@@ -128,5 +129,51 @@ class DatabaseManager extends Object
 		$planet = $this->getPlanet($coordinates);
 		$this->entityManager->remove($planet);
 		$this->entityManager->flush();
+	}
+
+	public function getAllPlanetsCount() : int
+	{
+		return $this->planetRepository->countBy([]);
+	}
+
+	public function getAllPlayersCount() : int
+	{
+		return $this->playerRepository->countBy([]);
+	}
+
+	public function getPlanetsWithAllInformationCount() : int
+	{
+		return $this->planetRepository->countBy(['probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION]);
+	}
+
+	public function getPlanetsWithoutFleetAndDefenseCount() : int
+	{
+		return $this->planetRepository->countBy([
+			'probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION,
+			'rocketLauncherAmount' => 0,
+			'lightLaserAmount' => 0,
+			'heavyLaserAmount' => 0,
+			'ionCannonAmount' => 0,
+			'gaussCannonAmount' => 0,
+			'plasmaTurretAmount' => 0,
+			'smallShieldDomeAmount' => 0,
+			'largeShieldDomeAmount' => 0,
+			'antiBallisticMissileAmount' => 0,
+			'interplanetaryMissileAmount' => 0,
+			'smallCargoShipAmount' => 0,
+			'largeCargoShipAmount' => 0,
+			'lightFighterAmount' => 0,
+			'heavyFighterAmount' => 0,
+			'cruiserAmount' => 0,
+			'battleshipAmount' => 0,
+			'battlecruiserAmount' => 0,
+			'destroyerAmount' => 0,
+			'deathstarAmount' => 0,
+			'bomberAmount' => 0,
+			'recyclerAmount' => 0,
+			'espionageProbeAmount' => 0,
+			'solarSatelliteAmount' => 0,
+			'colonyShipAmount' => 0
+		]);
 	}
 }

@@ -19,7 +19,6 @@ class PlanetProbingStatus extends Enum
 {
 
 	const
-		CURRENTLY_PROBING = 'currently probing',
 		GOT_ALL_INFORMATION = 'got all information',
 		DID_NOT_GET_ALL_INFORMATION = 'did not get all information'
 	;
