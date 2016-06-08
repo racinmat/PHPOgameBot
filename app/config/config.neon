@@ -5,6 +5,7 @@
 parameters:
 	acceleration: 3
 	cronFile: %wwwDir%/cron.txt
+	runningFile: %wwwDir%/running.txt
 	queueFile: %wwwDir%/queue.json
 	repetitiveCommandsFile:  %wwwDir%/repetitive.json
 	periodicRun: '30 minutes'
@@ -37,7 +38,7 @@ services:
 	- App\Model\Queue\QueueFileRepository(queueFile: %queueFile%, repetitiveCommandsFile: %repetitiveCommandsFile%)
 	- App\Forms\FormFactory
 	- App\Model\Game\Menu
-	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%)}}
+	- {class: App\Presenters\DashboardPresenter, setup: {setCronFile(%cronFile%), setRunningFile(%runningFile%)}}
 	- {implement: App\Components\IDisplayCommandFactory}
 	- App\Model\DatabaseManager
 	- App\Model\UpgradeStoragesPreProcessor
@@ -71,7 +72,7 @@ monolog:
 		- Monolog\Handler\SlackHandler(%slackApiToken%, %slackChannel%, ogameBot, true, null, Monolog\Logger::ALERT, true)
 		- Monolog\Handler\FingersCrossedHandler(
 			Monolog\Handler\RotatingFileHandler(%appDir%/../log/bot.log, 30, Monolog\Logger::DEBUG),
-			Monolog\Logger::DEBUG
+			Monolog\Logger::CRITICAL
 		)
 
 console:

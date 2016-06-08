@@ -23,8 +23,8 @@ abstract class CodeceptionUsingCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$wwwDir = $this->container->getParameters()['wwwDir'];
-		file_put_contents("$wwwDir/running.txt", 'running');
+		$runningFile = $this->container->getParameters()['runningFile'];
+		file_put_contents($runningFile, 'running');
 		try {
 			$this->executeDelegated($input, $output);
 		} catch(\Throwable $e) {
@@ -36,10 +36,10 @@ abstract class CodeceptionUsingCommand extends Command {
 			$logger->addCritical('Exception stacktrace: ' . $e->getTraceAsString());
 			$logger->addAlert("Exception thrown on computer {$_SERVER['USERNAME']}. Please, check it.");
 			$acceptanceTester->logFailedAction(Debugger::$logDirectory, 'exception-codeception-fail-'.Carbon::now()->format('Y-m-d--H-i'));
-			file_put_contents("$wwwDir/running.txt", '');
+			file_put_contents($runningFile, '');
 			throw $e;
 		}
-		file_put_contents("$wwwDir/running.txt", '');
+		file_put_contents($runningFile, '');
 		return 0; // zero return code means everything is ok
 	}
 

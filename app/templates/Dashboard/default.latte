@@ -18,6 +18,11 @@
 		<div class="panel-body">
 			<div class="row">
 				<span class="col-md-7">
+					{if $running}
+						Bot is currently running. <br/>
+					{else}
+						Bot is not running. <br/>
+					{/if}
 					{$nextRunTime}
 				</span>
 				<span class="col-md-5">

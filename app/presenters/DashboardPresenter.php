@@ -20,6 +20,9 @@ class DashboardPresenter extends BasePresenter
 	/** @var string */
 	private $cronFile;
 
+	/** @var string */
+	private $runningFile;
+
 	/**
 	 * @var QueueFileRepository
 	 * @inject
@@ -47,11 +50,14 @@ class DashboardPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);
-		$isEmpty = ctype_space($cronTime) || Strings::length($cronTime) === 0;
-		$nextRunTime = !$isEmpty ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
+		$running = file_get_contents($this->runningFile);
+		$isTimeEmpty = ctype_space($cronTime) || Strings::length($cronTime) === 0;
+		$isRunningEmpty = ctype_space($running) || Strings::length($running) === 0;
+		$nextRunTime = !$isTimeEmpty ? Carbon::instance(new \DateTime($cronTime)) : 'Time for next run is not set. Please, run the bot manually.';
 		$this->template->queue = $this->queueRepository->loadQueue();
 		$this->template->repetitiveCommands = $this->queueRepository->loadRepetitiveCommands();
 		$this->template->nextRunTime = $nextRunTime;
+		$this->template->running = ! $isRunningEmpty;
 		$this->template->players = $this->databaseManager->getAllPlayersCount();
 		$this->template->planets = $this->databaseManager->getAllPlanetsCount();
 		$this->template->planetsWithAllInformation = $this->databaseManager->getPlanetsWithAllInformationCount();
@@ -71,6 +77,14 @@ class DashboardPresenter extends BasePresenter
 	public function setCronFile($cronFile)
 	{
 		$this->cronFile = $cronFile;
+	}
+
+	/**
+	 * @param string $runningFile
+	 */
+	public function setRunningFile($runningFile)
+	{
+		$this->runningFile = $runningFile;
 	}
 
 	public function createComponentDisplayCommand()
