@@ -11,6 +11,7 @@ namespace App\Model\Logging;
 
 use Doctrine\DBAL\Logging\SQLLogger;
 use Monolog\Logger;
+use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 
 
@@ -57,7 +58,7 @@ class DoctrineMonologAdapter implements SQLLogger
 
 		$string = "SQL: $sql";
 		if ($params) {
-			$paramsString = implode(', ', $params);
+			$paramsString = implode(', ', Arrays::flatten($params));
 			$string .= ", params: $paramsString";
 		}
 		if ($types) {
