@@ -4,9 +4,11 @@ namespace Helper;
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
+use App\Model\Logging\CodeceptionMonologAdapter;
 use Codeception\Module\WebDriver;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverElement;
+use Kdyby\Monolog\Logger;
 
 class Acceptance extends \Codeception\Module
 {
@@ -50,7 +52,7 @@ class Acceptance extends \Codeception\Module
 		}
 
 		foreach ($nodes as $node) {
-			/** @var $node \WebDriverElement  * */
+			/** @var $node \WebDriverElement */
 			if (!$node->isDisplayed()) {
 				continue;
 			}
@@ -86,5 +88,19 @@ class Acceptance extends \Codeception\Module
 		$webDriverModule->_saveScreenshot("$logDirectory/$filename.png");
 		$webDriverModule->_savePageSource("$logDirectory/$filename.html");
 
+	}
+
+	public function setLogger(Logger $logger)
+	{
+		/** @var CodeceptionMonologAdapter $loggerModule */
+		$loggerModule = $this->getModule('App\Model\Logging\CodeceptionMonologAdapter');
+		$loggerModule->setLogger($logger);
+	}
+
+	private function getLogger() : Logger
+	{
+		/** @var CodeceptionMonologAdapter $loggerModule */
+		$loggerModule = $this->getModule('App\Model\Logging\CodeceptionMonologAdapter');
+		return $loggerModule->getLogger();
 	}
 }

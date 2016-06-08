@@ -13,3 +13,4 @@ modules:
             url: https://cz.ogame.gameforge.com
             browser: firefox
         - \Helper\Acceptance
+        - App\Model\Logging\CodeceptionMonologAdapter

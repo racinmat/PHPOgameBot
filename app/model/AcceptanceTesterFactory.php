@@ -3,8 +3,7 @@
 namespace App\Model;
  
 use Codeception\Codecept;
-
-
+use Kdyby\Monolog\Logger;
 use Nette;
 
 class AcceptanceTesterFactory extends Nette\Object
@@ -13,8 +12,12 @@ class AcceptanceTesterFactory extends Nette\Object
 	/** @var \AcceptanceTester */
 	private $acceptanceTester;
 
-	public function __construct()
+	/** @var Logger */
+	private $logger;
+	
+	public function __construct(Logger $logger)
 	{
+		$this->logger = $logger;
 		$this->acceptanceTester = null;
 	}
 
@@ -56,6 +59,7 @@ class AcceptanceTesterFactory extends Nette\Object
 			$codecept->run($suite, $test);
 		} catch(\ActorException $e) {
 			$actor = $e->actor;
+			$actor->setLogger($this->logger);
 			$this->acceptanceTester = $actor;
 		}
 

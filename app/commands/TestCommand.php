@@ -43,6 +43,9 @@ class TestCommand extends CodeceptionUsingCommand {
 		/** @var ReportReader $reportReader */
 		$reportReader = $this->container->getByType(ReportReader::class);
 		$signManager = $this->container->getByType(SignManager::class);
+		/** @var \AcceptanceTester $acceptanceTester */
+		$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
+		$acceptanceTester->logFailedAction(__DIR__, 'test.png');
 		/** @var FleetInfo $fleetInfo */
 		$fleetInfo = $this->container->getByType(FleetInfo::class);
 		$signManager->signIn();
