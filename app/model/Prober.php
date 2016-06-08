@@ -3,23 +3,14 @@
 namespace App\Model;
 
 use App\Enum\FleetMission;
-use App\Enum\PlanetProbingStatus;
 use App\Enum\ProbingStatus;
 use App\Enum\Ships;
-use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
-
 use App\Model\Game\FleetManager;
+use App\Model\Game\NonExistingPlanetException;
 use App\Model\Game\PlanetManager;
 use App\Model\Game\ReportReader;
-use App\Model\PlanetCalculator;
-use App\Model\Queue\Command\ICommand;
-
-use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
-use App\Model\Queue\ICommandProcessor;
-
-
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;

@@ -1,7 +1,18 @@
 {block content}
-<ul>
-	<li n:foreach="$resources as $coords => $resources">
-		{$coords}: {$resources}
-	</li>
-</ul>
+<div>
+	<div class="row" n:foreach="$resources as $coords => $resources">
+		<span class="col-md-1">
+			{$coords}:
+		</span>
+		<span class="col-md-2">
+			metal: {$resources->getMetal()|number}
+		</span>
+		<span class="col-md-2">
+			crystals: {$resources->getCrystal()|number}
+		</span>
+		<span class="col-md-2">
+			deuterium: {$resources->getDeuterium()|number}
+		</span>
+	</div>
+</div>
 {/block}
