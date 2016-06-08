@@ -213,7 +213,9 @@ class FleetManager extends Object implements ICommandProcessor
 		//we do not want to probe players who are not inactive anymore
 		if ($command->hasStatuses()) {
 			$playerStatusClass = $I->grabAttributeFrom('#fleetStatusBar > ul > li:nth-of-type(3) > span:last-of-type', 'class');
-			if ( ! $command->getStatuses()->contains(PlayerStatus::fromClass($playerStatusClass))) {
+			$status = PlayerStatus::fromClass($playerStatusClass);
+			$planet->getPlayer()->setStatus($status);
+			if ( ! $command->getStatuses()->contains($status)) {
 				$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 				return false;
 			}

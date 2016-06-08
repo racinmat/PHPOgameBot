@@ -1,18 +1,42 @@
 {block content}
-<div>
-	<div class="row" n:foreach="$resources as $coords => $resources">
-		<span class="col-md-1">
-			{$coords}:
-		</span>
-		<span class="col-md-2">
-			metal: {$resources->getMetal()|number}
-		</span>
-		<span class="col-md-2">
-			crystals: {$resources->getCrystal()|number}
-		</span>
-		<span class="col-md-2">
-			deuterium: {$resources->getDeuterium()|number}
-		</span>
-	</div>
-</div>
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>
+				coordinates
+			</th>
+			<th>
+				metal
+			</th>
+			<th>
+				crystal
+			</th>
+			<th>
+				deuterium
+			</th>
+			<th>
+				last visit
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr n:foreach="$resources as $coords => $resources">
+			<td>
+				{$coords}
+			</td>
+			<td>
+				{$resources->getMetal()|number}
+			</td>
+			<td>
+				{$resources->getCrystal()|number}
+			</td>
+			<td>
+				{$resources->getDeuterium()|number}
+			</td>
+			<td>
+				{$lastVisited[$coords]->diffForHumans()}
+			</td>
+		</tr>
+	</tbody>
+</table>
 {/block}

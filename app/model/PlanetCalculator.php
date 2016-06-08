@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 use App\Utils\ArrayCollection;
 use Carbon\Carbon;
@@ -25,10 +26,21 @@ class PlanetCalculator extends Object
 	/**
 	 * @return Resources[]
 	 */
-	public function getResourcesEstimateForInactivePlanets() : array
+	private function getResourcesEstimateForInactivePlanets() : array
 	{
 		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
 		return $this->getResourcesEstimateForPlanets($planets);
+	}
+
+	public function getResourcesEstimateAndLastVisitedForInactivePlanets()
+	{
+		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
+		$resources = $this->getResourcesEstimateForPlanets($planets);
+		$lastVisited = [];
+		foreach ($planets as $planet) {
+			$lastVisited[$planet->getCoordinates()->toString()] = $planet->getLastVisited();
+		}
+		return [$resources, $lastVisited];
 	}
 
 	private function getResourcesEstimateForPlanets(array  $planets) : array

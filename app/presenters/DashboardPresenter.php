@@ -60,7 +60,9 @@ class DashboardPresenter extends BasePresenter
 
 	public function renderResources()
 	{
-		$this->template->resources = $this->planetCalculator->getResourcesEstimateForInactivePlanets();
+		list($resources, $lastVisited) = $this->planetCalculator->getResourcesEstimateAndLastVisitedForInactivePlanets();
+		$this->template->resources = $resources;
+		$this->template->lastVisited = $lastVisited;
 	}
 	
 	/**
