@@ -12,5 +12,6 @@ modules:
         - WebDriver:
             url: https://cz.ogame.gameforge.com
             browser: firefox
+            window_size: 1920x1080
         - \Helper\Acceptance
         - App\Model\Logging\CodeceptionMonologAdapter
