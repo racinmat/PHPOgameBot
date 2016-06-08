@@ -20,7 +20,7 @@ class ProbeFarmsCommand extends BaseCommand
 
 	public static function getAction() : string
 	{
-		return static::ACTION_PROBE_PLAYERS;
+		return static::ACTION_PROBE_FARMS;
 	}
 
 	public function toArray() : array

@@ -28,6 +28,11 @@ class PlanetCalculator extends Object
 	public function getResourcesEstimateForInactivePlanets() : array
 	{
 		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
+		return $this->getResourcesEstimateForPlanets($planets);
+	}
+
+	private function getResourcesEstimateForPlanets(array  $planets) : array
+	{
 		$resources = [];
 		foreach ($planets as $planet) {
 			$resources[$planet->getCoordinates()->toString()] = $this->resourcesCalculator->getResourcesEstimateForTime($planet, Carbon::now());
@@ -35,4 +40,18 @@ class PlanetCalculator extends Object
 		uasort($resources, function(Resources $a, Resources $b) {return $b->getTotal() - $a->getTotal();});
 		return $resources;
 	}
+
+	public function getFarms(int $limit) : array
+	{
+		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
+		$resources = $this->getResourcesEstimateForPlanets($planets);
+		$topResources = array_slice($resources, 0, $limit, true);
+		foreach ($planets as $key => $planet) {
+			if ( ! array_key_exists($planet->getCoordinates()->toString(), $topResources)) {
+				unset($planets[$key]);
+			}
+		}
+		return $planets;
+	}
+	
 }

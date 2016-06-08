@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IUpgradeCommand;
+use App\Model\Queue\Command\ProbeFarmsCommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\SendFleetCommand;
@@ -39,7 +40,8 @@ class DisplayCommand extends UI\Control
 			IBuildCommand::class => 'build.latte',
 			ScanGalaxyCommand::class => 'scanGalaxy.latte',
 			ProbePlayersCommand::class => 'probePlayers.latte',
-			SendFleetCommand::class => 'sendFleet.latte'
+			SendFleetCommand::class => 'sendFleet.latte',
+			ProbeFarmsCommand::class => 'probeFarms.latte'
 		];
 
 		$controlTemplate = '';

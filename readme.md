@@ -6,6 +6,8 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- add status requirement to sendfleet command. Check if inactive players are still inactive when proing this way.
+- add processor for farmsProber. Make base prober class, because player probing and farm probing differs only in planets to be probed.
 - think about filtering and ordering of planets to probe. It must be easily modifyable and as general as possible
 	- filtering and ordering have many common elements, maybe what could be taken advantage of
 	- filter

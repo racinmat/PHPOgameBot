@@ -42,7 +42,7 @@ services:
 	- App\Model\DatabaseManager
 	- App\Model\UpgradeStoragesPreProcessor
 	- App\Model\Game\FleetManager
-	- App\Model\Game\PlayersProber
+	- App\Model\PlayersProber
 	- App\Model\Game\ReportReader
 	- App\Model\AttackChecker
 	- App\Model\PageObject\FleetInfo
@@ -54,6 +54,8 @@ services:
 	- App\Forms\ScanGalaxyCommandFormFactory
 	- App\Model\Queue\CommandDispatcher
 	- App\Model\PlanetCalculator
+	- App\Model\Prober
+	- App\Model\FarmsProber
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
