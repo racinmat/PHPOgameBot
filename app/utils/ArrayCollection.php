@@ -39,7 +39,7 @@ class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection
 	public function sort(callable $comparator) : ArrayCollection
 	{
 		$elements = $this->elements;
-		usort($elements, $comparator);
+		uasort($elements, $comparator);
 		return new static($elements);
 	}
 

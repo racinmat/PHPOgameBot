@@ -19,6 +19,7 @@ use App\Model\DatabaseManager;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\IEnhanceCommand;
+use App\Model\Queue\Command\ProbeFarmsCommand;
 use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\Command\SendFleetCommand;
@@ -212,7 +213,7 @@ class AddCommandPresenter extends BasePresenter
 			->getControlPrototype()->addAttributes(['size' => count(ProbingStatus::getSelectBoxValues())]);
 
 		$form->addText('limit', 'Limit of scanned planets:')
-			->setRequired('Limit muse be filled (to scan all planets, insert dome really high number).')
+			->setRequired('Limit must be filled (to scan all planets, insert dome really high number).')
 			->setType('number');
 
 		$form->addSelect('orderBy', 'Order planets to probe by: ', OrderPlanetsBy::getSelectBoxValues())
@@ -276,6 +277,43 @@ class AddCommandPresenter extends BasePresenter
 					'mission' => $values['mission'],
 					'waitForResources' => $values['waitForResources'],
 					'resources' => $values['resources']
+				]
+			]);
+			if ($values['repetitive']) {
+				$this->queueManager->addToRepetitiveCommands($command);
+			} else {
+				$this->queueManager->addToQueue($command);
+			}
+			$this->flashMessage('Command added', 'success');
+			$this->redirect('this');
+		};
+
+		return $form;
+	}
+
+	public function createComponentAddProbeFarmsCommandForm()
+	{
+		$form = $this->formFactory->create();
+
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
+			->setDefaultValue($this->planet);
+
+		$form->addText('limit', 'Limit of scanned farms:')
+			->setRequired('Set some low number.')
+			->setType('number');
+
+		$form->addSubmit('send', 'Add command');
+
+		$form->addCheckbox('repetitive', 'Repetitive command');
+
+		$form->onSuccess[] = function (Form $form, array $values) {
+			$this->planet = $values['planet'];
+
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
+			$command = ProbeFarmsCommand::fromArray([
+				'coordinates' => $coordinates,
+				'data' => [
+					'limit' => $values['limit']
 				]
 			]);
 			if ($values['repetitive']) {
