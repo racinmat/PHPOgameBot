@@ -7,9 +7,11 @@ namespace App\Model\Queue\Command;
 
 use App\Enum\FleetMission;
 
+use App\Enum\PlayerStatus;
 use App\Model\ValueObject\Coordinates;
 use App\Model\ValueObject\Fleet;
 use App\Model\ValueObject\Resources;
+use App\Utils\ArrayCollection;
 use Nette\Utils\Arrays;
 
 
@@ -30,6 +32,12 @@ class SendFleetCommand extends BaseCommand
 
 	/** @var bool */
 	private $waitForResources;
+
+	/**
+	 * Used only internally to prevent probing okayers who are not active. Thus it is not persisted
+	 * @var PlayerStatus[]|ArrayCollection
+	 */
+	private $statuses;
 
 	public static function getAction() : string
 	{
@@ -52,6 +60,7 @@ class SendFleetCommand extends BaseCommand
 
 	protected function loadFromArray(array $data)
 	{
+		$this->statuses = (new ArrayCollection($data['statuses'] ?? []))->map(function ($string) {return PlayerStatus::_($string);});
 		$this->to = Coordinates::fromArray($data['to']);
 		$this->fleet = Fleet::fromArray($data['fleet']);
 		$this->mission = FleetMission::_($data['mission']);
@@ -120,6 +129,19 @@ class SendFleetCommand extends BaseCommand
 	public function setWaitForResources(bool $waitForResources)
 	{
 		$this->waitForResources = $waitForResources;
+	}
+
+	/**
+	 * @return \App\Enum\PlayerStatus[]|ArrayCollection
+	 */
+	public function getStatuses() : ArrayCollection
+	{
+		return $this->statuses;
+	}
+
+	public function hasStatuses() : bool
+	{
+		return ! $this->statuses->isEmpty();
 	}
 
 }

@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\FleetMission;
 use App\Enum\PlanetProbingStatus;
+use App\Enum\PlayerStatus;
 use App\Enum\ProbingStatus;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
@@ -20,6 +21,7 @@ use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\ICommandProcessor;
 
 
+use App\Utils\ArrayCollection;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
@@ -75,7 +77,10 @@ class FarmsProber extends Object implements ICommandProcessor
 		/** @var ProbeFarmsCommand $command */
 		$planets = $this->planetCalculator->getFarms($command->getLimit());
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
-		$this->prober->probePlanets($planets, $fromPlanet);
+		$farmedStatuses = new ArrayCollection();
+		$farmedStatuses->add(PlayerStatus::_(PlayerStatus::STATUS_INACTIVE));
+		$farmedStatuses->add(PlayerStatus::_(PlayerStatus::STATUS_LONG_INACTIVE));
+		$this->prober->probePlanets($planets, $fromPlanet, $farmedStatuses);
 		return true;
 	}
 

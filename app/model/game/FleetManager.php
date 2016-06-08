@@ -4,6 +4,7 @@ namespace App\Model\Game;
 
 use App\Enum\FleetMission;
 use App\Enum\MenuItem;
+use App\Enum\PlayerStatus;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
 
@@ -208,6 +209,15 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		usleep(Random::microseconds(0.1, 1));
+
+		//we do not want to probe players who are not inactive anymore
+		if ($command->hasStatuses()) {
+			$playerStatusClass = $I->grabAttributeFrom('#fleetStatusBar > ul > li:nth-of-type(3) > span:nth-of-type(2)', 'class');
+			if ( ! $command->getStatuses()->contains(PlayerStatus::fromClass($playerStatusClass))) {
+				$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+				return false;
+			}
+		}
 
 		do {
 			$I->click($command->getMission()->getMissionSelector());

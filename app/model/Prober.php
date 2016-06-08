@@ -11,6 +11,8 @@ use App\Model\Game\NonExistingPlanetException;
 use App\Model\Game\PlanetManager;
 use App\Model\Game\ReportReader;
 use App\Model\Queue\Command\SendFleetCommand;
+use App\Utils\ArrayCollection;
+use App\Utils\Functions;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
@@ -53,8 +55,9 @@ class Prober extends Object
 	/**
 	 * @param Planet[] $planets
 	 * @param Planet $fromPlanet
+	 * @param ArrayCollection $statuses
 	 */
-	public function probePlanets(array $planets, Planet $fromPlanet)
+	public function probePlanets(array $planets, Planet $fromPlanet, ArrayCollection $statuses)
 	{
 		$this->logger->addInfo("Going to probe planets.");
 		$probingStart = Carbon::now();
@@ -63,14 +66,15 @@ class Prober extends Object
 		$this->logger->addInfo(count($planets) . ' planets to probe.');
 		/** @var Planet $planet */
 		foreach ($planets as $planet) {
-			$this->probePlanet($planet, $fromPlanet);
+			$this->probePlanet($planet, $fromPlanet, $statuses);
 		}
 
 		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
+		sleep(40);  //now I just wait for some time
 		$this->reportReader->readEspionageReportsFrom($probingStart);
 	}
 
-	private function probePlanet(Planet $planet, Planet $from)
+	private function probePlanet(Planet $planet, Planet $from, ArrayCollection $statuses)
 	{
 		$player = $planet->getPlayer();
 		$probesAmount = $player->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
@@ -88,7 +92,8 @@ class Prober extends Object
 			'data' => [
 				'to' => $planet->getCoordinates()->toArray(),
 				'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
-				'mission' => FleetMission::ESPIONAGE
+				'mission' => FleetMission::ESPIONAGE,
+				'statuses' => $statuses->map(Functions::enumToValue())->toArray()
 			]
 		]);
 
