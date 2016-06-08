@@ -121,6 +121,7 @@ class FleetInfo extends Object
 
 	private function parseFlight(int $i)
 	{
+		$this->logger->addDebug("Going to parse $i. flight.");
 		$I = $this->I;
 		$row = $this->getRowSelector($i);
 
@@ -135,6 +136,7 @@ class FleetInfo extends Object
 		$status = Strings::replace($status, '~countDown|textBeefy|\s+~', '');
 
 		$flightStatus = FlightStatus::fromClass($status);
+		$this->logger->addDebug("Flight status is $flightStatus.");
 
 		$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
 		$I->waitForElementVisible($this->fleetPopup);
@@ -146,6 +148,7 @@ class FleetInfo extends Object
 		}
 		$fleetFrom = $j + 1;
 
+		$this->logger->addDebug("There are $rows rows. Fleet starts in $fleetFrom. row.");
 		//I can see resources only on my flights
 		if ($flightStatus->isMine()) {
 			for ($j = $fleetFrom + 1; $j <= $rows; $j++) {
@@ -186,7 +189,7 @@ class FleetInfo extends Object
 		/** @var Carbon $arrivalTime */
 		$arrivalTime = Carbon::now()->add(OgameParser::parseOgameTimeInterval($timeToArrive));
 		$flight = new Flight($fleet, OgameParser::parseOgameCoordinates($from), OgameParser::parseOgameCoordinates($to), FleetMission::fromNumber($missionNumber), $arrivalTime, $returning, $flightStatus, $resources);
-		$this->logger->addDebug('Done parsing flight: ' . Json::encode($flight->toArray()));
+		$this->logger->addDebug("Done parsing $i. flight: " . Json::encode($flight->toArray()));
 		$this->flights->add($flight);
 	}
 
