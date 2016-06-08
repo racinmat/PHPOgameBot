@@ -139,8 +139,12 @@ class FleetInfo extends Object
 		$this->logger->addDebug("Flight status is $flightStatus.");
 
 		$I->moveMouseOver("$row > td[class^=\"icon_movement\"] > .tooltip");
-		$I->waitForElementVisible($this->fleetPopup);
-		$rows = $I->getNumberOfElements("$this->fleetPopup/tr");
+
+		do {    //for some weird reason, sometimes I get only 0 rows. Which is incorrect.
+			$I->waitForElementVisible($this->fleetPopup);
+			$rows = $I->getNumberOfElements("$this->fleetPopup/tr");
+		} while ($rows === 0);
+
 		for ($j = 1; $j <= $rows; $j++) {
 			if ($I->seeExists('Lodě:', "$this->fleetPopup/tr[$j]/th")) {
 				break;

@@ -31,7 +31,9 @@ class Acceptance extends \Codeception\Module
 	{
 		/** @var WebDriver $webDriver */
 		$webDriver = $this->getModule('WebDriver');
-		return count($webDriver->matchVisible($selector));
+		$count = count($webDriver->matchVisible($selector));
+		$this->getLogger()->addDebug("Codeception: found $count elements matching $selector");
+		return $count;
 	}
 
 	public function seeExists($text, $selector = null)
