@@ -153,6 +153,16 @@ class DatabaseManager extends Object
 		return $this->planetRepository->countBy($this->getNoFleetAndNoDefenseFilter());
 	}
 
+	public function getInactivePlayersCount()
+	{
+		return $this->playerRepository->countBy(['status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]]);
+	}
+
+	public function getInactivePlanetsCount()
+	{
+		return $this->planetRepository->countBy(['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]]);
+	}
+
 	/**
 	 * @return Planet[]
 	 */

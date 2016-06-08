@@ -54,6 +54,7 @@ class Research extends Upgradable
 			case 'Iontová technologie': return static::ION_TECHNOLOGY;
 			case 'Plasmová technologie': return static::PLASMA_TECHNOLOGY;
 			case 'Intergalaktická výzkumná síť': return static::INTERGALACTIC_RESEARCH_NETWORK;
+			case 'Výzkumná sít': return static::INTERGALACTIC_RESEARCH_NETWORK;
 			case 'Astrofyzika': return static::ASTROPHYSICS;
 			case 'Gravitonová technologie': return static::GRAVITON_TECHNOLOGY;
 		}
