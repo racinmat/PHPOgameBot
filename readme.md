@@ -6,6 +6,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 
 TODO
 -----
+- add command read players score. Add showing of players who have big difference between total (or economic) score and military score - potentional farms
 - add millions of resources parsing to resource parsing
 - add status requirement to sendfleet command. Check if inactive players are still inactive when proing this way.
 - add processor for farmsProber. Make base prober class, because player probing and farm probing differs only in planets to be probed.

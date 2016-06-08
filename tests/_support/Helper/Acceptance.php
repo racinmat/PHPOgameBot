@@ -36,6 +36,7 @@ class Acceptance extends \Codeception\Module
 
 	public function seeExists($text, $selector = null)
 	{
+		$this->getLogger()->addDebug("Codeception: checking if '$text' exists in '$selector'");
 		/** @var WebDriver $webDriver */
 		$webDriver = $this->getModule('WebDriver');
 		if (!$selector) {
@@ -57,9 +58,11 @@ class Acceptance extends \Codeception\Module
 				continue;
 			}
 			if (stripos(htmlspecialchars_decode($node->getText()), $text) !== false) {
+				$this->getLogger()->addDebug("Text found in node with id {$node->getID()} and text {$node->getText()}.");
 				return true;
 			}
 		}
+		$this->getLogger()->addDebug("Text not found.");
 		return false;
 
 	}
