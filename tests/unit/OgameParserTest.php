@@ -53,4 +53,11 @@ class OgameParserTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals([3, 43], OgameParser::parseTemperature('3°C až 43°C'));
 		$this->assertEquals([-3, 37], OgameParser::parseTemperature('-3°C až 37°C'));
 	}
+
+	public function testResources()
+	{
+		$this->assertEquals(3, OgameParser::parseResources('3'));
+		$this->assertEquals(250000, OgameParser::parseResources('250.000'));
+		$this->assertEquals(1590000, OgameParser::parseResources('1,59M'));
+	}
 }

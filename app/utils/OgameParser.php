@@ -39,8 +39,12 @@ class OgameParser
 		return [(int) $params['first'], (int) $params['second']];
 	}
 
-	public static function parseResources(string $resource) : string
+	public static function parseResources(string $resource) : int
 	{
+		if (Strings::contains($resource, 'M')) {
+			$resource = Strings::replace($resource, '~M~', '');
+			$resource = floatval(Strings::replace($resource, '~,~', '.')) * 1000000;
+		}
 		return Strings::replace($resource, '~\.~');
 	}
 

@@ -7,9 +7,6 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - add command read players score. Add showing of players who have big difference between total (or economic) score and military score - potentional farms
-- add millions of resources parsing to resource parsing
-- add status requirement to sendfleet command. Check if inactive players are still inactive when proing this way.
-- add processor for farmsProber. Make base prober class, because player probing and farm probing differs only in planets to be probed.
 - think about filtering and ordering of planets to probe. It must be easily modifyable and as general as possible
 	- filtering and ordering have many common elements, maybe what could be taken advantage of
 	- filter
@@ -24,12 +21,9 @@ TODO
 			- array of them from enum
 		- lastVisited
 		- got all info or not
-- before flights parsing,check flights which will arrive before parsing ends and wait, start parsing after these flights arrive (must measure how long the parsing usually take)
-- when sending espionage probe during players probing, check the status, if it has not changed
 - when reading espionage report, update the player status (jest in case the non-active user goes active, so I wont attack him)
 - add percentage of speed to send fleet command
 - add incoming resources to calculation of time to process some command which needs these resources
-- maybe add limit to probing players because probing 400 planets at once takes few hours
 - refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
 - add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
@@ -45,12 +39,6 @@ TODO
 - add 'important' option for enhancing. All important enhancements will be privileged and resources will be send to them from other planets.
 - when some planet does not have any enhancement in queue, it will send automatically resources to another planet which has enhancement in queue, even if it is not privileged. It will send to first non-processed enhancement in queue.
 - add continuous command for sending resources from one planet to another when they reach some user-defined treshold and have some user-defined ratio
-- inactive player probing
-	- save to db how many probes was sent to espionage player and how many information it retrieved. Next time, send more probes to retrieve all information
-		- add checkbox to command to decide whether to use fixed amount of probes or use counted value from database
-		- maybe add heuristics how big increment to make, to reach optimal count faster than by incrementing by one
-		- modify that value when espionage technology is upgraded because then less probes is needed?
-	- when sending fleet to nonexisting planet in PlayersProber, catch the non-existing planet exception and delete that planet. Probably add parameter to method whether throw exceptions or just return false (failed command). 
 - bugfix: when upgrading hangar, fleet and defense should not be built. When upgrading research lab, researches should not be upgraded. Now it does not matter.
 - during the galaxy scanning, delete abandoned planets which were there, but they are not anymore
 - add storages full of resources checking
