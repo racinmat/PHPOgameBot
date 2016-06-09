@@ -258,7 +258,9 @@ class FleetInfo extends Object
 
 	private function isNoFleetCurrentlyActive() : bool
 	{
-		return $this->I->seeElementExists('#eventboxBlank');
+		$isBlank = $this->I->seeElementExists('#eventboxBlank');
+		$this->logger->addDebug($isBlank ? 'No fleet is currently active.' : 'Some fleets currently fly.');
+		return $isBlank;
 	}
 
 	public function getTimeOfFleetReturn(Fleet $fleet, Planet $planet) : Carbon
