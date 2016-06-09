@@ -84,6 +84,9 @@ class FleetInfo extends Object
 		$I = $this->I;
 		$treshold = new CarbonInterval(0, 0, 0, 0, 0, 1, 0);
 		while (true) {  //still iterating until the soon to arrive collection is empty
+			if ($this->isNoFleetCurrentlyActive()) {
+				return;
+			}
 			$this->openFleetInfo();
 			//if any interval is below treshold, I will wait for it to arrive and then pase. Now the treshold is 1 minute, this is maximal time to parse.
 			$timesToArrive = new ArrayCollection($I->grabMultiple("$this->fleetRow > td.countDown"));
