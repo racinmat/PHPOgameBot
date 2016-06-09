@@ -195,6 +195,13 @@ class FleetManager extends Object implements ICommandProcessor
 			$I->fillField('input#position', $to->getPlanet());
 		}
 		$this->logger->addDebug('Filled coordinates.');
+
+		if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
+			$I->click('a.debris');
+			usleep(Random::microseconds(0.5, 1));
+		}
+
+		$I->click((string) $command->getSpeed(), '#speedLinks');
 		usleep(Random::microseconds(0.5, 1));
 
 		$I->click('#continue.on');

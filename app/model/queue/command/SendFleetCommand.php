@@ -39,6 +39,12 @@ class SendFleetCommand extends BaseCommand
 	 */
 	private $statuses;
 
+	/**
+	 * Speed in percents
+	 * @var int
+	 */
+	private $speed;
+
 	public static function getAction() : string
 	{
 		return static::ACTION_SEND_FLEET;
@@ -52,7 +58,8 @@ class SendFleetCommand extends BaseCommand
 				'fleet' => $this->fleet->toArray(),
 				'mission' => $this->mission->getValue(),
 				'resources' => $this->resources->toArray(),
-				'waitForResources' => $this->waitForResources
+				'waitForResources' => $this->waitForResources,
+				'speed' => $this->speed
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -66,6 +73,7 @@ class SendFleetCommand extends BaseCommand
 		$this->mission = FleetMission::_($data['mission']);
 		$this->resources = isset($data['resources']) ? Resources::fromArray($data['resources']) : new Resources(0, 0, 0);
 		$this->waitForResources = $data['waitForResources'] ?? false;
+		$this->speed = $data['speed'] ?? 100;
 
 		if ($this->fleet->isEmpty()) {
 			throw new \InvalidArgumentException("SendFleetCommand can not have empty fleet.");
@@ -142,6 +150,16 @@ class SendFleetCommand extends BaseCommand
 	public function hasStatuses() : bool
 	{
 		return ! $this->statuses->isEmpty();
+	}
+
+	public function getSpeed() : int
+	{
+		return $this->speed;
+	}
+
+	public function setSpeed(int $speed)
+	{
+		$this->speed = $speed;
 	}
 
 }

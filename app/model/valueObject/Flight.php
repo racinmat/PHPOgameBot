@@ -89,6 +89,9 @@ class Flight extends Nette\Object
 	 */
 	public function isReturning()
 	{
+		if ($this->getMission() === FleetMission::_(FleetMission::DEPLOYMENT)) {
+			return true;    //deployment behaves as returning fleet
+		}
 		return $this->returning;
 	}
 

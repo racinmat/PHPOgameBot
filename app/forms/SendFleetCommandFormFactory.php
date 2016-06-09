@@ -35,6 +35,10 @@ class SendFleetCommandFormFactory extends Object
 
 		$form->addSelect('mission', 'Mission: ', FleetMission::getSelectBoxValues());
 
+		$speeds = array_reverse([10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+		$form->addSelect('speed', 'Speed: ', array_combine($speeds, $speeds))
+			->setDefaultValue(100);
+
 		$form->addCheckbox('waitForResources', 'Wait for resources');
 
 		$form->addGroup('Ships');
@@ -83,7 +87,8 @@ class SendFleetCommandFormFactory extends Object
 				'fleet' => $ships,
 				'mission' => $command->getMission()->getValue(),
 				'waitForResources' => $command->waitForResources(),
-				'resources' => $command->getResources()->toArray()
+				'resources' => $command->getResources()->toArray(),
+				'speed' => $command->getSpeed()
 			]);
 		}
 

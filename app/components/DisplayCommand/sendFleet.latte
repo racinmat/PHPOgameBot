@@ -2,6 +2,7 @@
 {block content}
 	To: {$command->getTo()}, Mission: {$command->getMission()}<br/>
 	Wait for resources: {$command->waitForResources() ? 'yes' : 'no'}<br/>
+	Speed: {$command->getSpeed()}%<br/>
 	Fleet: {$command->getFleet()->toArray()|implodeAssoc:',',':'}
 {/block}
 

@@ -277,7 +277,8 @@ class AddCommandPresenter extends BasePresenter
 					'fleet' => $fleet,
 					'mission' => $values['mission'],
 					'waitForResources' => $values['waitForResources'],
-					'resources' => $values['resources']
+					'resources' => $values['resources'],
+					'speed' => $values['speed']
 				]
 			]);
 			if ($values['repetitive']) {
