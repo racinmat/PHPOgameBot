@@ -106,10 +106,6 @@ class FleetInfo extends Object
 	private function initialize()
 	{
 		$this->flights = new ArrayCollection();
-		if ($this->isNoFleetCurrentlyActive()) {
-			$this->logger->addDebug("No fleet is currently active. Flights are empty.");
-			return;
-		}
 
 		$this->openFleetInfo();
 		$fleetRows = $this->getNumberOfFlights();
@@ -198,6 +194,11 @@ class FleetInfo extends Object
 
 	private function getFlights() : ArrayCollection
 	{
+		if ($this->isNoFleetCurrentlyActive()) {
+			$this->logger->addDebug("No fleet is currently active. Flights are empty.");
+			return new ArrayCollection();
+		}
+
 		if (Carbon::now()->subMinutes(3)->gt($this->flightsLoadTime)) { //after 3 minutes the flights will be reloaded
 			$this->flights = null;
 		}
