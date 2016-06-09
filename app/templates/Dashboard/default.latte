@@ -4,11 +4,19 @@
 			Database statistics
 		</div>
 		<div class="panel-body">
-			Total players scanned: {$players}<br/>
-			Total planets scanned: {$planets}<br/>
-			Planets with all information espionaged: {$planetsWithAllInformation}<br/>
-			Planets with no fleet and defense: {$planetsToFarm}<br/>
-			<a n:href="resources" class="btn btn-info">Resources estimate of farmed planets</a>
+			<span class="row">
+				<span class="col-md-4">
+					<ul class="list-group">
+						<li class="list-group-item">Total players scanned <span class="badge">{$players}</span></li>
+						<li class="list-group-item">Total planets scanned <span class="badge">{$planets}</span></li>
+						<li class="list-group-item">Inactive players <span class="badge">{$inactivePlayers}</span></li>
+						<li class="list-group-item">Inactive planets <span class="badge">{$inactivePlanets}</span></li>
+						<li class="list-group-item">Planets with all information espionaged <span class="badge">{$planetsWithAllInformation}</span></li>
+						<li class="list-group-item">Planets with no fleet and defense <span class="badge">{$planetsToFarm}</span></li>
+					</ul>
+					<a n:href="resources" class="btn btn-info">Resources estimate of farmed planets</a>
+				</span>
+			</span>
 		</div>
 	</div>
 	<div class="panel panel-primary">
