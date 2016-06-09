@@ -46,6 +46,7 @@
 		"nesbot/carbon": "^1.21",
 		"ramsey/uuid": "^3.4",
 		"kdyby/monolog": "^1.2",
-        "doctrine/collections": "@dev"
+        "doctrine/collections": "@dev",
+		"nextras/forms": "^1.6"
 	}
 }

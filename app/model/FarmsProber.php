@@ -75,7 +75,7 @@ class FarmsProber extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var ProbeFarmsCommand $command */
-		$planets = $this->planetCalculator->getFarms($command->getLimit());
+		$planets = $this->planetCalculator->getFarms($command->getLimit(), $command->getVisitedBefore());
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
 		$farmedStatuses = new ArrayCollection();
 		$farmedStatuses->add(PlayerStatus::_(PlayerStatus::STATUS_INACTIVE));

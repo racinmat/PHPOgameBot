@@ -11,6 +11,7 @@ use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\ValueObject\Coordinates;
 use App\Utils\Functions;
 use App\Utils\ArrayCollection;
+use Carbon\Carbon;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
@@ -164,14 +165,19 @@ class DatabaseManager extends Object
 	}
 
 	/**
-	 * @return Planet[]
+	 * @param Carbon $lastVisitedBefore
+	 * @return Entity\Planet[]|array
 	 */
-	public function getInactiveDefenselessPlanets() : array
+	public function getInactiveDefenselessPlanets(Carbon $lastVisitedBefore = null) : array
 	{
-		return $this->planetRepository->findBy(array_merge(
+		$filters = array_merge(
 			['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]],
 			$this->getNoFleetAndNoDefenseFilter()
-		));
+		);
+		if ($lastVisitedBefore !== null) {
+			$filters['lastVisited <'] = $lastVisitedBefore;
+		}
+		return $this->planetRepository->findBy($filters);
 	}
 
 	private function getNoFleetAndNoDefenseFilter() : array

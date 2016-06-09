@@ -42,7 +42,7 @@ class DisplayCommand extends UI\Control
 			ProbePlayersCommand::class => 'probePlayers.latte',
 			SendFleetCommand::class => 'sendFleet.latte',
 			ProbeFarmsCommand::class => 'probeFarms.latte',
-			AttackFarmsCommand::class => 'probeFarms.latte'
+			AttackFarmsCommand::class => 'attackFarms.latte'
 		];
 
 		$controlTemplate = '';

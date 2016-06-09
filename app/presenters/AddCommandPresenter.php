@@ -28,6 +28,7 @@ use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Model\Queue\QueueManager;
 use App\Model\ValueObject\Coordinates;
+use Carbon\Carbon;
 use Nette\Application\UI\Form;
 
 
@@ -304,6 +305,9 @@ class AddCommandPresenter extends BasePresenter
 			->setRequired('Set some low number.')
 			->setType('number');
 
+		$form->addDateTimePicker('visitedBefore', 'Last visited before:')
+			->setDefaultValue(Carbon::now());
+
 		$form->addSubmit('send', 'Add command');
 
 		$form->addCheckbox('repetitive', 'Repetitive command');
@@ -315,7 +319,8 @@ class AddCommandPresenter extends BasePresenter
 			$command = ProbeFarmsCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
-					'limit' => $values['limit']
+					'limit' => $values['limit'],
+					'visitedBefore' => $values['visitedBefore']->__toString()
 				]
 			]);
 			if ($values['repetitive']) {

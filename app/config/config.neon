@@ -65,6 +65,7 @@ extensions:
 	annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	doctrine: Kdyby\Doctrine\DI\OrmExtension
 	monolog: Kdyby\Monolog\DI\MonologExtension
+	nextrasForms: Nextras\Forms\DI\FormsExtension
 
 monolog:
 	hookToTracy: off
