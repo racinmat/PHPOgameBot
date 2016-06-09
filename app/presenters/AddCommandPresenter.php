@@ -16,6 +16,7 @@ use App\Forms\ScanGalaxyCommandFormFactory;
 use App\Forms\SendFleetCommandFormFactory;
 use App\Model\DatabaseManager;
 
+use App\Model\Queue\Command\AttackFarmsCommand;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\IEnhanceCommand;
@@ -311,6 +312,43 @@ class AddCommandPresenter extends BasePresenter
 
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
 			$command = ProbeFarmsCommand::fromArray([
+				'coordinates' => $coordinates,
+				'data' => [
+					'limit' => $values['limit']
+				]
+			]);
+			if ($values['repetitive']) {
+				$this->queueManager->addToRepetitiveCommands($command);
+			} else {
+				$this->queueManager->addToQueue($command);
+			}
+			$this->flashMessage('Command added', 'success');
+			$this->redirect('this');
+		};
+
+		return $form;
+	}
+
+	public function createComponentAddAttackFarmsCommandForm()
+	{
+		$form = $this->formFactory->create();
+
+		$form->addSelect('planet', 'Planet: ', $this->planetManager->getAllMyPlanetsIdsNamesAndCoordinates())
+			->setDefaultValue($this->planet);
+
+		$form->addText('limit', 'Limit of attacked farms:')
+			->setRequired('Set count of farms to be attacked.')
+			->setType('number');
+
+		$form->addSubmit('send', 'Add command');
+
+		$form->addCheckbox('repetitive', 'Repetitive command');
+
+		$form->onSuccess[] = function (Form $form, array $values) {
+			$this->planet = $values['planet'];
+
+			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
+			$command = AttackFarmsCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
 					'limit' => $values['limit']
