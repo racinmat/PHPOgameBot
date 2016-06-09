@@ -57,6 +57,7 @@ services:
 	- App\Model\PlanetCalculator
 	- App\Model\Prober
 	- App\Model\FarmsProber
+	- App\Model\FarmsAttacker
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension

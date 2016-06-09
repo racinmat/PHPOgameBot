@@ -16,6 +16,7 @@ interface ICommand extends ArraySerializable
 		ACTION_SCAN_GALAXY = 'scan galaxy',
 		ACTION_PROBE_PLAYERS = 'probe players',
 		ACTION_PROBE_FARMS = 'probe farms',
+		ACTION_ATTACK_FARMS = 'attack farms',
 		ACTION_SEND_FLEET = 'send fleet'
 	;
 

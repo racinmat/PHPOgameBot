@@ -20,7 +20,7 @@ class AttackFarmsCommand extends BaseCommand
 
 	public static function getAction() : string
 	{
-		return static::ACTION_PROBE_FARMS;
+		return static::ACTION_ATTACK_FARMS;
 	}
 
 	public function toArray() : array
