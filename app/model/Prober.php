@@ -64,53 +64,46 @@ class Prober extends Object
 		//send espionage probes to all players with selected statuses
 
 		$this->logger->addInfo(count($planets) . ' planets to probe.');
-		/** @var Planet $planet */
-		foreach ($planets as $planet) {
-			$this->probePlanet($planet, $fromPlanet, $statuses);
-		}
+		$commands = $this->createEspionageCommands($planets, $fromPlanet, $statuses);
+		$this->fleetManager->sendMultipleFleetsAtOnce($commands);
 
 		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
 		sleep(40);  //now I just wait for some time
 		$this->reportReader->readEspionageReportsFrom($probingStart);
 	}
 
-	private function probePlanet(Planet $planet, Planet $from, ArrayCollection $statuses)
+	/**
+	 * @param Planet[] $planets
+	 * @param Planet $from
+	 * @param ArrayCollection $statuses
+	 * @return SendFleetCommand[]
+	 */
+	private function createEspionageCommands(array $planets, Planet $from, ArrayCollection $statuses)
 	{
-		$player = $planet->getPlayer();
-		$probesAmount = $player->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
-		if ($probesAmount === 0) {
-			$probesAmount = 1;  //for first estimate
-		} else if ($player->getProbingStatus()->missingAnyInformation() && $player->getProbingStatus() !== ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING)) {
-			$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $player->getProbingStatus());
+		$commands = [];
+		foreach ($planets as $planet) {
+			$player = $planet->getPlayer();
+			$probesAmount = $player->getProbesToLastEspionage(); //before first probing, we have 0 probes and did not get all information. So at least one probe is sent.
+			if ($probesAmount === 0) {
+				$probesAmount = 1;  //for first estimate
+			} else if ($player->getProbingStatus()->missingAnyInformation() && $player->getProbingStatus() !== ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING)) {
+				$probesAmount = $this->calculateProbesAmountToGetAllInformation($probesAmount, $player->getProbingStatus());
+			}
+			$this->logger->addDebug("Going to probe player with name {$player->getName()} and planet with coordinates {$planet->getCoordinates()->toString()}. $probesAmount probes will be sent. Planet probing status is {$planet->getProbingStatus()}.");
+			$player->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
+			$player->setProbesToLastEspionage($probesAmount);
+			$this->databaseManager->flush();
+			$commands[] = SendFleetCommand::fromArray([
+				'coordinates' => $from->getCoordinates()->toArray(),
+				'data' => [
+					'to' => $planet->getCoordinates()->toArray(),
+					'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
+					'mission' => FleetMission::ESPIONAGE,
+					'statuses' => $statuses->map(Functions::enumToValue())->toArray()
+				]
+			]);
 		}
-		$this->logger->addDebug("Going to probe player with name {$player->getName()} and planet with coordinates {$planet->getCoordinates()->toString()}. $probesAmount probes will be sent. Planet probing status is.");
-		$player->setProbingStatus(ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING));
-		$player->setProbesToLastEspionage($probesAmount);
-		$this->databaseManager->flush();
-		$probePlanetCommand = SendFleetCommand::fromArray([
-			'coordinates' => $from->getCoordinates()->toArray(),
-			'data' => [
-				'to' => $planet->getCoordinates()->toArray(),
-				'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
-				'mission' => FleetMission::ESPIONAGE,
-				'statuses' => $statuses->map(Functions::enumToValue())->toArray()
-			]
-		]);
-
-		while ( ! $this->fleetManager->isProcessingAvailable($probePlanetCommand)) {
-			$time = $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);
-			$seconds = $time->diffInSeconds();
-			$seconds = min($seconds, 60);       //Do not wait for more than 60 seconds.
-			$this->logger->addInfo("Going to wait until sending probes is available, for $seconds seconds.");
-			sleep($seconds);
-			$this->I->reloadPage();
-		}
-		try {
-			$this->fleetManager->processCommand($probePlanetCommand);
-		} catch(NonExistingPlanetException $e) {
-			$this->logger->addInfo("Removing non existing planet from coordinates {$planet->getCoordinates()->toString()}");
-			$this->databaseManager->removePlanet($planet->getCoordinates());
-		}
+		return $commands;
 	}
 
 	private function calculateProbesAmountToGetAllInformation(int $probes, ProbingStatus $information) : int

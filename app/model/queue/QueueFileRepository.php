@@ -2,6 +2,7 @@
 
 namespace App\Model\Queue;
  
+use App\Model\Queue\Command\AttackFarmsCommand;
 use App\Model\Queue\Command\BuildDefenseCommand;
 use App\Model\Queue\Command\BuildShipsCommand;
 use App\Model\Queue\Command\ICommand;
@@ -73,7 +74,8 @@ class QueueFileRepository extends Object
 			ScanGalaxyCommand::class,
 			ProbePlayersCommand::class,
 			SendFleetCommand::class,
-			ProbeFarmsCommand::class
+			ProbeFarmsCommand::class,
+			AttackFarmsCommand::class
 		];
 	}
 

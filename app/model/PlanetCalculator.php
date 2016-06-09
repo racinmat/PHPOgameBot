@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Enum\Ships;
 use App\Model\Entity\Planet;
 use App\Model\ValueObject\Resources;
 use App\Utils\ArrayCollection;
@@ -65,5 +66,11 @@ class PlanetCalculator extends Object
 		}
 		return $planets;
 	}
-	
+
+	public function countShipsNeededToFarmResources(Planet $planet, Ships $ship) : int
+	{
+		$resourcesNow = $this->resourcesCalculator->getResourcesEstimateForTime($planet, Carbon::now());
+		return ceil($resourcesNow->getTotal() / 2 / $ship->getCapacity());  //Every attack takes only one half of resources
+	}
+
 }

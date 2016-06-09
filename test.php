@@ -200,6 +200,9 @@ function add(int $a, int $b) : int {
 //var_dump(gmp_sign(20));
 //$orderBy = \App\Enum\OrderPlanetsBy::_(\App\Enum\OrderPlanetsBy::NULL);
 //var_dump($orderBy->isActive());
-$interval = new \Carbon\CarbonInterval(0, 0, 0, 0, 0, 1, 0);
-$time = \Carbon\Carbon::minValue()->add($interval);
-var_dump($time);
+//$interval = new \Carbon\CarbonInterval(0, 0, 0, 0, 0, 1, 0);
+//$time = \Carbon\Carbon::minValue()->add($interval);
+//var_dump($time);
+$arr = [0,1,2,3,4,5,6];
+var_dump(array_slice($arr, 0, 3));
+var_dump(array_slice($arr, 0, 30));

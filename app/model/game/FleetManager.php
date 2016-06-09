@@ -271,6 +271,35 @@ class FleetManager extends Object implements ICommandProcessor
 		return $fleet;
 	}
 
+	/**
+	 * @param SendFleetCommand[] $commands
+	 * @param bool $removeNonExistingPlanets
+	 * @throws NonExistingPlanetException
+	 */
+	public function sendMultipleFleetsAtOnce(array $commands, bool $removeNonExistingPlanets = true)
+	{
+		foreach ($commands as $command) {
+			while ( ! $this->isProcessingAvailable($command)) {
+				$time = $this->getTimeToProcessingAvailable($command);
+				$seconds = $time->diffInSeconds();
+				$seconds = min($seconds, 60);       //Do not wait for more than 60 seconds.
+				$this->logger->addInfo("Going to wait until sending probes is available, for $seconds seconds.");
+				sleep($seconds);
+				$this->I->reloadPage();
+			}
+			try {
+				$this->processCommand($command);
+			} catch(NonExistingPlanetException $e) {
+				if ($removeNonExistingPlanets) {
+					$this->logger->addInfo("Removing non existing planet from coordinates {$command->getTo()->toString()}");
+					$this->databaseManager->removePlanet($command->getTo());
+				} else {
+					throw $e;
+				}
+			}
+		}
+
+	}
 }
 
 class NonExistingPlanetException extends \Exception {}

@@ -2,6 +2,7 @@
  
 namespace App\Components;
  
+use App\Model\Queue\Command\AttackFarmsCommand;
 use App\Model\Queue\Command\IBuildCommand;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IUpgradeCommand;
@@ -14,7 +15,6 @@ use Latte\Runtime\CachingIterator;
 use Nette;
 use Nette\Application\UI;
 use Ramsey\Uuid\Uuid;
-
 
 /**
  * Class DisplayCommand
@@ -41,7 +41,8 @@ class DisplayCommand extends UI\Control
 			ScanGalaxyCommand::class => 'scanGalaxy.latte',
 			ProbePlayersCommand::class => 'probePlayers.latte',
 			SendFleetCommand::class => 'sendFleet.latte',
-			ProbeFarmsCommand::class => 'probeFarms.latte'
+			ProbeFarmsCommand::class => 'probeFarms.latte',
+			AttackFarmsCommand::class => 'probeFarms.latte'
 		];
 
 		$controlTemplate = '';
