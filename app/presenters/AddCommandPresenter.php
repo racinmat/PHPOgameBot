@@ -349,7 +349,7 @@ class AddCommandPresenter extends BasePresenter
 			->setType('number');
 
 		$form->addDateTimePicker('visitedAfter', 'Last visited after:')
-			->setDefaultValue(Carbon::now());
+			->setDefaultValue(Carbon::now()->hour(2)->minute(30));
 
 		$form->addSubmit('send', 'Add command');
 
@@ -359,7 +359,7 @@ class AddCommandPresenter extends BasePresenter
 			$this->planet = $values['planet'];
 
 			$coordinates = $this->planetManager->getPlanetById($values['planet'])->getCoordinates()->toArray();
-			$time = Carbon::instance($values['visitedBefore']);
+			$time = Carbon::instance($values['visitedAfter']);
 			$command = AttackFarmsCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
