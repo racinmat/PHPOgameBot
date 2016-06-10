@@ -54,6 +54,7 @@ class ReportReader extends Object
 		$I->click($firstReportDetailsSelector);
 		usleep(Random::microseconds(1.5, 2.5));
 		$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
+		$I->waitForElementVisible("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
 		$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
 		list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
 		if ($currentReport != 1) {

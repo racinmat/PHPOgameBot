@@ -53,7 +53,7 @@ class CommandDispatcher extends Object
 		$processor = $this->getProcessor($command);
 		$this->logger->addInfo("Going to find the next run of command $command.");
 		$datetime = $processor->getTimeToProcessingAvailable($command);
-		$this->logger->addInfo("Next run of command $command is $datetime.");
+		$this->logger->addInfo("$datetime is next run of command $command.");
 		return $datetime;
 	}
 
