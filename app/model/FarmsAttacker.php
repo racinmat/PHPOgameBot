@@ -3,25 +3,15 @@
 namespace App\Model;
 
 use App\Enum\FleetMission;
-use App\Enum\PlanetProbingStatus;
 use App\Enum\PlayerStatus;
 use App\Enum\ProbingStatus;
 use App\Enum\Ships;
-use App\Model\DatabaseManager;
 use App\Model\Entity\Planet;
-
 use App\Model\Game\FleetManager;
-use App\Model\Game\PlanetManager;
-use App\Model\Game\ReportReader;
 use App\Model\Queue\Command\AttackFarmsCommand;
 use App\Model\Queue\Command\ICommand;
-
-use App\Model\Queue\Command\ProbeFarmsCommand;
-use App\Model\Queue\Command\ProbePlayersCommand;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Model\Queue\ICommandProcessor;
-
-
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Carbon\Carbon;
@@ -77,7 +67,7 @@ class FarmsAttacker extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var AttackFarmsCommand $command */
-		$planets = $this->planetCalculator->getFarms($command->getLimit(), $command->getVisitedAfter());
+		$planets = $this->planetCalculator->getFarms($command->getLimit(), Carbon::now()->sub($command->getVisitedAfter()));
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
 		$attackCommands = $this->createAttackCommands($planets, $fromPlanet);
 		$this->fleetManager->sendMultipleFleetsAtOnce($attackCommands, $command->getUuid());

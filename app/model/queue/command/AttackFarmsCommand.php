@@ -10,6 +10,7 @@ use App\Enum\ProbingStatus;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Nette\Utils\Arrays;
 
 
@@ -19,7 +20,7 @@ class AttackFarmsCommand extends BaseCommand
 	/** @var int */
 	private $limit;
 
-	/** @var Carbon */
+	/** @var CarbonInterval interval from now (from time of execution, very handy for repetitive command) */
 	private $visitedAfter;
 
 	public static function getAction() : string
@@ -41,7 +42,7 @@ class AttackFarmsCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->limit = $data['limit'];
-		$this->visitedAfter = $data['visitedAfter'] ? Carbon::instance(new \DateTime($data['visitedAfter'])) : Carbon::minValue();
+		$this->visitedAfter = CarbonInterval::instance(\DateInterval::createFromDateString($data['visitedAfter'] ?? 'now'));
 	}
 
 	public function getDependencyType() : string
@@ -54,7 +55,7 @@ class AttackFarmsCommand extends BaseCommand
 		return $this->limit;
 	}
 
-	public function getVisitedAfter() : Carbon
+	public function getVisitedAfter() : CarbonInterval
 	{
 		return $this->visitedAfter;
 	}

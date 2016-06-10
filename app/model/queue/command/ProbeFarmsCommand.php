@@ -10,6 +10,7 @@ use App\Enum\ProbingStatus;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Nette\Utils\Arrays;
 use Tracy\Debugger;
 
@@ -20,7 +21,7 @@ class ProbeFarmsCommand extends BaseCommand
 	/** @var int */
 	private $limit;
 
-	/** @var Carbon */
+	/** @var CarbonInterval interval from now (from time of execution, very handy for repetitive command) */
 	private $visitedBefore;
 
 	public static function getAction() : string
@@ -42,7 +43,7 @@ class ProbeFarmsCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->limit = $data['limit'];
-		$this->visitedBefore = Carbon::instance(new \DateTime($data['visitedBefore'] ?? 'now'));
+		$this->visitedBefore = CarbonInterval::instance(\DateInterval::createFromDateString($data['visitedBefore'] ?? 'now'));
 	}
 
 	public function getDependencyType() : string
@@ -55,7 +56,7 @@ class ProbeFarmsCommand extends BaseCommand
 		return $this->limit;
 	}
 
-	public function getVisitedBefore() : Carbon
+	public function getVisitedBefore() : CarbonInterval
 	{
 		return $this->visitedBefore;
 	}
