@@ -9,7 +9,6 @@ TODO
 - add command read players score. Add showing of players who have big difference between total (or economic) score and military score - potentional farms
 - add incoming resources to calculation of time to process some command which needs these resources
 - refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
-- add disable option for repetitious commands (or automatically disable sending resources away when some resource dependent commands are waiting to proceed)
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
 - fleetsave from main planet. Fleetsave only in pauses between two enhancements
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements

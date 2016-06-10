@@ -61,6 +61,10 @@ class CommandDispatcher extends Object
 	
 	public function preProcessCommand(ICommand $command, ArrayCollection $queue)
 	{
+		if ($command->isDisabled()) {
+			return;
+		}
+
 		if ( ! $this->hasPreProcessor($command)) {
 			return;
 		}
@@ -72,6 +76,10 @@ class CommandDispatcher extends Object
 
 	public function processCommand(ICommand $command) : bool
 	{
+		if ($command->isDisabled()) {
+			return false;
+		}
+
 		if ( ! $this->hasProcessor($command)) {
 			return false;
 		}

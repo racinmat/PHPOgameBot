@@ -23,7 +23,10 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	/** @var Uuid */
 	protected $uuid;
 
-	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null)
+	/** @var bool */
+	protected $disabled;
+
+	public function __construct(Coordinates $coordinates, array $data, Uuid $uuid = null, bool $disabled = false)
 	{
 		$this->coordinates = $coordinates;
 		if ($uuid) {
@@ -31,6 +34,7 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 		} else {
 			$this->uuid = Uuid::uuid4();
 		}
+		$this->disabled = $disabled;
 		$this->loadFromArray($data);
 	}
 
@@ -44,13 +48,14 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 		return [
 			'coordinates' => $this->coordinates->toArray(),
 			'uuid' => $this->getUuid()->toString(),
-			'action' => $this->getAction()
+			'action' => $this->getAction(),
+			'disabled' => $this->disabled
 		];
 	}
 
 	public static function fromArray(array $data)
 	{
-		return new static(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null);
+		return new static(Coordinates::fromArray($data['coordinates']), $data['data'], isset($data['uuid']) ? Uuid::fromString($data['uuid']) : null, $data['disabled'] ?? false);
 	}
 
 	public function __toString() : string
@@ -79,4 +84,16 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	{
 		return $this->getUuid()->equals($another->getUuid());
 	}
+
+	public function isDisabled() : bool
+	{
+		return $this->disabled;
+	}
+
+	public function setDisabled(bool $disabled)
+	{
+		$this->disabled = $disabled;
+	}
+	
+	
 }

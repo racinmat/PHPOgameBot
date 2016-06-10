@@ -77,4 +77,15 @@ class DisplayCommand extends UI\Control
 		$this->presenter->redirect('default');
 	}
 
+	public function handleDisable(string $uuid)
+	{
+		$this->queueManager->disableCommand(Uuid::fromString($uuid));
+		$this->presenter->redirect('default');
+	}
+
+	public function handleEnable(string $uuid)
+	{
+		$this->queueManager->enableCommand(Uuid::fromString($uuid));
+		$this->presenter->redirect('default');
+	}
 }

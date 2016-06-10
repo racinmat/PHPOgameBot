@@ -42,4 +42,8 @@ interface ICommand extends ArraySerializable
 	 */
 	public function getDependencyType() : string;
 
+	public function setDisabled(bool $disabled);
+
+	public function isDisabled() : bool;
+
 }

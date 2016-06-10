@@ -88,6 +88,42 @@ class QueueManager extends Object
 		}
 	}
 
+	public function disableCommand(Uuid $uuid)
+	{
+		$command = $this->getCommand($uuid);
+		$command->setDisabled(true);
+		if ($this->isCommandInQueue($command->getUuid())) {
+			$queue = $this->queueRepository->loadQueue();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($command->getUuid())) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
+	}
+
+	public function enableCommand(Uuid $uuid)
+	{
+		$command = $this->getCommand($uuid);
+		$command->setDisabled(false);
+		if ($this->isCommandInQueue($command->getUuid())) {
+			$queue = $this->queueRepository->loadQueue();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveQueue($queue);
+			return;
+		}
+		if ($this->isCommandInRepetitive($command->getUuid())) {
+			$queue = $this->queueRepository->loadRepetitiveCommands();
+			$this->updateCommand($queue, $command);
+			$this->queueRepository->saveRepetitiveCommands($queue);
+			return;
+		}
+	}
+
 	private function moveUp(ArrayCollection $queue, Uuid $uuid)
 	{
 		foreach ($queue as $key => $item) {

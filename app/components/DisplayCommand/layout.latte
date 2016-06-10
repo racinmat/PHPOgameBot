@@ -19,6 +19,13 @@
 		{block edit}
 		{/block}
 	</span>
+	<span class="col-md-1 col-lg-1 col-xs-1">
+		{if $command->isDisabled()}
+			<a class="btn btn-success" n:href="enable!, uuid => $command->getUuid()->toString()">Enable</a>
+		{else}
+			<a class="btn btn-warning" n:href="disable!, uuid => $command->getUuid()->toString()">Disable</a>
+		{/if}
+	</span>
 	<span class="col-md-1 col-lg-1 col-xs-1 up-down-arrows">
 		{if !$iterator->isFirst()}
 			<p>
