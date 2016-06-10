@@ -19,6 +19,7 @@ while (true) {
 	}
 
 	if ( ! isConnectedToInternet()) {
+		echo 'connection to internet lost' . PHP_EOL;
 		continue;
 	}
 	

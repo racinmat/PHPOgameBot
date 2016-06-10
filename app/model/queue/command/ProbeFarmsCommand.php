@@ -11,6 +11,7 @@ use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use Carbon\Carbon;
 use Nette\Utils\Arrays;
+use Tracy\Debugger;
 
 
 class ProbeFarmsCommand extends BaseCommand
@@ -32,7 +33,7 @@ class ProbeFarmsCommand extends BaseCommand
 		$data = [
 			'data' => [
 				'limit' => $this->limit,
-				'visitedBefore' => $this->visitedBefore
+				'visitedBefore' => $this->visitedBefore->__toString()
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -41,7 +42,7 @@ class ProbeFarmsCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->limit = $data['limit'];
-		$this->visitedBefore = Carbon::instance(new \DateTime($data['visitedBefore']['date'] ?? 'now'));
+		$this->visitedBefore = Carbon::instance(new \DateTime($data['visitedBefore'] ?? 'now'));
 	}
 
 	public function getDependencyType() : string
