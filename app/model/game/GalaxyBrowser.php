@@ -11,6 +11,7 @@ use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\ScanGalaxyCommand;
 use App\Model\Queue\ICommandProcessor;
 use App\Model\ValueObject\Coordinates;
+use App\Utils\ArrayCollection;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
@@ -97,18 +98,20 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		}
 
 		$planetCount = Coordinates::$maxPlanet;
+		$planetsInSystem = new ArrayCollection();
 		for ($i = 1; $i <= $planetCount; $i++) {
-			$coordinates = $coordinates->planet($i);
+			$planetCoordinates = $coordinates->planet($i);
 			//check to avoid parsing empty spots
 			if ( ! $I->seeElementExists("tbody tr:nth-of-type($i) > td.colonized")) {
 				continue;
 			}
 
 			//checking my planet, do not waste time with it. Status of my planets is missing
-			if ($myPlanetsCoordinates->exists(Functions::equalCoordinates($coordinates))) {
+			if ($myPlanetsCoordinates->exists(Functions::equalCoordinates($planetCoordinates))) {
 				continue;
 			}
 
+			$planetsInSystem->add($planetCoordinates->getPlanet());
 			$planetName = $I->grabTextFrom("tbody tr:nth-of-type($i) .planetname");
 			$playerName = $I->grabTextFrom("tbody tr:nth-of-type($i) .playername > a > span");
 			$playerStatusClass = $I->grabAttributeFrom("tbody tr:nth-of-type($i) .playername > a > span", 'class');
@@ -137,9 +140,9 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			if ($player === null) {
 				$player = $this->databaseManager->addPlayer($playerName);
 			}
-			$planet = $this->databaseManager->getPlanet($coordinates);
+			$planet = $this->databaseManager->getPlanet($planetCoordinates);
 			if ($planet === null) {
-				$planet = $this->databaseManager->addPlanet($coordinates, $player);
+				$planet = $this->databaseManager->addPlanet($planetCoordinates, $player);
 			}
 			
 			$player->setStatus($playerStatus);
@@ -154,6 +157,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 		}
 		$this->databaseManager->flush();
+		$this->databaseManager->removePlanetsInSystemExceptOf($coordinates, $planetsInSystem);
 	}
 
 	protected function goToNextSystem()

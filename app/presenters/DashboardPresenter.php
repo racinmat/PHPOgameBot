@@ -9,6 +9,8 @@ use App\Model\DatabaseManager;
 use App\Model\PlanetCalculator;
 use App\Model\Queue\QueueFileRepository;
 
+use App\Model\ValueObject\Coordinates;
+use App\Utils\ArrayCollection;
 use Carbon\Carbon;
 
 use Nette\Utils\Strings;

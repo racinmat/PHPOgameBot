@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Object;
+use Tracy\Debugger;
 
 
 class DatabaseManager extends Object
@@ -131,6 +132,24 @@ class DatabaseManager extends Object
 	{
 		$planet = $this->getPlanet($coordinates);
 		$this->entityManager->remove($planet);
+		$this->entityManager->flush();
+	}
+
+	public function removePlanetsInSystemExceptOf(Coordinates $coordinates, ArrayCollection $planetsInSystem)
+	{
+		$qb = $this->planetRepository->createQueryBuilder('planet')
+			->andWhere('planet.coordinates.galaxy = :galaxy')
+			->andWhere('planet.coordinates.system = :system')
+			->setParameters([
+				'galaxy' => $coordinates->getGalaxy(),
+				'system' => $coordinates->getSystem()
+			]);
+		if ( ! $planetsInSystem->isEmpty()) {
+			$qb->andWhere('planet.coordinates.planet NOT IN (:planets)')
+				->setParameter('planets', $planetsInSystem->toArray());
+		}
+		$planets = $qb->getQuery()->getResult();
+		$this->entityManager->remove($planets);
 		$this->entityManager->flush();
 	}
 
