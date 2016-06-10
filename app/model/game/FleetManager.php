@@ -286,13 +286,12 @@ class FleetManager extends Object implements ICommandProcessor
 	public function sendMultipleFleetsAtOnce(array $commands, bool $removeNonExistingPlanets = true)
 	{
 		foreach ($commands as $command) {
-			while ( ! $this->isProcessingAvailable($command)) {
+			while ( ! $this->isProcessingAvailable($command)) { //page realoding is in this function, so there is no need to reload page here
 				$time = $this->getTimeToProcessingAvailable($command);
 				$seconds = $time->diffInSeconds();
 				$seconds = min($seconds, 60);       //Do not wait for more than 60 seconds.
 				$this->logger->addInfo("Going to wait until sending probes is available, for $seconds seconds.");
 				sleep($seconds);
-				$this->I->reloadPage();
 			}
 			try {
 				$this->processCommand($command);
