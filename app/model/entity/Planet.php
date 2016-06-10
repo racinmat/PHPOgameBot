@@ -532,6 +532,14 @@ class Planet extends Object
 		$this->metal = $metal;
 	}
 
+	public function setResources(Resources $resources)
+	{
+		$this->setMetal($resources->getMetal());
+		$this->setCrystal($resources->getCrystal());
+		$this->setDeuterium($resources->getDeuterium());
+		$this->setLastVisited(Carbon::now());
+	}
+
 	/**
 	 * @return int
 	 */

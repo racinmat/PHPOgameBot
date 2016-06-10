@@ -35,7 +35,7 @@ class PlanetCalculator extends Object
 		return [$resources, $lastVisited];
 	}
 
-	private function getResourcesEstimateForPlanets(array  $planets) : array
+	private function getResourcesEstimateForPlanets(array $planets) : array
 	{
 		$resources = [];
 		foreach ($planets as $planet) {
@@ -64,4 +64,21 @@ class PlanetCalculator extends Object
 		return ceil($resourcesNow->getTotal() / 2 / $ship->getCapacity());  //Every attack takes only one half of resources
 	}
 
+	public function saveResourcesEstimateAfterAttack(Planet $planet)
+	{
+		$resources = $this->resourcesCalculator->getResourcesEstimateForTime($planet, Carbon::now());
+		$resources = $resources->divideByScalar(2);
+		$planet->setResources($resources);
+		$this->databaseManager->flush();
+	}
+
+	/**
+	 * @param Planet[] $planets
+	 */
+	public function saveResourcesEstimateAfterAttackForPlanets(array $planets)
+	{
+		foreach ($planets as $planet) {
+			$this->saveResourcesEstimateAfterAttack($planet);
+		}
+	}
 }
