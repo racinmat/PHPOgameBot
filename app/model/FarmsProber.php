@@ -80,7 +80,7 @@ class FarmsProber extends Object implements ICommandProcessor
 		$farmedStatuses = new ArrayCollection();
 		$farmedStatuses->add(PlayerStatus::_(PlayerStatus::STATUS_INACTIVE));
 		$farmedStatuses->add(PlayerStatus::_(PlayerStatus::STATUS_LONG_INACTIVE));
-		$this->prober->probePlanets($planets, $fromPlanet, $farmedStatuses);
+		$this->prober->probePlanets($planets, $fromPlanet, $farmedStatuses, $command->getUuid());
 		return true;
 	}
 

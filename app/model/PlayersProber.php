@@ -70,7 +70,7 @@ class PlayersProber extends Object implements ICommandProcessor
 		/** @var ProbePlayersCommand $command */
 		$planets = $this->databaseManager->getPlanetsFromCommand($command);
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
-		$this->prober->probePlanets($planets, $fromPlanet, $command->getStatuses());
+		$this->prober->probePlanets($planets, $fromPlanet, $command->getStatuses(), $command->getUuid());
 		return true;
 	}
 

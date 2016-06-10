@@ -80,7 +80,7 @@ class FarmsAttacker extends Object implements ICommandProcessor
 		$planets = $this->planetCalculator->getFarms($command->getLimit(), $command->getVisitedAfter());
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
 		$attackCommands = $this->createAttackCommands($planets, $fromPlanet);
-		$this->fleetManager->sendMultipleFleetsAtOnce($attackCommands);
+		$this->fleetManager->sendMultipleFleetsAtOnce($attackCommands, $command->getUuid());
 		$this->planetCalculator->saveResourcesEstimateAfterAttackForPlanets($planets);
 		return true;
 	}

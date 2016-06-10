@@ -16,6 +16,7 @@ use App\Utils\Functions;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
+use Ramsey\Uuid\Uuid;
 
 class Prober extends Object
 {
@@ -56,8 +57,10 @@ class Prober extends Object
 	 * @param Planet[] $planets
 	 * @param Planet $fromPlanet
 	 * @param ArrayCollection $statuses
+	 * @param Uuid $uuid
+	 * @throws NonExistingPlanetException
 	 */
-	public function probePlanets(array $planets, Planet $fromPlanet, ArrayCollection $statuses)
+	public function probePlanets(array $planets, Planet $fromPlanet, ArrayCollection $statuses, Uuid $uuid)
 	{
 		$this->logger->addInfo("Going to probe planets.");
 		$probingStart = Carbon::now();
@@ -65,7 +68,7 @@ class Prober extends Object
 
 		$this->logger->addInfo(count($planets) . ' planets to probe.');
 		$commands = $this->createEspionageCommands($planets, $fromPlanet, $statuses);
-		$this->fleetManager->sendMultipleFleetsAtOnce($commands);
+		$this->fleetManager->sendMultipleFleetsAtOnce($commands, $uuid);
 
 		//todo: add waiting until all sent probes come back so we wont miss any report during the parsing.
 		sleep(40);  //now I just wait for some time

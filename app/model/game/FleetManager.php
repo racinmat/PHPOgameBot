@@ -25,7 +25,10 @@ use Carbon\Carbon;
 
 use Facebook\WebDriver\Exception\TimeOutException;
 use Kdyby\Monolog\Logger;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Object;
+use Ramsey\Uuid\Uuid;
 
 class FleetManager extends Object implements ICommandProcessor
 {
@@ -51,7 +54,10 @@ class FleetManager extends Object implements ICommandProcessor
 	/** @var FleetInfo */
 	private $fleetInfo;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo)
+	/** @var Cache */
+	private $cache;
+	
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo, IStorage $storage)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
@@ -60,6 +66,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->databaseManager = $databaseManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->fleetInfo = $fleetInfo;
+		$this->cache = new Cache($storage, 'processedFlights');
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -187,15 +194,6 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->click('#continue.on');
 		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
 
-		$I->fillField('input#galaxy', $to->getGalaxy());
-		$I->fillField('input#system', $to->getSystem());
-		if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
-			$I->fillField('input#position', 16);
-		} else {
-			$I->fillField('input#position', $to->getPlanet());
-		}
-		$this->logger->addDebug('Filled coordinates.');
-
 		if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
 			$I->click('a.debris');
 			usleep(Random::microseconds(0.5, 1));
@@ -204,6 +202,16 @@ class FleetManager extends Object implements ICommandProcessor
 		$I->click((string) $command->getSpeed(), '#speedLinks');
 		usleep(Random::microseconds(0.5, 1));
 
+		do {
+			$I->fillField('input#galaxy', $to->getGalaxy());
+			$I->fillField('input#system', $to->getSystem());
+			if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
+				$I->fillField('input#position', 16);
+			} else {
+				$I->fillField('input#position', $to->getPlanet());
+			}
+			$this->logger->addDebug('Filled coordinates.');
+		} while ( ! $I->seeElementExists('#continue.on'));
 		$I->click('#continue.on');
 
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
@@ -280,12 +288,18 @@ class FleetManager extends Object implements ICommandProcessor
 
 	/**
 	 * @param SendFleetCommand[] $commands
+	 * @param Uuid $uuid
 	 * @param bool $removeNonExistingPlanets
 	 * @throws NonExistingPlanetException
 	 */
-	public function sendMultipleFleetsAtOnce(array $commands, bool $removeNonExistingPlanets = true)
+	public function sendMultipleFleetsAtOnce(array $commands, Uuid $uuid, bool $removeNonExistingPlanets = true)
 	{
 		foreach ($commands as $command) {
+			$cacheName = $uuid->toString() . '/' . $command->getCoordinates()->toString();
+			if ($this->cache->load($cacheName) !== null) {
+				continue;
+			}
+
 			while ( ! $this->isProcessingAvailable($command)) { //page realoding is in this function, so there is no need to reload page here
 				$time = $this->getTimeToProcessingAvailable($command);
 				$seconds = $time->diffInSeconds();
@@ -303,8 +317,9 @@ class FleetManager extends Object implements ICommandProcessor
 					throw $e;
 				}
 			}
+			$this->cache->save($cacheName, 'done', [Cache::TAGS => [$uuid->toString()]]);
 		}
-
+		$this->cache->clean([Cache::TAGS => [$uuid->toString()]]);
 	}
 }
 
