@@ -296,9 +296,9 @@ class FleetManager extends Object implements ICommandProcessor
 	public function sendMultipleFleetsAtOnce(array $commands, Uuid $uuid, bool $removeNonExistingPlanets = true)
 	{
 		foreach ($commands as $command) {
-			$cacheName = $uuid->toString() . '/' . $command->getCoordinates()->toString();
+			$cacheName = $uuid->toString() . '/' . $command->getTo()->toString();
 			if ($this->cache->load($cacheName) !== null) {
-				$this->logger->addInfo("Skipping flight to planet {$command->getCoordinates()->toString()}.");
+				$this->logger->addInfo("Skipping flight to planet {$command->getTo()->toString()}.");
 				continue;
 			}
 
