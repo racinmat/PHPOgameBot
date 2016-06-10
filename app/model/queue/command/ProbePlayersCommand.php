@@ -109,4 +109,9 @@ class ProbePlayersCommand extends BaseCommand
 		return $this->probingStatuses;
 	}
 
+	public function isEvaluatedForNextRun() : bool
+	{
+		return false;
+	}
+
 }

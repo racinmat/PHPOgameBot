@@ -59,4 +59,9 @@ class AttackFarmsCommand extends BaseCommand
 		return $this->visitedAfter;
 	}
 
+	public function isEvaluatedForNextRun() : bool
+	{
+		return false;
+	}
+
 }

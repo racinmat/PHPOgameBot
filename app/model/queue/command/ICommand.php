@@ -46,4 +46,5 @@ interface ICommand extends ArraySerializable
 
 	public function isDisabled() : bool;
 
+	public function isEvaluatedForNextRun() : bool; 
 }

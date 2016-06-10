@@ -94,6 +94,10 @@ abstract class BaseCommand extends Nette\Object implements ICommand
 	{
 		$this->disabled = $disabled;
 	}
-	
+
+	public function isEvaluatedForNextRun() : bool
+	{
+		return true;
+	}
 	
 }

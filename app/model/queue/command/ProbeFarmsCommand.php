@@ -60,4 +60,9 @@ class ProbeFarmsCommand extends BaseCommand
 		return $this->visitedBefore;
 	}
 
+	public function isEvaluatedForNextRun() : bool
+	{
+		return false;
+	}
+
 }

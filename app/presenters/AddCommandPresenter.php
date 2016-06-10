@@ -347,7 +347,7 @@ class AddCommandPresenter extends BasePresenter
 			->setType('number');
 
 		$form->addDateTimePicker('visitedAfter', 'Last visited after:')
-			->setDefaultValue(Carbon::now());
+			->setDefaultValue(Carbon::now()->subWeeks(2));
 
 		$form->addSubmit('send', 'Add command');
 

@@ -8,7 +8,7 @@ parameters:
 	runningFile: %wwwDir%/running.txt
 	queueFile: %wwwDir%/queue.json
 	repetitiveCommandsFile:  %wwwDir%/repetitive.json
-	periodicRun: '30 minutes'
+	periodicRun: '50 minutes'
 
 php:
 	date.timezone: Europe/Prague

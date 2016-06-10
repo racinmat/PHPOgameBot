@@ -46,7 +46,7 @@ class CommandDispatcher extends Object
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
-		if ($command->isDisabled()) {
+		if ($command->isDisabled() || ! $command->isEvaluatedForNextRun()) {
 			return Carbon::maxValue();
 		}
 
