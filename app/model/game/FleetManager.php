@@ -297,6 +297,7 @@ class FleetManager extends Object implements ICommandProcessor
 		foreach ($commands as $command) {
 			$cacheName = $uuid->toString() . '/' . $command->getCoordinates()->toString();
 			if ($this->cache->load($cacheName) !== null) {
+				$this->logger->addInfo("Skipping flight to planet {$command->getCoordinates()->toString()}.");
 				continue;
 			}
 
