@@ -176,8 +176,9 @@ class FleetManager extends Object implements ICommandProcessor
 
 		$to = $command->getTo();
 
-		$planet = $this->planetManager->getPlanet($command->getCoordinates());
-		$this->menu->goToPlanet($planet);
+		$targetPlanet = $this->planetManager->getPlanet($to);
+		$myPlanet = $this->planetManager->getPlanet($command->getCoordinates());
+		$this->menu->goToPlanet($myPlanet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 
 		if (!$this->isProcessingAvailable($command)) {
@@ -229,7 +230,7 @@ class FleetManager extends Object implements ICommandProcessor
 		if ($command->hasStatuses()) {
 			$playerStatusClass = $I->grabAttributeFrom('#fleetStatusBar > ul > li:nth-of-type(3) > span:last-of-type', 'class');
 			$status = PlayerStatus::fromClass($playerStatusClass);
-			$planet->getPlayer()->setStatus($status);
+			$targetPlanet->getPlayer()->setStatus($status);
 			if ( ! $command->getStatuses()->contains($status)) {
 				$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 				return false;
