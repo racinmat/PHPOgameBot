@@ -46,6 +46,10 @@ class CommandDispatcher extends Object
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
+		if ($command->isDisabled()) {
+			return Carbon::maxValue();
+		}
+
 		$processor = $this->getProcessor($command);
 		$this->logger->addInfo("Going to find the next run of command $command.");
 		$datetime = $processor->getTimeToProcessingAvailable($command);
