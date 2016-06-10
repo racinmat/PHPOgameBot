@@ -18,6 +18,10 @@ while (true) {
 		continue;
 	}
 
+	if ( ! isConnectedToInternet()) {
+		continue;
+	}
+	
 	$datetime = new DateTime($string);
 	$difference = (new DateTime())->getTimestamp() - $datetime->getTimestamp();    //in seconds
 	echo $difference . PHP_EOL;
@@ -25,7 +29,16 @@ while (true) {
 		continue;
 	}
 
-	file_put_contents('www/cron.txt', '');
 	$output = shell_exec('php www/index.php bot:queue --debug-mode');
 	echo $output . PHP_EOL;
+}
+
+function isConnectedToInternet() {
+
+	$connected = @fsockopen('www.google.com', 80);
+	if ($connected) {
+		fclose($connected);
+		return true;
+	}
+	return false;
 }

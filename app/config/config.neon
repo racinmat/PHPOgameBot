@@ -74,7 +74,7 @@ monolog:
 		- Monolog\Handler\SlackHandler(%slackApiToken%, %slackChannel%, ogameBot, true, null, Monolog\Logger::ALERT, true)
 		- Monolog\Handler\FingersCrossedHandler(
 			Monolog\Handler\RotatingFileHandler(%appDir%/../log/bot.log, 30, Monolog\Logger::DEBUG),
-			Monolog\Logger::CRITICAL
+			Monolog\Logger::DEBUG
 		)
 
 console:
