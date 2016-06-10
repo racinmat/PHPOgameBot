@@ -14,7 +14,9 @@ use App\Utils\ArrayCollection;
 use Carbon\Carbon;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
+use Nette\Utils\Json;
 use Tracy\Debugger;
 
 
@@ -30,9 +32,13 @@ class DatabaseManager extends Object
 	/** @var EntityRepository */
 	private $playerRepository;
 
-	public function __construct(EntityManager $entityManager)
+	/** @var Logger  */
+	private $logger;
+
+	public function __construct(EntityManager $entityManager, Logger $logger)
 	{
 		$this->entityManager = $entityManager;
+		$this->logger = $logger;
 		$this->planetRepository = $entityManager->getRepository(Planet::class);
 		$this->playerRepository = $entityManager->getRepository(Player::class);
 	}
@@ -149,6 +155,8 @@ class DatabaseManager extends Object
 				->setParameter('planets', $planetsInSystem->toArray());
 		}
 		$planets = $qb->getQuery()->getResult();
+		$coords = (new ArrayCollection($planets))->map(Functions::planetToCoordinates());
+		$this->logger->addInfo("Removing non existing planets from coordinates " . Json::encode($coords->toArray()));
 		$this->entityManager->remove($planets);
 		$this->entityManager->flush();
 	}
