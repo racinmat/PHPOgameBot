@@ -9,6 +9,7 @@ use App\Enum\PlayerStatus;
 use App\Enum\ProbingStatus;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
+use Carbon\Carbon;
 use Nette\Utils\Arrays;
 
 
@@ -17,6 +18,9 @@ class AttackFarmsCommand extends BaseCommand
 
 	/** @var int */
 	private $limit;
+
+	/** @var Carbon */
+	private $visitedAfter;
 
 	public static function getAction() : string
 	{
@@ -27,7 +31,8 @@ class AttackFarmsCommand extends BaseCommand
 	{
 		$data = [
 			'data' => [
-				'limit' => $this->limit
+				'limit' => $this->limit,
+				'visitedAfter' => $this->visitedAfter->__toString()
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -36,6 +41,7 @@ class AttackFarmsCommand extends BaseCommand
 	protected function loadFromArray(array $data)
 	{
 		$this->limit = $data['limit'];
+		$this->visitedAfter = $data['visitedAfter'] ? Carbon::instance(new \DateTime($data['visitedAfter'])) : Carbon::minValue();
 	}
 
 	public function getDependencyType() : string
@@ -46,6 +52,11 @@ class AttackFarmsCommand extends BaseCommand
 	public function getLimit() : int
 	{
 		return $this->limit;
+	}
+
+	public function getVisitedAfter() : Carbon
+	{
+		return $this->visitedAfter;
 	}
 
 }

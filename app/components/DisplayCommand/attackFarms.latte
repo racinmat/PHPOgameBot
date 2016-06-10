@@ -1,3 +1,4 @@
 {layout 'layout.latte'}
 {block content}
-	Limit: {$command->getLimit()}
+	Limit: {$command->getLimit()}<br/>
+	Last visited after: {$command->getVisitedAfter()->diffForHumans()}

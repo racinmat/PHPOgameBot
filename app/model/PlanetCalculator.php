@@ -45,9 +45,9 @@ class PlanetCalculator extends Object
 		return $resources;
 	}
 
-	public function getFarms(int $limit, Carbon $lastVisitedBefore = null) : array
+	public function getFarms(int $limit, Carbon $lastVisitedFrom = null, Carbon $lastVisitedTo = null) : array
 	{
-		$planets = $this->databaseManager->getInactiveDefenselessPlanets($lastVisitedBefore);
+		$planets = $this->databaseManager->getInactiveDefenselessPlanets($lastVisitedFrom, $lastVisitedTo);
 		$resources = $this->getResourcesEstimateForPlanets($planets);
 		$topResources = array_slice($resources, 0, $limit, true);
 		foreach ($planets as $key => $planet) {
@@ -81,4 +81,5 @@ class PlanetCalculator extends Object
 			$this->saveResourcesEstimateAfterAttack($planet);
 		}
 	}
+
 }

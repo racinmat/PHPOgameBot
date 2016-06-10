@@ -346,6 +346,9 @@ class AddCommandPresenter extends BasePresenter
 			->setRequired('Set count of farms to be attacked.')
 			->setType('number');
 
+		$form->addDateTimePicker('visitedAfter', 'Last visited after:')
+			->setDefaultValue(Carbon::now());
+
 		$form->addSubmit('send', 'Add command');
 
 		$form->addCheckbox('repetitive', 'Repetitive command');
@@ -357,7 +360,8 @@ class AddCommandPresenter extends BasePresenter
 			$command = AttackFarmsCommand::fromArray([
 				'coordinates' => $coordinates,
 				'data' => [
-					'limit' => $values['limit']
+					'limit' => $values['limit'],
+					'visitedAfter' => $values['visitedAfter']->__toString()
 				]
 			]);
 			if ($values['repetitive']) {

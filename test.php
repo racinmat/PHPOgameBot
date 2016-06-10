@@ -164,11 +164,14 @@ function add(int $a, int $b) : int {
 //var_dump(add(5000000000,6000000000));
 //var_dump(add(100000000, 1));
 //
-//$arr = ['one' => 1];
-//var_dump($arr['two'] ?? 0);
-//var_dump(false ?? 0);
-//var_dump(false ?: 0);
-//var_dump(null ?? 0);
+$arr = ['one' => 1, 'three' => 'ahoj'];
+var_dump($arr['two'] ?? 0);
+var_dump($arr['one'] ? 1 : 0);
+var_dump($arr['three'] ? 3 : -1);
+var_dump($arr['two'] ?: 0);
+var_dump(false ?? 0);
+var_dump(false ?: 0);
+var_dump(null ?? 0);
 
 //$comparator = \App\Utils\Functions::compareCarbonDateTimes();
 //var_dump($comparator(\Carbon\Carbon::now(), \Carbon\Carbon::minValue()));
@@ -203,6 +206,6 @@ function add(int $a, int $b) : int {
 //$interval = new \Carbon\CarbonInterval(0, 0, 0, 0, 0, 1, 0);
 //$time = \Carbon\Carbon::minValue()->add($interval);
 //var_dump($time);
-$arr = [0,1,2,3,4,5,6];
-var_dump(array_slice($arr, 0, 3));
-var_dump(array_slice($arr, 0, 30));
+//$arr = [0,1,2,3,4,5,6];
+//var_dump(array_slice($arr, 0, 3));
+//var_dump(array_slice($arr, 0, 30));

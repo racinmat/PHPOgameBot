@@ -77,7 +77,7 @@ class FarmsAttacker extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var AttackFarmsCommand $command */
-		$planets = $this->planetCalculator->getFarms($command->getLimit());
+		$planets = $this->planetCalculator->getFarms($command->getLimit(), $command->getVisitedAfter());
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
 		$attackCommands = $this->createAttackCommands($planets, $fromPlanet);
 		$this->fleetManager->sendMultipleFleetsAtOnce($attackCommands);
