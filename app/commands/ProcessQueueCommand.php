@@ -28,13 +28,9 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 	/** @var AttackChecker */
 	private $attackChecker;
 
-	/** @var string */
-	private $periodicRun;
-
-	public function __construct(Container $container, string $periodicRun)
+	public function __construct(Container $container)
 	{
 		parent::__construct($container);
-		$this->periodicRun = $periodicRun;
 	}
 
 	protected function configure()
@@ -81,7 +77,7 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 		}
 
 		$signManager->signOut();
-		$cronManager->addNextStart(Carbon::instance(new \DateTime($this->periodicRun))->addMinutes(random_int(0, 4))->addSeconds(random_int(0, 59)));
+		$cronManager->addNextPeriodicRun();
 
 		return 0; // zero return code means everything is ok
 	}

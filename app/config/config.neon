@@ -8,7 +8,6 @@ parameters:
 	runningFile: %wwwDir%/running.txt
 	queueFile: %wwwDir%/queue.json
 	repetitiveCommandsFile:  %wwwDir%/repetitive.json
-	periodicRun: '50 minutes'
 
 php:
 	date.timezone: Europe/Prague
@@ -84,7 +83,7 @@ monolog:
 console:
 	commands:
 		- App\Commands\TestCommand
-		- App\Commands\ProcessQueueCommand(periodicRun: %periodicRun%)
+		- App\Commands\ProcessQueueCommand
 
 doctrine:
     types:
