@@ -93,6 +93,9 @@ class ReportReader extends Object
 			return;     //when espionage report is not opened, do not try to parse it
 		}
 
+		$reportTimeString = $I->grabTextFrom("$this->reportPopupSelector .msg_date.fright");
+		$reportTime = Carbon::instance(new \DateTime($reportTimeString));
+
 		$probingStatus = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION);
 		$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 
@@ -120,7 +123,7 @@ class ReportReader extends Object
 		$planet->setMetal($metal);
 		$planet->setCrystal($crystal);
 		$planet->setDeuterium($deuterium);
-		$planet->setLastVisited(Carbon::now());
+		$planet->setLastVisited($reportTime);
 
 		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
 			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
