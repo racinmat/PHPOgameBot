@@ -44,6 +44,8 @@ class OgameParser
 		if (Strings::contains($resource, 'M')) {
 			$resource = Strings::replace($resource, '~M~', '');
 			$resource = floatval(Strings::replace($resource, '~,~', '.')) * 1000000;
+		} else {
+			$resource = Strings::split($resource, '~,~')[0];
 		}
 		return Strings::replace($resource, '~\.~');
 	}

@@ -49,7 +49,7 @@ class ReportReader extends Object
 		$I->click('a.comm_menu.messages');
 		usleep(Random::microseconds(1, 2));
 
-		$firstReportDetailsSelector = 'ul.tab_inner li:nth-of-type(1).msg a.fright.txt_link.msg_action_link.overlay';
+		$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
 		$I->waitForElementVisible($firstReportDetailsSelector);
 		$I->click($firstReportDetailsSelector);
 		usleep(Random::microseconds(1.5, 2.5));

@@ -59,5 +59,7 @@ class OgameParserTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(3, OgameParser::parseResources('3'));
 		$this->assertEquals(250000, OgameParser::parseResources('250.000'));
 		$this->assertEquals(1590000, OgameParser::parseResources('1,59M'));
+		$this->assertEquals(360525, OgameParser::parseResources('360.525,287'));   //this weird value appeared once. Is is same as 360.525
+
 	}
 }
