@@ -64,6 +64,7 @@ class DashboardPresenter extends BasePresenter
 		$this->template->planets = $this->databaseManager->getAllPlanetsCount();
 		$this->template->inactivePlayers = $this->databaseManager->getInactivePlayersCount();
 		$this->template->inactivePlanets = $this->databaseManager->getInactivePlanetsCount();
+		$this->template->planetsWithSomeInformation = $this->databaseManager->getPlanetsWithSomeInformationCount();
 		$this->template->planetsWithAllInformation = $this->databaseManager->getPlanetsWithAllInformationCount();
 		$this->template->planetsToFarm = $this->databaseManager->getPlanetsWithoutFleetAndDefenseCount();
 	}

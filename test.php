@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+
 /** @var \Nette\DI\Container $container */
 $container = require_once __DIR__ . '/app/bootstrap.php';
 //$hours = 1 + 24/60 + 38/3600;
@@ -209,14 +212,29 @@ function add(int $a, int $b) : int {
 //$arr = [0,1,2,3,4,5,6];
 //var_dump(array_slice($arr, 0, 3));
 //var_dump(array_slice($arr, 0, 30));
-$interval = new \Carbon\CarbonInterval(0,0,0,0,1,30);
-var_dump($interval);
-var_dump($interval->__toString());
-$another = \Carbon\CarbonInterval::instance(DateInterval::createFromDateString($interval->__toString()));
-var_dump($another);
-var_dump($another->__toString());
-var_dump($interval == $another);
-var_dump($interval == new \Carbon\CarbonInterval(0,0,0,0,1,40));
-$another = \Carbon\CarbonInterval::instance(DateInterval::createFromDateString('now'));
-var_dump($another);
-var_dump($another->__toString());
+//$interval = new CarbonInterval(0,0,0,0,1,30);
+//var_dump($interval);
+//var_dump($interval->__toString());
+//$another = CarbonInterval::instance(DateInterval::createFromDateString($interval->__toString()));
+//var_dump($another);
+//var_dump($another->__toString());
+//var_dump($interval == $another);
+//var_dump($interval == new CarbonInterval(0,0,0,0,1,40));
+//$another = CarbonInterval::instance(DateInterval::createFromDateString('now'));
+//var_dump($another);
+//var_dump($another->__toString());
+
+Carbon::setTestNow(Carbon::today()->hour(5));
+
+$inDay = new CarbonInterval(0, 0, 0, 0, 0, 30);
+$inNight = new CarbonInterval(0, 0, 0, 0, 0, 55);
+
+$longerIntervalFromHour = 1;
+$longerIntervalToHour = 7;
+if (Carbon::now()->hour >= $longerIntervalFromHour && Carbon::now()->hour < $longerIntervalToHour) {
+	var_dump('inNight');
+//	var_dump($inNight);
+} else {
+	var_dump('inDay');
+//  var_dump($inDay);
+}

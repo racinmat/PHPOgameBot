@@ -176,6 +176,14 @@ class DatabaseManager extends Object
 		return $this->planetRepository->countBy(['probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION]);
 	}
 
+	public function getPlanetsWithSomeInformationCount() : int
+	{
+		return $this->planetRepository->countBy([
+			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+			'player.probesToLastEspionage >' => 0
+		]);
+	}
+
 	public function getPlanetsWithoutFleetAndDefenseCount() : int
 	{
 		return $this->planetRepository->countBy($this->getNoFleetAndNoDefenseFilter());

@@ -39,11 +39,11 @@ class CronManager extends Nette\Object
 	private function getNextRunInterval() : CarbonInterval
 	{
 		$inDay = new CarbonInterval(0, 0, 0, 0, 0, 30);
-		$inNight = new CarbonInterval(0, 0, 0, 0, 0, 55);
+		$inNight = new CarbonInterval(0, 0, 0, 0, 1, 55);
 
 		$longerIntervalFromHour = 1;
 		$longerIntervalToHour = 7;
-		if (Carbon::now()->hour > $longerIntervalFromHour && Carbon::now()->hour < $longerIntervalToHour) {
+		if (Carbon::now()->hour >= $longerIntervalFromHour && Carbon::now()->hour < $longerIntervalToHour) {
 			return $inNight;
 		}
 		return $inDay;
