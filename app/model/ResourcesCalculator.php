@@ -172,7 +172,7 @@ class ResourcesCalculator extends Nette\Object
 	public function getResourcesEstimateForTime(Planet $planet, Carbon $time) : Resources
 	{
 		$resources = $planet->getResources();
-		$hours = $planet->getLastVisited()->diffInHours($time);
+		$hours = $planet->getLastVisited()->diffInSeconds($time) / Carbon::SECONDS_PER_MINUTE / Carbon::MINUTES_PER_HOUR;   //diffInHours rounds down, now also minutes and seconds are calculated
 		return $this->getProductionPerHour($planet)->multiplyByScalar($hours)->add($resources)->min($this->getStoragesCapacity($planet));
 	}
 }

@@ -224,17 +224,36 @@ function add(int $a, int $b) : int {
 //var_dump($another);
 //var_dump($another->__toString());
 
-Carbon::setTestNow(Carbon::today()->hour(5));
+//Carbon::setTestNow(Carbon::today()->hour(5));
+//
+//$inDay = new CarbonInterval(0, 0, 0, 0, 0, 30);
+//$inNight = new CarbonInterval(0, 0, 0, 0, 0, 55);
+//
+//$longerIntervalFromHour = 1;
+//$longerIntervalToHour = 7;
+//if (Carbon::now()->hour >= $longerIntervalFromHour && Carbon::now()->hour < $longerIntervalToHour) {
+//	var_dump('inNight');
+////	var_dump($inNight);
+//} else {
+//	var_dump('inDay');
+////  var_dump($inDay);
+//}
 
-$inDay = new CarbonInterval(0, 0, 0, 0, 0, 30);
-$inNight = new CarbonInterval(0, 0, 0, 0, 0, 55);
-
-$longerIntervalFromHour = 1;
-$longerIntervalToHour = 7;
-if (Carbon::now()->hour >= $longerIntervalFromHour && Carbon::now()->hour < $longerIntervalToHour) {
-	var_dump('inNight');
-//	var_dump($inNight);
-} else {
-	var_dump('inDay');
-//  var_dump($inDay);
+/** @var \SplFileInfo $file */
+foreach (\Nette\Utils\Finder::findFiles('*.log')->from(__DIR__ . '/log') as $file) {
+	echo $file->getRealPath() . PHP_EOL;
+	$lines = \Nette\Utils\Strings::split(file_get_contents($file->getRealPath()), '~[\r\n]~');
+	$planetLines = preg_grep('/non existing/i', $lines);
+	$planets = [];
+	foreach ($planetLines as $planetLine) {
+		$planets[] = \Nette\Utils\Strings::match($planetLine, '~\[\d+:\d+:\d+\]~')[0];
+	}
+	echo implode(PHP_EOL, $planets);
 }
+//implode(PHP_EOL, preg_grep('~removing~', \Nette\Utils\Strings::split(file_get_contents('C:\xampp\htdocs\ogameBot\log\error.log'), '~'.PHP_EOL.'~')));
+//var_dump(implode(PHP_EOL, \Nette\Utils\Strings::split(file_get_contents('C:\xampp\htdocs\ogameBot\log\error.log'), '~'.PHP_EOL.'~')));
+//var_dump(file_get_contents('C:\xampp\htdocs\ogameBot\log\error.log'));
+//$lines = \Nette\Utils\Strings::split(file_get_contents('C:\xampp\htdocs\ogameBot\log\error.log'), '~'.PHP_EOL.'~');
+//var_dump(implode(PHP_EOL, $lines));
+//var_dump(preg_grep('~command~i', $lines));
+//var_dump(\Nette\Utils\Strings::match("[2016-06-02 00:51:40] serverLogger.INFO: Removing non existing planet from coordinates [1:69:6] [] []", '~\[\d+:\d+:\d+\]~'));
