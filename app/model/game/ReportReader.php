@@ -10,6 +10,7 @@ use App\Enum\ProbingStatus;
 use App\Enum\Research;
 use App\Enum\Ships;
 use App\Model\DatabaseManager;
+use App\Model\Entity\Planet;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
@@ -97,7 +98,6 @@ class ReportReader extends Object
 		$reportTime = Carbon::instance(new \DateTime($reportTimeString));
 
 		$probingStatus = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION);
-		$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 
 		$coordinatesText = $I->grabTextFrom($this->reportPopupSelector . ' .msg_title a.txt_link');
 		$coordinates = OgameParser::parseOgameCoordinates($coordinatesText);
@@ -125,86 +125,50 @@ class ReportReader extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited($reportTime);
 
-		if ($I->seeElementExists($buildingsSelector . ' li.detail_list_fail')) {
-			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
-			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-		} else {
-			$buildingsCount = $I->getNumberOfElements($buildingsSelector . ' li');
-			for ($i = 1; $i <= $buildingsCount; $i++) {
-				$nameSelector = $buildingsSelector . " li:nth-of-type($i) > span.detail_list_txt";
-				$levelSelector = $buildingsSelector . " li:nth-of-type($i) > span.fright";
-				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
-				if ($name == '') {
-					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
-					$name = $I->grabTextFrom($nameSelector);
-				}
-				$level = $I->grabTextFrom($levelSelector);
-
-				$this->logger->addDebug("parsing building number $i, name: $name, level: $level");
-				$building = Building::_(Building::getFromTranslatedName($name));
-				$building->setCurrentLevel($planet, $level);
+		$this->readSection($buildingsSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
+			},
+			function (string $name, string $value) use ($planet) {
+				$ships = Building::_(Building::getFromTranslatedName($name));
+				$ships->setCurrentLevel($planet, $value);
 			}
-		}
+		);
 
-		if ($I->seeElementExists($researchSelector . ' li.detail_list_fail')) {
-			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_RESEARCH));
-			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-		} else {
-			$researchCount = $I->getNumberOfElements($researchSelector . ' li');
-			for ($i = 1; $i <= $researchCount; $i++) {
-				$nameSelector = $researchSelector . " li:nth-of-type($i) > span.detail_list_txt";
-				$levelSelector = $researchSelector . " li:nth-of-type($i) > span.fright";
-				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
-				if ($name == '') {
-					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
-					$name = $I->grabTextFrom($nameSelector);
-				}
-				$level = $I->grabTextFrom($levelSelector);
-
-				$this->logger->addDebug("parsing research number $i, name: $name, level: $level");
-				$research = Research::_(Research::getFromTranslatedName($name));
-				$research->setCurrentLevel($planet, $level);
+		$this->readSection($researchSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_RESEARCH));
+			},
+			function (string $name, string $value) use ($planet) {
+				$ships = Research::_(Research::getFromTranslatedName($name));
+				$ships->setCurrentLevel($planet, $value);
 			}
-		}
+		);
 
-		if ($I->seeElementExists($defenseSelector . ' li.detail_list_fail')) {
-			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
-			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-		} else {
-			$defenseCount = $I->getNumberOfElements($defenseSelector . ' li');
-			for ($i = 1; $i <= $defenseCount; $i++) {
-				$nameSelector = $defenseSelector . " li:nth-of-type($i) > span.detail_list_txt";
-				$levelSelector = $defenseSelector . " li:nth-of-type($i) > span.fright";
-				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
-				if ($name == '') {
-					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
-					$name = $I->grabTextFrom($nameSelector);
-				}
-				$level = $I->grabTextFrom($levelSelector);
-
-				$defense = Defense::_(Defense::getFromTranslatedName($name));
-				$defense->setAmount($planet, $level);
+		$this->readSection($defenseSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
+			},
+			function (string $name, string $value) use ($planet) {
+				$ships = Defense::_(Defense::getFromTranslatedName($name));
+				$ships->setAmount($planet, $value);
 			}
-		}
+		);
 
-		if ($I->seeElementExists($fleetSelector . ' li.detail_list_fail')) {
-			$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
-			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
-		} else {
-			$fleetCount = $I->getNumberOfElements($fleetSelector . ' li');
-			for ($i = 1; $i <= $fleetCount; $i++) {
-				$nameSelector = $fleetSelector . " li:nth-of-type($i) > span.detail_list_txt";
-				$levelSelector = $fleetSelector . " li:nth-of-type($i) > span.fright";
-				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
-				if ($name == '') {
-					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
-					$name = $I->grabTextFrom($nameSelector);
-				}
-				$level = $I->grabTextFrom($levelSelector);
-
+		$this->readSection($fleetSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
+			},
+			function (string $name, string $value) use ($planet) {
 				$ships = Ships::_(Ships::getFromTranslatedName($name));
-				$ships->setAmount($planet, $level);
+				$ships->setAmount($planet, $value);
 			}
+		);
+
+		if ($probingStatus->missingAnyInformation()) {
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
+		} else {
+			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 		}
 
 		$this->logger->addDebug("Parsing report for planet {$planet->getCoordinates()->toString()}. Probing status is $probingStatus.");
@@ -214,4 +178,29 @@ class ReportReader extends Object
 		$this->databaseManager->flush();
 	}
 
+	private function readSection(string $selector, callable $unsuccessful, callable $setValue)
+	{
+		$I = $this->I;
+		$I->waitForElementVisible($selector);
+		if ($I->seeElementExists($selector . ' li.detail_list_fail')) {
+			$unsuccessful();
+			throw new MissingSectionException();
+		} else {
+			$count = $I->getNumberOfElements($selector . ' li');
+			for ($i = 1; $i <= $count; $i++) {
+				$nameSelector = $selector . " li:nth-of-type($i) > span.detail_list_txt";
+				$levelSelector = $selector . " li:nth-of-type($i) > span.fright";
+				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
+				if ($name == '') {
+					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
+					$name = $I->grabTextFrom($nameSelector);
+				}
+				$level = $I->grabTextFrom($levelSelector);
+				$setValue($name, $level);
+			}
+		}
+
+	}
 }
+
+class MissingSectionException extends \Exception {};
