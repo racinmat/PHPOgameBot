@@ -103,6 +103,7 @@ class ReportReader extends Object
 		$coordinates = OgameParser::parseOgameCoordinates($coordinatesText);
 
 		$planet = $this->databaseManager->getPlanet($coordinates);
+		$this->logger->addDebug("Going to parse report for planet {$planet->getCoordinates()->toString()}.");
 
 		$resourcesSelector = $this->reportPopupSelector . ' div.mCSB_container > ul:nth-of-type(1)';
 		$fleetSelector = $this->reportPopupSelector . ' div.mCSB_container > ul:nth-of-type(2)';
@@ -171,7 +172,7 @@ class ReportReader extends Object
 			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::GOT_ALL_INFORMATION);
 		}
 
-		$this->logger->addDebug("Parsing report for planet {$planet->getCoordinates()->toString()}. Probing status is $probingStatus.");
+		$this->logger->addDebug("Done parsing report for planet {$planet->getCoordinates()->toString()}. Probing status is $probingStatus.");
 		$planet->getPlayer()->setProbingStatus($probingStatus);
 		$planet->setProbingStatus($planetProbingStatus);
 
