@@ -50,25 +50,22 @@ class ReportReader extends Object
 		$I->click('a.comm_menu.messages');
 		usleep(Random::microseconds(1, 2));
 
-		$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
-		$I->waitForElementVisible($firstReportDetailsSelector);
-		$I->click($firstReportDetailsSelector);
-		usleep(Random::microseconds(1.5, 2.5));
-		$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
-		$I->waitForElementVisible("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
+		$this->goToReport(1);
 		$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
-		list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
-		if ($currentReport != 1) {
-			$I->click("$this->reportPopupSelector .pagination > li:nth-of-type(1)");    //go to first report
-			usleep(Random::microseconds(1.5, 2.5));
-			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
-			list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
-			if ($currentReport != 1) {
-				$this->logger->addWarning('Not at the first espionage report.');
-			}
-		}
-		$this->logger->addInfo("Going to read max $reportsCount logs to date $from.");
+		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		$this->logger->addInfo("Going to read max $reportsCount reports to date $from.");
+
 		for ($i = 1; $i < $reportsCount; $i++) {
+			$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
+			list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
+
+			//check report number
+			if ($currentReport !== $i) {
+				$this->logger->addWarning("Expected to be reading $i. report, but $currentReport. is opened. Going to $i. report.");
+				$I->reloadPage();
+				$this->goToReport($i);
+			}
+
 			//check report time
 			$reportTimeString = $I->grabTextFrom("$this->reportPopupSelector .msg_date.fright");
 			$reportTime = Carbon::instance(new \DateTime($reportTimeString));
@@ -77,8 +74,7 @@ class ReportReader extends Object
 			}
 
 			$this->readCurrentEspionageReport();
-			$I->click("$this->reportPopupSelector .pagination > li:nth-of-type(4) a");
-			usleep(Random::microseconds(1, 1.5));
+			$this->goToNextReport();
 		}
 
 		$this->logger->addInfo("Done reading reports.");
@@ -200,8 +196,67 @@ class ReportReader extends Object
 				$setValue($name, $level);
 			}
 		}
+	}
+
+	private function goToReport(int $index)
+	{
+		$I = $this->I;
+		$this->logger->addDebug("Going to report with number $index.");
+		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
+
+		if ( ! $I->seeElementExists($reportCountSelector)) {   //report popup is not opened
+			//open report popup
+			$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
+			$I->waitForElementVisible($firstReportDetailsSelector);
+			$I->click($firstReportDetailsSelector);
+			usleep(Random::microseconds(1.5, 2.5));
+			$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
+		}
+
+		$I->waitForElementVisible($reportCountSelector);
+		$reports = $I->grabTextFrom($reportCountSelector);
+		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+
+		//if report is
+		if ($index === 1) {
+			$this->goToFirstReport();
+			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
+			list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+			if ($currentIndex !== 1) {
+				$this->logger->addWarning("Went to 1. report, but stayed in report $currentIndex.");
+			}
+			return;
+		}
+
+		while ($currentIndex != $index) {
+			if ($currentIndex < $index) {
+				$this->goToNextReport();
+			} else {
+				$this->goToPreviousReport();
+			}
+			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
+			list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		}
 
 	}
+
+	private function goToFirstReport()
+	{
+		$this->I->click("$this->reportPopupSelector .pagination > li:nth-of-type(1) > a");
+		usleep(Random::microseconds(1, 1.5));
+	}
+	private function goToPreviousReport()
+	{
+		$this->I->click("$this->reportPopupSelector .pagination > li:nth-of-type(2) > a");
+		usleep(Random::microseconds(1, 1.5));
+	}
+
+	private function goToNextReport()
+	{
+		$this->I->click("$this->reportPopupSelector .pagination > li:nth-of-type(4) a");
+		usleep(Random::microseconds(1, 1.5));
+	}
+
 }
 
 class MissingSectionException extends \Exception {};

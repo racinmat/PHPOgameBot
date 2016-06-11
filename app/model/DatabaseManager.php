@@ -171,20 +171,34 @@ class DatabaseManager extends Object
 		return $this->playerRepository->countBy([]);
 	}
 
-	public function getPlanetsWithAllInformationCount() : int
-	{
-		return $this->planetRepository->countBy(['probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION]);
-	}
-
-	public function getPlanetsWithSomeInformationCount() : int
+	public function getInactivePlanetsWithAllInformationCount() : int
 	{
 		return $this->planetRepository->countBy([
-			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
-			'player.probesToLastEspionage >' => 0
+			'probingStatus' => PlanetProbingStatus::GOT_ALL_INFORMATION,
+			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'
 		]);
 	}
 
-	public function getPlanetsWithoutFleetAndDefenseCount() : int
+	public function getInactivePlanetsWithSomeInformationCount() : int
+	{
+		return $this->planetRepository->countBy([
+			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+			'player.probesToLastEspionage >' => 0,
+			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'
+		]);
+	}
+
+	public function getInactivePlanetsWithNoInformationCount() : int
+	{
+		return $this->planetRepository->countBy([
+			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+			'player.probesToLastEspionage' => 0,
+			'player.probingStatus' => ProbingStatus::MISSING_FLEET,
+			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'
+		]);
+	}
+
+	public function getInactivePlanetsWithoutFleetAndDefenseCount() : int
 	{
 		return $this->planetRepository->countBy($this->getNoFleetAndNoDefenseFilter());
 	}
