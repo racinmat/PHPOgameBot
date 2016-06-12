@@ -5,6 +5,7 @@ namespace App\Model\Queue;
 use App\Model\Queue\Command\ICommand;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 use Ramsey\Uuid\Uuid;
 
@@ -14,12 +15,13 @@ class QueueManager extends Object
 	/** @var QueueFileRepository */
 	private $queueRepository;
 
-	/**
-	 * @param QueueFileRepository $queueRepository
-	 */
-	public function __construct(QueueFileRepository $queueRepository)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(QueueFileRepository $queueRepository, Logger $logger)
 	{
 		$this->queueRepository = $queueRepository;
+		$this->logger = $logger;
 	}
 
 	public function addToQueue(ICommand $command)
@@ -27,6 +29,7 @@ class QueueManager extends Object
 		$queue = $this->queueRepository->loadQueue();
 		$queue->add($command);
 		$this->queueRepository->saveQueue($queue);
+		$this->logger->addDebug("Command was added to queue: $command");
 	}
 
 	public function addToRepetitiveCommands(ICommand $command)
@@ -34,6 +37,7 @@ class QueueManager extends Object
 		$queue = $this->queueRepository->loadRepetitiveCommands();
 		$queue->add($command);
 		$this->queueRepository->saveRepetitiveCommands($queue);
+		$this->logger->addDebug("Command was added to repetitive commands: $command");
 	}
 
 	public function removeCommand(Uuid $uuid)
@@ -44,6 +48,7 @@ class QueueManager extends Object
 				return ! $c->getUuid()->equals($uuid);
 			});
 			$this->queueRepository->saveQueue($queue);
+			$this->logger->addDebug("Command with id $uuid was removed from queue.");
 			return;
 		}
 		if ($this->isCommandInRepetitive($uuid)) {
@@ -52,6 +57,7 @@ class QueueManager extends Object
 				return ! $c->getUuid()->equals($uuid);
 			});
 			$this->queueRepository->saveRepetitiveCommands($queue);
+			$this->logger->addDebug("Command with id $uuid was removed from repetitive commands.");
 			return;
 		}
 	}
