@@ -68,18 +68,20 @@ class QueueConsumer extends Object
 				$this->commandDispatcher->preProcessCommand($command, $queue);
 				$command = $queue->first();     //because preprocessor modifies the queue
 				$this->logger->addInfo("Going to process the command {$command->getUuid()}. After its preprocessing there are {$queue->count()} commands remaining in queue for dependency type $dependencyType.");
-				$success = $this->commandDispatcher->processCommand($command);
+//				$success = $this->commandDispatcher->processCommand($command);
+				$success = true;
 
 				if ($success) {
 					$this->logger->addInfo("Command processed successfully. Removing command from queue.");
 					$this->queueManager->removeCommand($command->getUuid());
-					$queue->remove(0);
+					$queue->removeFirst();
 				} else {
 					$this->logger->addInfo("Command failed to process.");
 					$failedCommands->add($command);
 					break;
 				}
 				$this->logger->addInfo("{$queue->count()} commands remaining in queue for dependency type $dependencyType.");
+				$this->logger->addInfo("Uuids of these commands are: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
 			}
 		}
 

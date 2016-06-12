@@ -43,4 +43,10 @@ class ArrayCollection extends \Doctrine\Common\Collections\ArrayCollection
 		return new static($elements);
 	}
 
+	public function removeFirst()
+	{
+		$this->first();
+		$key = $this->key();
+		$this->remove($key);
+	}
 }

@@ -257,10 +257,28 @@ function add(int $a, int $b) : int {
 //var_dump(implode(PHP_EOL, $lines));
 //var_dump(preg_grep('~command~i', $lines));
 //var_dump(\Nette\Utils\Strings::match("[2016-06-02 00:51:40] serverLogger.INFO: Removing non existing planet from coordinates [1:69:6] [] []", '~\[\d+:\d+:\d+\]~'));
-$sth = 'hello world';
-$fun = function () use (&$sth) {
-	$sth = 'goodbye world';
-};
-var_dump($sth);
-$fun();
-var_dump($sth);
+//$sth = 'hello world';
+//$fun = function () use (&$sth) {
+//	$sth = 'goodbye world';
+//};
+//var_dump($sth);
+//$fun();
+//var_dump($sth);
+
+$commands = new \App\Utils\ArrayCollection();
+$coordinates = (new \App\Model\ValueObject\Coordinates(1,2,3))->toArray();
+for ($i = 0; $i < 5; $i++) {
+	$command = \App\Model\Queue\Command\ProbeFarmsCommand::fromArray([
+		'coordinates' => $coordinates,
+		'data' => [
+			'limit' => 10,
+			'visitedBefore' => (new CarbonInterval(0, 0, 0, 0, 1, 2))->__toString()
+		]
+	]);
+	$commands->add($command);
+}
+while (!$commands->isEmpty()) {
+	$commands->remove(0);
+//	var_dump($commands);
+	echo 'removed' . PHP_EOL;
+}
