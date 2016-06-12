@@ -186,12 +186,14 @@ class FleetManager extends Object implements ICommandProcessor
 			return false;
 		}
 		$this->logger->addDebug('Processing available, starting to process the command.');
-		foreach ($command->getFleet() as $ship => $count) {
-			if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
-				return false;
+		do {
+			foreach ($command->getFleet() as $ship => $count) {
+				if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
+					return false;
+				}
+				$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
 			}
-			$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
-		}
+		} while ( ! $I->seeElementExists('#continue.on'));
 		$I->click('#continue.on');
 		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
 
