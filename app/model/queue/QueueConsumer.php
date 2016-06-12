@@ -10,6 +10,8 @@ use App\Utils\Functions;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
+use Nette\Utils\Arrays;
+use Nette\Utils\Json;
 
 class QueueConsumer extends Object
 {
@@ -52,12 +54,20 @@ class QueueConsumer extends Object
 			$dependencyTypes[$dependencyType]->add($command);
 		}
 		$failedCommands = new ArrayCollection();
-		foreach ($dependencyTypes as $planetCoordinates => $queue) {
+
+		$this->logger->addInfo("Commands categorized to types.");
+		foreach ($dependencyTypes as $dependencyType => $queue) {
+			$this->logger->addDebug("Uuids in queue for dependency type $dependencyType: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
+		}
+
+		$this->logger->addInfo("Starting to process queue.");
+		foreach ($dependencyTypes as $dependencyType => $queue) {
 			/** @var ICommand $command */
 			while(!$queue->isEmpty()) {
 				$command = $queue->first();
 				$this->commandDispatcher->preProcessCommand($command, $queue);
 				$command = $queue->first();     //because preprocessor modifies the queue
+				$this->logger->addInfo("Going to process the command {$command->getUuid()}. After its preprocessing there are {$queue->count()} commands remaining in queue for dependency type $dependencyType.");
 				$success = $this->commandDispatcher->processCommand($command);
 
 				if ($success) {
@@ -69,15 +79,18 @@ class QueueConsumer extends Object
 					$failedCommands->add($command);
 					break;
 				}
+				$this->logger->addInfo("{$queue->count()} commands remaining in queue for dependency type $dependencyType.");
 			}
 		}
 
+		$this->logger->addInfo("Queue processed. Starting to process repetitive commands.");
 		//repetitive commands
 		$repetitiveCommands = $this->queueManager->getRepetitiveCommands();
 		foreach ($repetitiveCommands as $repetitiveCommand) {
 			$this->commandDispatcher->processCommand($repetitiveCommand);
 		}
 
+		$this->logger->addInfo("Repetitive commands processed.");
 		$this->resolveTimeOfNextRun($failedCommands->merge($repetitiveCommands));
 	}
 
