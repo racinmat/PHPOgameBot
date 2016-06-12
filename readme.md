@@ -8,9 +8,10 @@ TODO
 -----
 - add command read players score. Add showing of players who have big difference between total (or economic) score and military score - potentional farms
 - add incoming resources to calculation of time to process some command which needs these resources
+- skip repetitious probing when too few slots is available
 - refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
-- fleetsave from main planet. Fleetsave only in pauses between two enhancements
+- fleetsave from main planet. Fleetsave only in pauses between two enhancements. Fleetsave only resources that are not needed
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
 - fix creating new profiles in selenium webdriver (it takes too much space in disc)
 - maybe bugfix: when parsing time to complete upgrade, the real time is few seconds later than parsed time
@@ -54,3 +55,6 @@ TODO
 - maybe try to implement generating construction list from Ogame Automizer
 - randomize intervals, set how slow or big should be waiting betewwn actions (slider more bot - more human)
 - setting automating resources sending and automatic building (e.g. for satellites for Graviton technology)
+- when enhancement and batch probing are in queue, process the probing first, so enhancement is right before repetitive resurces transportation
+	- this is must have because long pause between enhancing and repetitious resources transport sends resources intended for enhancement back.
+- propably do not send resources from planet when enhancement is in queue in that planet

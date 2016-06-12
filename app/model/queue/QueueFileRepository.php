@@ -14,6 +14,7 @@ use App\Model\Queue\Command\UpgradeBuildingCommand;
 use App\Model\Queue\Command\UpgradeResearchCommand;
 use App\Utils\Functions;
 use App\Utils\ArrayCollection;
+use Kdyby\Monolog\Logger;
 use Nette\Object;
 
 use Nette\Utils\Json;
@@ -27,10 +28,14 @@ class QueueFileRepository extends Object
 	/** @var string */
 	private $repetitiveCommandsFile;
 
-	public function __construct(string $queueFile, string $repetitiveCommandsFile)
+	/** @var Logger */
+	private $logger;
+
+	public function __construct(string $queueFile, string $repetitiveCommandsFile, Logger $logger)
 	{
 		$this->queueFile = $queueFile;
 		$this->repetitiveCommandsFile = $repetitiveCommandsFile;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -40,7 +45,9 @@ class QueueFileRepository extends Object
 	public function loadQueue() : ArrayCollection
 	{
 		$queueCollection = new ArrayCollection(Json::decode(file_get_contents($this->queueFile), Json::FORCE_ARRAY));
-		return $queueCollection->map($this->arrayToCommandCallback());
+		$queue = $queueCollection->map($this->arrayToCommandCallback());
+		$this->logger->addDebug("Loading queue with ids: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
+		return $queue;
 	}
 
 	private function arrayToCommand(array $data) : ICommand
@@ -81,6 +88,7 @@ class QueueFileRepository extends Object
 
 	public function saveQueue(ArrayCollection $queue)
 	{
+		$this->logger->addDebug("Saving queue with ids: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
 		$array = $queue->map(Functions::toArray())->getValues();
 		file_put_contents($this->queueFile, Json::encode($array, Json::PRETTY));
 	}
@@ -92,11 +100,14 @@ class QueueFileRepository extends Object
 	public function loadRepetitiveCommands() : ArrayCollection
 	{
 		$queueCollection = new ArrayCollection(Json::decode(file_get_contents($this->repetitiveCommandsFile), Json::FORCE_ARRAY));
-		return $queueCollection->map($this->arrayToCommandCallback());
+		$queue = $queueCollection->map($this->arrayToCommandCallback());
+		$this->logger->addDebug("Loading repetitive commands with ids: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
+		return $queue;
 	}
 
 	public function saveRepetitiveCommands(ArrayCollection $queue)
 	{
+		$this->logger->addDebug("Saving repetitive commands with ids: " . Json::encode($queue->map(Functions::commandToUuidString())->toArray()));
 		$array = $queue->map(Functions::toArray())->getValues();
 		file_put_contents($this->repetitiveCommandsFile, Json::encode($array, Json::PRETTY));
 	}

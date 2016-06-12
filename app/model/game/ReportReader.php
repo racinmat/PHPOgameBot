@@ -181,7 +181,6 @@ class ReportReader extends Object
 		$I->waitForElementVisible($selector);
 		if ($I->seeElementExists($selector . ' li.detail_list_fail')) {
 			$unsuccessful();
-			throw new MissingSectionException();
 		} else {
 			$count = $I->getNumberOfElements($selector . ' li');
 			for ($i = 1; $i <= $count; $i++) {
@@ -258,5 +257,3 @@ class ReportReader extends Object
 	}
 
 }
-
-class MissingSectionException extends \Exception {};

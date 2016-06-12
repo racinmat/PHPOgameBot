@@ -60,6 +60,7 @@ class DashboardPresenter extends BasePresenter
 		$this->template->repetitiveCommands = $this->queueRepository->loadRepetitiveCommands();
 		$this->template->nextRunTime = $nextRunTime;
 		$this->template->running = ! $isRunningEmpty;
+		$this->template->stopped = $running === 'stopped';
 		$this->template->players = $this->databaseManager->getAllPlayersCount();
 		$this->template->planets = $this->databaseManager->getAllPlanetsCount();
 		$this->template->inactivePlayers = $this->databaseManager->getInactivePlayersCount();
@@ -105,4 +106,17 @@ class DashboardPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
+	public function actionDisableBot()
+	{
+		$running = file_put_contents($this->runningFile, 'stopped');
+		$this->flashMessage('Bot disabled.', 'info');
+		$this->redirect('default');
+	}
+
+	public function actionEnableBot()
+	{
+		$running = file_put_contents($this->runningFile, '');
+		$this->flashMessage('Bot enabled.', 'info');
+		$this->redirect('default');
+	}
 }

@@ -29,14 +29,25 @@
 			<div class="row">
 				<span class="col-md-7">
 					{if $running}
-						Bot is currently running. <br/>
+						{if $stopped}
+							Bot is currently disabled. <br/>
+						{else}
+							Bot is currently running. <br/>
+						{/if}
 					{else}
 						Bot is not running. <br/>
 					{/if}
 					{$nextRunTime}
 				</span>
-				<span class="col-md-5">
+				<span class="col-md-2">
 					<a n:href="runBot" class="btn btn-warning">Run bot</a>
+				</span>
+				<span class="col-md-2">
+					{if $stopped}
+						<a n:href="enableBot" class="btn btn-success">Enable bot</a>
+					{else}
+						<a n:href="disableBot" class="btn btn-danger">Disable bot</a>
+					{/if}
 				</span>
 			</div>
 		</div>

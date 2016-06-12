@@ -94,6 +94,13 @@ class Functions extends Object
 		};
 	}
 
+	public static function commandToUuidString() : callable
+	{
+		return function (ICommand $command) :string {
+			return $command->getUuid()->toString();
+		};
+	}
+
 	public static function enumToValue() : callable
 	{
 		return function (Enum $enum) : string {
