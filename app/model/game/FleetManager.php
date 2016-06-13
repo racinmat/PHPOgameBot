@@ -57,7 +57,13 @@ class FleetManager extends Object implements ICommandProcessor
 
 	/** @var Cache */
 	private $cache;
-	
+
+	/**
+	 * Used to save one redundant reload during batch sending.
+	 * @var bool
+	 */
+	private $skipReload;
+
 	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo, IStorage $storage)
 	{
 		$this->I = $I;
@@ -68,6 +74,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->fleetInfo = $fleetInfo;
 		$this->cache = new Cache($storage, 'processedFlights');
+		$this->skipReload = false;
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -133,7 +140,13 @@ class FleetManager extends Object implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
-		$this->I->reloadPage(); //because the free fleets update only on page reload
+
+		if ($this->skipReload) {
+			$this->skipReload = false;
+		} else {
+			$this->I->reloadPage(); //because the free fleets update only on page reload
+		}
+
 
 		/** @var SendFleetCommand $command */
 		$freeFleets = $this->areFreeFleets();
@@ -350,6 +363,7 @@ class FleetManager extends Object implements ICommandProcessor
 				sleep($seconds);
 			}
 			try {
+				$this->skipReload = true;
 				$this->processCommand($command);
 			} catch(NonExistingPlanetException $e) {
 				if ($removeNonExistingPlanets) {
