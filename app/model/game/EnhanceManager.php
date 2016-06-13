@@ -4,12 +4,14 @@ namespace App\Model\Game;
 
 use App\Enum\Enhanceable;
 
+use App\Model\PageObject\FleetInfo;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\ICommandProcessor;
 use App\Model\Queue\QueueManager;
 use App\Model\ResourcesCalculator;
 use App\Utils\Random;
+use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -34,13 +36,17 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 	/** @var QueueManager */
 	protected $queueManager;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
+	/** @var FleetInfo */
+	protected $fleetInfo;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger, FleetInfo $fleetInfo)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
 		$this->resourcesCalculator = $resourcesCalculator;
 		$this->menu = $menu;
 		$this->logger = $logger;
+		$this->fleetInfo = $fleetInfo;
 	}
 
 	/**
@@ -85,6 +91,13 @@ abstract class EnhanceManager extends Object implements ICommandProcessor
 	{
 		/** @var IEnhanceCommand $command */
 		return $this->enhance($command);
+	}
+
+	protected function getTimeToEnoughResourcesToEnhance(IEnhanceCommand $command) : Carbon
+	{
+		$planet = $this->planetManager->getPlanet($command->getCoordinates());
+		$flightsWithResources = $this->fleetInfo->getFlightsCarryingResources();
+		return $this->resourcesCalculator->getTimeToEnoughResourcesToEnhance($planet, $command, $flightsWithResources);
 	}
 
 }

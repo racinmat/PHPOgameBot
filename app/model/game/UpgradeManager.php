@@ -5,6 +5,7 @@ namespace App\Model\Game;
 use App\Enum\Upgradable;
 use App\Model\DatabaseManager;
 
+use App\Model\PageObject\FleetInfo;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\Queue\Command\IUpgradeCommand;
@@ -19,9 +20,9 @@ class UpgradeManager extends EnhanceManager implements ICommandProcessor
 	/** @var DatabaseManager */
 	protected $databaseManager;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger, DatabaseManager $databaseManager)
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger, DatabaseManager $databaseManager, FleetInfo $fleetInfo)
 	{
-		parent::__construct($I, $planetManager, $resourcesCalculator, $menu, $logger);
+		parent::__construct($I, $planetManager, $resourcesCalculator, $menu, $logger, $fleetInfo);
 		$this->databaseManager = $databaseManager;
 	}
 
@@ -44,7 +45,7 @@ class UpgradeManager extends EnhanceManager implements ICommandProcessor
 		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($planet);
 		/** @var IUpgradeCommand $command */
-		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesToEnhance($planet, $command);
+		$datetime1 = $this->getTimeToEnoughResourcesToEnhance($command);
 		$datetime2 = $this->planetManager->getTimeToFinish($command->getUpgradable());
 		return $datetime1->max($datetime2);
 	}

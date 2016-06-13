@@ -9,6 +9,8 @@ use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Resources;
 
+use App\Utils\ArrayCollection;
+use App\Utils\Functions;
 use Carbon\Carbon;
 
 use Kdyby\Monolog\Logger;
@@ -61,9 +63,18 @@ class ResourcesCalculator extends Nette\Object
 		return $enough;
 	}
 
-	public function getTimeToEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command) : Carbon
+	public function getTimeToEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command, ArrayCollection $flightsWithResources) : Carbon
 	{
-		return $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
+		//todo: dodělat
+//		if ($flightsWithResources->isEmpty()) {
+			return $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
+//		}
+//		//flights are already sorted by time to arrive
+//		while ( ! $flightsWithResources->isEmpty()) {
+//			$nearest = $flightsWithResources[0];
+//			$time = $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
+//		}
+
 	}
 
 	private function getMissingResources(Planet $planet, Resources $expected) : Resources

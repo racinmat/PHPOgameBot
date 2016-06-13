@@ -8,6 +8,7 @@ use App\Model\Queue\Command\ArraySerializable;
 use App\Model\Queue\Command\ICommand;
 use App\Model\Queue\Command\IEnhanceCommand;
 use App\Model\ValueObject\Coordinates;
+use App\Model\ValueObject\Flight;
 use Carbon\Carbon;
 use Nette\DI\Container;
 use Nette\Object;
@@ -51,7 +52,7 @@ class Functions extends Object
 		};
 	}
 
-	public static function planetToNameAndTextCoordinates()
+	public static function planetToNameAndTextCoordinates() : callable
 	{
 		return function (Planet $planet) : string {
 			return $planet->getName() . ' ' . $planet->getCoordinates()->toString();
@@ -59,13 +60,19 @@ class Functions extends Object
 	}
 
 
-	public static function planetToCoordinates()
+	public static function planetToCoordinates() : callable
 	{
 		return function (Planet $planet) : Coordinates {
 			return $planet->getCoordinates();
 		};
 	}
 
+	public static function flightCarriesResources() : callable
+	{
+		return function (Flight $flight) : bool {
+			return $flight->carriesResources();
+		};
+	}
 	public static function compareCarbonDateTimes() : callable
 	{
 		return function (Carbon $a, Carbon $b) : int {

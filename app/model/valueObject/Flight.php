@@ -166,4 +166,16 @@ class Flight extends Nette\Object
 		};
 	}
 
+	public function getResources() : Resources
+	{
+		return $this->resources;
+	}
+
+	public function carriesResources() : bool
+	{
+		$hasResources = ! $this->getResources()->isZero();
+		$isNotReturningTransport = $this->getStatus() === FleetMission::_(FleetMission::TRANSPORT) && ! $this->isReturning();
+		$isDeployment = $this->getStatus() === FleetMission::_(FleetMission::DEPLOYMENT);
+		return $hasResources && ($isNotReturningTransport || $isDeployment);
+	}
 }

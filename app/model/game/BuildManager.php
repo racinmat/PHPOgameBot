@@ -17,12 +17,7 @@ use Kdyby\Monolog\Logger;
 
 class BuildManager extends EnhanceManager implements ICommandProcessor
 {
-
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, ResourcesCalculator $resourcesCalculator, Menu $menu, Logger $logger)
-	{
-		parent::__construct($I, $planetManager, $resourcesCalculator, $menu, $logger);
-	}
-
+	
 	protected function fillAdditionalInfo(IEnhanceCommand $command) {
 		/** @var IBuildCommand $command */
 		$amount = $command->getAmount();
@@ -37,9 +32,8 @@ class BuildManager extends EnhanceManager implements ICommandProcessor
 
 	public function getTimeToProcessingAvailable(ICommand $command) : Carbon
 	{
-		$planet = $this->planetManager->getPlanet($command->getCoordinates());
 		/** @var IBuildCommand $command */
-		$datetime1 = $this->resourcesCalculator->getTimeToEnoughResourcesToEnhance($planet, $command);
+		$datetime1 = $this->getTimeToEnoughResourcesToEnhance($command);
 		return $datetime1;
 	}
 

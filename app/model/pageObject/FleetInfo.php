@@ -212,6 +212,11 @@ class FleetInfo extends Object
 		return $this->flights;
 	}
 
+	public function getFlightsCarryingResources() : ArrayCollection
+	{
+		return $this->getFlights()->filter(Functions::flightCarriesResources());
+	}
+
 	/**
 	 * @return Carbon[]|ArrayCollection
 	 */

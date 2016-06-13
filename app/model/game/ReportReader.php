@@ -51,13 +51,11 @@ class ReportReader extends Object
 		usleep(Random::microseconds(1, 2));
 
 		$this->goToReport(1);
-		$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
-		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		$reportsCount = $this->getReportsCount();
 		$this->logger->addInfo("Going to read max $reportsCount reports to date $from.");
 
 		for ($i = 1; $i < $reportsCount; $i++) {
-			$reports = $I->grabTextFrom("$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active");
-			list($currentReport, $reportsCount) = OgameParser::parseSlash($reports);
+			$currentReport = $this->getCurrentIndex();
 
 			//check report number
 			if ($currentReport !== $i) {
@@ -197,12 +195,37 @@ class ReportReader extends Object
 		}
 	}
 
+	private function getCurrentIndex() : int
+	{
+		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
+		$I = $this->I;
+		$I->waitForElementVisible($reportCountSelector);
+		$reports = $I->grabTextFrom($reportCountSelector);
+		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		return $currentIndex;
+	}
+
+	private function getReportsCount() : int
+	{
+		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
+		$I = $this->I;
+		$I->waitForElementVisible($reportCountSelector);
+		$reports = $I->grabTextFrom($reportCountSelector);
+		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		return $reportsCount;
+	}
+
 	private function goToReport(int $index)
 	{
-		$I = $this->I;
-		$this->logger->addDebug("Going to report with number $index.");
-		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
+		$currentIndex = $this->getCurrentIndex();
+		if ($currentIndex === $index) {
+			return;
+		}
 
+		$this->logger->addDebug("Going to report with number $index.");
+
+		$I = $this->I;
+		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
 		if ( ! $I->seeElementExists($reportCountSelector)) {   //report popup is not opened
 			//open report popup
 			$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
@@ -212,15 +235,12 @@ class ReportReader extends Object
 			$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
 		}
 
-		$I->waitForElementVisible($reportCountSelector);
-		$reports = $I->grabTextFrom($reportCountSelector);
-		list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+		$currentIndex = $this->getCurrentIndex();
 
 		//if report is
 		if ($index === 1) {
 			$this->goToFirstReport();
-			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
-			list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+			$currentIndex = $this->getCurrentIndex();
 			if ($currentIndex !== 1) {
 				$this->logger->addWarning("Went to 1. report, but stayed in report $currentIndex.");
 			}
@@ -233,8 +253,7 @@ class ReportReader extends Object
 			} else {
 				$this->goToPreviousReport();
 			}
-			$reports = $I->grabTextFrom($this->reportPopupSelector . ' li.p_li.active > a.fright.txt_link.msg_action_link.active');
-			list($currentIndex, $reportsCount) = OgameParser::parseSlash($reports);
+			$currentIndex = $this->getCurrentIndex();
 		}
 
 	}

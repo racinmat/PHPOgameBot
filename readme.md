@@ -58,3 +58,8 @@ TODO
 - when enhancement and batch probing are in queue, process the probing first, so enhancement is right before repetitive resurces transportation
 	- this is must have because long pause between enhancing and repetitious resources transport sends resources intended for enhancement back.
 - propably do not send resources from planet when enhancement is in queue in that planet
+- add flying time to counting of resources of farms and amount of cargoes to send
+- for batch fleet sending (probing and farm attacking), set the free slots limit when the command will be processed (will be used for isProcessingAvailable and getTimeToProcessingAvailable)
+	- the limit can be possibly calculated as a fraction of the limit of ships in command
+- add better invalidation for flights. Compare current count of flights and loaded count of flights. When they differ, invalidate. Detect attack by red triangle and then invalidate.
+	- do not invalidate every 3 minutes, just when it is needed by comparing loaded and current count of flights. Remove past flights from loaded before comparing.

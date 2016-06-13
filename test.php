@@ -278,7 +278,7 @@ for ($i = 0; $i < 5; $i++) {
 	$commands->add($command);
 }
 while (!$commands->isEmpty()) {
-	$commands->remove(0);
+	$commands->removeFirst();
 //	var_dump($commands);
 	echo 'removed' . PHP_EOL;
 }
