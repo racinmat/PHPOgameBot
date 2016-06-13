@@ -572,12 +572,9 @@ class Planet extends Object
 		$this->deuterium = $deuterium;
 	}
 
-	/**
-	 * @return Carbon
-	 */
-	public function getLastVisited()
+	public function getLastVisited() : Carbon
 	{
-		return $this->lastVisited;
+		return $this->lastVisited->copy();
 	}
 
 	/**

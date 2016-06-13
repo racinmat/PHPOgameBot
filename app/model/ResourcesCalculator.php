@@ -7,6 +7,7 @@ namespace App\Model;
 
 use App\Model\Entity\Planet;
 use App\Model\Queue\Command\IEnhanceCommand;
+use App\Model\ValueObject\Flight;
 use App\Model\ValueObject\Resources;
 
 use App\Utils\ArrayCollection;
@@ -65,16 +66,23 @@ class ResourcesCalculator extends Nette\Object
 
 	public function getTimeToEnoughResourcesToEnhance(Planet $planet, IEnhanceCommand $command, ArrayCollection $flightsWithResources) : Carbon
 	{
-		//todo: dodělat
-//		if ($flightsWithResources->isEmpty()) {
-			return $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
-//		}
-//		//flights are already sorted by time to arrive
-//		while ( ! $flightsWithResources->isEmpty()) {
-//			$nearest = $flightsWithResources[0];
-//			$time = $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
-//		}
-
+		$time = $this->getTimeToEnoughResources($planet, $command->getPrice($planet));
+		if ($flightsWithResources->isEmpty()) {
+			return $time;
+		}
+		//flights are already sorted by time to arrive
+		$price = $command->getPrice($planet);
+		/** @var Flight $flight */
+		foreach ($flightsWithResources as $flight) {
+			if ($flight->getArrivalTime()->lt($time)) {
+				$price = $price->subtract($flight->getResources());
+				$time = $this->getTimeToEnoughResources($planet, $price);
+			} else {
+				break;
+			}
+			$time = $time->max($flight->getArrivalTime());
+		}
+		return $time;
 	}
 
 	private function getMissingResources(Planet $planet, Resources $expected) : Resources
