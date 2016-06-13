@@ -21,6 +21,7 @@ use App\Model\ValueObject\Fleet;
 use App\Utils\Functions;
 use App\Utils\OgameParser;
 use App\Utils\Random;
+use App\Utils\Strings;
 use Carbon\Carbon;
 
 use Facebook\WebDriver\Exception\TimeOutException;
@@ -180,41 +181,72 @@ class FleetManager extends Object implements ICommandProcessor
 		$myPlanet = $this->planetManager->getPlanet($command->getCoordinates());
 		$this->menu->goToPlanet($myPlanet);
 		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
+		$fast = $command->isFast();
 
 		if (!$this->isProcessingAvailable($command)) {
 			$this->logger->addDebug('Processing not available.');
 			return false;
 		}
 		$this->logger->addDebug('Processing available, starting to process the command.');
-		do {
-			foreach ($command->getFleet() as $ship => $count) {
-				if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
-					return false;
-				}
-				$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
+
+		if ($fast) {
+			$type = 1;  //planet
+//			$type = 3   //moon
+			if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
+				$type = 2;  //debris
 			}
-		} while ( ! $I->seeElementExists('#continue.on'));
+			//todo: add type to debris
+			$parameters = [
+				'galaxy' => $to->getGalaxy(),
+				'system' => $to->getSystem(),
+				'position' => $to->getPlanet(),
+				'type' => $type,
+				'mission' => $command->getMission()->getNumber(),
+				'speed' => $command->getSpeed() / 10
+			];
+			foreach ($command->getFleet() as $shipName => $count) {
+				$ship = Ships::_($shipName);
+				$parameters['am' . $ship->getNumber()] = $count;
+			}
+			$I->amOnUrl(Strings::appendGetParametersToUrl($I->grabFromCurrentUrl(), $parameters));
+		} else {
+			do {
+				foreach ($command->getFleet() as $ship => $count) {
+					if ($I->seeElementExists(Ships::_($ship)->getFleetInputSelector() . ':disabled')) {
+						return false;
+					}
+					$I->fillField(Ships::_($ship)->getFleetInputSelector(), $count);
+				}
+			} while ( ! $I->seeElementExists('#continue.on'));
+		}
+
 		$I->click('#continue.on');
 		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
 
-		if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
-			$I->click('a.debris');
+
+		if ($fast) {
+			$I->waitForElement('#continue.on');
+		} else {
+			if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
+				$I->click('a.debris');
+				usleep(Random::microseconds(0.5, 1));
+			}
+
+			$I->click((string) $command->getSpeed(), '#speedLinks');
 			usleep(Random::microseconds(0.5, 1));
+
+			do {
+				$I->fillField('input#galaxy', $to->getGalaxy());
+				$I->fillField('input#system', $to->getSystem());
+				if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
+					$I->fillField('input#position', 16);
+				} else {
+					$I->fillField('input#position', $to->getPlanet());
+				}
+				$this->logger->addDebug('Filled coordinates.');
+			} while ( ! $I->seeElementExists('#continue.on'));
 		}
 
-		$I->click((string) $command->getSpeed(), '#speedLinks');
-		usleep(Random::microseconds(0.5, 1));
-
-		do {
-			$I->fillField('input#galaxy', $to->getGalaxy());
-			$I->fillField('input#system', $to->getSystem());
-			if ($command->getMission() === FleetMission::_(FleetMission::EXPEDITION)) {
-				$I->fillField('input#position', 16);
-			} else {
-				$I->fillField('input#position', $to->getPlanet());
-			}
-			$this->logger->addDebug('Filled coordinates.');
-		} while ( ! $I->seeElementExists('#continue.on'));
 		$I->click('#continue.on');
 
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
@@ -239,12 +271,17 @@ class FleetManager extends Object implements ICommandProcessor
 			}
 		}
 
-		do {
-			$I->click($command->getMission()->getMissionSelector());
-			$this->logger->addDebug('Selected mission.');
-			usleep(Random::microseconds(1, 2));
-		} while ( ! $I->seeElementExists('#start.on'));
+		if ($fast) {
+			$I->waitForElement('#start.on');
+		} else {
+			do {
+				$I->click($command->getMission()->getMissionSelector());
+				$this->logger->addDebug('Selected mission.');
+				usleep(Random::microseconds(1, 2));
+			} while ( ! $I->seeElementExists('#start.on'));
+		}
 
+		//resources can not be filled by url parameters
 		if ( ! $command->getResources()->isZero()) {
 			$I->fillField('input#metal', $command->getResources()->getMetal());
 			$I->fillField('input#crystal', $command->getResources()->getCrystal());

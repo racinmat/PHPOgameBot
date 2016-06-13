@@ -63,3 +63,4 @@ TODO
 	- the limit can be possibly calculated as a fraction of the limit of ships in command
 - add better invalidation for flights. Compare current count of flights and loaded count of flights. When they differ, invalidate. Detect attack by red triangle and then invalidate.
 	- do not invalidate every 3 minutes, just when it is needed by comparing loaded and current count of flights. Remove past flights from loaded before comparing.
+- do not wait for fleet sending when not enough ships is present buring batch fleet sending

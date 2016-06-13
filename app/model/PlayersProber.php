@@ -59,7 +59,8 @@ class PlayersProber extends Object implements ICommandProcessor
 			'data' => [
 				'to' => ['galaxy' => 1, 'system' => 1, 'planet' => 1],
 				'fleet' => [Ships::ESPIONAGE_PROBE => 1],
-				'mission' => FleetMission::ESPIONAGE
+				'mission' => FleetMission::ESPIONAGE,
+				'fast' => true
 			]
 		]);
 		return $this->fleetManager->getTimeToProcessingAvailable($probePlanetCommand);

@@ -90,7 +90,7 @@ class Ships extends Buildable
 		}
 	}
 
-	private function getNumber() : string
+	public function getNumber() : string
 	{
 		switch ($this->getValue()) {
 			case static::SMALL_CARGO_SHIP: return '202';

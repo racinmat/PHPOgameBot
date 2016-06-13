@@ -45,6 +45,12 @@ class SendFleetCommand extends BaseCommand
 	 */
 	private $speed;
 
+	/**
+	 * Default false, if true, fleet is sent by filling get parameters instead of form filling
+	 * @var bool
+	 */
+	private $fast;
+
 	public static function getAction() : string
 	{
 		return static::ACTION_SEND_FLEET;
@@ -59,7 +65,8 @@ class SendFleetCommand extends BaseCommand
 				'mission' => $this->mission->getValue(),
 				'resources' => $this->resources->toArray(),
 				'waitForResources' => $this->waitForResources,
-				'speed' => $this->speed
+				'speed' => $this->speed,
+				'fast' => $this->fast
 			]
 		];
 		return Arrays::mergeTree($data, parent::toArray());
@@ -74,6 +81,7 @@ class SendFleetCommand extends BaseCommand
 		$this->resources = isset($data['resources']) ? Resources::fromArray($data['resources']) : new Resources(0, 0, 0);
 		$this->waitForResources = $data['waitForResources'] ?? false;
 		$this->speed = $data['speed'] ?? 100;
+		$this->fast = $data['fast'] ?? false;
 
 		if ($this->fleet->isEmpty()) {
 			throw new \InvalidArgumentException("SendFleetCommand can not have empty fleet.");
@@ -160,6 +168,11 @@ class SendFleetCommand extends BaseCommand
 	public function setSpeed(int $speed)
 	{
 		$this->speed = $speed;
+	}
+
+	public function isFast() : bool
+	{
+		return $this->fast;
 	}
 
 }
