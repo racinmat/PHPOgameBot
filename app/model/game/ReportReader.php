@@ -217,26 +217,12 @@ class ReportReader extends Object
 
 	private function goToReport(int $index)
 	{
+		$this->openReportPopupIfClosed();
 		$currentIndex = $this->getCurrentIndex();
 		if ($currentIndex === $index) {
 			return;
 		}
-
 		$this->logger->addDebug("Going to report with number $index.");
-
-		$I = $this->I;
-		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
-		if ( ! $I->seeElementExists($reportCountSelector)) {   //report popup is not opened
-			//open report popup
-			$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
-			$I->waitForElementVisible($firstReportDetailsSelector);
-			$I->click($firstReportDetailsSelector);
-			usleep(Random::microseconds(1.5, 2.5));
-			$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
-		}
-
-		$currentIndex = $this->getCurrentIndex();
-
 		//if report is
 		if ($index === 1) {
 			$this->goToFirstReport();
@@ -256,6 +242,20 @@ class ReportReader extends Object
 			$currentIndex = $this->getCurrentIndex();
 		}
 
+	}
+
+	private function openReportPopupIfClosed()
+	{
+		$I = $this->I;
+		$reportCountSelector = "$this->reportPopupSelector li.p_li.active > a.fright.txt_link.msg_action_link.active";
+		if ( ! $I->seeElementExists($reportCountSelector)) {   //report popup is not opened
+			//open report popup
+			$firstReportDetailsSelector = 'ul.tab_inner li.msg a.fright.txt_link.msg_action_link.overlay';  //there does not have to be nth-of-type(1), because the webDriver clicks only on the first occurrence, and that is what we want.
+			$I->waitForElementVisible($firstReportDetailsSelector);
+			$I->click($firstReportDetailsSelector);
+			usleep(Random::microseconds(1.5, 2.5));
+			$I->waitForText('Podrobnosti', null, '.ui-dialog-title');
+		}
 	}
 
 	private function goToFirstReport()
