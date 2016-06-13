@@ -108,4 +108,13 @@ class Acceptance extends \Codeception\Module
 		$loggerModule = $this->getModule('App\Model\Logging\CodeceptionMonologAdapter');
 		return $loggerModule->getLogger();
 	}
+
+	public function getWholeUrl() : string 
+	{
+		/** @var WebDriver $webDriverModule */
+		$webDriverModule =  $this->getModule('WebDriver');
+		/** @var RemoteWebDriver $webDriver */
+		$webDriver = $webDriverModule->webDriver;
+		return $webDriver->getCurrentURL();
+	}
 }

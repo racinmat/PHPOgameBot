@@ -265,20 +265,22 @@ function add(int $a, int $b) : int {
 //$fun();
 //var_dump($sth);
 
-$commands = new \App\Utils\ArrayCollection();
-$coordinates = (new \App\Model\ValueObject\Coordinates(1,2,3))->toArray();
-for ($i = 0; $i < 5; $i++) {
-	$command = \App\Model\Queue\Command\ProbeFarmsCommand::fromArray([
-		'coordinates' => $coordinates,
-		'data' => [
-			'limit' => 10,
-			'visitedBefore' => (new CarbonInterval(0, 0, 0, 0, 1, 2))->__toString()
-		]
-	]);
-	$commands->add($command);
-}
-while (!$commands->isEmpty()) {
-	$commands->removeFirst();
-//	var_dump($commands);
-	echo 'removed' . PHP_EOL;
-}
+//$commands = new \App\Utils\ArrayCollection();
+//$coordinates = (new \App\Model\ValueObject\Coordinates(1,2,3))->toArray();
+//for ($i = 0; $i < 5; $i++) {
+//	$command = \App\Model\Queue\Command\ProbeFarmsCommand::fromArray([
+//		'coordinates' => $coordinates,
+//		'data' => [
+//			'limit' => 10,
+//			'visitedBefore' => (new CarbonInterval(0, 0, 0, 0, 1, 2))->__toString()
+//		]
+//	]);
+//	$commands->add($command);
+//}
+//while (!$commands->isEmpty()) {
+//	$commands->removeFirst();
+////	var_dump($commands);
+//	echo 'removed' . PHP_EOL;
+//}
+\App\Utils\Strings::split('page=fleet1&galaxy=1&system=24', '~\&~');
+\App\Utils\Strings::extractParametersFromUrl('http://regexr.com/foo.html?q=bar');

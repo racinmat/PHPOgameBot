@@ -102,7 +102,8 @@ class Prober extends Object
 					'to' => $planet->getCoordinates()->toArray(),
 					'fleet' => [Ships::ESPIONAGE_PROBE => $probesAmount],
 					'mission' => FleetMission::ESPIONAGE,
-					'statuses' => $statuses->map(Functions::enumToValue())->toArray()
+					'statuses' => $statuses->map(Functions::enumToValue())->toArray(),
+					'fast' => true
 				]
 			]);
 		}

@@ -208,7 +208,7 @@ class FleetManager extends Object implements ICommandProcessor
 				$ship = Ships::_($shipName);
 				$parameters['am' . $ship->getNumber()] = $count;
 			}
-			$I->amOnUrl(Strings::appendGetParametersToUrl($I->grabFromCurrentUrl(), $parameters));
+			$I->amOnUrl(Strings::appendGetParametersToUrl($I->getWholeUrl(), $parameters));
 		} else {
 			do {
 				foreach ($command->getFleet() as $ship => $count) {
@@ -225,7 +225,7 @@ class FleetManager extends Object implements ICommandProcessor
 
 
 		if ($fast) {
-			$I->waitForElement('#continue.on');
+			usleep(Random::microseconds(0.2, 0.4));
 		} else {
 			if ($command->getMission() === FleetMission::_(FleetMission::HARVESTING)) {
 				$I->click('a.debris');
@@ -252,6 +252,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->logger->addDebug('Going to select mission, clicked on continue button.');
 
 		try {
+			usleep(Random::microseconds(0.2, 0.4));
 			$I->waitForText('Odeslání letky III', 5, '#planet > h2');
 		} catch(TimeOutException $e) {
 			$this->logger->addDebug('Url is still same. Can not proceed to next phase of fleet sending. Throwing exception.');
@@ -272,7 +273,7 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		if ($fast) {
-			$I->waitForElement('#start.on');
+			usleep(Random::microseconds(0.2, 0.4));
 		} else {
 			do {
 				$I->click($command->getMission()->getMissionSelector());

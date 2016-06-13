@@ -28,5 +28,17 @@ class Strings extends \Nette\Utils\Strings
 		$paramsString .= implode('&', $parameters);
 		return $url . $paramsString;
 	}
-	
+
+	public static function extractParametersFromUrl(string $url) : array 
+	{
+		$paramsString = static::match($url, '~\?[a-zA-Z0-9=&]+~')[0];
+		$paramsString = static::replace($paramsString, '~\?~', '');
+		$params = static::split($paramsString, '~&~');
+		$associativeParams = [];
+		foreach ($params as $param) {
+			list($key, $value) = static::split($param, '~=~');
+			$associativeParams[$key] = $value;
+		}
+		return $associativeParams;
+	}
 }
