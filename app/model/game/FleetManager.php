@@ -121,11 +121,17 @@ class FleetManager extends Object implements ICommandProcessor
 		return $minimalTime;
 	}
 
-	private function areFreeFleets() : bool
+	public function getFreeSlotsCount() : int
 	{
+		$this->menu->goToPage(MenuItem::_(MenuItem::FLEET));
 		$fleets = $this->I->grabTextFrom('#inhalt > div:nth-of-type(2) > #slots > div:nth-of-type(1) > span.tooltip');
 		list($occupied, $total) = OgameParser::parseSlash($fleets);
-		return $occupied < $total;
+		return $total - $occupied;
+	}
+
+	private function areFreeFleets() : bool
+	{
+		return $this->getFreeSlotsCount() > 0;
 	}
 
 	private function areFreeExpeditions() : bool

@@ -109,7 +109,8 @@ class FarmsAttacker extends Object implements ICommandProcessor
 
 	public function isProcessingAvailable(ICommand $command) : bool
 	{
-		return true;
+		/** @var AttackFarmsCommand $command */
+		return $this->fleetManager->getFreeSlotsCount() >= $command->getLimit();
 	}
 
 }
