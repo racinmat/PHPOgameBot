@@ -84,8 +84,8 @@ class ProcessQueueCommand extends CodeceptionUsingCommand {
 
 	private function process(OutputInterface $output)
 	{
-//		$this->attackChecker->checkIncomingAttacks();
-//		$output->writeln('Attacks checked before queue');
+		$this->attackChecker->checkIncomingAttacks();
+		$output->writeln('Attacks checked before queue');
 		$this->queueConsumer->processQueue();
 		$output->writeln('Queue processed');
 		$this->attackChecker->checkIncomingAttacks();

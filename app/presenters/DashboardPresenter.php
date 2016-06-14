@@ -43,12 +43,6 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public $databaseManager;
 
-	/**
-	 * @var PlanetCalculator
-	 * @inject
-	 */
-	public $planetCalculator;
-
 	public function renderDefault()
 	{
 		$cronTime = file_get_contents($this->cronFile);
@@ -71,13 +65,6 @@ class DashboardPresenter extends BasePresenter
 		$this->template->planetsToFarm = $this->databaseManager->getInactivePlanetsWithoutFleetAndDefenseCount();
 	}
 
-	public function renderResources()
-	{
-		list($resources, $lastVisited) = $this->planetCalculator->getResourcesEstimateAndLastVisitedForInactivePlanets();
-		$this->template->resources = $resources;
-		$this->template->lastVisited = $lastVisited;
-	}
-	
 	/**
 	 * @param string $cronFile
 	 */
@@ -108,14 +95,14 @@ class DashboardPresenter extends BasePresenter
 
 	public function actionDisableBot()
 	{
-		$running = file_put_contents($this->runningFile, 'stopped');
+		file_put_contents($this->runningFile, 'stopped');
 		$this->flashMessage('Bot disabled.', 'info');
 		$this->redirect('default');
 	}
 
 	public function actionEnableBot()
 	{
-		$running = file_put_contents($this->runningFile, '');
+		file_put_contents($this->runningFile, '');
 		$this->flashMessage('Bot enabled.', 'info');
 		$this->redirect('default');
 	}
