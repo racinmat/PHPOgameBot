@@ -66,6 +66,10 @@ class FarmsAttacker extends Object implements ICommandProcessor
 
 	public function processCommand(ICommand $command) : bool
 	{
+		if ( ! $this->isProcessingAvailable($command)) {
+			return false;
+		}
+		
 		/** @var AttackFarmsCommand $command */
 		$planets = $this->planetCalculator->getFarms($command->getLimit(), Carbon::now()->sub($command->getVisitedAfter()));
 		$fromPlanet = $this->databaseManager->getPlanet($command->getCoordinates());
