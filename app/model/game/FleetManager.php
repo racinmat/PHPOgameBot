@@ -263,6 +263,7 @@ class FleetManager extends Object implements ICommandProcessor
 					$I->fillField('input#position', $to->getPlanet());
 				}
 				$this->logger->addDebug('Filled coordinates.');
+				usleep(Random::microseconds(0.1, 0.2));
 			} while ( ! $I->seeElementExists('#continue.on'));
 		}
 
