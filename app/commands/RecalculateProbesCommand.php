@@ -49,11 +49,14 @@ class RecalculateProbesCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		/** @var DatabaseManager $databaseManager */
-		$databaseManager = $this->container->getByType(ReportReader::class);
+		$databaseManager = $this->container->getByType(DatabaseManager::class);
 		$me = $databaseManager->getMe();
 		$myLevel = $me->getEspionageTechnologyLevel();
 		$playersWithAllInfo = $databaseManager->getAllPlayers();
 		foreach ($playersWithAllInfo as $player) {
+			if ($player === $me) {
+				continue;
+			}
 			if ($player->getProbesToLastEspionage() === 0) {
 				continue;
 			}
@@ -66,7 +69,7 @@ class RecalculateProbesCommand extends Command {
 			$probesToAllInfo = OgameMath::calculateProbesToSend($myLevel, $enemyLevel, $player->getProbingStatus()->getMaximalResult());
 			$player->setProbesToLastEspionage($probesToAllInfo);
 		}
-//		$databaseManager->flush();
+		$databaseManager->flush();
 		return 0; // zero return code means everything is ok
 	}
 
