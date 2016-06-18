@@ -284,6 +284,7 @@ function add(int $a, int $b) : int {
 //}
 //\App\Utils\Strings::split('page=fleet1&galaxy=1&system=24', '~\&~');
 //\App\Utils\Strings::extractParametersFromUrl('http://regexr.com/foo.html?q=bar');
-/** @var \App\Model\Prober $prober */
-$prober = $container->getByType(\App\Model\Prober::class);
-echo $prober->calculateProbesAmountToGetAllInformation(7, \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::MISSING_RESEARCH));
+///** @var \App\Model\Prober $prober */
+//$prober = $container->getByType(\App\Model\Prober::class);
+//echo $prober->calculateProbesAmountToGetAllInformation(7, \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::MISSING_RESEARCH));
+echo \App\Utils\OgameMath::calculateProbesToGetAllInfo(8, 1, 7);

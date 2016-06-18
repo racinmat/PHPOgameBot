@@ -84,6 +84,7 @@ console:
 	commands:
 		- App\Commands\TestCommand
 		- App\Commands\ProcessQueueCommand
+		- App\Commands\RecalculateProbesCommand
 
 doctrine:
     types:

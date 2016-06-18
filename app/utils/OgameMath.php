@@ -25,7 +25,7 @@ class OgameMath extends Object
 
 	public static function calculateProbesToSend(int $myLevel, int $enemyLevel, int $desiredResult)
 	{
-		return $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel);
+		return max(1, $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel));
 	}
 
 	public static function calculateProbesToGetAllInfo(int $myLevel, int $probes, int $currentResult)

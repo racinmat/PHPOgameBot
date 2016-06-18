@@ -270,4 +270,12 @@ class DatabaseManager extends Object
 		return $this->playerRepository->findBy(['probingStatus' => ProbingStatus::GOT_ALL_INFORMATION]);
 	}
 
+	/**
+	 * @return Player[]
+	 */
+	public function getAllPlayers() : array
+	{
+		return $this->playerRepository->findAll();
+	}
+
 }
