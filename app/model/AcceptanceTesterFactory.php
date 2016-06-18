@@ -3,6 +3,8 @@
 namespace App\Model;
  
 use Codeception\Codecept;
+use Codeception\Scenario;
+use Codeception\Test\Unit;
 use Kdyby\Monolog\Logger;
 use Nette;
 

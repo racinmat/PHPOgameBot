@@ -110,7 +110,7 @@ class Prober extends Object
 		return $commands;
 	}
 
-	private function calculateProbesAmountToGetAllInformation(int $probes, ProbingStatus $information) : int
+	public function calculateProbesAmountToGetAllInformation(int $probes, ProbingStatus $information) : int
 	{
 		$me = $this->databaseManager->getMe();
 		$myLevel = $me->getEspionageTechnologyLevel();
@@ -124,7 +124,7 @@ class Prober extends Object
 
 	private function calculateEnemyLevel(int $myLevel, int $probes, int $result)
 	{
-		return $myLevel + gmp_sign($probes - $result) + sqrt(abs($probes - $result));
+		return $myLevel + gmp_sign($probes - $result) * sqrt(abs($probes - $result));
 	}
 
 }
