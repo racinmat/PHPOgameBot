@@ -54,10 +54,14 @@ class RecalculateProbesCommand extends Command {
 		$myLevel = $me->getEspionageTechnologyLevel();
 		$playersWithAllInfo = $databaseManager->getAllPlayers();
 		foreach ($playersWithAllInfo as $player) {
-			if ($player->getProbesToLastEspionage() == 0) {
+			if ($player->getProbesToLastEspionage() === 0) {
 				continue;
 			}
-			
+			if ($player->getProbingStatus() === ProbingStatus::_(ProbingStatus::CURRENTLY_PROBING)) {
+				$player->setProbesToLastEspionage(0);
+				$player->setProbingStatus(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
+			}
+
 			$enemyLevel = $player->getEspionageTechnologyLevel();
 			$probesToAllInfo = OgameMath::calculateProbesToSend($myLevel, $enemyLevel, $player->getProbingStatus()->getMaximalResult());
 			$player->setProbesToLastEspionage($probesToAllInfo);
