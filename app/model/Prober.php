@@ -13,6 +13,7 @@ use App\Model\Game\ReportReader;
 use App\Model\Queue\Command\SendFleetCommand;
 use App\Utils\ArrayCollection;
 use App\Utils\Functions;
+use App\Utils\OgameMath;
 use Carbon\Carbon;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
@@ -115,16 +116,9 @@ class Prober extends Object
 		$me = $this->databaseManager->getMe();
 		$myLevel = $me->getEspionageTechnologyLevel();
 		$currentResult = $information->getMaximalResult();
-		$desiredResult = ProbingStatus::_(ProbingStatus::GOT_ALL_INFORMATION)->getMinimalResult();
-		$enemyLevel = $this->calculateEnemyLevel($myLevel, $probes, $currentResult);
-		$probesToSend = $desiredResult - ($myLevel - $enemyLevel) * abs($myLevel - $enemyLevel);
+		$probesToSend = OgameMath::calculateProbesToGetAllInfo($myLevel, $probes, $currentResult);
 		$this->logger->addDebug("Calculating probes amount for $probes probes and probing status $information with result $currentResult. $probesToSend probes should be send to get all information.");
 		return $probesToSend;
-	}
-
-	private function calculateEnemyLevel(int $myLevel, int $probes, int $result)
-	{
-		return $myLevel + gmp_sign($probes - $result) * sqrt(abs($probes - $result));
 	}
 
 }

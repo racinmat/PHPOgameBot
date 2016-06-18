@@ -262,4 +262,12 @@ class DatabaseManager extends Object
 		];
 	}
 
+	/**
+	 * @return Player[]
+	 */
+	public function getPlayersWithAllInfo() : array
+	{
+		return $this->playerRepository->findBy(['probingStatus' => ProbingStatus::GOT_ALL_INFORMATION]);
+	}
+
 }
