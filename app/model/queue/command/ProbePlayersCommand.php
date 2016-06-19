@@ -125,7 +125,7 @@ class ProbePlayersCommand extends BaseCommand
 	 */
 	public function getPlanetProbingStatuses() : ArrayCollection
 	{
-		return $this->probingStatuses;
+		return $this->planetProbingStatuses;
 	}
 
 	public function isEvaluatedForNextRun() : bool

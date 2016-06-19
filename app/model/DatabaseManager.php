@@ -124,9 +124,9 @@ class DatabaseManager extends Object
 	public function getPlanetsFromCommand(ProbePlayersCommand $command) : array
 	{
 		$filter = [];
-		$command->getStatuses()->isEmpty() ?: $filter['player.status'] = $command->getStatuses()->toArray();
-		$command->getProbingStatuses()->isEmpty() ?: $filter['player.probingStatus'] = $command->getProbingStatuses()->toArray();
-		$command->getPlanetProbingStatuses()->isEmpty() ?: $filter['probingStatus'] = $command->getPlanetProbingStatuses()->toArray();
+		$command->getStatuses()->isEmpty() ?: $filter['player.status'] = $command->getStatusTexts();
+		$command->getProbingStatuses()->isEmpty() ?: $filter['player.probingStatus'] = $command->getProbingStatusTexts();
+		$command->getPlanetProbingStatuses()->isEmpty() ?: $filter['probingStatus'] = $command->getPlanetProbingStatusTexts();
 		$orderBy = [];
 		if ($command->isOrderActive()) {
 			$orderBy[$command->getOrderBy()->getValue()] = $command->getOrderType()->getValue();
