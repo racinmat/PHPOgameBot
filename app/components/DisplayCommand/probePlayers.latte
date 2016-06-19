@@ -2,4 +2,5 @@
 {block content}
 	Only with statuses: {$command->getStatusTexts()|implode:', '}<br/>
 	Only with probing statuses: {$command->getProbingStatusTexts()|implode:', '}<br/>
+	Only with planet probing statuses: {$command->getPlanetProbingStatusTexts()|implode:', '}<br/>
 	Limit: {$command->getLimit()}

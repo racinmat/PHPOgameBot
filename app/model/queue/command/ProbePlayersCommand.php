@@ -4,6 +4,7 @@ namespace App\Model\Queue\Command;
  
 use App\Enum\OrderPlanetsBy;
 use App\Enum\OrderType;
+use App\Enum\PlanetProbingStatus;
 use App\Enum\PlayerStatus;
 
 use App\Enum\ProbingStatus;
@@ -30,6 +31,9 @@ class ProbePlayersCommand extends BaseCommand
 	/** @var ProbingStatus[]|ArrayCollection */
 	private $probingStatuses;
 
+	/** @var PlanetProbingStatus[]|ArrayCollection */
+	private $planetProbingStatuses;
+
 	public static function getAction() : string
 	{
 		return static::ACTION_PROBE_PLAYERS;
@@ -41,6 +45,7 @@ class ProbePlayersCommand extends BaseCommand
 			'data' => [
 				'statuses' => $this->statuses->map(Functions::enumToValue())->toArray(),
 				'probingStatuses' => $this->probingStatuses->map(Functions::enumToValue())->toArray(),
+				'planetProbingStatuses' => $this->planetProbingStatuses->map(Functions::enumToValue())->toArray(),
 				'orderType' => $this->orderType->getValue(),
 				'limit' => $this->limit,
 				'orderBy' => $this->orderBy->getValue()
@@ -53,6 +58,7 @@ class ProbePlayersCommand extends BaseCommand
 	{
 		$this->statuses = (new ArrayCollection($data['statuses']))->map(function ($string) {return PlayerStatus::_($string);});
 		$this->probingStatuses = (new ArrayCollection($data['probingStatuses']))->map(function ($string) {return ProbingStatus::_($string);});
+		$this->planetProbingStatuses = (new ArrayCollection($data['planetProbingStatuses']))->map(function ($string) {return PlanetProbingStatus::_($string);});
 		$this->orderType = OrderType::_($data['orderType']);
 		$this->limit = $data['limit'];
 		$this->orderBy = OrderPlanetsBy::_($data['orderBy']);
@@ -81,6 +87,11 @@ class ProbePlayersCommand extends BaseCommand
 		return $this->probingStatuses->map(Functions::enumToValue())->toArray();
 	}
 
+	public function getPlanetProbingStatusTexts() : array
+	{
+		return $this->planetProbingStatuses->map(Functions::enumToValue())->toArray();
+	}
+
 	public function isOrderActive() : bool
 	{
 		return $this->orderBy->isActive() && $this->orderType->isActive();
@@ -102,9 +113,17 @@ class ProbePlayersCommand extends BaseCommand
 	}
 
 	/**
-	 * @return \App\Enum\ProbingStatus[]|ArrayCollection
+	 * @return ProbingStatus[]|ArrayCollection
 	 */
 	public function getProbingStatuses() : ArrayCollection
+	{
+		return $this->probingStatuses;
+	}
+
+	/**
+	 * @return PlanetProbingStatus[]|ArrayCollection
+	 */
+	public function getPlanetProbingStatuses() : ArrayCollection
 	{
 		return $this->probingStatuses;
 	}

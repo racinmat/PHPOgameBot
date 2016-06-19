@@ -123,10 +123,10 @@ class DatabaseManager extends Object
 	 */
 	public function getPlanetsFromCommand(ProbePlayersCommand $command) : array
 	{
-		$filter = [
-			'player.status' => $command->getStatuses()->toArray(),
-			'player.probingStatus' => $command->getProbingStatuses()->toArray()
-		];
+		$filter = [];
+		$command->getStatuses()->isEmpty() ?: $filter['player.status'] = $command->getStatuses()->toArray();
+		$command->getProbingStatuses()->isEmpty() ?: $filter['player.probingStatus'] = $command->getProbingStatuses()->toArray();
+		$command->getPlanetProbingStatuses()->isEmpty() ?: $filter['probingStatus'] = $command->getPlanetProbingStatuses()->toArray();
 		$orderBy = [];
 		if ($command->isOrderActive()) {
 			$orderBy[$command->getOrderBy()->getValue()] = $command->getOrderType()->getValue();
@@ -184,9 +184,9 @@ class DatabaseManager extends Object
 
 	public function getInactivePlanetsWithSomeInformationCount() : int
 	{
+		//selecting both players with all info and players with only some info. Because sometimes I have all info about player, but not info about all his planets
 		return $this->planetRepository->countBy([
 			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
-			'player.probingStatus !=' => ProbingStatus::GOT_ALL_INFORMATION,
 			'player.probesToLastEspionage >' => 0,
 			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'
 		]);

@@ -44,13 +44,13 @@ class TestCommand extends CodeceptionUsingCommand {
 		$reportReader = $this->container->getByType(ReportReader::class);
 		$signManager = $this->container->getByType(SignManager::class);
 		/** @var \AcceptanceTester $acceptanceTester */
-		$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
-		$acceptanceTester->logFailedAction(__DIR__, 'test.png');
+//		$acceptanceTester = $this->container->getByType(\AcceptanceTester::class);
+//		$acceptanceTester->logFailedAction(__DIR__, 'test.png');
 		/** @var FleetInfo $fleetInfo */
 		$fleetInfo = $this->container->getByType(FleetInfo::class);
 		$signManager->signIn();
 //		$fleetInfo->isAnyAttackOnMe();
-		$reportReader->readEspionageReportsFrom(Carbon::today()->subMinutes(30));
+		$reportReader->readEspionageReportsFrom(Carbon::now()->subMinutes(7));
 //		$command = SendFleetCommand::fromArray([
 //			'coordinates' => [
 //				'galaxy' => 1,
