@@ -137,6 +137,9 @@ class DatabaseManager extends Object
 	public function removePlanet(Coordinates $coordinates)
 	{
 		$planet = $this->getPlanet($coordinates);
+		if ($planet->getPlayer()->hasOnlyOnePlanet()) {
+			$this->entityManager->remove($planet->getPlayer());
+		}
 		$this->entityManager->remove($planet);
 		$this->entityManager->flush();
 	}
@@ -192,7 +195,7 @@ class DatabaseManager extends Object
 	public function getInactivePlanetsWithNoInformationCount() : int
 	{
 		return $this->planetRepository->countBy([
-//			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
 			'player.probesToLastEspionage' => 0,
 			'player.probingStatus' => ProbingStatus::MISSING_FLEET,
 			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'

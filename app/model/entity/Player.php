@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Enum\PlayerStatus;
 use App\Enum\ProbingStatus;
+use App\Utils\ArrayCollection;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities;
@@ -31,7 +32,7 @@ class Player extends Object
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Planet", mappedBy="player")
-	 * @var Planet[]
+	 * @var Planet[]|ArrayCollection
 	 */
 	private $planets;
 
@@ -193,6 +194,7 @@ class Player extends Object
 		$this->gravitonTechnologyLevel = 0;
 		$this->probesToLastEspionage = 0;
 		$this->probingStatus = ProbingStatus::_(ProbingStatus::MISSING_FLEET);
+		$this->planets = new ArrayCollection();
 	}
 
 	/**
@@ -538,6 +540,11 @@ class Player extends Object
 	public function setProbingStatus(ProbingStatus $probingStatus)
 	{
 		$this->probingStatus = $probingStatus;
+	}
+
+	public function hasOnlyOnePlanet() : int
+	{
+		return $this->planets->count() === 1;
 	}
 
 }
