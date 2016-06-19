@@ -183,6 +183,7 @@ class DatabaseManager extends Object
 	{
 		return $this->planetRepository->countBy([
 			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+			'player.probingStatus !=' => ProbingStatus::GOT_ALL_INFORMATION,
 			'player.probesToLastEspionage >' => 0,
 			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'
 		]);
@@ -191,7 +192,7 @@ class DatabaseManager extends Object
 	public function getInactivePlanetsWithNoInformationCount() : int
 	{
 		return $this->planetRepository->countBy([
-			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
+//			'probingStatus' => PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION,
 			'player.probesToLastEspionage' => 0,
 			'player.probingStatus' => ProbingStatus::MISSING_FLEET,
 			'player.status LIKE' => '%' . PlayerStatus::STATUS_INACTIVE . '%'

@@ -36,8 +36,8 @@ class PlayerStatus extends Enum
 
 		$classToStatus = [
 			'status_abbr_noob' => static::STATUS_NOOB,
-			'status_abbr_active' => static::STATUS_NOOB,
-			'status_abbr_honorableTarget' => static::STATUS_NOOB,
+			'status_abbr_active' => static::STATUS_ACTIVE,
+			'status_abbr_honorableTarget' => static::STATUS_HONORABLE_TARGET,
 			'status_abbr_vacation' => static::STATUS_VACATION,
 			'status_abbr_inactive' => static::STATUS_INACTIVE,
 			'status_abbr_strong' => static::STATUS_STRONG,
