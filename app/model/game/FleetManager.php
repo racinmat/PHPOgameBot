@@ -24,6 +24,7 @@ use App\Utils\Random;
 use App\Utils\Strings;
 use Carbon\Carbon;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\TimeOutException;
 use Kdyby\Monolog\Logger;
 use Nette\Caching\Cache;
@@ -189,7 +190,16 @@ class FleetManager extends Object implements ICommandProcessor
 	public function processCommand(ICommand $command) : bool
 	{
 		/** @var SendFleetCommand $command */
-		return $this->sendFleet($command);
+		$done = false;
+		while (!$done) {
+			try {
+				$fleetSent = $this->sendFleet($command);
+				$done = true;
+				return $fleetSent;
+			} catch(NoSuchElementException $e) {
+				$this->signManager->checkSignedIn();
+			}
+		}
 	}
 
 	private function sendFleet(SendFleetCommand $command) : bool
@@ -244,7 +254,6 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		$I->click('#continue.on');
-		$this->signManager->checkSignedIn();
 		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
 
 		if ($fast) {
