@@ -20,7 +20,7 @@ class OgameMath extends Object
 
 	public static function calculateEnemyLevel(int $myLevel, int $probes, int $result)
 	{
-		return $myLevel + gmp_sign($probes - $result) * sqrt(abs($probes - $result));
+		return ceil($myLevel + gmp_sign($probes - $result) * sqrt(abs($probes - $result)));
 	}
 
 	public static function calculateProbesToSend(int $myLevel, int $enemyLevel, int $desiredResult)

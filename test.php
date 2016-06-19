@@ -287,4 +287,4 @@ function add(int $a, int $b) : int {
 ///** @var \App\Model\Prober $prober */
 //$prober = $container->getByType(\App\Model\Prober::class);
 //echo $prober->calculateProbesAmountToGetAllInformation(7, \App\Enum\ProbingStatus::_(\App\Enum\ProbingStatus::MISSING_RESEARCH));
-echo \App\Utils\OgameMath::calculateProbesToGetAllInfo(8, 1, 7);
+echo \App\Utils\OgameMath::calculateProbesToGetAllInfo($myLevel = 10, $probes = 1, $currentResult = 6);
