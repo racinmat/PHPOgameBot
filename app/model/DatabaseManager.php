@@ -216,9 +216,10 @@ class DatabaseManager extends Object
 	/**
 	 * @param Carbon $lastVisitedFrom
 	 * @param Carbon $lastVisitedTo
+	 * @param bool $joinPlayers
 	 * @return Entity\Planet[]|array
 	 */
-	public function getInactiveDefenselessPlanets(Carbon $lastVisitedFrom = null, Carbon $lastVisitedTo = null) : array
+	public function getInactiveDefenselessPlanets(Carbon $lastVisitedFrom = null, Carbon $lastVisitedTo = null, bool $joinPlayers = false) : array
 	{
 		$filters = array_merge(
 			['player.status' => [PlayerStatus::STATUS_INACTIVE, PlayerStatus::STATUS_LONG_INACTIVE]],
@@ -230,7 +231,16 @@ class DatabaseManager extends Object
 		if ($lastVisitedTo !== null) {
 			$filters['lastVisited <'] = $lastVisitedTo;
 		}
-		return $this->planetRepository->findBy($filters);
+		if ($joinPlayers) {
+			return $this->planetRepository->createQueryBuilder('planet')
+				->addSelect('player')
+				->whereCriteria($filters)
+				->join('planet.player', 'player')
+				->getQuery()
+				->getResult();
+		} else {
+			return $this->planetRepository->findBy($filters);
+		}
 	}
 
 	private function getNoFleetAndNoDefenseFilter() : array

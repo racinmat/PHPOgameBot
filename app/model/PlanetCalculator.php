@@ -26,7 +26,7 @@ class PlanetCalculator extends Object
 
 	public function getResourcesEstimateAndLastVisitedForInactivePlanets()
 	{
-		$planets = $this->databaseManager->getInactiveDefenselessPlanets();
+		$planets = $this->databaseManager->getInactiveDefenselessPlanets(null, null, true);
 		$resources = $this->getResourcesEstimateForPlanets($planets);
 		$lastVisited = [];
 		foreach ($planets as $planet) {
