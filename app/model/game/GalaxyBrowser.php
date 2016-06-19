@@ -70,8 +70,6 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 
 	protected function scanSystem(Coordinates $coordinates, Planet $planet)
 	{
-		$myPlanetsCoordinates = $this->databaseManager->getAllMyPlanetsCoordinates();
-		
 		$I = $this->I;
 
 		$currentGalaxy = (int) $I->grabValueFrom('#galaxy_input', $coordinates->getGalaxy());
@@ -96,7 +94,14 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			}
 			$this->goToSystem($coordinates);    //sometimes refresh after getting stuck does not log me out. In that case, I only go to desired system without login
 		}
+		
+		$this->readPlanetsInfo($coordinates);
+	}
 
+	private function readPlanetsInfo(Coordinates $coordinates)
+	{
+		$I = $this->I;
+		$myPlanetsCoordinates = $this->databaseManager->getAllMyPlanetsCoordinates();
 		$planetCount = Coordinates::$maxPlanet;
 		$planetsInSystem = new ArrayCollection();
 		for ($i = 1; $i <= $planetCount; $i++) {
@@ -135,7 +140,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				$debrisMetal = 0;
 				$debrisCrystal = 0;
 			}
-			
+
 			$player = $this->databaseManager->getPlayer($playerName);
 			if ($player === null) {
 				$player = $this->databaseManager->addPlayer($playerName);
@@ -144,7 +149,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 			if ($planet === null) {
 				$planet = $this->databaseManager->addPlanet($planetCoordinates, $player);
 			}
-			
+
 			$player->setStatus($playerStatus);
 			$player->setAlliance($alliance);
 			$player->setLastVisited(Carbon::now());
