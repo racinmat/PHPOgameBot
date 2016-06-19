@@ -78,7 +78,7 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 		$currentSystem = (int) $I->grabValueFrom('#system_input', $coordinates->getSystem());
 		$isNextSystem = $currentGalaxy === $coordinates->getGalaxy() && ($currentSystem + 1) === $coordinates->getSystem();
 
-		//sometimes it just logs me out afte ~100 systems scanned
+		//sometimes it just logs me out after ~100 systems scanned
 		try {
 			if ($isNextSystem) {
 				$this->goToNextSystem();
@@ -106,12 +106,12 @@ class GalaxyBrowser extends Object implements ICommandProcessor
 				continue;
 			}
 
+			$planetsInSystem->add($planetCoordinates->getPlanet());
 			//checking my planet, do not waste time with it. Status of my planets is missing
 			if ($myPlanetsCoordinates->exists(Functions::equalCoordinates($planetCoordinates))) {
 				continue;
 			}
 
-			$planetsInSystem->add($planetCoordinates->getPlanet());
 			$planetName = $I->grabTextFrom("tbody tr:nth-of-type($i) .planetname");
 			$playerName = $I->grabTextFrom("tbody tr:nth-of-type($i) .playername > a > span");
 			$playerStatusClass = $I->grabAttributeFrom("tbody tr:nth-of-type($i) .playername > a > span", 'class');
