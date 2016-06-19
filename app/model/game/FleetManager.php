@@ -64,7 +64,10 @@ class FleetManager extends Object implements ICommandProcessor
 	 */
 	private $skipReload;
 
-	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo, IStorage $storage)
+	/** @var SignManager */
+	private $signManager;
+
+	public function __construct(\AcceptanceTester $I, PlanetManager $planetManager, Menu $menu, Logger $logger, DatabaseManager $databaseManager, ResourcesCalculator $resourcesCalculator, FleetInfo $fleetInfo, IStorage $storage, SignManager $signManager)
 	{
 		$this->I = $I;
 		$this->planetManager = $planetManager;
@@ -75,6 +78,7 @@ class FleetManager extends Object implements ICommandProcessor
 		$this->fleetInfo = $fleetInfo;
 		$this->cache = new Cache($storage, 'processedFlights');
 		$this->skipReload = false;
+		$this->signManager = $signManager;
 	}
 
 	public function canProcessCommand(ICommand $command) : bool
@@ -240,8 +244,8 @@ class FleetManager extends Object implements ICommandProcessor
 		}
 
 		$I->click('#continue.on');
+		$this->signManager->checkSignedIn();
 		$I->waitForText('Odeslání letky II', 3, '#planet > h2');
-
 
 		if ($fast) {
 			usleep(Random::microseconds(0.2, 0.4));

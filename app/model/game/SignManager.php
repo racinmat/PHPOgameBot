@@ -49,4 +49,12 @@ class SignManager extends Nette\Object
 		$I->click('Odhlásit se');
 		$I->closeBrowser();
 	}
+
+	public function checkSignedIn()
+	{
+		if ($this->I->seeExists('OGame - Ovládni vesmír', '.inner-box.clearfix > h2')) {
+			$this->signIn();
+		}
+	}
+
 }
