@@ -14,6 +14,8 @@ use App\Model\Entity\Planet;
 use App\Utils\OgameParser;
 use App\Utils\Random;
 use Carbon\Carbon;
+use Facebook\WebDriver\Exception\ElementNotVisibleException;
+use Facebook\WebDriver\Exception\TimeOutException;
 use Kdyby\Monolog\Logger;
 use Nette\Object;
 
@@ -88,6 +90,9 @@ class ReportReader extends Object
 			return;     //when espionage report is not opened, do not try to parse it
 		}
 
+		//this jquery code shows whole report without need for scrolling
+		$I->executeJS("$('.detail_msg_ctn.mCustomScrollbar').css('height', '2000')");
+
 		$reportTimeString = $I->grabTextFrom("$this->reportPopupSelector .msg_date.fright");
 		$reportTime = Carbon::instance(new \DateTime($reportTimeString));
 
@@ -120,6 +125,26 @@ class ReportReader extends Object
 		$planet->setDeuterium($deuterium);
 		$planet->setLastVisited($reportTime);
 
+		$this->readSection($fleetSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
+			},
+			function (string $name, string $value) use ($planet) {
+				$ships = Ships::_(Ships::getFromTranslatedName($name));
+				$ships->setAmount($planet, $value);
+			}
+		);
+
+		$this->readSection($defenseSelector,
+			function () use (&$probingStatus, &$planetProbingStatus) {
+				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
+			},
+			function (string $name, string $value) use ($planet) {
+				$ships = Defense::_(Defense::getFromTranslatedName($name));
+				$ships->setAmount($planet, $value);
+			}
+		);
+
 		$this->readSection($buildingsSelector,
 			function () use (&$probingStatus, &$planetProbingStatus) {
 				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_BUILDINGS));
@@ -140,26 +165,6 @@ class ReportReader extends Object
 			}
 		);
 
-		$this->readSection($defenseSelector,
-			function () use (&$probingStatus, &$planetProbingStatus) {
-				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_DEFENSE));
-			},
-			function (string $name, string $value) use ($planet) {
-				$ships = Defense::_(Defense::getFromTranslatedName($name));
-				$ships->setAmount($planet, $value);
-			}
-		);
-
-		$this->readSection($fleetSelector,
-			function () use (&$probingStatus, &$planetProbingStatus) {
-				$probingStatus = $probingStatus->min(ProbingStatus::_(ProbingStatus::MISSING_FLEET));
-			},
-			function (string $name, string $value) use ($planet) {
-				$ships = Ships::_(Ships::getFromTranslatedName($name));
-				$ships->setAmount($planet, $value);
-			}
-		);
-
 		if ($probingStatus->missingAnyInformation()) {
 			$planetProbingStatus = PlanetProbingStatus::_(PlanetProbingStatus::DID_NOT_GET_ALL_INFORMATION);
 		} else {
@@ -176,7 +181,7 @@ class ReportReader extends Object
 	private function readSection(string $selector, callable $unsuccessful, callable $setValue)
 	{
 		$I = $this->I;
-		$I->waitForElementVisible($selector);
+			$I->waitForElementVisible($selector, 4);
 		if ($I->seeElementExists($selector . ' li.detail_list_fail')) {
 			$unsuccessful();
 		} else {
@@ -185,10 +190,6 @@ class ReportReader extends Object
 				$nameSelector = $selector . " li:nth-of-type($i) > span.detail_list_txt";
 				$levelSelector = $selector . " li:nth-of-type($i) > span.fright";
 				$name = $I->grabTextFrom($nameSelector);    //pokud je element mimo obrazovku, vrátí se prázdný string
-				if ($name == '') {
-					$I->click($nameSelector);      //click vyvolá scrollnutí na element, je to nejjednodušší způsob, jak scrollnout
-					$name = $I->grabTextFrom($nameSelector);
-				}
 				$level = $I->grabTextFrom($levelSelector);
 				$setValue($name, $level);
 			}
