@@ -7,9 +7,7 @@ Queue with tasks for bot can be filled in web gui or by modifying the queue.json
 TODO
 -----
 - add command read players score. Add showing of players who have big difference between total (or economic) score and military score - potentional farms
-- add incoming resources to calculation of time to process some command which needs these resources
 - skip repetitious probing when too few slots is available
-- refactor waitings in fleet sending to waitForText or something like that, to speed up probes sending. Maybe add parameter slow, which will enable additional random waiting
 - refactor buildings, ships and defense in to embeddable. And refactor researches too.
 - fleetsave from main planet. Fleetsave only in pauses between two enhancements. Fleetsave only resources that are not needed
 - consider using only FacebookWebDriver and use modified CodeceptionWebDriver for syntax sugar. No asserts, only returing values and elements
@@ -49,7 +47,7 @@ TODO
 	- gathering debris by recyclers
 - automatic fleetsave on attack
 	- building transporters when too many resources is on the planet
-	- sending transporters from other planets to save rsources when it is time
+	- sending transporters from other planets to attacked planet to save rsources when it is time
 	- set time to leave before attack
 - maybe try to integrate Ogame Automizer constuctor for mines on planet optimization
 - maybe try to implement generating construction list from Ogame Automizer
@@ -63,5 +61,11 @@ TODO
 	- the limit can be possibly calculated as a fraction of the limit of ships in command
 - add better invalidation for flights. Compare current count of flights and loaded count of flights. When they differ, invalidate. Detect attack by red triangle and then invalidate.
 	- do not invalidate every 3 minutes, just when it is needed by comparing loaded and current count of flights. Remove past flights from loaded before comparing.
-- do not wait for fleet sending when not enough ships is present buring batch fleet sending
+- do not wait for fleet sending when not enough ships is present during batch fleet sending
 - add reading reports command. Save last report read datetime to planet, next to lastVisited. When reading some older report, skip it.
+- add logging of current action to cache - show that in dashboard (waiting for free fleet, reading research, etc...)
+- detect not loaded css and refresh page if that is detected
+- add graphs
+ 	- player position and buildings/resources level
+ 	- estimated resources and last visited time
+ 	- logging of many data and showing change of these data in time
