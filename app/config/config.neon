@@ -49,7 +49,7 @@ services:
 	nette.latteFactory:
 		setup:
 			- addFilter(implodeAssoc, App\Filters\ImplodeAssoc::process)
-	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::DELETE])
+	- App\Model\Logging\DoctrineMonologAdapter(types: [App\Model\Logging\DoctrineMonologAdapter::UPDATE, App\Model\Logging\DoctrineMonologAdapter::DELETE])
 	- App\Forms\SendFleetCommandFormFactory
 	- App\Forms\ScanGalaxyCommandFormFactory
 	- App\Model\Queue\CommandDispatcher

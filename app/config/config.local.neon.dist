@@ -1,0 +1,11 @@
+parameters:
+	user: ####
+	password: ####
+	slackApiToken: ####
+	slackChannel: ####
+
+doctrine:
+	host: ####
+	user: ####
+	password: ####
+	dbname: ####

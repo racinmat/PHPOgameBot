@@ -11,3 +11,4 @@ www/queue.json
 www/cron.txt
 www/running.txt
 www/repetitive.json
+/.idea
