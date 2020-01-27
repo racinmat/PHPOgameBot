@@ -1,7 +1,10 @@
 Ogame Bot
 =============
 
-This is bot for browser game ogame. 
+This is bot for browser game [Ogame](www.ogame.cz), based on PHP, Nette Framework, and most importantly, Selenium and Codedeption.
+Uses persistent queue and scheduler to plan and execute tasks when their preconditions are met.
+Provies also web-based interface for managing the queue.
+
 Queue with tasks for bot can be filled in web gui or by modifying the queue.json file.
 
 ## Setup
